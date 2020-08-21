@@ -37,9 +37,9 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     fname = os.path.basename(log_file)
     run_case = log_file.split("/")[-2]  # eg: 1n1g
     model = fname.split("_")[0]
-    batch_size = fname.split("_")[1].strip("b")
+    batch_size = int(fname.split("_")[1].strip("b"))
     pricition = fname.split("_")[2]
-    test_iter = fname.split("_")[3].strip(".log")
+    test_iter = int(fname.split("_")[3].strip(".log"))
 
     total_batch_size = 0
     node_num = int(run_case[0])
@@ -65,7 +65,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                 avg_speed_list.append(speed)
 
     # compute avg throughoutput
-    avg_speed = round(np.mean(avg_speed_list[:args.train_batches]), 2)
+    avg_speed = round(np.mean(avg_speed_list[args.warmup_batches:args.train_batches]), 2)
     tmp_dict['average_speed'] = avg_speed
 
     result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
