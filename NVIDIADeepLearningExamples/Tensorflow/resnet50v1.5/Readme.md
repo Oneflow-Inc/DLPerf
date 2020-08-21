@@ -4,10 +4,10 @@
 本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中Tensorflow版[ResNet50(v1.5)](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 
-- **Environment  **给出了测评时的硬件系统环境、Docker容器等信息
-- **Quick Start     **介绍了从克隆官方Github仓库到数据集准备的详细过程
-- **Training           **提供了方便易用的测评脚本，覆盖从单机单卡～多机多卡的情形
-- **Result               **提供完整测评log日志，并给出示例代码，用以计算平均速度、加速比，并给出汇总表格
+-  **Environment** 给出了测评时的硬件系统环境、Docker容器等信息
+-  **Quick Start** 介绍了从克隆官方Github仓库到数据集准备的详细过程
+-  **Training** 提供了方便易用的测评脚本，覆盖从单机单卡～多机多卡的情形
+-  **Result** 提供完整测评log日志，并给出示例代码，用以计算平均速度、加速比，并给出汇总表格
 
 
 
@@ -49,9 +49,9 @@ git clone https://github.com/NVIDIA/DeepLearningExamples
 cd DeepLearningExamples && checkout fed7ba99cde958fda12c9e81d12b3d7e738e0590
 ```
 
-
 1.将本页面scripts文件夹中的脚本：`single_node_train.sh`、`multi_node_train.sh`放入
 DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training下；
+
 2.将scripts中的脚本：`SINGLE_NODE_RN50_FP32_1E.sh`、`TWO_NODE_RN50_FP32_1E.sh`和`MULTI_NODE_RN50_FP32_1E.sh`放入resnet50v1.5/training/FP32目录下
 
 
@@ -92,8 +92,8 @@ docker  run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 
 
 ## 数据集
-采用imagenet制作的tfrecord格式：train-00000-of-01024 ...train-00015-of-01024共16384张训练集图片。
-进入容器，制作dali数据集索引：
+采用imagenet制作的tfrecord格式：train-00000-of-01024 ...train-00015-of-01024，共16384张训练集图片。进入容器，制作dali数据集索引：
+
 ```shell
 docker exec -it tf_resnet /bin/bash
 cd /workspace/rn50v15_tf && mkdir /data/dali_idx
@@ -110,7 +110,7 @@ apt-get install openssh-server
 **设置免密登录**
 
 - 节点间：/root/.ssh/id_rsa.pub 互相放到/root/.ssh/authorized_keys中；
-- `vim /etc/ssh/sshd_config`[sshd_config.zip](https://www.yuque.com/attachments/yuque/0/2020/zip/216914/1597851226295-2cbdce72-2b3e-4a7b-94c8-98901f654a35.zip?_lake_card=%7B%22uid%22%3A%221597851226137-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fzip%2F216914%2F1597851226295-2cbdce72-2b3e-4a7b-94c8-98901f654a35.zip%22%2C%22name%22%3A%22sshd_config.zip%22%2C%22size%22%3A1708%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22eWh97%22%2C%22refSrc%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fzip%2F216914%2F1597851226295-2cbdce72-2b3e-4a7b-94c8-98901f654a35.zip%22%2C%22card%22%3A%22file%22%7D)
+- 修改sshd中用于docker通信的Port端口号`vim /etc/ssh/sshd_config`
 - `service ssh restart`
 # Training
 集群中有4台节点：
@@ -129,12 +129,13 @@ docker exec -it tf_resnet /bin/bash
 cd /workspace/rn50v15
 bash ./resnet50v1.5/training/FP32/SINGLE_NODE_RN50_FP32_1E.sh
 ```
-脚本默认会对单机1卡、4卡、8卡分别做6组测试。
+执行脚本，对单机1卡、4卡、8卡分别做6组测试。
 
 
 
 ## 2机16卡
 容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/FP32/TWO_NODE_RN50_FP32_1E.sh`
+
 即可运行2机16卡的训练，同样默认测试6组。
 
 ## 4机32卡
