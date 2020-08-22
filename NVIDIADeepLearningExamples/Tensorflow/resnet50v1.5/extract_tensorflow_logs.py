@@ -14,7 +14,7 @@ os.chdir(sys.path[0])
 parser = argparse.ArgumentParser(description="flags for cnn benchmark")
 parser.add_argument("--log_dir", type=str, default="../ngc/tensorflow", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
-parser.add_argument('--warmup_batches', type=int, default=0)
+parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
 parser.add_argument('--batch_size_per_device', type=int, default=128)
 
@@ -65,7 +65,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                 avg_speed_list.append(speed)
 
     # compute avg throughoutput
-    avg_speed = round(np.mean(avg_speed_list[args.warmup_batches:args.train_batches]), 2)
+    avg_speed = round(np.mean(avg_speed_list[0:args.train_batches-20]), 2)
     tmp_dict['average_speed'] = avg_speed
 
     result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']

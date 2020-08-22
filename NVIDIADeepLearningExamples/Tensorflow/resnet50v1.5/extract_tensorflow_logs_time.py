@@ -15,8 +15,8 @@ os.chdir(sys.path[0])
 parser = argparse.ArgumentParser(description="flags for cnn benchmark")
 parser.add_argument("--log_dir", type=str, default="../ngc/tensorflow", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
-parser.add_argument('--warmup_batches', type=int, default=0)
-parser.add_argument('--train_batches', type=int, default=100)
+parser.add_argument('--warmup_batches', type=int, default=20)
+parser.add_argument('--train_batches', type=int, default=120)
 parser.add_argument('--batch_size_per_device', type=int, default=128)
 
 args = parser.parse_args()
@@ -69,15 +69,13 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
 
                 if line_num == 1:
                     start_time = re.findall(pt, line)[0]
-                    line_num += 1
                     continue
 
-                if line_num == args.train_batches:
+                if line_num == (args.train_batches-args.warmup_batches):
                     end_time = re.findall(pt, line)[0]
-                    line_num += 1
                     t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
                     t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
-                    cost_time = (t2 - t1).seconds
+                    cost_time = (t2 - t1).total_seconds()
                     iter_num = args.train_batches - args.warmup_batches
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
                     break
