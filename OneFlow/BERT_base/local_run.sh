@@ -2,8 +2,9 @@ NUM_NODES=$1
 GPU_NUM_PER_NODE=$2
 BSZ_PER_DEVICE=$3 
 
-DATA_ROOT=~/DLPerf/dataset/bert_base_ofrecord
 BENCH_ROOT=BERT
+DATA_ROOT=/path/to/bert_base_ofrecord
+DATA_PART_NUM=32
 
 if [ -n "$4" ]; then
     NODE_IPS=$4
@@ -34,7 +35,7 @@ python3 ./$BENCH_ROOT/run_pretraining.py \
   --hidden_dropout_prob=0.1 \
   --hidden_size_per_head=64 \
   --data_dir=$DATA_ROOT \
-  --data_part_num=32 \
+  --data_part_num=$DATA_PART_NUM \
   --log_dir=./log \
   --model_save_every_n_iter=10000 \
   --save_last_snapshot=False \
