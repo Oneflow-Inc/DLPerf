@@ -1,7 +1,13 @@
 # NVIDIA-Tensorflow-ResNet50V1.5测评
 
 # Overview
-本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中Tensorflow版[ResNet50(v1.5)](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本仓库复现了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中Tensorflow版[ResNet50(v1.5)](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力(NVIDIA仓库中，仅给出了单机的测评结果)。
+
+目前，我们仅测试了正常FP32精度下，不加XLA时的情况，后续我们会陆续开展混合精度、XLA等多种方式的测评。
+
+
+
+本文主要内容：
 
 
 -  **Environment** 给出了测评时的硬件系统环境、Docker容器等信息
@@ -16,7 +22,7 @@
 
 - 系统：Ubuntu 16.04
 - 显卡：Tesla V100（16G）×8
-- 驱动：440.33.01
+- 显卡驱动：NVIDIA 440.33.01
 - CUDA：10.2
 - cudnn：7.6.5
 ## NGC容器
@@ -33,9 +39,10 @@
 ## Feature support matrix
 | Feature | ResNet-50 v1.5 Tensorflow |
 | --- | --- |
-| Multi-GPU training with [Horovod](https://github.com/horovod/horovod) | Yes |
+| Multi-node,multi-gpu training | Yes |
 | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes |
 | Automatic mixed precision (AMP) | No |
+| [Horovod](https://github.com/horovod/horovod) | Yes |
 
 # Quick Start
 ## 项目代码
@@ -202,6 +209,9 @@ python extract_tensorflow_logs.py --log_dir="../ngc/tensorflow"
 Saving result to ./result/tensorflow_result.json
 ```
 ## ResNet50 V1.5 bsz = 128
+
+### FP32 & Without XLA
+
 | 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(tensorflow) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
 | 1 | 1 | 383.76 | 1 | 362.09 | 1 |
@@ -214,11 +224,11 @@ Saving result to ./result/tensorflow_result.json
 
 附：[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/709456cdd7a0f2ae03fe42846ec6a24dceee536e/TensorFlow/Classification/RN50v1.5#nvidia-dgx-1-8x-v100-16g-1)
 
-| **number of GPUs** | **FP32 img/s** |
+| **FP32 img/s** | **number of GPUs** |
 | --- | --- |
-| **1** | 364.9 |
-| **4** | 1419.4 |
-| **8** | 2778.5 |
+| 364.9 | **1** |
+| 1419.4 | **4** |
+| 2778.5 | **8** |
 
 
 
