@@ -65,7 +65,6 @@ DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training下
 ## NGC容器
 参考[NVIDIA官方Quick start](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/Classification/ConvNets/resnet50v1.5#quick-start-guide)
 
-
 **构建项目镜像**
 
 > 如果您本地有[nvidia:tensorflow](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow)的NGC镜像，或者之前通过`docker pull nvcr.io/nvidia/tensorflow:20.03-tf1-py3`下载过此镜像，则可以修改Dockerfile：
@@ -99,9 +98,12 @@ docker  run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 
 
 ## 数据集
-采用imagenet制作的tfrecord格式：train-00000-of-01024 ...train-00015-of-01024，共16384张训练集图片。进入容器，制作dali数据集索引：
+采用imagenet制作的tfrecord格式：train-00000-of-01024,train-00001-of-01024....数据集。参考：nvidia官方的[快速入门指南](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/Classification/ConvNets/resnet50v1.5#quick-start-guide)
+
+准备好imagenet数据集后，还需要为dali制作数据集索引：
 
 ```shell
+# enter docker container
 docker exec -it tf_resnet /bin/bash
 cd /workspace/rn50v15_tf && mkdir /data/dali_idx
 bash ./utils/dali_index.sh /data/tfrecords /data/dali_idx
@@ -153,60 +155,61 @@ bash ./resnet50v1.5/training/FP32/SINGLE_NODE_RN50_FP32_1E.sh
 
 # Result
 ## 完整日志
-[ngc.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/ngc.zip)
+[logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/logs.zip)
+
 ## 加速比
 执行以下脚本计算各个情况下的加速比：
 ```shell
-python extract_tensorflow_logs.py --log_dir="../ngc/tensorflow"
+python extract_tensorflow_logs.py --log_dir=./logs
 ```
 输出：
 ```shell
-../ngc/tensorflow/4n8g/r50_b128_fp32_1.log {'1': 9582.21}
-../ngc/tensorflow/4n8g/r50_b128_fp32_4.log {'1': 9582.21, '4': 9548.5}
-../ngc/tensorflow/4n8g/r50_b128_fp32_2.log {'1': 9582.21, '4': 9548.5, '2': 9352.08}
-../ngc/tensorflow/4n8g/r50_b128_fp32_3.log {'1': 9582.21, '4': 9548.5, '2': 9352.08, '3': 9706.33}
-../ngc/tensorflow/4n8g/r50_b128_fp32_6.log {'1': 9582.21, '4': 9548.5, '2': 9352.08, '3': 9706.33, '6': 9711.99}
-../ngc/tensorflow/4n8g/r50_b128_fp32_5.log {'1': 9582.21, '4': 9548.5, '2': 9352.08, '3': 9706.33, '6': 9711.99, '5': 9286.44}
-../ngc/tensorflow/1n8g/r50_b128_fp32_1.log {'1': 2732.05}
-../ngc/tensorflow/1n8g/r50_b128_fp32_4.log {'1': 2732.05, '4': 2728.35}
-../ngc/tensorflow/1n8g/r50_b128_fp32_2.log {'1': 2732.05, '4': 2728.35, '2': 2719.11}
-../ngc/tensorflow/1n8g/r50_b128_fp32_3.log {'1': 2732.05, '4': 2728.35, '2': 2719.11, '3': 2720.72}
-../ngc/tensorflow/1n8g/r50_b128_fp32_6.log {'1': 2732.05, '4': 2728.35, '2': 2719.11, '3': 2720.72, '6': 2722.68}
-../ngc/tensorflow/1n8g/r50_b128_fp32_5.log {'1': 2732.05, '4': 2728.35, '2': 2719.11, '3': 2720.72, '6': 2722.68, '5': 2723.71}
-../ngc/tensorflow/1n4g/r50_b128_fp32_1.log {'1': 1392.36}
-../ngc/tensorflow/1n4g/r50_b128_fp32_4.log {'1': 1392.36, '4': 1388.01}
-../ngc/tensorflow/1n4g/r50_b128_fp32_2.log {'1': 1392.36, '4': 1388.01, '2': 1390.2}
-../ngc/tensorflow/1n4g/r50_b128_fp32_3.log {'1': 1392.36, '4': 1388.01, '2': 1390.2, '3': 1389.31}
-../ngc/tensorflow/1n4g/r50_b128_fp32_6.log {'1': 1392.36, '4': 1388.01, '2': 1390.2, '3': 1389.31, '6': 1390.35}
-../ngc/tensorflow/1n4g/r50_b128_fp32_5.log {'1': 1392.36, '4': 1388.01, '2': 1390.2, '3': 1389.31, '6': 1390.35, '5': 1393.52}
-../ngc/tensorflow/1n1g/r50_b128_fp32_1.log {'1': 362.81}
-../ngc/tensorflow/1n1g/r50_b128_fp32_4.log {'1': 362.81, '4': 361.67}
-../ngc/tensorflow/1n1g/r50_b128_fp32_2.log {'1': 362.81, '4': 361.67, '2': 363.48}
-../ngc/tensorflow/1n1g/r50_b128_fp32_3.log {'1': 362.81, '4': 361.67, '2': 363.48, '3': 363.07}
-../ngc/tensorflow/1n1g/r50_b128_fp32_6.log {'1': 362.81, '4': 361.67, '2': 363.48, '3': 363.07, '6': 361.96}
-../ngc/tensorflow/1n1g/r50_b128_fp32_5.log {'1': 362.81, '4': 361.67, '2': 363.48, '3': 363.07, '6': 361.96, '5': 359.55}
-../ngc/tensorflow/2n8g/r50_b128_fp32_1.log {'1': 5080.61}
-../ngc/tensorflow/2n8g/r50_b128_fp32_4.log {'1': 5080.61, '4': 5126.4}
-../ngc/tensorflow/2n8g/r50_b128_fp32_2.log {'1': 5080.61, '4': 5126.4, '2': 5130.6}
-../ngc/tensorflow/2n8g/r50_b128_fp32_3.log {'1': 5080.61, '4': 5126.4, '2': 5130.6, '3': 5105.73}
-../ngc/tensorflow/2n8g/r50_b128_fp32_6.log {'1': 5080.61, '4': 5126.4, '2': 5130.6, '3': 5105.73, '6': 5089.51}
-../ngc/tensorflow/2n8g/r50_b128_fp32_5.log {'1': 5080.61, '4': 5126.4, '2': 5130.6, '3': 5105.73, '6': 5089.51, '5': 5114.58}
-{'r50': {'1n1g': {'average_speed': 362.09,
-                  'batch_size_per_device': '128',
+./logs/4n8g/r50_b128_fp32_1.log {1: 9403.78}
+./logs/4n8g/r50_b128_fp32_4.log {1: 9403.78, 4: 9477.39}
+./logs/4n8g/r50_b128_fp32_2.log {1: 9403.78, 4: 9477.39, 2: 9574.57}
+./logs/4n8g/r50_b128_fp32_3.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9}
+./logs/4n8g/r50_b128_fp32_6.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9, 6: 9631.24}
+./logs/4n8g/r50_b128_fp32_5.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9, 6: 9631.24, 5: 9342.6}
+./logs/1n8g/r50_b128_fp32_1.log {1: 2737.81}
+./logs/1n8g/r50_b128_fp32_4.log {1: 2737.81, 4: 2696.33}
+./logs/1n8g/r50_b128_fp32_2.log {1: 2737.81, 4: 2696.33, 2: 2717.99}
+./logs/1n8g/r50_b128_fp32_3.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18}
+./logs/1n8g/r50_b128_fp32_6.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96}
+./logs/1n8g/r50_b128_fp32_5.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96, 5: 2727.71}
+./logs/1n4g/r50_b128_fp32_1.log {1: 1391.53}
+./logs/1n4g/r50_b128_fp32_4.log {1: 1391.53, 4: 1393.31}
+./logs/1n4g/r50_b128_fp32_2.log {1: 1391.53, 4: 1393.31, 2: 1392.25}
+./logs/1n4g/r50_b128_fp32_3.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17}
+./logs/1n4g/r50_b128_fp32_6.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17, 6: 1391.03}
+./logs/1n4g/r50_b128_fp32_5.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17, 6: 1391.03, 5: 1389.73}
+./logs/1n1g/r50_b128_fp32_1.log {1: 362.05}
+./logs/1n1g/r50_b128_fp32_4.log {1: 362.05, 4: 362.43}
+./logs/1n1g/r50_b128_fp32_2.log {1: 362.05, 4: 362.43, 2: 362.28}
+./logs/1n1g/r50_b128_fp32_3.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78}
+./logs/1n1g/r50_b128_fp32_6.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45}
+./logs/1n1g/r50_b128_fp32_5.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45, 5: 362.45}
+./logs/2n8g/r50_b128_fp32_1.log {1: 5097.79}
+./logs/2n8g/r50_b128_fp32_4.log {1: 5097.79, 4: 5018.55}
+./logs/2n8g/r50_b128_fp32_2.log {1: 5097.79, 4: 5018.55, 2: 5063.02}
+./logs/2n8g/r50_b128_fp32_3.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27}
+./logs/2n8g/r50_b128_fp32_6.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81}
+./logs/2n8g/r50_b128_fp32_5.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81, 5: 5101.06}
+{'r50': {'1n1g': {'average_speed': 362.41,
+                  'batch_size_per_device': 128,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1390.62,
-                  'batch_size_per_device': '128',
-                  'speedup': 3.87},
-         '1n8g': {'average_speed': 2724.44,
-                  'batch_size_per_device': '128',
-                  'speedup': 7.58},
-         '2n8g': {'average_speed': 5107.9,
-                  'batch_size_per_device': '128',
-                  'speedup': 14.11},
-         '4n8g': {'average_speed': 9531.26,
-                  'batch_size_per_device': '128',
-                  'speedup': 26.51}}}
-Saving result to ./result/tensorflow_result.json
+         '1n4g': {'average_speed': 1391.34,
+                  'batch_size_per_device': 128,
+                  'speedup': 3.84},
+         '1n8g': {'average_speed': 2720.16,
+                  'batch_size_per_device': 128,
+                  'speedup': 7.5},
+         '2n8g': {'average_speed': 5085.58,
+                  'batch_size_per_device': 128,
+                  'speedup': 14.03},
+         '4n8g': {'average_speed': 9496.91,
+                  'batch_size_per_device': 128,
+                  'speedup': 26.2}}}
+Saving result to ./result/logs_result.json
 ```
 ## ResNet50 V1.5 bsz = 128
 
@@ -214,11 +217,11 @@ Saving result to ./result/tensorflow_result.json
 
 | 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(tensorflow) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 383.76 | 1 | 362.09 | 1 |
-| 1 | 4 | 1497.62 | 3.90 | 1390.62 | 3.87 |
-| 1 | 8 | 2942.32 | 7.67 | 2724.44 | 7.58 |
-| 2 | 16 | 5839.05 | 15.22 | 5107.9 | 14.11 |
-| 4 | 32 | 11548.45 | 30.09 | 9531.26 | 26.51 |
+| 1 | 1 | 383.76 | 1 | 362.41 | 1 |
+| 1 | 4 | 1497.62 | 3.90 | 1391.34 | 3.84 |
+| 1 | 8 | 2942.32 | 7.67 | 2720.16 | 7.5 |
+| 2 | 16 | 5839.05 | 15.22 | 5085.58 | 14.03 |
+| 4 | 32 | 11548.45 | 30.09 | 9496.91 | 26.2 |
 
 
 
