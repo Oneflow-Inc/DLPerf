@@ -3,11 +3,25 @@
 # Overview
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的paddle版[ResNet50(v1.5)](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
+目前，我们仅测试了正常FP32精度下，不加XLA时的情况，后续我们会陆续开展混合精度、XLA等多种方式的测评。
 
-- **Environment  **给出了测评时的硬件系统环境、软件版本等信息
-- **Quick Start     **介绍了从克隆官方Github仓库到数据集准备的详细过程
-- **Training           **提供了方便易用的测评脚本，覆盖从单机单卡～多机多卡的情形
-- **Result               **提供完整测评log日志，并给出示例代码，用以计算平均速度、加速比，并给出汇总表格
+
+
+本文主要内容：
+
+
+- **Environment**
+
+  - 给出了测评时的硬件系统环境、软件版本等信息
+- **Quick Start**
+
+  - 介绍了从克隆官方Github仓库到数据集准备的详细过程
+- **Training**
+
+  - 提供了方便易用的测评脚本，覆盖从单机单卡～多机多卡的情形
+- **Result**
+
+  - 提供完整测评log日志，并给出示例代码，用以计算平均速度、加速比，并给出汇总表格
 
 
 
@@ -26,9 +40,8 @@
 ## Feature support matrix
 | Feature | ResNet-50 v1.5 Paddle |
 | --- | --- |
-| Multi-GPU training | Yes |
+| Multi-node,multi-gpu training | Yes |
 | NVIDIA NCCL | Yes |
-| FP32 | Yes |
 
 # Quick Start
 ## 项目代码
@@ -160,6 +173,9 @@ python extract_paddle_logs.py --log_dir=./logs/resnet50
                   'speedup': 26.65}}}
 ```
 ## ResNet50 V1.5 bsz = 128
+
+### FP32 & Without XLA
+
 | 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(Paddle) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
 | 1 | 1 | 383.76 | 1 | 354.83 | 1 |
@@ -167,8 +183,6 @@ python extract_paddle_logs.py --log_dir=./logs/resnet50
 | 1 | 8 | 2942.32 | 7.67 | 846.89 | 2.38 |
 | 2 | 16 | 5839.05 | 15.22 | 4780.96 | 13.47 |
 | 4 | 32 | 11548.45 | 30.09 | 9502.18 | 26.65 |
-
-
 
 附：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
 
