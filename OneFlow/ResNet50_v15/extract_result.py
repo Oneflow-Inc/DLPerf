@@ -3,8 +3,6 @@ import sys
 import glob
 import argparse
 
-pp = pprint.PrettyPrinter(indent=1)
-os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for cnn benchmark")
 parser.add_argument(
@@ -48,13 +46,16 @@ def compute_throughput(result_dict):
 
     num_examples = total_batch_size * (args.end_iter - args.start_iter)
     throughput = num_examples / duration
-    print(result_dict['num_nodes'],result_dict['gpu_num_per_node'], throughput)
+    throughput = '{:.1f}'.format(throughput)
+    print('|', result_dict['num_nodes'], '|', result_dict['gpu_num_per_node'], '|', result_dict['batch_size_per_device'], '|', throughput, '|')
 
 
 def extract_result():
 
     logs_list = glob.glob(os.path.join(args.benchmark_log_dir, "*/*.log"))
     logs_list = sorted(logs_list)
+    print('|', 'num_nodes', '|', 'gpu_num_per_node', '|', 'batch_size_per_device', '|', 'throughput', '|')
+    print('|', '--------', '|', '--------', '|', '--------', '|', '--------', '|')
     for l in logs_list:
         result_dict = extract_info_from_file(l)
         compute_throughput(result_dict)
