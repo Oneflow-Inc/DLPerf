@@ -1,11 +1,11 @@
 #!/bin/bash
 #
 
-NUM_NODES=$1
-GPU_NUM_PER_NODE=$2
-BSZ=$3
-
-LOCAL_RUN=local_run.sh
+LOCAL_RUN=$1
+BENCH_ROOT=$2
+NUM_NODES=$3
+GPU_NUM_PER_NODE=$4
+BSZ=$5
 
 #0 prepare the host list ips for training
 declare -a host_list=("10.11.0.2" "10.11.0.3" "10.11.0.4" "10.11.0.5")
@@ -36,7 +36,7 @@ for host in "${hosts[@]:1}"
 do
   echo "start training on ${host}"
   ssh $USER@$host 'rm -rf ~/oneflow_temp/*'
-  scp -r $PWD/BERT ./$LOCAL_RUN $USER@$host:~/oneflow_temp
+  scp -r $BENCH_ROOT ./$LOCAL_RUN $USER@$host:~/oneflow_temp
   ssh $USER@$host "cd ~/oneflow_temp; nohup ./$LOCAL_RUN $NUM_NODES $GPU_NUM_PER_NODE $BSZ $ips 1>oneflow.log 2>&1 </dev/null &"
 done
 
@@ -44,7 +44,7 @@ done
 host=${hosts[0]}
 echo "start training on ${host}"
 ssh $USER@$host 'rm -rf ~/oneflow_temp/*'
-scp -r $PWD/BERT ./$LOCAL_RUN $USER@$host:~/oneflow_temp
+scp -r $BENCH_ROOT ./$LOCAL_RUN $USER@$host:~/oneflow_temp
 ssh $USER@$host "cd ~/oneflow_temp; ./$LOCAL_RUN $NUM_NODES $GPU_NUM_PER_NODE $BSZ $ips > oneflow.log"
 
 echo "done"
