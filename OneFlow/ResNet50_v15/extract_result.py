@@ -1,10 +1,7 @@
 import os
 import sys
 import glob
-import json
 import argparse
-import pprint
-import numpy as np
 
 pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
