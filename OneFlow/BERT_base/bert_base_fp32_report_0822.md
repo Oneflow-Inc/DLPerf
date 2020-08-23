@@ -1,4 +1,52 @@
-## batch size = 96
+# ResNet50-V1.5 Benchmark Test Report
+本报告总结了2020-8-22进行的BERT base吞吐率评测的结果。
+
+## Test Environment
+所有的测试都是在4台配置8卡V100-SXM2-16GB的服务器中进行，主要应软件配置如下：
+- Tesla V100-SXM2-16GB x 8
+- InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
+- 48 CPU(s), Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+- Memory 384G
+- Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- CUDA Version: 10.2, Driver Version: 440.33.01
+- OneFlow: v0.1.8, fix_infer_out_logical_blob_desc@17a2bdc9b
+- OneFlow-Benchmark: master@892f87e6
+- `nvidia-smi topo -m`
+```
+        GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    mlx5_0  CPU Affinity
+GPU0     X      NV1     NV1     NV2     NV2     SYS     SYS     SYS     NODE    0-11,24-35
+GPU1    NV1      X      NV2     NV1     SYS     NV2     SYS     SYS     NODE    0-11,24-35
+GPU2    NV1     NV2      X      NV2     SYS     SYS     NV1     SYS     PIX     0-11,24-35
+GPU3    NV2     NV1     NV2      X      SYS     SYS     SYS     NV1     PIX     0-11,24-35
+GPU4    NV2     SYS     SYS     SYS      X      NV1     NV1     NV2     SYS     12-23,36-47
+GPU5    SYS     NV2     SYS     SYS     NV1      X      NV2     NV1     SYS     12-23,36-47
+GPU6    SYS     SYS     NV1     SYS     NV1     NV2      X      NV2     SYS     12-23,36-47
+GPU7    SYS     SYS     SYS     NV1     NV2     NV1     NV2      X      SYS     12-23,36-47
+mlx5_0  NODE    NODE    PIX     PIX     SYS     SYS     SYS     SYS      X
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+```
+
+## Test Descriptions
+- Data Type: Float32
+- XLA: 未采用
+- batch size per device: 96 64 32 24
+- 测试有四组分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中间结果作为最后结果。
+
+全部日志可以点击[此处](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/bert_base_logs_0822.tgz)获取。
+
+## Test Results
+### batch size = 96
+本结果是`All Results` `batch_size_per_device=96`中提取出来的结果，从每一组7个结果中提取的中间值。
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 96 | 149.8 | 1.00  | 
@@ -6,6 +54,33 @@
 | 2 | 8 | 96 | 2257.7 | 15.07  | 
 | 4 | 8 | 96 | 4456 | 29.75  | 
 
+### batch size = 64 
+本结果是`All Results` `batch_size_per_device=64`中提取出来的结果，从每一组7个结果中提取的中间值。
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
+| -------- | -------- | -------- | -------- | -------- | 
+| 1 | 1 | 64 | 149.8 | 1.00  | 
+| 1 | 8 | 64 | 1138.9 | 7.60  | 
+| 2 | 8 | 64 | 2189.3 | 14.61  | 
+| 4 | 8 | 64 | 4310.4 | 28.77  | 
+
+### batch size = 32
+本结果是`All Results` `batch_size_per_device=32`中提取出来的结果，从每一组7个结果中提取的中间值。
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
+| -------- | -------- | -------- | -------- | -------- | 
+| 1 | 1 | 32 | 145.2 | 1.00  | 
+| 1 | 8 | 32 | 1043 | 7.18  | 
+| 2 | 8 | 32 | 1890.3 | 13.02  | 
+| 4 | 8 | 32 | 3715.1 | 25.59  | 
+
+### batch size = 24
+本结果是`All Results` `batch_size_per_device=24`中提取出来的结果，从每一组7个结果中提取的中间值。
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
+| -------- | -------- | -------- | -------- | -------- | 
+| 1 | 1 | 24 | 140.4 | 1.00  | 
+| 1 | 8 | 24 | 986.1 | 7.02  | 
+| 2 | 8 | 24 | 1697.8 | 12.09  | 
+
+### All Results
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput |
 | -------- | -------- | -------- | -------- |
 | 1 | 1 | 96 | 149.9 |
@@ -36,17 +111,6 @@
 | 4 | 8 | 96 | 4456.0 |
 | 4 | 8 | 96 | 4451.4 |
 | 4 | 8 | 96 | 4458.1 |
-
-## batch size = 64 
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
-| -------- | -------- | -------- | -------- | -------- | 
-| 1 | 1 | 64 | 149.8 | 1.00  | 
-| 1 | 8 | 64 | 1138.9 | 7.60  | 
-| 2 | 8 | 64 | 2189.3 | 14.61  | 
-| 4 | 8 | 64 | 4310.4 | 28.77  | 
-
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput |
-| -------- | -------- | -------- | -------- |
 | 1 | 1 | 64 | 150.0 |
 | 1 | 1 | 64 | 149.8 |
 | 1 | 1 | 64 | 149.8 |
@@ -75,16 +139,6 @@
 | 4 | 8 | 64 | 4305.7 |
 | 4 | 8 | 64 | 4310.6 |
 | 4 | 8 | 64 | 4308.8 |
-## batch size = 32
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
-| -------- | -------- | -------- | -------- | -------- | 
-| 1 | 1 | 32 | 145.2 | 1.00  | 
-| 1 | 8 | 32 | 1043 | 7.18  | 
-| 2 | 8 | 32 | 1890.3 | 13.02  | 
-| 4 | 8 | 32 | 3715.1 | 25.59  | 
-
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput |
-| -------- | -------- | -------- | -------- |
 | 1 | 1 | 32 | 145.4 |
 | 1 | 1 | 32 | 145.3 |
 | 1 | 1 | 32 | 145.1 |
@@ -113,16 +167,6 @@
 | 4 | 8 | 32 | 3715.1 |
 | 4 | 8 | 32 | 3694.4 |
 | 4 | 8 | 32 | 3720.5 |
-## batch size = 24
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
-| -------- | -------- | -------- | -------- | -------- | 
-| 1 | 1 | 24 | 140.4 | 1.00  | 
-| 1 | 8 | 24 | 986.1 | 7.02  | 
-| 2 | 8 | 24 | 1697.8 | 12.09  | 
-
-
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput |
-| -------- | -------- | -------- | -------- |
 | 1 | 1 | 24 | 140.4 |
 | 1 | 1 | 24 | 140.2 |
 | 1 | 1 | 24 | 140.3 |
@@ -144,7 +188,4 @@
 | 2 | 8 | 24 | 1697.8 |
 | 2 | 8 | 24 | 1701.3 |
 | 2 | 8 | 24 | 1703.8 |
-## all values
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput |
-| -------- | -------- | -------- | -------- |
 | 4 | 8 | 48 | 4103.6 |
