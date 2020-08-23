@@ -73,7 +73,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                     t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S,%f")
                     t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S,%f")
                     cost_time = (t2 - t1).total_seconds()
-                    iter_num = args.train_batches - args.warmup_batches
+                    iter_num = args.train_batches-1-args.warmup_batches
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
                     break
 
