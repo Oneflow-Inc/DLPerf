@@ -5,6 +5,7 @@ import glob
 import json
 import argparse
 import pprint
+import datetime
 
 import numpy as np
 
@@ -52,26 +53,35 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
         'batch_size_per_device': batch_size,
     }
 
+    pt = re.compile(r"(\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2},\d{3})", re.S)
+    s1 = "train batch "+str(args.warmup_batches)
+    s2 = "train batch "+str(args.train_batches-1)
+    start_time = ''
+    end_time = ''
     avg_speed_list = []
     # extract info from file content
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
             if "elapse" in line:
-                p1 = re.compile(r".*elapse (.*?) sec", re.S)
-                item = re.findall(p1, line)
-                a = float(item[0].strip())
-                avg_speed_list.append(round((total_batch_size / a), 4))
+                if s1 in line:
+                    start_time = re.findall(pt, line)[0]
+                    continue
+
+                if s2 in line:
+                    end_time = re.findall(pt, line)[0]
+                    t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S,%f")
+                    t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S,%f")
+                    cost_time = (t2 - t1).total_seconds()
+                    iter_num = args.train_batches - args.warmup_batches
+                    avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
+                    break
 
     # compute avg throughoutput
-    avg_speed = round(np.mean(avg_speed_list[args.warmup_batches:args.train_batches]), 2)
     tmp_dict['average_speed'] = avg_speed
-
-    result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
+    result_dict[model][run_case]['average_speed'] = avg_speed
     result_dict[model][run_case]['batch_size_per_device'] = tmp_dict['batch_size_per_device']
-
     speed_dict[model][run_case][test_iter] = avg_speed
-
     print(log_file, speed_dict[model][run_case])
 
 

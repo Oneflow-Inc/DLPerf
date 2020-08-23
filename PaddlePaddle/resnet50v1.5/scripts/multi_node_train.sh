@@ -2,7 +2,7 @@ MODEL=${1:-"resnet50"}
 gpus=${2:-"0,1,2,3,4,5,6,7"}
 BATCH_SIZE=${3:-128}
 IMAGE_SIZE=${4:-224}
-nodes=${5:-$NODE1,$NODE2}
+nodes=${5:-$NODE1,$NODE2,NODE3,$NODE4}
 CURRENT_NODE=${6:-NODE1}
 TEST_NUM=${7:-1}
 
@@ -33,7 +33,7 @@ python3 -m paddle.distributed.launch --cluster_node_ips=${nodes} \
 --node_ip=$CURRENT_NODE \
 train.py \
         --data_dir=${DATA_DIR} \
-        --total_images=54289 \
+        --total_images=651468 \
         --class_dim=1000 \
         --validate=False \
         --batch_size=$total_bz \
