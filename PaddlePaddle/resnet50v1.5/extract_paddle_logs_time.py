@@ -110,9 +110,7 @@ def compute_average(iter_dict):
 def compute_middle(iter_dict):
     def middle(x):
         length = len(x)
-        print(length)
         x.sort()
-        print(x)
         if (length % 2)== 1:
             z=length // 2
             y = x[z]
