@@ -67,6 +67,15 @@ DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training下
 
 **构建项目镜像**
 
+
+本次测评采用的是NVIDIA官方提供的NGC镜像，您可以在目录DeepLearningExamples/TensorFlow/Classification/ConvNets下运行
+```shell
+docker build . -t nvidia_rn50_tf:20.03-resnet
+```
+直接构建本地项目镜像，Dockerfile中将通过`docker pull nvcr.io/nvidia/tensorflow:20.03-tf1-py3`从网上拉取NVIDIA官方的NGC镜像。
+
+> **本地构建**
+>
 > 如果您本地有[nvidia:tensorflow](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow)的NGC镜像，或者之前通过`docker pull nvcr.io/nvidia/tensorflow:20.03-tf1-py3`下载过此镜像，则可以修改Dockerfile：
 > 这将使得构建项目镜像时，直接从本地已有镜像构建（而不是从网上拉取）。
 
@@ -74,13 +83,6 @@ DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training下
 # 注释 ARG FROM_IMAGE_NAME=nvcr.io/nvidia/tensorflow:20.03-tf1-py3
 ARG FROM_IMAGE_NAME=fdc4e72f4c15
 ```
-
-
-本次测评采用的是NVIDIA官方提供的NGC镜像，您可以在目录DeepLearningExamples/TensorFlow/Classification/ConvNets下运行
-```shell
-docker build . -t nvidia_rn50_tf:20.03-resnet
-```
-直接构建本地项目镜像，Dockerfile中将通过`docker pull nvcr.io/nvidia/tensorflow:20.03-tf1-py3`从网上拉取NVIDIA官方的NGC镜像。
 
 
 **启动容器**
@@ -98,7 +100,11 @@ docker  run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 
 
 ## 数据集
+**tfrecord**
+
 采用imagenet制作的tfrecord格式：train-00000-of-01024,train-00001-of-01024....数据集。参考：nvidia官方的[快速入门指南](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/Classification/ConvNets/resnet50v1.5#quick-start-guide)
+
+**dali-index**
 
 准备好imagenet数据集后，还需要为dali制作数据集索引：
 
@@ -112,7 +118,7 @@ bash ./utils/dali_index.sh /data/tfrecords /data/dali_idx
 单机情况下无需配置ssh服务，需要测试2机、4机等多机情况下，则需要安装docker容器间的ssh服务，配置ssh免密登录，保证分布式horovod/mpi脚本运行时可以在单机上与其他节点互联
 **安装ssh服务端**
 ```shell
-docker exec -it tf_resnet_lyon /bin/bash
+docker exec -it tf_resnet  /bin/bash
 apt-get update
 apt-get install openssh-server
 ```
