@@ -70,7 +70,7 @@ sudo apt update
 sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 ```
 ## 数据集
-本次训练使用了ImageNet2012的一个子集(共54289张图片)，数据集制作以及格式参照[paddle官方说明](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87)
+本次训练使用了ImageNet2012的一个子集(共651468张图片)，数据集制作以及格式参照[paddle官方说明](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87)
 
 
 # Training
@@ -82,7 +82,12 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
 
-每个节点有8张显卡，这里设置batch_size=128，从1机1卡～4机32卡进行了一组训练
+## 测评方法
+
+每个节点有8张显卡，这里设置batch_size=128，从1机1卡～4机32卡进行了多组训练。每组进行5~7次训练，每次训练过程只取第1个epoch的前120iter，计算训练速度时去掉前20iter，只取后100iter。最后将5~7次训练的速度求平均得到平均速度。
+
+在下文的【Result】部分，我们提供了完整日志计算平均速度的完整代码。
+
 ## 单机
 `models/PaddleCV/image_classification/`目录下,执行脚本
 ```shell
@@ -90,10 +95,8 @@ bash run_single_node.sh
 ```
 对单机1卡、4卡、8卡分别做6组测试。
 ## 2机16卡
-2机、4机等多机情况下，需要在所有机器节点上准备同样的数据集、执行同样的脚本，以完成分布式训练。
+2机、4机等多机情况下，需要在所有机器节点上准备同样的数据集、执行同样的脚本，以完成分布式训练。如，2机：NODE1='10.11.0.2'     NODE2='10.11.0.3' 的训练，需在两台机器上分别准备好数据集后，NODE1节点`models/PaddleCV/image_classification/`目录下,执行脚本:
 
-
-如，2机：NODE1='10.11.0.2'     NODE2='10.11.0.3' 的训练，需在两台机器上分别准备好数据集后，NODE1节点`models/PaddleCV/image_classification/`目录下,执行脚本:
 ```shell
 bash run_two_node.sh
 ```
@@ -111,7 +114,10 @@ bash run_multi_node.sh
 [resnet50.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/resnet50.zip)
 
 ## 加速比
+这里提供了两个脚本
+
 执行以下脚本计算各个情况下的加速比：
+
 ```shell
 python extract_paddle_logs_time.py  --log_dir=logs/paddle/resnet50
 ```
