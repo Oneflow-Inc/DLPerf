@@ -5,7 +5,8 @@
 3. `launch_all.sh`，发送脚本到指定的机器节点并运行；
 4. `cp_logs.sh`，拷贝日志到指定目录；
 5. `schedule_launch.sh`，批量顺序执行多组`launch_all.sh`；
-6. `extract_result.py`，从日志中提取结果，并打印成markdown表格。
+6. `extract_bert_result.py`，从BERT预训练日志中提取结果，并打印成markdown表格。
+7. `extract_cnn_result.py`，从cnn训练日志中提取结果，并打印成markdown表格。
 
 通常这几个文件需要修改很少的配置才能够正常运行，下面对各个脚本进行详细介绍。
 ## 本地训练启动脚本：`rn50_train.sh`和`bert_base_train.sh`
