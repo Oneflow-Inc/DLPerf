@@ -85,11 +85,10 @@ REPEAT_ID=$4
 
 在当前的`schedule_launch.sh`脚本中会循环不同batch size，4组节点和GPU设备数量，每组实验重复7次，每次实验结束后日志被拷贝到当前目录的`logs/oneflow`目录下。
 
-## `extract_result.py`
-由于ResNet50和BERT base的日志格式有所不同，所以有两个`extract_result.py`文件分别放在不同的目录里。
-运行方式如下：
+## `extract_bert_result.py` `extract_cnn_result.py`
+由于ResNet50和BERT base的日志格式有所不同，所以有两个文件，以bert为例，运行方式如下：
 ```
-python3 BERT_base/extract_result.py
+python3 extract_bert_result.py
 ```
 生成结果直接被打印到屏幕，是markdown格式方便直接引用，如下
 ```
@@ -103,3 +102,6 @@ python3 BERT_base/extract_result.py
 | 4 | 8 | 96 | 4451.4 |
 | 4 | 8 | 96 | 4458.1 |
 ```
+### 输入参数
+- `benchmark_log_dir`: 日志存放的目录，脚本中会自动遍历所有`*.log`文件进行信息提取；
+- `start_iter` `end_iter`: 待提取的起始和终止步数，脚本中会利用这两个步子中的时间戳计算吞吐率。
