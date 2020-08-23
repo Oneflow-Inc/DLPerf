@@ -9,8 +9,9 @@
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
-- OneFlow: v0.1.8, fix_infer_out_logical_blob_desc@17a2bdc9b
-- OneFlow-Benchmark: master@892f87e6
+- OneFlow: v0.1.9 
+- NCCL: 2.7.3
+- OneFlow-Benchmark: master@8a78044
 - `nvidia-smi topo -m`
 ```
         GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    mlx5_0  CPU Affinity
