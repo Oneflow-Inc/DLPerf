@@ -18,7 +18,7 @@
 | 4 | 8 | 128 | 11746.5 | 30.52  | 
 
 ### BERT base
-此处摘取的是2020-08-22的测试结果，详细内容请参考[bert_base_fp32_report_0822.md](./ResNet50_v15/rn50_fp32_report_0822.md)
+此处摘取的是2020-08-22的测试结果，详细内容请参考[bert_base_fp32_report_0822.md](./BERT_base/rn50_fp32_report_0822.md)
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 96 | 149.8 | 1.00  | 
