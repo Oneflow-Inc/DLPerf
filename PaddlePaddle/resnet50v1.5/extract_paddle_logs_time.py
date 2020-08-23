@@ -73,7 +73,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                     t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S,%f")
                     t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S,%f")
                     cost_time = (t2 - t1).total_seconds()
-                    iter_num = args.train_batches - args.warmup_batches
+                    iter_num = args.train_batches-1-args.warmup_batches
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
                     break
 
@@ -93,7 +93,8 @@ def compute_speedup(result_dict, speed_dict):
             speed_up = 1.0
             if result_dict[m]['1n1g']['average_speed']:
                 result_dict[m][d]['average_speed'] = compute_average(speed_dict[m][d])
-                speed_up = result_dict[m][d]['average_speed'] / result_dict[m]['1n1g']['average_speed']
+                result_dict[m][d]['middle_speed'] = compute_middle(speed_dict[m][d])
+                speed_up = result_dict[m][d]['middle_speed'] / compute_middle(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
 
 
@@ -104,6 +105,22 @@ def compute_average(iter_dict):
         i += 1
         total_speed += iter_dict[iter]
     return round(total_speed / i, 2)
+
+
+def compute_middle(iter_dict):
+    def middle(x):
+        length = len(x)
+        print(length)
+        x.sort()
+        print(x)
+        if (length % 2)== 1:
+            z=length // 2
+            y = x[z]
+        else:
+            y = (x[length//2]+x[length//2-1])/2
+        return y
+    speed_list = [i for i in iter_dict.values()]
+    return round(middle(speed_list), 2)
 
 
 def extract_result():
