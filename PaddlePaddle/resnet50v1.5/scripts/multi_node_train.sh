@@ -1,55 +1,71 @@
-MODEL=${1:-"resnet50"}
-gpus=${2:-"0,1,2,3,4,5,6,7"}
-BATCH_SIZE=${3:-128}
-IMAGE_SIZE=${4:-224}
-nodes=${5:-$NODE1,$NODE2,NODE3,$NODE4}
-CURRENT_NODE=${6:-NODE1}
-TEST_NUM=${7:-1}
+#!/bin/bash
+OUTPUT_DIR=../output
+MODEL=${1:-"bert_base"}
+bz_per_device=${2:-32}
+gpus=${3:-"0,1,2,3,4,5,6,7"}
+node_ips=${4:-$NODE1,$NODE2,$NODE3,$NODE4}
+CURRENT_NODE=${5:-$NODE1}
+TEST_NUM=${6:-1}
+echo "Node IPs : $node_ips"
 
 a=`expr ${#gpus} + 1`
-GPUS_PER_NODE=`expr ${a} / 2`
-total_bz=`expr ${BATCH_SIZE} \* ${GPUS_PER_NODE}`
-LR=$(awk -v total_bz="$total_bz" 'BEGIN{print  total_bz / 1000}')
-node_num=$(echo $nodes | tr ',' '\n' | wc -l)
-NUM_EPOCH=`expr ${node_num} \* 4`
+NUM_GPU=`expr ${a} / 2`
+paddle_batch_size=`expr ${bz_per_device} \* 128`
+node_num=$(echo $node_ips | tr ',' '\n' | wc -l)
 
-echo "Nodes : $nodes"
 echo "Use gpus: $gpus"
-echo "Batch size : $BATCH_SIZE"
-echo "Total batch size : $total_bz"
-echo "Learning rate: $LR"
+echo "Batch size : $bz_per_device"
+echo "Paddle Batch size : $paddle_batch_size"
 
 
-LOG_FOLDER=../paddle/resnet50/${node_num}n${GPUS_PER_NODE}g
+
+LOG_FOLDER=../paddle/bert/${node_num}n${NUM_GPU}g
 mkdir -p $LOG_FOLDER
-LOGFILE=${LOG_FOLDER}/r50_b${BATCH_SIZE}_fp32_$TEST_NUM.log
+LOGFILE=${LOG_FOLDER}/bert_b${bz_per_device}_fp32_$TEST_NUM.log
 
 
 export CUDA_VISIBLE_DEVICES=${gpus}
-export FLAGS_fraction_of_gpu_memory_to_use=0.98
-DATA_DIR=/datasets/ImageNet/imagenet_1k/
+export worker_endpoints=$node_ips
+export current_endpoint=$CURRENT_NODE
 
-python3 -m paddle.distributed.launch --cluster_node_ips=${nodes} \
---node_ip=$CURRENT_NODE \
-train.py \
-        --data_dir=${DATA_DIR} \
-        --total_images=651468 \
-        --class_dim=1000 \
-        --validate=False \
-        --batch_size=$total_bz \
-        --image_shape 3 $IMAGE_SIZE $IMAGE_SIZE \
-	--print_step=1 \
-	--save_step=10000 \
-        --lr_strategy=piecewise_decay \
-        --lr=$LR \
-        --momentum_rate=0.875 \
-        --max_iter=120 \
-        --model='ResNet50'  \
-        --model_save_dir=output/ \
-        --l2_decay=0.000030518 \
-        --warm_up_epochs=1 \
-        --use_mixup=False \
-        --use_label_smoothing=True \
-        --label_smoothing_epsilon=0.1  2>&1 | tee ${LOGFILE}
+echo "CUDA_VISIBLE_DEVICES:${gpus}"
+if [ "$MODEL" = "bert_base" ] ; then
+    CONFIG_PATH=${BERT_BASE_CONFIG}
+    # VOCAB_PATH=${SCRIPT_ROOT_DIR}/configs/bert_model_config/uncased_L-12_H-768_A-12/vocab.txt
+    VOCAB_PATH='data/demo_config/vocab.txt'
+    max_seq_len=128
+    max_predictions_per_seq=20
+    PADDLE_BERT_DATA_DIR=$PADDLE_BERT_BASE_DATA_DIR
+else
+    CONFIG_PATH=${BERT_LARGE_CONFIG}
+    VOCAB_PATH=${SCRIPT_ROOT_DIR}/configs/bert_model_config/uncased_L-24_H-1024_A-16/vocab.txt
+    max_seq_len=512
+    max_predictions_per_seq=80
+    PADDLE_BERT_DATA_DIR=$PADDLE_BERT_LARGE_DATA_DIR
+fi
 
-echo "Writting log to ${LOGFILE}"
+
+# Change your train arguments:
+python -u ./train.py --is_distributed true\
+        --use_cuda true\
+        --weight_sharing true\
+        --batch_size ${paddle_batch_size}\
+        --data_dir ${PADDLE_BERT_DATA_DIR:-'data/train'}\
+        --validation_set_dir ${PADDLE_BERT_DATA_DIR:-'data/train'} \
+        --bert_config_path ${CONFIG_PATH:-'data/demo_config/bert_config.json'} \
+        --vocab_path ${VOCAB_PATH} \
+        --generate_neg_sample true\
+        --save_steps 10000\
+        --learning_rate 1e-4 \
+        --weight_decay 0.01 \
+        --warmup_steps 120 \
+        --num_train_steps 120 \
+        --max_seq_len ${max_seq_len} \
+        --skip_steps 1 \
+        --validation_steps 1000 \
+        --use_fp16 false \
+        --verbose true \
+        --checkpoints $OUTPUT_DIR/paddle/runtime_output/checkpoints 2>&1 | tee $LOGFILE
+
+echo "Writting log to $LOGFILE"
+       
