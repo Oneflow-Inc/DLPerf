@@ -17,9 +17,9 @@
 - 系统：Ubuntu 16.04
 - 显卡：Tesla V100（16G）×8
 - 驱动：Nvidia 440.33.01
-- cuda：10.2
-- cudnn：7.6.5
-- nccl：2.7.3
+- CUDA：10.2
+- cuDNN：7.6.5
+- NCCL：2.7.3
 ## 框架
 
 - **paddle 1.8.3.post107**
@@ -107,41 +107,98 @@ bash run_multi_node.sh
 ## 加速比
 执行以下脚本计算各个情况下的加速比：
 ```shell
-python extract_paddle_logs.py --log_dir=./logs/paddle/bert
+python extract_paddle_logs.py --log_dir=logs/paddle/bert/bz64 --batch_size_per_device=64
 ```
-输出：（TOTO）
+输出：
 ```shell
-
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_4.log {4: 2712.28}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_1.log {4: 2712.28, 1: 2703.05}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_2.log {4: 2712.28, 1: 2703.05, 2: 2687.85}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_6.log {4: 2712.28, 1: 2703.05, 2: 2687.85, 6: 2755.53}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_3.log {4: 2712.28, 1: 2703.05, 2: 2687.85, 6: 2755.53, 3: 2673.17}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_5.log {4: 2712.28, 1: 2703.05, 2: 2687.85, 6: 2755.53, 3: 2673.17, 5: 2768.95}
+logs/paddle/bert/bz64/1n8g/bert_b64_fp32_4.log {4: 780.47}
+logs/paddle/bert/bz64/1n8g/bert_b64_fp32_1.log {4: 780.47, 1: 756.94}
+logs/paddle/bert/bz64/1n8g/bert_b64_fp32_2.log {4: 780.47, 1: 756.94, 2: 765.51}
+logs/paddle/bert/bz64/1n8g/bert_b64_fp32_6.log {4: 780.47, 1: 756.94, 2: 765.51, 6: 744.27}
+logs/paddle/bert/bz64/1n8g/bert_b64_fp32_3.log {4: 780.47, 1: 756.94, 2: 765.51, 6: 744.27, 3: 769.89}
+logs/paddle/bert/bz64/1n8g/bert_b64_fp32_5.log {4: 780.47, 1: 756.94, 2: 765.51, 6: 744.27, 3: 769.89, 5: 737.23}
+logs/paddle/bert/bz64/1n4g/bert_b64_fp32_4.log {4: 436.65}
+logs/paddle/bert/bz64/1n4g/bert_b64_fp32_1.log {4: 436.65, 1: 463.53}
+logs/paddle/bert/bz64/1n4g/bert_b64_fp32_2.log {4: 436.65, 1: 463.53, 2: 462.61}
+logs/paddle/bert/bz64/1n4g/bert_b64_fp32_6.log {4: 436.65, 1: 463.53, 2: 462.61, 6: 441.4}
+logs/paddle/bert/bz64/1n4g/bert_b64_fp32_3.log {4: 436.65, 1: 463.53, 2: 462.61, 6: 441.4, 3: 424.21}
+logs/paddle/bert/bz64/1n4g/bert_b64_fp32_5.log {4: 436.65, 1: 463.53, 2: 462.61, 6: 441.4, 3: 424.21, 5: 442.09}
+logs/paddle/bert/bz64/1n1g/bert_b64_fp32_4.log {4: 137.2}
+logs/paddle/bert/bz64/1n1g/bert_b64_fp32_1.log {4: 137.2, 1: 137.06}
+logs/paddle/bert/bz64/1n1g/bert_b64_fp32_2.log {4: 137.2, 1: 137.06, 2: 137.18}
+logs/paddle/bert/bz64/1n1g/bert_b64_fp32_6.log {4: 137.2, 1: 137.06, 2: 137.18, 6: 137.35}
+logs/paddle/bert/bz64/1n1g/bert_b64_fp32_3.log {4: 137.2, 1: 137.06, 2: 137.18, 6: 137.35, 3: 137.39}
+logs/paddle/bert/bz64/1n1g/bert_b64_fp32_5.log {4: 137.2, 1: 137.06, 2: 137.18, 6: 137.35, 3: 137.39, 5: 137.59}
+logs/paddle/bert/bz64/1n2g/bert_b64_fp32_4.log {4: 251.44}
+logs/paddle/bert/bz64/1n2g/bert_b64_fp32_1.log {4: 251.44, 1: 252.99}
+logs/paddle/bert/bz64/1n2g/bert_b64_fp32_2.log {4: 251.44, 1: 252.99, 2: 254.32}
+logs/paddle/bert/bz64/1n2g/bert_b64_fp32_6.log {4: 251.44, 1: 252.99, 2: 254.32, 6: 252.04}
+logs/paddle/bert/bz64/1n2g/bert_b64_fp32_3.log {4: 251.44, 1: 252.99, 2: 254.32, 6: 252.04, 3: 252.72}
+logs/paddle/bert/bz64/1n2g/bert_b64_fp32_5.log {4: 251.44, 1: 252.99, 2: 254.32, 6: 252.04, 3: 252.72, 5: 252.7}
+logs/paddle/bert/bz64/2n8g/bert_b64_fp32_4.log {4: 1418.26}
+logs/paddle/bert/bz64/2n8g/bert_b64_fp32_1.log {4: 1418.26, 1: 1441.44}
+logs/paddle/bert/bz64/2n8g/bert_b64_fp32_2.log {4: 1418.26, 1: 1441.44, 2: 1431.65}
+logs/paddle/bert/bz64/2n8g/bert_b64_fp32_6.log {4: 1418.26, 1: 1441.44, 2: 1431.65, 6: 1389.89}
+logs/paddle/bert/bz64/2n8g/bert_b64_fp32_3.log {4: 1418.26, 1: 1441.44, 2: 1431.65, 6: 1389.89, 3: 1447.72}
+logs/paddle/bert/bz64/2n8g/bert_b64_fp32_5.log {4: 1418.26, 1: 1441.44, 2: 1431.65, 6: 1389.89, 3: 1447.72, 5: 1421.38}
+{'bert': {'1n1g': {'average_speed': 137.29,
+                   'batch_size_per_device': 64,
+                   'median_speed': 137.27,
+                   'speedup': 1.0},
+          '1n2g': {'average_speed': 252.7,
+                   'batch_size_per_device': 64,
+                   'median_speed': 252.71,
+                   'speedup': 1.84},
+          '1n4g': {'average_speed': 445.08,
+                   'batch_size_per_device': 64,
+                   'median_speed': 441.74,
+                   'speedup': 3.22},
+          '1n8g': {'average_speed': 759.05,
+                   'batch_size_per_device': 64,
+                   'median_speed': 761.22,
+                   'speedup': 5.55},
+          '2n8g': {'average_speed': 1425.06,
+                   'batch_size_per_device': 64,
+                   'median_speed': 1426.52,
+                   'speedup': 10.39},
+          '4n8g': {'average_speed': 2716.8,
+                   'batch_size_per_device': 64,
+                   'median_speed': 2707.66,
+                   'speedup': 19.73}}}
+Saving result to ./result/bz64_result.json
 ```
 ## BERT-Base  batch size=32
 ### FP32 & Without XLA
 | 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(Paddle) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 145.2 | 1.00 |    |    |
-| 1 | 4 |    |    |    |    |
-| 1 | 8 | 1043.0 | 7.18 |    |    |
-| 2 | 16 | 1890.3 | 13.02 |    |    |
-| 4 | 32 | 3715.1 | 25.59 |    |    |
+| 1 | 1 | 145.2 | 1.00 | 132.64  | 1.00 |
+| 1 | 8 | 1043.0 | 7.18 | 615.12 | 4.64 |
+| 2 | 16 | 1890.3 | 13.02 | 1116.02 | 8.41 |
+| 4 | 32 | 3715.1 | 25.59 | 2078.56 | 15.67 |
 
 ## BERT-Base  batch size=64
 ### FP32 & Without XLA
 | 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(Paddle) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 149.8 | 1 |    |    |
-| 1 | 4 |             |     |    |    |
-| 1 | 8 | 1138.9 | 7.60 |    |    |
-| 2 | 16 | 2189.3 | 14.61 |    |   |
-| 4 | 32 | 4310.4 | 28.77 |    |    |
+| 1 | 1 | 149.8 | 1 | 137.27 | 1.0 |
+| 1 | 8 | 1138.9 | 7.60 | 761.22 | 5.55 |
+| 2 | 16 | 2189.3 | 14.61 | 1426.52 | 10.39 |
+| 4 | 32 | 4310.4 | 28.77 | 2707.66 | 19.73 |
 
 ## BERT-Base  batch size=96
 ### FP32 & Without XLA
 | 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(Paddle) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 149.8 | 1.00 |    |    |
-| 1 | 4 |    |    |    |    |
-| 1 | 8 | 1158.5 | 7.73 |    |    |
-| 2 | 16 | 2257.7 | 15.07 |    |    |
-| 4 | 32 | 4456.0 | 29.75 |    |    |
+| 1 | 1 | 149.8 | 1.00 | 136.97 | 1.0 |
+| 1 | 8 | 1158.5 | 7.73 | 490.38 | 3.58 |
+| 2 | 16 | 2257.7 | 15.07 | 868.6 | 6.34 |
+| 4 | 32 | 4456.0 | 29.75 | 1631.36 | 11.91 |
 
 
 
