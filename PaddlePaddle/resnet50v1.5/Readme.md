@@ -31,9 +31,9 @@
 - 系统：Ubuntu 16.04
 - 显卡：Tesla V100（16G）×8
 - 驱动：Nvidia 440.33.01
-- cuda：10.2
-- cudnn：7.6.5
-- nccl：2.7.3
+- CUDA：10.2
+- cuDNN：7.6.5
+- NCCL：2.7.3
 ## 框架
 
 - **paddle 1.8.3.post107**
@@ -84,9 +84,9 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 
 ## 测评方法
 
-每个节点有8张显卡，这里设置batch_size=128，从1机1卡～4机32卡进行了多组训练。每组进行5~7次训练，每次训练过程只取第1个epoch的前120iter，计算训练速度时去掉前20iter，只取后100iter。最后将5~7次训练的速度取中位数得到最终速度并最终以此计算加速比。
+每个节点有8张显卡，这里设置batch_size=128，从1机1卡～4机32卡进行了多组训练。每组进行5~7次训练，每次训练过程只取第1个epoch的前120iter，计算训练速度时去掉前20iter，只取后100iter。最后将5~7次训练的速度取中位数得到最终速度，并最终以此计算加速比。
 
-在下文的【Result】部分，我们提供了完整日志和速度计算的完整代码。
+在下文的【Result】部分，我们提供了完整日志和用于根据log计算速度的代码。
 
 ## 单机
 `models/PaddleCV/image_classification/`目录下,执行脚本
@@ -160,29 +160,29 @@ logs/paddle/resnet50/2n8g/r50_b128_fp32_6.log {1: 4885.12, 4: 4888.3, 2: 4897.39
 logs/paddle/resnet50/2n8g/r50_b128_fp32_5.log {1: 4885.12, 4: 4888.3, 2: 4897.39, 3: 4913.18, 6: 4887.0, 5: 4871.62}
 {'r50': {'1n1g': {'average_speed': 352.23,
                   'batch_size_per_device': 128,
-                  'middle_speed': 352.02,
+                  'median_speed': 352.02,
                   'speedup': 1.0},
          '1n2g': {'average_speed': 633.65,
                   'batch_size_per_device': 128,
-                  'middle_speed': 635.05,
+                  'median_speed': 635.05,
                   'speedup': 1.8},
          '1n4g': {'average_speed': 1357.45,
                   'batch_size_per_device': 128,
-                  'middle_speed': 1357.82,
+                  'median_speed': 1357.82,
                   'speedup': 3.86},
          '1n8g': {'average_speed': 2621.2,
                   'batch_size_per_device': 128,
-                  'middle_speed': 2619.94,
+                  'median_speed': 2619.94,
                   'speedup': 7.44},
          '2n8g': {'average_speed': 4890.44,
                   'batch_size_per_device': 128,
-                  'middle_speed': 4887.65,
+                  'median_speed': 4887.65,
                   'speedup': 13.88},
          '4n8g': {'average_speed': 9311.85,
                   'batch_size_per_device': 128,
-                  'middle_speed': 9330.94,
+                  'median_speed': 9330.94,
                   'speedup': 26.51}}}
-Saving result to ./result/resnet50_result.json
+Saving result to ./result/resnet50_result.jso
 ```
 ## ResNet50 V1.5 bsz = 128
 
