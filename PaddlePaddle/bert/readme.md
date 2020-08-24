@@ -45,7 +45,7 @@ cd models/PaddleNLP/pretrain_language_models/BERT
 ```
 
 
-将本页面scripts文件夹中的脚本：`make_pretrain_data.sh` 放入data/train/下，其余脚本全部放入：`BERT/`目录下
+将本页面scripts文件夹中的脚本：`make_pretrain_data.sh` 放入BERT/data下，其余脚本全部放入：BERT/目录下
 ## 框架安装
 ```shell
 python3 -m pip install paddlepaddle-gpu==1.8.3.post107 -i https://mirror.baidu.com/pypi/simple
@@ -60,8 +60,13 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 ```
 ## 数据集
 本次bert的预训练过程使用了paddle官方的示例数据集：[demo_wiki_train.gz](https://github.com/PaddlePaddle/models/blob/release/1.8/PaddleNLP/pretrain_language_models/BERT/data/train/demo_wiki_train.gz)，由于数据集规模较小，我们在此基础上制作了demo_wiki_train_50.gz用于预训练。数据集制作过程如下：
-执行：`bash make_pretrain_data.sh`
+
+`cd models/PaddleNLP/pretrain_language_models/BERT/data`
+
+`bash make_pretrain_data.sh`
+
 脚本将复制demo_wiki_train的内容，构造出一个50倍数据规模的训练集demo_wiki_train_50.gz
+
 # Training
 集群中有4台节点：
 
@@ -98,13 +103,13 @@ bash run_multi_node.sh
 以运行4机32卡的训练，默认测试6组。
 # Result
 ## 完整日志
-[paddle.zip](https://www.yuque.com/attachments/yuque/0/2020/zip/216914/1598001820913-9d030496-845f-425f-95ae-1d786ff26933.zip?_lake_card=%7B%22uid%22%3A%221598001820748-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fzip%2F216914%2F1598001820913-9d030496-845f-425f-95ae-1d786ff26933.zip%22%2C%22name%22%3A%22paddle.zip%22%2C%22size%22%3A182771%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22eX9GC%22%2C%22card%22%3A%22file%22%7D)
+（TOTO）
 ## 加速比
 执行以下脚本计算各个情况下的加速比：
 ```shell
 python extract_paddle_logs.py --log_dir=./logs/paddle/bert
 ```
-输出：
+输出：（TOTO）
 ```shell
 
 ```
