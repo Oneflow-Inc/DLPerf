@@ -93,8 +93,8 @@ def compute_speedup(result_dict, speed_dict):
             speed_up = 1.0
             if result_dict[m]['1n1g']['average_speed']:
                 result_dict[m][d]['average_speed'] = compute_average(speed_dict[m][d])
-                result_dict[m][d]['middle_speed'] = compute_median(speed_dict[m][d])
-                speed_up = result_dict[m][d]['middle_speed'] / compute_median(speed_dict[m]['1n1g'])
+                result_dict[m][d]['median_speed'] = compute_median(speed_dict[m][d])
+                speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
 
 
