@@ -4,10 +4,10 @@
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的paddle版[BERT](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 
-- **Environment  **给出了测评时的硬件系统环境、软件版本等信息
-- **Quick Start     **介绍了从克隆官方Github仓库到数据集准备的详细过程
-- **Training           **提供了方便易用的测评脚本，覆盖从单机单卡～多机多卡的情形
-- **Result               **提供完整测评log日志，并给出示例代码，用以计算平均速度、加速比，并给出汇总表格
+- **Environment** 给出了测评时的硬件系统环境、软件版本等信息
+- **Quick Start** 介绍了从克隆官方Github仓库到数据集准备的详细过程
+- **Training** 提供了方便易用的测评脚本，覆盖从单机单卡～多机多卡的情形
+- **Result** 提供完整测评log日志，并给出示例代码，用以计算平均速度、加速比，并给出汇总表格
 
 
 
@@ -23,20 +23,11 @@
 ## 框架
 
 - **paddle 1.8.3.post107**
-## Feature support matrix
-| Feature | BERT Paddle |
-| --- | --- |
-| BERT-Base | Yes |
-| NVIDIA NCCL | Yes |
-| FP32 | Yes |
-
 # Quick Start
 ## 项目代码
 
 - [PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)
    - [BERT项目主页](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT)
-
-
 
 下载官方源码：
 ```shell
@@ -75,8 +66,6 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 - NODE2=10.11.0.3
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
-
-
 
 每个节点有8张显卡，这里设置batch size为32、64和96，分别在1机1卡～4机32卡的情况下进行了多组训练。
 ## 单机
