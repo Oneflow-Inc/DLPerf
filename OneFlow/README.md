@@ -10,7 +10,7 @@
 ## OneFlow Benchmark Test Result
 ### ResNet50-V1.5 result on 4 nodes with (8x V100 16G) GPUs each
 此处摘取的是2020-08-21的测试结果，详细内容请参考[rn50_fp32_report_0821.md](./ConvNets/rn50_fp32_report_0821.md)
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no AMP | speedup | 
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no XLA | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 128 | 384.9 | 1.00  | 
 | 1 | 8 | 128 | 2969.5 | 7.71  | 
@@ -19,7 +19,7 @@
 
 ### BERT base result on 4 nodes with (8x V100 16G) GPUs each
 此处摘取的是2020-08-22的测试结果，详细内容请参考[bert_base_fp32_report_0822.md](./BERT/bert_base_fp32_report_0822.md)
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no AMP | speedup | 
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no XLA | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 96 | 149.8 | 1.00  | 
 | 1 | 8 | 96 | 1158.5 | 7.73  | 
