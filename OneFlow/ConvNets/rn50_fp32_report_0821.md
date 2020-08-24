@@ -45,7 +45,7 @@ Legend:
 全部日志可以点击[此处](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/rn50_logs_0821.tgz)获取。
 
 ## Finial Result
-本结果是`All Results`中提取出来的结果，从每一组7个结果中提取的中间值。
+本结果是`All Results`中提取出来的结果，从每一组7个结果中提取的中位数。
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 128 | 384.9 | 1.00  | 

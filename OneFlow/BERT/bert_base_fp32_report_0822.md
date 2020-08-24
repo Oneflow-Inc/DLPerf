@@ -46,7 +46,7 @@ Legend:
 
 ## Test Results
 ### batch size = 96
-本结果是`All Results` `batch_size_per_device=96`中提取出来的结果，从每一组7个结果中提取的中间值。
+本结果是`All Results` `batch_size_per_device=96`中提取出来的结果，从每一组7个结果中提取的中位数。
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 96 | 149.8 | 1.00  | 
@@ -55,7 +55,7 @@ Legend:
 | 4 | 8 | 96 | 4456.0 | 29.75  | 
 
 ### batch size = 64 
-本结果是`All Results` `batch_size_per_device=64`中提取出来的结果，从每一组7个结果中提取的中间值。
+本结果是`All Results` `batch_size_per_device=64`中提取出来的结果，从每一组7个结果中提取的中位数。
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 64 | 149.8 | 1.00  | 
@@ -64,7 +64,7 @@ Legend:
 | 4 | 8 | 64 | 4310.4 | 28.77  | 
 
 ### batch size = 32
-本结果是`All Results` `batch_size_per_device=32`中提取出来的结果，从每一组7个结果中提取的中间值。
+本结果是`All Results` `batch_size_per_device=32`中提取出来的结果，从每一组7个结果中提取的中位数。
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 32 | 145.2 | 1.00  | 
@@ -73,7 +73,7 @@ Legend:
 | 4 | 8 | 32 | 3715.1 | 25.59  | 
 
 ### batch size = 24
-本结果是`All Results` `batch_size_per_device=24`中提取出来的结果，从每一组7个结果中提取的中间值。
+本结果是`All Results` `batch_size_per_device=24`中提取出来的结果，从每一组7个结果中提取的中位数。
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
 | 1 | 1 | 24 | 140.4 | 1.00  | 
