@@ -10,7 +10,6 @@
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
 - OneFlow: v0.1.9 
-- NCCL: 2.7.3
 - OneFlow-Benchmark: master@8a78044
 - `nvidia-smi topo -m`
 ```
