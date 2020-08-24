@@ -8,7 +8,7 @@
 评测所用脚本都在`scripts`目录中，脚本使用方法参见[scripts/README.md](./scripts/README.md)。
 
 ## OneFlow Benchmark Test Result
-### ResNet50-V1.5
+### ResNet50-V1.5 result on 4 nodes with (8x V100 16G) GPUs each
 此处摘取的是2020-08-21的测试结果，详细内容请参考[rn50_fp32_report_0821.md](./ResNet50_v15/rn50_fp32_report_0821.md)
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no AMP | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
@@ -17,7 +17,7 @@
 | 2 | 8 | 128 | 5906.6 | 15.35  | 
 | 4 | 8 | 128 | 11711.2 | 30.43  | 
 
-### BERT base
+### BERT base result on 4 nodes with (8x V100 16G) GPUs each
 此处摘取的是2020-08-22的测试结果，详细内容请参考[bert_base_fp32_report_0822.md](./BERT_base/bert_base_fp32_report_0822.md)
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no AMP | speedup | 
 | -------- | -------- | -------- | -------- | -------- | 
