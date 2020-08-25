@@ -1,4 +1,4 @@
-# ResNet50-V1.5 Benchmark Test Report
+# BERT base Benchmark Test Report
 本报告总结了2020-8-22进行的BERT base吞吐率评测的结果。
 
 ## Test Environment
