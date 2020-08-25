@@ -53,6 +53,8 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
         'batch_size_per_device': batch_size,
     }
 
+    from_iter = 0 if args.warmup_batches < 20 else args.warmup_batches-20
+    to_iter = args.train_batches-20
     avg_speed_list = []
     # extract info from file content
     with open(log_file) as f:
@@ -64,13 +66,13 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                 speed = float(s[0].split(" : ")[1].strip())
                 avg_speed_list.append(speed)
 
+
     # compute avg throughoutput
-    avg_speed = round(np.mean(avg_speed_list[0:args.train_batches-20]), 2)
+    avg_speed = round(np.mean(avg_speed_list[from_iter:to_iter]), 2)
     tmp_dict['average_speed'] = avg_speed
 
     result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
     result_dict[model][run_case]['batch_size_per_device'] = tmp_dict['batch_size_per_device']
-
     speed_dict[model][run_case][test_iter] = avg_speed
 
     print(log_file, speed_dict[model][run_case])
@@ -83,9 +85,23 @@ def compute_speedup(result_dict, speed_dict):
         for d in run_case:
             speed_up = 1.0
             if result_dict[m]['1n1g']['average_speed']:
-                result_dict[m][d]['average_speed'] = compute_average(speed_dict[m][d])
-                speed_up = result_dict[m][d]['average_speed'] / result_dict[m]['1n1g']['average_speed']
+                result_dict[m][d]['median_speed'] = compute_median(speed_dict[m][d])
+                speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
+
+
+def compute_median(iter_dict):
+    def median(x):
+        length = len(x)
+        x.sort()
+        if (length % 2)== 1:
+            z=length // 2
+            y = x[z]
+        else:
+            y = (x[length//2]+x[length//2-1])/2
+        return y
+    speed_list = [i for i in iter_dict.values()]
+    return round(median(speed_list), 2)
 
 
 def compute_average(iter_dict):
