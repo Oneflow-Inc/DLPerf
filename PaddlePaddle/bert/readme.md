@@ -92,7 +92,8 @@ bash run_multi_node.sh
 以运行4机32卡的训练，默认测试6组。
 # Result
 ## 完整日志
-（TOTO）
+[bert.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert.zip)
+
 ## 加速比
 执行以下脚本计算各个情况下的加速比：
 ```shell
@@ -100,12 +101,12 @@ python extract_paddle_logs.py --log_dir=logs/paddle/bert/bz64 --batch_size_per_d
 ```
 输出：
 ```shell
-logs/paddle/bert/bz64/4n8g/bert_b64_fp32_4.log {4: 2712.28}
-logs/paddle/bert/bz64/4n8g/bert_b64_fp32_1.log {4: 2712.28, 1: 2703.05}
-logs/paddle/bert/bz64/4n8g/bert_b64_fp32_2.log {4: 2712.28, 1: 2703.05, 2: 2687.85}
-logs/paddle/bert/bz64/4n8g/bert_b64_fp32_6.log {4: 2712.28, 1: 2703.05, 2: 2687.85, 6: 2755.53}
-logs/paddle/bert/bz64/4n8g/bert_b64_fp32_3.log {4: 2712.28, 1: 2703.05, 2: 2687.85, 6: 2755.53, 3: 2673.17}
-logs/paddle/bert/bz64/4n8g/bert_b64_fp32_5.log {4: 2712.28, 1: 2703.05, 2: 2687.85, 6: 2755.53, 3: 2673.17, 5: 2768.95}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_4.log {4: 2743.19}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_1.log {4: 2743.19, 1: 2699.39}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_2.log {4: 2743.19, 1: 2699.39, 2: 2745.97}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_6.log {4: 2743.19, 1: 2699.39, 2: 2745.97, 6: 2687.66}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_3.log {4: 2743.19, 1: 2699.39, 2: 2745.97, 6: 2687.66, 3: 2730.36}
+logs/paddle/bert/bz64/4n8g/bert_b64_fp32_5.log {4: 2743.19, 1: 2699.39, 2: 2745.97, 6: 2687.66, 3: 2730.36, 5: 2745.92}
 logs/paddle/bert/bz64/1n8g/bert_b64_fp32_4.log {4: 780.47}
 logs/paddle/bert/bz64/1n8g/bert_b64_fp32_1.log {4: 780.47, 1: 756.94}
 logs/paddle/bert/bz64/1n8g/bert_b64_fp32_2.log {4: 780.47, 1: 756.94, 2: 765.51}
@@ -156,10 +157,10 @@ logs/paddle/bert/bz64/2n8g/bert_b64_fp32_5.log {4: 1418.26, 1: 1441.44, 2: 1431.
                    'batch_size_per_device': 64,
                    'median_speed': 1426.52,
                    'speedup': 10.39},
-          '4n8g': {'average_speed': 2716.8,
+          '4n8g': {'average_speed': 2725.42,
                    'batch_size_per_device': 64,
-                   'median_speed': 2707.66,
-                   'speedup': 19.73}}}
+                   'median_speed': 2736.78,
+                   'speedup': 19.94}}}
 Saving result to ./result/bz64_result.json
 ```
 ## BERT-Base  batch size=32
@@ -169,7 +170,7 @@ Saving result to ./result/bz64_result.json
 | 1 | 1 | 145.2 | 1.00 | 132.64  | 1.00 |
 | 1 | 8 | 1043.0 | 7.18 | 615.12 | 4.64 |
 | 2 | 16 | 1890.3 | 13.02 | 1116.02 | 8.41 |
-| 4 | 32 | 3715.1 | 25.59 | 2078.56 | 15.67 |
+| 4 | 32 | 3715.1 | 25.59 | 2073.6            | 15.63 |
 
 ## BERT-Base  batch size=64
 ### FP32 & Without XLA
@@ -178,7 +179,7 @@ Saving result to ./result/bz64_result.json
 | 1 | 1 | 149.8 | 1 | 137.27 | 1.0 |
 | 1 | 8 | 1138.9 | 7.60 | 761.22 | 5.55 |
 | 2 | 16 | 2189.3 | 14.61 | 1426.52 | 10.39 |
-| 4 | 32 | 4310.4 | 28.77 | 2707.66 | 19.73 |
+| 4 | 32 | 4310.4 | 28.77 | 2736.78           | 19.94 |
 
 ## BERT-Base  batch size=96
 ### FP32 & Without XLA
@@ -187,7 +188,7 @@ Saving result to ./result/bz64_result.json
 | 1 | 1 | 149.8 | 1.00 | 136.97 | 1.0 |
 | 1 | 8 | 1158.5 | 7.73 | 490.38 | 3.58 |
 | 2 | 16 | 2257.7 | 15.07 | 868.6 | 6.34 |
-| 4 | 32 | 4456.0 | 29.75 | 1631.36 | 11.91 |
+| 4 | 32 | 4456.0 | 29.75 | 3167.68 | 23.13 |
 
 
 
