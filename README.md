@@ -6,7 +6,6 @@ This repository provides State-of-the-Art classical deeplearning neural network(
 ### ResNet50-V1.5 Training performance images/sec
 Our results were obtained by running the applicable training scripts on 4 server nodes with 8x NVIDIA-V100-16G GPUs each. The specific training script that was run is documented in the corresponding model's README.
 
- on 4 nodes with (8x NVIDIA V100 16G) GPUs each
 | Model | Framework | Source | FP32 | FP32 XLA | AMP |
 | ---- | ---- | ---- | ---- | ---- | --- |
 | ResNet50-V1.5 | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.2](./OneFlow/ConvNets/rn50_fp32_report_0821.md) | TODO | TODO |
@@ -25,4 +24,5 @@ Our results were obtained by running the applicable training scripts on 4 server
 | BERT base Pretrain | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0](https://github.com/Oneflow-Inc/DLPerf/blob/master/OneFlow/BERT/bert_base_fp32_report_0822.md) | TODO | TODO |
 | BERT base Pretrain | TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/LanguageModeling/BERT) | **ZLY** | TODO | TODO |
 | BERT base Pretrain | MxNet | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/v0.10.x/scripts/bert) | **QJ** | TODO | TODO |
-| BERT base Pretrain | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/LanguageModeling/BERT) | **ZLY** | TODO | TODO |
+| BERT base Pretrain | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT) | **SX** | TODO | TODO |
+| BERT base Pretrain | PaddlePaddle | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | **ZLY** | TODO | TODO |
