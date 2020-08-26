@@ -24,14 +24,14 @@
 - 显卡：Tesla V100（16G）×8
 - 显卡驱动：NVIDIA 440.33.01
 - CUDA：10.2
-- cudnn：7.6.5
+- cuDNN：7.6.5
 ## NGC容器
 
 - Ubuntu18.04
 - Python 3.6
 - **Tensorflow 1.15.2**
 - CUDA 10.2.89
-- CUDNN 7.6.5
+- cuDNN 7.6.5
 - NCCL 2.6.3
 - Horovod 0.19.0
 - OpenMPI 3.1.4
@@ -166,68 +166,103 @@ bash ./resnet50v1.5/training/FP32/SINGLE_NODE_RN50_FP32_1E.sh
 ## 加速比
 执行以下脚本计算各个情况下的加速比：
 ```shell
-python extract_tensorflow_logs.py --log_dir=./logs
+python extract_tensorflow_logs.py --log_dir=logs/ngc/tensorflow/resnet50 --batch_size_per_device=128 --warmup_batches=20
 ```
 输出：
 ```shell
-./logs/4n8g/r50_b128_fp32_1.log {1: 9403.78}
-./logs/4n8g/r50_b128_fp32_4.log {1: 9403.78, 4: 9477.39}
-./logs/4n8g/r50_b128_fp32_2.log {1: 9403.78, 4: 9477.39, 2: 9574.57}
-./logs/4n8g/r50_b128_fp32_3.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9}
-./logs/4n8g/r50_b128_fp32_6.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9, 6: 9631.24}
-./logs/4n8g/r50_b128_fp32_5.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9, 6: 9631.24, 5: 9342.6}
-./logs/1n8g/r50_b128_fp32_1.log {1: 2737.81}
-./logs/1n8g/r50_b128_fp32_4.log {1: 2737.81, 4: 2696.33}
-./logs/1n8g/r50_b128_fp32_2.log {1: 2737.81, 4: 2696.33, 2: 2717.99}
-./logs/1n8g/r50_b128_fp32_3.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18}
-./logs/1n8g/r50_b128_fp32_6.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96}
-./logs/1n8g/r50_b128_fp32_5.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96, 5: 2727.71}
-./logs/1n4g/r50_b128_fp32_1.log {1: 1391.53}
-./logs/1n4g/r50_b128_fp32_4.log {1: 1391.53, 4: 1393.31}
-./logs/1n4g/r50_b128_fp32_2.log {1: 1391.53, 4: 1393.31, 2: 1392.25}
-./logs/1n4g/r50_b128_fp32_3.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17}
-./logs/1n4g/r50_b128_fp32_6.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17, 6: 1391.03}
-./logs/1n4g/r50_b128_fp32_5.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17, 6: 1391.03, 5: 1389.73}
-./logs/1n1g/r50_b128_fp32_1.log {1: 362.05}
-./logs/1n1g/r50_b128_fp32_4.log {1: 362.05, 4: 362.43}
-./logs/1n1g/r50_b128_fp32_2.log {1: 362.05, 4: 362.43, 2: 362.28}
-./logs/1n1g/r50_b128_fp32_3.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78}
-./logs/1n1g/r50_b128_fp32_6.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45}
-./logs/1n1g/r50_b128_fp32_5.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45, 5: 362.45}
-./logs/2n8g/r50_b128_fp32_1.log {1: 5097.79}
-./logs/2n8g/r50_b128_fp32_4.log {1: 5097.79, 4: 5018.55}
-./logs/2n8g/r50_b128_fp32_2.log {1: 5097.79, 4: 5018.55, 2: 5063.02}
-./logs/2n8g/r50_b128_fp32_3.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27}
-./logs/2n8g/r50_b128_fp32_6.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81}
-./logs/2n8g/r50_b128_fp32_5.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81, 5: 5101.06}
-{'r50': {'1n1g': {'average_speed': 362.41,
+logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_1.log {1: 9403.78}
+logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_4.log {1: 9403.78, 4: 9477.39}
+logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_2.log {1: 9403.78, 4: 9477.39, 2: 9574.57}
+logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_3.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9}
+logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_6.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9, 6: 9631.24}
+logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_5.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9, 6: 9631.24, 5: 9342.6}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_1.log {1: 2737.81}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_4.log {1: 2737.81, 4: 2696.33}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_2.log {1: 2737.81, 4: 2696.33, 2: 2717.99}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_3.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_6.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_5.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96, 5: 2727.71}
+logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_1.log {1: 1391.53}
+logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_4.log {1: 1391.53, 4: 1393.31}
+logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_2.log {1: 1391.53, 4: 1393.31, 2: 1392.25}
+logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_3.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17}
+logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_6.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17, 6: 1391.03}
+logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_5.log {1: 1391.53, 4: 1393.31, 2: 1392.25, 3: 1390.17, 6: 1391.03, 5: 1389.73}
+logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_1.log {1: 362.05}
+logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_4.log {1: 362.05, 4: 362.43}
+logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_2.log {1: 362.05, 4: 362.43, 2: 362.28}
+logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_3.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78}
+logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_6.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45}
+logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_5.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45, 5: 362.45}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_1.log {1: 5097.79}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_4.log {1: 5097.79, 4: 5018.55}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_2.log {1: 5097.79, 4: 5018.55, 2: 5063.02}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_3.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_6.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_5.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81, 5: 5101.06}
+{'r50': {'1n1g': {'average_speed': 362.45,
                   'batch_size_per_device': 128,
+                  'median_speed': 362.44,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1391.34,
+         '1n4g': {'average_speed': 1389.73,
                   'batch_size_per_device': 128,
+                  'median_speed': 1391.28,
                   'speedup': 3.84},
-         '1n8g': {'average_speed': 2720.16,
+         '1n8g': {'average_speed': 2727.71,
                   'batch_size_per_device': 128,
-                  'speedup': 7.5},
-         '2n8g': {'average_speed': 5085.58,
+                  'median_speed': 2721.98,
+                  'speedup': 7.51},
+         '2n8g': {'average_speed': 5101.06,
                   'batch_size_per_device': 128,
-                  'speedup': 14.03},
-         '4n8g': {'average_speed': 9496.91,
+                  'median_speed': 5099.42,
+                  'speedup': 14.07},
+         '4n8g': {'average_speed': 9342.6,
                   'batch_size_per_device': 128,
-                  'speedup': 26.2}}}
-Saving result to ./result/logs_result.json
+                  'median_speed': 9514.64,
+                  'speedup': 26.25}}}
+Saving result to ./result/resnet50_result.json
 ```
+### 计算规则
+
+#### 1.测速脚本
+
+- extract_tensorflow_logs.py
+
+- extract_tensorflow_logs_time.py
+
+两个脚本略有不同：
+
+extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
+
+extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20iter，取后100个iter的实际运行时间计算速度。
+
+#### 2.均值速度和中值速度
+
+- average_speed均值速度
+
+- median_speed中值速度
+
+  每个batch size进行5~7次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+
+#### 3.加速比以中值速度计算
+
+脚本和表格中的 **加速比** 是以单机单卡下的中值速度为基准进行计算的。例如:
+
+单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
+
+
+
 ## ResNet50 V1.5 bsz = 128
 
 ### FP32 & Without XLA
 
 | 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(tensorflow) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 383.76 | 1 | 362.41 | 1 |
-| 1 | 4 | 1497.62 | 3.90 | 1391.34 | 3.84 |
-| 1 | 8 | 2942.32 | 7.67 | 2720.16 | 7.5 |
-| 2 | 16 | 5839.05 | 15.22 | 5085.58 | 14.03 |
-| 4 | 32 | 11548.45 | 30.09 | 9496.91 | 26.2 |
+| 1 | 1 | 383.76 | 1.00 | 362.44                | 1.00 |
+| 1 | 4 | 1497.62 | 3.90 | 1391.28 | 3.84 |
+| 1 | 8 | 2942.32 | 7.67 | 2721.98 | 7.51 |
+| 2 | 16 | 5839.05 | 15.22 | 5099.42               | 14.07 |
+| 4 | 32 | 11548.45 | 30.09 | 9514.64 | 26.25 |
 
 
 
