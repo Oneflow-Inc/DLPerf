@@ -50,6 +50,7 @@ cd DeepLearningExamples/TensorFlow/LanguageModeling/BERT/
 ```
 
 1.将本页面scripts文件夹中的脚本：`run_pretraining_adam.sh`、`multi_node_run_pretraining_adam.sh`放入BERT/scripts下；
+
 2.将scripts中的其余脚本：`SINGLE_NODE_BERT_FP32_1E.sh`、`TWO_NODE_BERT_FP32_1E.sh`和`MULTI_NODE_BERT_FP32_1E.sh`放入BERT目录下
 
 
@@ -272,7 +273,7 @@ extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter�
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 ### BERT-Base  batch size=48
 #### FP32 & Without XLA
-| 节点数 | GPU数 | samples/s(Paddle) | 加速比 |
+| 节点数 | GPU数 | samples/s(Tensorflow) | 加速比 |
 | --- | --- | --- | --- |
 | 1 | 1 | 112.81 | 1.00 |
 | 1 | 8 | 854.61 | 7.58 |
@@ -283,7 +284,7 @@ extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter�
 
 ### BERT-Base  batch size=32
 #### FP32 & Without XLA
-| 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(Paddle) | 加速比 |
+| 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(Tensorflow) | 加速比 |
 | --- | --- | --- | --- | --- | --- |
 | 1 | 1 | 145.2 | 1.00 | 107.06 | 1.00 |
 | 1 | 8 | 1043.0 | 7.18 | 791.76 | 7.40 |
