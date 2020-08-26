@@ -16,6 +16,8 @@ Our results were obtained by running the applicable training scripts on 4 server
 | ResNet50-V1.5 | TensorFlow 2.x | [**ZLY**]() | [**ZLY**]() | TODO | TODO |
 | ResNet50-V1.5 | MxNet | [**QJ**]() | [**QJ**]() | TODO | TODO |
 
+
+## Natural Language Processing
 ### BERT base Pretraining performance sequence/sec
 Our results were obtained by running the applicable training scripts on 4 server nodes with 8x NVIDIA-V100-16G GPUs each. The specific training script that was run is documented in the corresponding model's README.
 
