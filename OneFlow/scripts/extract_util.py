@@ -34,6 +34,7 @@ def extract_result(args, extract_func):
     logs_list = sorted(logs_list)
 
     final_result_dict = {}
+    print("## All Results")
     mode_print(['num_nodes', 'gpu_num_per_node', 'batch_size_per_device', 'throughput'])
     if args.print_mode == 'markdown':
         mode_print(['--------' for _ in range(4)])
@@ -68,6 +69,7 @@ def extract_result(args, extract_func):
     final_result_list = sorted(final_result_list, key=lambda x: (-x[2], x[0], x[1]))
 
     # print results
+    print("## Filtered Result `median value`")
     mode_print(['num_nodes', 'gpu_num_per_node', 'batch_size_per_device', 'throughput', 'speedup'])
     if args.print_mode == 'markdown':
         mode_print(['--------' for _ in range(5)])
