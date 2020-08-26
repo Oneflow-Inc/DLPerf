@@ -23,7 +23,7 @@ Our results were obtained by running the applicable training scripts on 4 server
 
 | Model | Framework | Source | FP32 | FP32 XLA | AMP |
 | ---- | ---- | ---- | ---- | ---- | --- |
-| BERT base Pretrain | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0](https://github.com/Oneflow-Inc/DLPerf/blob/master/OneFlow/BERT/bert_base_fp32_report_0822.md) | TODO | TODO |
+| BERT base Pretrain | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0](./OneFlow/BERT/bert_base_fp32_report_0822.md) | TODO | TODO |
 | BERT base Pretrain | TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/LanguageModeling/BERT) | **ZLY** | TODO | TODO |
 | BERT base Pretrain | MxNet | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/v0.10.x/scripts/bert) | **QJ** | TODO | TODO |
 | BERT base Pretrain | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT) | **SX** | TODO | TODO |
