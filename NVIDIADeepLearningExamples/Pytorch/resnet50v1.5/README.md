@@ -8,7 +8,26 @@
 
 ## 内容目录 Table Of Content
 
-[TOC]
+- [NVIDIA/DeepLearningExamples Pytorch ResNet50 v1.5 测评](#nvidia-deeplearningexamples-pytorch-resnet50-v15---)
+  * [概述 Overview](#---overview)
+  * [内容目录 Table Of Content](#-----table-of-content)
+  * [环境 Environment](#---environment)
+    + [系统](#--)
+      - [硬件](#--)
+    + [NGC 容器](#ngc---)
+      - [Feature support matrix](#feature-support-matrix)
+  * [快速开始 Quick Start](#-----quick-start)
+    + [项目代码](#----)
+    + [1. 前期准备](#1-----)
+      - [数据集](#---)
+      - [镜像及容器](#-----)
+      - [SSH 免密](#ssh---)
+    + [2. 运行测试](#2-----)
+      - [单机测试](#----)
+    + [3. 数据处理](#3-----)
+  * [性能结果 Performance](#-----performance)
+    + [FP32 & W/O XLA](#fp32---w-o-xla)
+    + [ResNet50 v1.5 batch_size = 128](#resnet50-v15-batch-size---128)
 
 ## 环境 Environment
 
@@ -46,7 +65,7 @@
 
 - Python：3.6.9
 
-  更多容器细节请参考[NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
+  更多容器细节请参考 [NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
 
   #### Feature support matrix
 
@@ -74,7 +93,7 @@
 
 - #### 镜像及容器
 
-- 同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT#quick-start-guide)下载源码、拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
+  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT#quick-start-guide)下载源码、拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
 
   ```
   git clone https://github.com/NVIDIA/DeepLearningExamples.git
@@ -91,7 +110,7 @@
   -d nvidia_rn50_pt:20.03
   ```
 
-  - #### SSH 免密
+- #### SSH 免密
 
   单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证 Pytorch 官方的 mpi/nccl 分布式脚本运行时可以在单机上与其他节点互联。
 
@@ -183,7 +202,7 @@ Saving result to ./result/_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 NVIDIA Pytorch 框架的 ResNet50 v1.5 模型测试的性能结果和完整 log 日志。
+该小节提供针对 NVIDIA Pytorch 框架的 ResNet50 v1.5 模型单机测试的性能结果和完整 log 日志。
 
 ### FP32 & W/O XLA
 
@@ -200,5 +219,4 @@ NVIDIA的 Pytorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 result
 Ray 的 Pytorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks).
 
 详细 Log 信息可下载：[ngc_pytorch_resnet50_v1.5.zip]()
-
 
