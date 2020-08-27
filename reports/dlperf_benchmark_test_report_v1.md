@@ -76,7 +76,7 @@ data source:
 
 ### BERT Base Pretrain 
 data source:
-- OF_rn50: [OneFlow ResNet50-V1.5 Benchmark Test Report](../OneFlow/ConvNets/rn50_fp32_report_0821.md)
+- OF_rn50: [OneFlow BERT Benchmark Test Report](../OneFlow/BERT/bert_base_fp32_report_0822.md)
 - TF_NGC_rn50: [¡¾DLPerf¡¿NVIDIA-Tensorflow-BERT²âÆÀ](../NVIDIADeepLearningExamples/Tensorflow/LanguageModeling/BERT)
 - MX_NGC_rn50: TODO
 - PT_NGC_rn50: TODO
