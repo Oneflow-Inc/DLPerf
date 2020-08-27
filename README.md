@@ -56,7 +56,7 @@ According to chapter `Benchmark Test Scopes`, each test case varies with followi
 Each test case will repeat several times(suggest 7 times). The median value is choosed as the final result.
 
 ### Throughput
-Throughput is average training samples per second, e.g. images/sec for image classification.
+Throughput is the average training samples per second, e.g. images/sec for image classification.
 
 To get a continuous and stable output, first several training steps are ignored. In practice, we ignore 20 training steps of the begining, and measure the following 100 steps processing time to calculate throughput.
 
