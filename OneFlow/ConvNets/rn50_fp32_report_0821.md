@@ -5,7 +5,7 @@
 所有的测试都是在4台配置8卡V100-SXM2-16GB的服务器中进行，主要应软件配置如下：
 - Tesla V100-SXM2-16GB x 8
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
-- 48 CPU(s), Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+- Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
