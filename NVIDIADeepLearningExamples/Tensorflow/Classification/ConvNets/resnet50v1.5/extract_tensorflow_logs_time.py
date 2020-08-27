@@ -5,7 +5,8 @@ import glob
 import json
 import argparse
 import pprint
-
+import time
+import datetime
 import numpy as np
 
 pp = pprint.PrettyPrinter(indent=1)
@@ -41,34 +42,51 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     pricition = fname.split("_")[2]
     test_iter = int(fname.split("_")[3].strip(".log"))
 
-    total_batch_size = 0
     node_num = int(run_case[0])
     if len(run_case) == 4:
         card_num = int(run_case[-2])
     elif len(run_case) == 5:
         card_num = int(run_case[-3:-1])
 
+    total_batch_size = node_num * card_num * batch_size
+
     tmp_dict = {
         'average_speed': 0,
         'batch_size_per_device': batch_size,
     }
 
-    avg_speed_list = []
+    avg_speed = 0
     # extract info from file content
+    pt = re.compile(r"(\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})", re.S)
+
+    from_line_num = 1 if args.warmup_batches < 20 else args.warmup_batches-20+1
+    to_line_num = args.train_batches - 20
+    start_time = ''
+    end_time = ''
+    line_num = 0
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
             if " imgs_per_sec " in line:
-                p1 = re.compile(r' imgs_per_sec \: \d+.\d+ ', re.S)
-                s = re.findall(p1, line)
-                speed = float(s[0].split(" : ")[1].strip())
-                avg_speed_list.append(speed)
+                line_num += 1
+
+                if line_num == from_line_num:
+                    start_time = re.findall(pt, line)[0]
+                    continue
+
+                if line_num == to_line_num:
+                    end_time = re.findall(pt, line)[0]
+                    t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
+                    t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
+                    cost_time = (t2 - t1).total_seconds()
+                    iter_num = to_line_num-from_line_num
+                    avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
+                    break
+
 
     # compute avg throughoutput
-    avg_speed = round(np.mean(avg_speed_list[0:args.train_batches-20]), 2)
     tmp_dict['average_speed'] = avg_speed
-
-    result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
+    result_dict[model][run_case]['average_speed'] = avg_speed
     result_dict[model][run_case]['batch_size_per_device'] = tmp_dict['batch_size_per_device']
 
     speed_dict[model][run_case][test_iter] = avg_speed
@@ -83,9 +101,23 @@ def compute_speedup(result_dict, speed_dict):
         for d in run_case:
             speed_up = 1.0
             if result_dict[m]['1n1g']['average_speed']:
-                result_dict[m][d]['average_speed'] = compute_average(speed_dict[m][d])
-                speed_up = result_dict[m][d]['average_speed'] / result_dict[m]['1n1g']['average_speed']
+                result_dict[m][d]['median_speed'] = compute_median(speed_dict[m][d])
+                speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
+
+
+def compute_median(iter_dict):
+    def median(x):
+        length = len(x)
+        x.sort()
+        if (length % 2)== 1:
+            z=length // 2
+            y = x[z]
+        else:
+            y = (x[length//2]+x[length//2-1])/2
+        return y
+    speed_list = [i for i in iter_dict.values()]
+    return round(median(speed_list), 2)
 
 
 def compute_average(iter_dict):
