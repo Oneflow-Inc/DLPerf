@@ -1,0 +1,350 @@
+2020-08-26 15:57:15.717077: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+I0826 15:57:17.029998 140244211521280 classifier_trainer.py:180] Base params: {'evaluation': {'epochs_between_evals': 1, 'skip_eval': False, 'steps': None},
+ 'export': {'checkpoint': None, 'destination': None},
+ 'mode': None,
+ 'model': {'learning_rate': {'boundaries': [30, 60, 80],
+                             'decay_epochs': None,
+                             'decay_rate': None,
+                             'examples_per_epoch': 1281167,
+                             'initial_lr': None,
+                             'multipliers': [1.0, 0.1, 0.01, 0.001],
+                             'name': 'piecewise_constant_with_warmup',
+                             'scale_by_batch_size': 0.0,
+                             'staircase': None,
+                             'warmup_epochs': 5},
+           'loss': {'label_smoothing': None,
+                    'name': 'sparse_categorical_crossentropy'},
+           'model_params': {'batch_size': None,
+                            'num_classes': 1000,
+                            'rescale_inputs': False,
+                            'use_l2_regularizer': True},
+           'name': 'ResNet',
+           'num_classes': 1000,
+           'optimizer': {'beta_1': None,
+                         'beta_2': None,
+                         'decay': 0.9,
+                         'epsilon': 0.001,
+                         'lookahead': None,
+                         'momentum': 0.9,
+                         'moving_average_decay': None,
+                         'name': 'momentum',
+                         'nesterov': None}},
+ 'model_dir': None,
+ 'model_name': None,
+ 'runtime': {'all_reduce_alg': None,
+             'batchnorm_spatial_persistent': False,
+             'dataset_num_private_threads': None,
+             'distribution_strategy': 'mirrored',
+             'enable_xla': False,
+             'gpu_thread_mode': None,
+             'loss_scale': None,
+             'mixed_precision_dtype': None,
+             'num_gpus': 0,
+             'num_packs': 1,
+             'per_gpu_thread_count': 0,
+             'run_eagerly': False,
+             'task_index': -1,
+             'tpu': None,
+             'worker_hosts': None},
+ 'train': {'callbacks': {'enable_checkpoint_and_export': True,
+                         'enable_tensorboard': True,
+                         'enable_time_history': True},
+           'epochs': 90,
+           'metrics': ['accuracy', 'top_5'],
+           'resume_checkpoint': True,
+           'set_epoch_loop': False,
+           'steps': None,
+           'tensorboard': {'track_lr': True, 'write_model_weights': False},
+           'time_history': {'log_steps': 1}},
+ 'train_dataset': {'augmenter': {'name': None, 'params': None},
+                   'batch_size': 128,
+                   'builder': 'records',
+                   'cache': False,
+                   'data_dir': None,
+                   'download': False,
+                   'dtype': 'float32',
+                   'file_shuffle_buffer_size': 1024,
+                   'filenames': None,
+                   'image_size': 224,
+                   'mean_subtract': True,
+                   'name': 'imagenet2012',
+                   'num_channels': 'infer',
+                   'num_classes': 'infer',
+                   'num_devices': 1,
+                   'num_examples': 'infer',
+                   'one_hot': False,
+                   'shuffle_buffer_size': 10000,
+                   'skip_decoding': True,
+                   'split': 'train',
+                   'standardize': True,
+                   'tf_data_service': None,
+                   'use_per_replica_batch_size': True},
+ 'validation_dataset': {'augmenter': {'name': None, 'params': None},
+                        'batch_size': 128,
+                        'builder': 'records',
+                        'cache': False,
+                        'data_dir': None,
+                        'download': False,
+                        'dtype': 'float32',
+                        'file_shuffle_buffer_size': 1024,
+                        'filenames': None,
+                        'image_size': 224,
+                        'mean_subtract': True,
+                        'name': 'imagenet2012',
+                        'num_channels': 'infer',
+                        'num_classes': 'infer',
+                        'num_devices': 1,
+                        'num_examples': 'infer',
+                        'one_hot': False,
+                        'shuffle_buffer_size': 10000,
+                        'skip_decoding': True,
+                        'split': 'validation',
+                        'standardize': True,
+                        'tf_data_service': None,
+                        'use_per_replica_batch_size': True}}
+I0826 15:57:17.030208 140244211521280 classifier_trainer.py:183] Overriding params: configs/examples/resnet/imagenet/gpu.yaml
+/home/leinao/tensorflow/models-2.3.0/official/modeling/hyperparams/params_dict.py:431: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  params_dict = yaml.load(dict_or_string_or_yaml_file)
+/home/leinao/tensorflow/models-2.3.0/official/modeling/hyperparams/params_dict.py:436: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  params.override(yaml.load(f), is_strict)
+I0826 15:57:17.036275 140244211521280 classifier_trainer.py:183] Overriding params: runtime.num_gpus=2
+I0826 15:57:17.036833 140244211521280 classifier_trainer.py:183] Overriding params: {'model_dir': '../output', 'mode': 'train_and_eval', 'model': {'name': 'resnet'}, 'runtime': {'run_eagerly': None, 'tpu': None}, 'train_dataset': {'data_dir': '/datasets/ImageNet/tfrecord'}, 'validation_dataset': {'data_dir': '/datasets/ImageNet/tfrecord'}, 'train': {'time_history': {'log_steps': 100}}}
+I0826 15:57:17.038293 140244211521280 classifier_trainer.py:189] Final model parameters: {'evaluation': {'epochs_between_evals': 10, 'skip_eval': False, 'steps': None},
+ 'export': {'checkpoint': None, 'destination': None},
+ 'mode': 'train_and_eval',
+ 'model': {'learning_rate': {'boundaries': [30, 60, 80],
+                             'decay_epochs': None,
+                             'decay_rate': None,
+                             'examples_per_epoch': 640512,
+                             'initial_lr': 0.256,
+                             'multipliers': [1.0, 0.1, 0.01, 0.001],
+                             'name': 'piecewise_constant_with_warmup',
+                             'scale_by_batch_size': 0.0,
+                             'staircase': None,
+                             'warmup_epochs': 0},
+           'loss': {'label_smoothing': 0.1,
+                    'name': 'sparse_categorical_crossentropy'},
+           'model_params': {'batch_size': None,
+                            'num_classes': 1000,
+                            'rescale_inputs': False,
+                            'use_l2_regularizer': True},
+           'name': 'resnet',
+           'num_classes': 1000,
+           'optimizer': {'beta_1': None,
+                         'beta_2': None,
+                         'decay': 0.9,
+                         'epsilon': 0.001,
+                         'lookahead': None,
+                         'momentum': 0.875,
+                         'moving_average_decay': None,
+                         'name': 'momentum',
+                         'nesterov': None}},
+ 'model_dir': '../output',
+ 'model_name': None,
+ 'runtime': {'all_reduce_alg': None,
+             'batchnorm_spatial_persistent': True,
+             'dataset_num_private_threads': None,
+             'distribution_strategy': 'mirrored',
+             'enable_xla': False,
+             'gpu_thread_mode': None,
+             'loss_scale': None,
+             'mixed_precision_dtype': None,
+             'num_gpus': 2,
+             'num_packs': 1,
+             'per_gpu_thread_count': 0,
+             'run_eagerly': None,
+             'task_index': -1,
+             'tpu': None,
+             'worker_hosts': None},
+ 'train': {'callbacks': {'enable_checkpoint_and_export': True,
+                         'enable_tensorboard': True,
+                         'enable_time_history': True},
+           'epochs': 1,
+           'metrics': ['accuracy', 'top_5'],
+           'resume_checkpoint': False,
+           'set_epoch_loop': False,
+           'steps': 600,
+           'tensorboard': {'track_lr': True, 'write_model_weights': False},
+           'time_history': {'log_steps': 100}},
+ 'train_dataset': {'augmenter': {'name': None, 'params': None},
+                   'batch_size': 128,
+                   'builder': 'records',
+                   'cache': False,
+                   'data_dir': '/datasets/ImageNet/tfrecord',
+                   'download': False,
+                   'dtype': 'float32',
+                   'file_shuffle_buffer_size': 1024,
+                   'filenames': None,
+                   'image_size': 224,
+                   'mean_subtract': True,
+                   'name': 'imagenet2012',
+                   'num_channels': 'infer',
+                   'num_classes': 1000,
+                   'num_devices': 1,
+                   'num_examples': 640512,
+                   'one_hot': False,
+                   'shuffle_buffer_size': 10000,
+                   'skip_decoding': True,
+                   'split': 'train',
+                   'standardize': True,
+                   'tf_data_service': None,
+                   'use_per_replica_batch_size': True},
+ 'validation_dataset': {'augmenter': {'name': None, 'params': None},
+                        'batch_size': 128,
+                        'builder': 'records',
+                        'cache': False,
+                        'data_dir': '/datasets/ImageNet/tfrecord',
+                        'download': False,
+                        'dtype': 'float32',
+                        'file_shuffle_buffer_size': 1024,
+                        'filenames': None,
+                        'image_size': 224,
+                        'mean_subtract': True,
+                        'name': 'imagenet2012',
+                        'num_channels': 'infer',
+                        'num_classes': 1000,
+                        'num_devices': 1,
+                        'num_examples': 50000,
+                        'one_hot': False,
+                        'shuffle_buffer_size': 10000,
+                        'skip_decoding': True,
+                        'split': 'validation',
+                        'standardize': True,
+                        'tf_data_service': None,
+                        'use_per_replica_batch_size': True}}
+I0826 15:57:17.038367 140244211521280 classifier_trainer.py:294] Running train and eval.
+2020-08-26 15:57:17.039631: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcuda.so.1
+2020-08-26 15:57:17.516218: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1716] Found device 0 with properties: 
+pciBusID: 0000:1a:00.0 name: Tesla V100-SXM2-16GB computeCapability: 7.0
+coreClock: 1.53GHz coreCount: 80 deviceMemorySize: 15.78GiB deviceMemoryBandwidth: 836.37GiB/s
+2020-08-26 15:57:17.519580: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1716] Found device 1 with properties: 
+pciBusID: 0000:1b:00.0 name: Tesla V100-SXM2-16GB computeCapability: 7.0
+coreClock: 1.53GHz coreCount: 80 deviceMemorySize: 15.78GiB deviceMemoryBandwidth: 836.37GiB/s
+2020-08-26 15:57:17.519630: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2020-08-26 15:57:17.522518: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcublas.so.10
+2020-08-26 15:57:17.524973: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcufft.so.10
+2020-08-26 15:57:17.525418: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcurand.so.10
+2020-08-26 15:57:17.528265: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusolver.so.10
+2020-08-26 15:57:17.529805: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusparse.so.10
+2020-08-26 15:57:17.536319: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudnn.so.7
+2020-08-26 15:57:17.552100: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1858] Adding visible gpu devices: 0, 1
+2020-08-26 15:57:17.552790: I tensorflow/core/platform/cpu_feature_guard.cc:142] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN)to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2020-08-26 15:57:17.570466: I tensorflow/core/platform/profile_utils/cpu_utils.cc:104] CPU Frequency: 2300115000 Hz
+2020-08-26 15:57:17.578122: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55ae6ea9aeb0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-08-26 15:57:17.578158: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-08-26 15:57:25.892356: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55ae6eb075b0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-08-26 15:57:25.892429: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Tesla V100-SXM2-16GB, Compute Capability 7.0
+2020-08-26 15:57:25.892440: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (1): Tesla V100-SXM2-16GB, Compute Capability 7.0
+2020-08-26 15:57:25.897519: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1716] Found device 0 with properties: 
+pciBusID: 0000:1a:00.0 name: Tesla V100-SXM2-16GB computeCapability: 7.0
+coreClock: 1.53GHz coreCount: 80 deviceMemorySize: 15.78GiB deviceMemoryBandwidth: 836.37GiB/s
+2020-08-26 15:57:25.901982: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1716] Found device 1 with properties: 
+pciBusID: 0000:1b:00.0 name: Tesla V100-SXM2-16GB computeCapability: 7.0
+coreClock: 1.53GHz coreCount: 80 deviceMemorySize: 15.78GiB deviceMemoryBandwidth: 836.37GiB/s
+2020-08-26 15:57:25.902038: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2020-08-26 15:57:25.902088: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcublas.so.10
+2020-08-26 15:57:25.902115: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcufft.so.10
+2020-08-26 15:57:25.902196: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcurand.so.10
+2020-08-26 15:57:25.902220: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusolver.so.10
+2020-08-26 15:57:25.902251: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusparse.so.10
+2020-08-26 15:57:25.902276: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudnn.so.7
+2020-08-26 15:57:25.920644: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1858] Adding visible gpu devices: 0, 1
+2020-08-26 15:57:25.920790: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2020-08-26 15:57:55.261797: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1257] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-08-26 15:57:55.261850: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1263]      0 1 
+2020-08-26 15:57:55.261859: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1276] 0:   N Y 
+2020-08-26 15:57:55.261864: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1276] 1:   Y N 
+2020-08-26 15:57:55.275508: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1402] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 14755 MB memory) -> physical GPU (device: 0, name: Tesla V100-SXM2-16GB, pci bus id: 0000:1a:00.0, compute capability: 7.0)
+2020-08-26 15:57:55.284356: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1402] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 14755 MB memory) -> physical GPU (device: 1, name: Tesla V100-SXM2-16GB, pci bus id: 0000:1b:00.0, compute capability: 7.0)
+INFO:tensorflow:Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0', '/job:localhost/replica:0/task:0/device:GPU:1')
+I0826 15:57:55.309745 140244211521280 mirrored_strategy.py:341] Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0', '/job:localhost/replica:0/task:0/device:GPU:1')
+I0826 15:57:55.311638 140244211521280 classifier_trainer.py:310] Detected 2 devices.
+W0826 15:57:55.312302 140244211521280 classifier_trainer.py:101] label_smoothing > 0, so datasets will be one hot encoded.
+I0826 15:57:55.313191 140244211521280 dataset_factory.py:173] Using augmentation: None
+I0826 15:57:55.314125 140244211521280 dataset_factory.py:173] Using augmentation: None
+I0826 15:57:55.314539 140244211521280 dataset_factory.py:358] Using TFRecords to load data.
+WARNING:tensorflow:From /home/leinao/anaconda3/envs/tensorflow/lib/python3.7/site-packages/tensorflow/python/util/dispatch.py:201: sample_distorted_bounding_box (from tensorflow.python.ops.image_ops_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+`seed2` arg is deprecated.Use sample_distorted_bounding_box_v2 instead.
+W0826 15:57:55.948261 140244211521280 deprecation.py:323] From /home/leinao/anaconda3/envs/tensorflow/lib/python3.7/site-packages/tensorflow/python/util/dispatch.py:201: sample_distorted_bounding_box (from tensorflow.python.ops.image_ops_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+`seed2` arg is deprecated.Use sample_distorted_bounding_box_v2 instead.
+I0826 15:57:56.158425 140244211521280 dataset_factory.py:358] Using TFRecords to load data.
+I0826 15:57:57.316939 140244211521280 dataset_info.py:430] Load pre-computed DatasetInfo (eg: splits, num examples,...) from GCS: imagenet2012/5.0.0
+I0826 15:58:00.009092 140244211521280 dataset_info.py:361] Load dataset info from /tmp/tmpt8__7w1ztfds
+I0826 15:58:00.015884 140244211521280 dataset_info.py:401] Field info.description from disk and from code do not match. Keeping the one from code.
+I0826 15:58:00.016003 140244211521280 dataset_info.py:401] Field info.citation from disk and from code do not match. Keeping the one from code.
+I0826 15:58:00.292344 140244211521280 classifier_trainer.py:329] Global batch size: 256
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.432084 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.437067 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.443051 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.447435 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.462437 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.466613 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.506342 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.510775 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.516237 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:02.520507 140244211521280 cross_device_ops.py:443] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0826 15:58:06.325137 140244211521280 optimizer_factory.py:372] Using Piecewise constant decay with warmup. Parameters: batch_size: 256, epoch_size: 640512, warmup_epochs: 0, boundaries: [30, 60, 80], multipliers: [1.0, 0.1, 0.01, 0.001]
+I0826 15:58:06.325424 140244211521280 optimizer_factory.py:273] Building momentum optimizer with params {'name': 'momentum', 'decay': 0.9, 'epsilon': 0.001, 'momentum': 0.875, 'nesterov': None, 'moving_average_decay': None, 'lookahead': None, 'beta_1': None, 'beta_2': None}
+I0826 15:58:06.325496 140244211521280 optimizer_factory.py:281] Using momentum optimizer
+2020-08-26 15:58:06.385982: I tensorflow/core/profiler/lib/profiler_session.cc:164] Profiler session started.
+2020-08-26 15:58:06.386066: I tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1391] Profiler found 2 GPUs
+2020-08-26 15:58:06.386940: W tensorflow/stream_executor/platform/default/dso_loader.cc:59] Could not load dynamic library 'libcupti.so.10.1'; dlerror: libcupti.so.10.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/leinao/gcc-5.5/lib/:/home/leinao/gcc-5.5/lib/::/usr/local/cuda/lib64:/usr/local/nccl_2.7.3-1+cuda10.1_x86_64/lib:/usr/local/openmpi/lib:/usr/local/cuda/lib64:/usr/local/nccl_2.7.3-1+cuda10.1_x86_64/lib:/usr/local/openmpi/lib
+2020-08-26 15:58:06.387031: W tensorflow/stream_executor/platform/default/dso_loader.cc:59] Could not load dynamic library 'libcupti.so'; dlerror: libcupti.so: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/leinao/gcc-5.5/lib/:/home/leinao/gcc-5.5/lib/::/usr/local/cuda/lib64:/usr/local/nccl_2.7.3-1+cuda10.1_x86_64/lib:/usr/local/openmpi/lib:/usr/local/cuda/lib64:/usr/local/nccl_2.7.3-1+cuda10.1_x86_64/lib:/usr/local/openmpi/lib
+2020-08-26 15:58:06.387045: E tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1441] function cupti_interface_->Subscribe( &subscriber_, (CUpti_CallbackFunc)ApiCallback, this)failed with error CUPTI could not be loaded or symbol could not be found.
+I0826 15:58:06.387885 140244211521280 classifier_trainer.py:285] Saving experiment configuration to ../output/params.yaml
+INFO:tensorflow:batch_all_reduce: 161 all-reduces with algorithm = nccl, num_packs = 1
+I0826 15:58:13.043026 140244211521280 cross_device_ops.py:702] batch_all_reduce: 161 all-reduces with algorithm = nccl, num_packs = 1
+INFO:tensorflow:batch_all_reduce: 161 all-reduces with algorithm = nccl, num_packs = 1
+I0826 15:58:19.326507 140244211521280 cross_device_ops.py:702] batch_all_reduce: 161 all-reduces with algorithm = nccl, num_packs = 1
+2020-08-26 15:58:30.872278: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcublas.so.10
+2020-08-26 15:58:45.034884: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudnn.so.7
+2020-08-26 16:00:24.148148: I tensorflow/core/profiler/lib/profiler_session.cc:164] Profiler session started.
+2020-08-26 16:00:24.148267: E tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1441] function cupti_interface_->Subscribe( &subscriber_, (CUpti_CallbackFunc)ApiCallback, this)failed with error CUPTI could not be loaded or symbol could not be found.
+WARNING:tensorflow:From /home/leinao/anaconda3/envs/tensorflow/lib/python3.7/site-packages/tensorflow/python/ops/summary_ops_v2.py:1277: stop (from tensorflow.python.eager.profiler) is deprecated and will be removed after 2020-07-01.
+Instructions for updating:
+use `tf.profiler.experimental.stop` instead.
+W0826 16:00:24.639155 140244211521280 deprecation.py:323] From /home/leinao/anaconda3/envs/tensorflow/lib/python3.7/site-packages/tensorflow/python/ops/summary_ops_v2.py:1277: stop (from tensorflow.python.eager.profiler) is deprecated and will be removed after 2020-07-01.
+Instructions for updating:
+use `tf.profiler.experimental.stop` instead.
+2020-08-26 16:00:24.705051: I tensorflow/core/profiler/internal/gpu/device_tracer.cc:223]  GpuTracer has collected 0 callback api events and 0 activity events. 
+2020-08-26 16:00:24.758452: I tensorflow/core/profiler/rpc/client/save_profile.cc:176] Creating directory: ../output/train/plugins/profile/2020_08_26_16_00_24
+2020-08-26 16:00:24.789566: I tensorflow/core/profiler/rpc/client/save_profile.cc:182] Dumped gzipped tool data for trace.json.gz to ../output/train/plugins/profile/2020_08_26_16_00_24/VS002.trace.json.gz
+2020-08-26 16:00:24.881829: I tensorflow/core/profiler/rpc/client/save_profile.cc:176] Creating directory: ../output/train/plugins/profile/2020_08_26_16_00_24
+2020-08-26 16:00:24.898566: I tensorflow/core/profiler/rpc/client/save_profile.cc:182] Dumped gzipped tool data for memory_profile.json.gz to ../output/train/plugins/profile/2020_08_26_16_00_24/VS002.memory_profile.json.gz
+2020-08-26 16:00:24.901700: I tensorflow/python/profiler/internal/profiler_wrapper.cc:111] Creating directory: ../output/train/plugins/profile/2020_08_26_16_00_24Dumped tool data for xplane.pb to ../output/train/plugins/profile/2020_08_26_16_00_24/VS002.xplane.pb
+Dumped tool data for overview_page.pb to ../output/train/plugins/profile/2020_08_26_16_00_24/VS002.overview_page.pb
+Dumped tool data for input_pipeline.pb to ../output/train/plugins/profile/2020_08_26_16_00_24/VS002.input_pipeline.pb
+Dumped tool data for tensorflow_stats.pb to ../output/train/plugins/profile/2020_08_26_16_00_24/VS002.tensorflow_stats.pb
+Dumped tool data for kernel_stats.pb to ../output/train/plugins/profile/2020_08_26_16_00_24/VS002.kernel_stats.pb
+
+I0826 16:01:08.618142 140244211521280 keras_utils.py:133] TimeHistory: 178.42 seconds, 143.48 examples/second between steps 0 and 100
+I0826 16:01:52.940788 140244211521280 keras_utils.py:133] TimeHistory: 44.32 seconds, 577.67 examples/second between steps 100 and 200
+I0826 16:02:36.968875 140244211521280 keras_utils.py:133] TimeHistory: 44.02 seconds, 581.49 examples/second between steps 200 and 300
+I0826 16:03:20.816368 140244211521280 keras_utils.py:133] TimeHistory: 43.84 seconds, 583.91 examples/second between steps 300 and 400
+I0826 16:04:04.606445 140244211521280 keras_utils.py:133] TimeHistory: 43.78 seconds, 584.71 examples/second between steps 400 and 500
+I0826 16:04:49.139817 140244211521280 keras_utils.py:133] TimeHistory: 44.53 seconds, 574.95 examples/second between steps 500 and 600
+
+Epoch 00001: saving model to ../output/model.ckpt-0001
+600/600 - 266s - loss: 9.6349 - accuracy: 0.2434 - top_5_accuracy: 0.4216
+WARNING:tensorflow:From /home/leinao/anaconda3/envs/tensorflow/lib/python3.7/site-packages/tensorflow/python/data/ops/multi_device_iterator_ops.py:601: get_next_as_optional (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Iterator.get_next_as_optional()` instead.
+W0826 16:04:50.098962 140244211521280 deprecation.py:323] From /home/leinao/anaconda3/envs/tensorflow/lib/python3.7/site-packages/tensorflow/python/data/ops/multi_device_iterator_ops.py:601: get_next_as_optional (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Iterator.get_next_as_optional()` instead.
+195/195 - 22s - loss: 6.3155 - accuracy: 0.9214 - top_5_accuracy: 0.9882
+I0826 16:05:16.434691 140244211521280 classifier_trainer.py:447] Run stats:
+{'accuracy_top_1': 0.9213541746139526, 'eval_loss': 6.315457344055176, 'loss': 9.634931564331055, 'training_accuracy_top_1': 0.2433789074420929, 'step_timestamp_log': ['BatchTimestamp<batch_index: 0, timestamp: 1598428690.1980512>', 'BatchTimestamp<batch_index: 100, timestamp: 1598428868.617921>', 'BatchTimestamp<batch_index: 200, timestamp: 1598428912.9405723>', 'BatchTimestamp<batch_index: 300, timestamp: 1598428956.9684653>', 'BatchTimestamp<batch_index: 400, timestamp: 1598429000.8161633>', 'BatchTimestamp<batch_index: 500, timestamp: 1598429044.605536>', 'BatchTimestamp<batch_index: 600, timestamp: 1598429089.1396217>'], 'train_finish_time': 1598429089.774884, 'avg_exp_per_second': 384.4074134552999}
