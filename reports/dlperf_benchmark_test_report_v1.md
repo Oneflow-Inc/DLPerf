@@ -52,7 +52,7 @@ Legend:
 | TensorFlow 1.15.2 | nvcr.io/nvidia/tensorflow:20.03-tf1-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/LanguageModeling/BERT) | TF_NGC_bert |
 | MxNet 1.6.0 | nvcr.io/nvidia/mxnet:20.03-py3 | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/v0.10.x/scripts/bert) | MX_bert |
 | PyTorch | nvcr.io/nvidia/pytorch:20.03-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT) | PT_NGC_bert |
-| PaddlePaddle 1.8.3.post107  | NA | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | PP_rn50 |
+| PaddlePaddle 1.8.3.post107  | NA | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | PP_bert |
 
 ## Benchmark Test Options
 - Devices: 1 node(1 device), 1 node(8 devices), 2 nodes(8 devices), 4 nodes(8 devices)   
