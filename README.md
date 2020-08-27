@@ -60,7 +60,16 @@ Throughput is the average training samples per second, e.g. images/sec for image
 
 To get a continuous and stable output, first several training steps are ignored. In practice, we ignore 20 training steps of the begining, and measure the following 100 steps processing time to calculate throughput.
 
-## Computer Vision
+## Files and Folders
+- `README.md`: introduce general information of this repository.
+- `NVIDIADeepLearningExamples/`: holds the reproducible scripts and test reports for DNN models from NVIDIA DeepLearningExamples;
+- `OneFlow/`: holds the reproducible scripts and test reports for DNN models from OneFlow official benchmark;
+- `PaddlePaddle/`: holds the reproducible scripts and test reports for DNN models from PaddlePaddle official benchmark;  
+- `reports`: holds rounds of DNN's benchmark test reports.
+
+## Summary of Latest Test Results
+This section maintains the summary of the lastest test results. For more and detail information, please find in [reports](./reports) folder.
+
 ### ResNet50-V1.5 Training Performance images/sec
 Our results were obtained by running the applicable training scripts on 4 server nodes with 8x NVIDIA-V100-16G GPUs each. The specific training script that was run is documented in the corresponding model's README.
 
@@ -74,7 +83,6 @@ Our results were obtained by running the applicable training scripts on 4 server
 | TensorFlow 2.x | [**ZLY**]() | [**ZLY**]() | TODO | TODO |
 | MxNet | [**QJ**]() | [**QJ**]() | TODO | TODO |
 
-## Natural Language Processing
 ### BERT base Pretraining Performance sequence/sec
 Our results were obtained by running the applicable training scripts on 4 server nodes with 8x NVIDIA-V100-16G GPUs each. The specific training script that was run is documented in the corresponding model's README.
 
@@ -85,3 +93,4 @@ Our results were obtained by running the applicable training scripts on 4 server
 | MxNet | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/v0.10.x/scripts/bert) | **QJ** | **QJ** | TODO | TODO |
 | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT) | **SX** | **SX** | TODO | TODO |
 | PaddlePaddle | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | **ZLY** | **ZLY** | TODO | TODO |
+
