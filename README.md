@@ -84,7 +84,7 @@ This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1,
 | MxNet | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5) | **QJ** | TODO | TODO |
 | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets/resnet50v1.5) | **SX** | TODO | TODO |
 | PaddlePaddle | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | [9330.94](./PaddlePaddle/resnet50v1.5) | TODO | TODO |
-| TensorFlow 2.x | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | [9418.44](./Tensorflow/resnet50v1.5) | TODO | TODO |
+| TensorFlow 2.x | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | [9418.44](./TensorFlow/resnet50v1.5) | TODO | TODO |
 | MxNet | [**QJ**]() | [**QJ**]() | TODO | TODO |
 
 ### BERT base Pretraining Performance sequence/sec
@@ -93,7 +93,7 @@ Our results were obtained by running the applicable training scripts on 4 server
 | Framework | Source | FP32<br>bsz=max | FP32<br>bsz=32 |FP32 XLA | AMP |
 | ---- | ---- | ---- | ---- | ---- | --- |
 | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0<br>bsz=96](./OneFlow/BERT/bert_base_fp32_report_0822.md) | [3715.1](./OneFlow/BERT/bert_base_fp32_report_0822.md) | TODO | TODO |
-| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/LanguageModeling/BERT) | [2478.59<br/>bsz=48](./NVIDIADeepLearningExamples/Tensorflow/LanguageModeling/BERT) | [1923.68](./NVIDIADeepLearningExamples/Tensorflow/LanguageModeling/BERT) | TODO | TODO |
+| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | [2478.59<br/>bsz=48](./NVIDIADeepLearningExamples/Tensorflow/LanguageModeling/BERT) | [1923.68](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | TODO | TODO |
 | MxNet | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/v0.10.x/scripts/bert) | **QJ** | **QJ** | TODO | TODO |
 | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT) | **SX** | **SX** | TODO | TODO |
 | PaddlePaddle | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | [3167.68<br/>bsz=96](./PaddlePaddle/bert) | [2073.6](./PaddlePaddle/bert) | TODO | TODO |
