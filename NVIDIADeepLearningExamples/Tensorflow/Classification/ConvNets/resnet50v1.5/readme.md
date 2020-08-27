@@ -166,7 +166,7 @@ bash ./resnet50v1.5/training/FP32/SINGLE_NODE_RN50_FP32_1E.sh
 ## 加速比
 执行以下脚本计算各个情况下的加速比：
 ```shell
-python extract_tensorflow_logs.py --log_dir=logs/ngc/tensorflow/resnet50 --batch_size_per_device=128 --warmup_batches=20
+python extract_tensorflow_logs.py --log_dir=logs/ngc/tensorflow/resnet50 --batch_size_per_device=128
 ```
 输出：
 ```shell
@@ -178,10 +178,10 @@ logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_6.log {1: 9403.78, 4: 9477.39, 2
 logs/ngc/tensorflow/resnet50/4n8g/r50_b128_fp32_5.log {1: 9403.78, 4: 9477.39, 2: 9574.57, 3: 9551.9, 6: 9631.24, 5: 9342.6}
 logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_1.log {1: 2737.81}
 logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_4.log {1: 2737.81, 4: 2696.33}
-logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_2.log {1: 2737.81, 4: 2696.33, 2: 2717.99}
-logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_3.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18}
-logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_6.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96}
-logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_5.log {1: 2737.81, 4: 2696.33, 2: 2717.99, 3: 2715.18, 6: 2725.96, 5: 2727.71}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_2.log {1: 2737.81, 4: 2696.33, 2: 2718.0}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_3.log {1: 2737.81, 4: 2696.33, 2: 2718.0, 3: 2715.18}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_6.log {1: 2737.81, 4: 2696.33, 2: 2718.0, 3: 2715.18, 6: 2725.96}
+logs/ngc/tensorflow/resnet50/1n8g/r50_b128_fp32_5.log {1: 2737.81, 4: 2696.33, 2: 2718.0, 3: 2715.18, 6: 2725.96, 5: 2727.71}
 logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_1.log {1: 1391.53}
 logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_4.log {1: 1391.53, 4: 1393.31}
 logs/ngc/tensorflow/resnet50/1n4g/r50_b128_fp32_2.log {1: 1391.53, 4: 1393.31, 2: 1392.25}
@@ -195,28 +195,28 @@ logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_3.log {1: 362.05, 4: 362.43, 2: 
 logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_6.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45}
 logs/ngc/tensorflow/resnet50/1n1g/r50_b128_fp32_5.log {1: 362.05, 4: 362.43, 2: 362.28, 3: 362.78, 6: 362.45, 5: 362.45}
 logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_1.log {1: 5097.79}
-logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_4.log {1: 5097.79, 4: 5018.55}
-logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_2.log {1: 5097.79, 4: 5018.55, 2: 5063.02}
-logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_3.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27}
-logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_6.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81}
-logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_5.log {1: 5097.79, 4: 5018.55, 2: 5063.02, 3: 5107.27, 6: 5125.81, 5: 5101.06}
-{'r50': {'1n1g': {'average_speed': 362.45,
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_4.log {1: 5097.79, 4: 5018.54}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_2.log {1: 5097.79, 4: 5018.54, 2: 5063.02}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_3.log {1: 5097.79, 4: 5018.54, 2: 5063.02, 3: 5107.27}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_6.log {1: 5097.79, 4: 5018.54, 2: 5063.02, 3: 5107.27, 6: 5125.81}
+logs/ngc/tensorflow/resnet50/2n8g/r50_b128_fp32_5.log {1: 5097.79, 4: 5018.54, 2: 5063.02, 3: 5107.27, 6: 5125.81, 5: 5101.06}
+{'r50': {'1n1g': {'average_speed': 362.41,
                   'batch_size_per_device': 128,
                   'median_speed': 362.44,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1389.73,
+         '1n4g': {'average_speed': 1391.34,
                   'batch_size_per_device': 128,
                   'median_speed': 1391.28,
                   'speedup': 3.84},
-         '1n8g': {'average_speed': 2727.71,
+         '1n8g': {'average_speed': 2720.16,
                   'batch_size_per_device': 128,
                   'median_speed': 2721.98,
                   'speedup': 7.51},
-         '2n8g': {'average_speed': 5101.06,
+         '2n8g': {'average_speed': 5085.58,
                   'batch_size_per_device': 128,
                   'median_speed': 5099.42,
                   'speedup': 14.07},
-         '4n8g': {'average_speed': 9342.6,
+         '4n8g': {'average_speed': 9496.91,
                   'batch_size_per_device': 128,
                   'median_speed': 9514.64,
                   'speedup': 26.25}}}
@@ -256,13 +256,13 @@ extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20ite
 
 ### FP32 & Without XLA
 
-| 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(tensorflow) | 加速比 |
-| --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 383.76 | 1.00 | 362.44                | 1.00 |
-| 1 | 4 | 1497.62 | 3.90 | 1391.28 | 3.84 |
-| 1 | 8 | 2942.32 | 7.67 | 2721.98 | 7.51 |
-| 2 | 16 | 5839.05 | 15.22 | 5099.42               | 14.07 |
-| 4 | 32 | 11548.45 | 30.09 | 9514.64 | 26.25 |
+| 节点数 | GPU数 | samples/s | 加速比 |
+| --- | --- | --- | --- |
+| 1 | 1 | 362.44    | 1.00 |
+| 1 | 4 | 1391.28   | 3.84 |
+| 1 | 8 | 2721.98   | 7.51   |
+| 2 | 16 | 5099.42 | 14.07  |
+| 4 | 32 | 9514.64 | 26.25 |
 
 
 
