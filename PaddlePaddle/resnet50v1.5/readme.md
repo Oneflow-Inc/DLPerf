@@ -222,7 +222,7 @@ extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20ite
 | 1 | 4 | 1358.64   | 3.85   |
 | 1 | 8 | 2625.38   | 7.44   |
 | 2 | 16 | 4895.27   | 13.88  |
-| 4 | 32 | 9348.17   | 36.50 |
+| 4 | 32 | 9348.17   | 26.50 |
 
 附：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
 
