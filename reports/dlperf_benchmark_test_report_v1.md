@@ -43,6 +43,7 @@ Legend:
 | MxNet 1.6.0 | nvcr.io/nvidia/mxnet:20.03-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5) | MX_NGC_rn50 |
 | PyTorch | nvcr.io/nvidia/pytorch:20.03-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets) | PT_NGC_rn50 |
 | PaddlePaddle 1.8.3.post107 | NA | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | PP_rn50 |
+| TensorFlow 2.3 | TODO | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | TF2_rn50 |
 
 ### BERT Base Pretrain 
 | Framework Version | Docker From | DNN modeles source | Abbr |
@@ -66,13 +67,15 @@ data source:
 - MX_NGC_rn50: TODO
 - PT_NGC_rn50: TODO
 - PP_50: [¡¾DLPerf¡¿Paddle-ResNet50V1.5²âÆÀ](../PaddlePaddle/resnet50v1.5)
+- TF2_50: [¡¾DLPerf¡¿TensorFlow-ResNet50V1.5²âÆÀ](../TensorFlow/resnet50v1.5)
+
 #### batch size = 128
-| node num | device num | throughput<br>OF_rn50 | throughput<br>TF_NGC_rn50 | throughput<br>MX_NGC_rn50 | throughput<br>PT_NGC_rn50 | throughput<br>PP_rn50 | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
-| 1 | 1 | 384.90 | 362.44 | TODO | TODO | 352.72 | 
-| 1 | 8 | 2969.50 | 2721.98 | TODO | TODO | 2625.38 | 
-| 2 | 16 | 5906.60 | 5099.42 | TODO | TODO | 4895.27 | 
-| 4 | 32 | 11711.20 | 9514.64 | TODO | TODO | 9348.17 | 
+| node num | device num | throughput<br>OF_rn50 | throughput<br>TF_NGC_rn50 | throughput<br>MX_NGC_rn50 | throughput<br>PT_NGC_rn50 | throughput<br>PP_rn50 | throughput<br>TF2_rn50 | 
+| -------- | -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| 1 | 1 | 384.90 | 362.44 | TODO | TODO | 352.72 | 321.80 | 
+| 1 | 8 | 2969.50 | 2721.98 | TODO | TODO | 2625.38 | 2458.74 | 
+| 2 | 16 | 5906.60 | 5099.42 | TODO | TODO | 4895.27 | 4849.68 | 
+| 4 | 32 | 11711.20 | 9514.64 | TODO | TODO | 9348.17 | 9418.44 | 
 
 ### BERT Base Pretrain 
 data source:
