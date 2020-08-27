@@ -29,7 +29,7 @@
 
 - Ubuntu18.04
 - Python 3.6
-- **Tensorflow 1.15.2**
+- **TensorFlow 1.15.2**
 - CUDA 10.2.89
 - cuDNN 7.6.5
 - NCCL 2.6.3
@@ -37,7 +37,7 @@
 - OpenMPI 3.1.4
 - DALI 0.19.0
 ## Feature support matrix
-| Feature | ResNet-50 v1.5 Tensorflow |
+| Feature | ResNet-50 v1.5 TensorFlow |
 | --- | --- |
 | Multi-node,multi-gpu training | Yes |
 | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes |
