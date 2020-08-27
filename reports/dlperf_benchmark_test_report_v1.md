@@ -5,7 +5,7 @@ This report summrized the results of a series of tests performed on Aug 2020.
 All tests were performed on 4 GPU Servers with 8x Tesla V100-SXM2-16GB and following is the main hardware and software configurations for each:  
 - Tesla V100-SXM2-16GB x 8
 - InfiniBand 100 Gb/sec (4X EDR)£¬ Mellanox Technologies MT27700 Family
-- 48 CPU(s), Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+- Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
