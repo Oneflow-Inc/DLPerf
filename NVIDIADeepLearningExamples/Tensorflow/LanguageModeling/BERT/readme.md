@@ -187,80 +187,85 @@ bash SINGLE_NODE_BERT_FP32_1E.sh
 ### 加速比
 执行以下脚本计算各个情况下的加速比：
 ```shell
-python extract_tensorflow_logs.py --log_dir=logs/ngc/tensorflow/bert/bz48 --batch_size_per_device=48
+python extract_tensorflow_logs_time.py --log_dir=logs/ngc/tensorflow/bert/bz48 --batch_size_per_device=48
 ```
 输出：
 ```shell
-logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_2.log {2: 2482.36}
-logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_1.log {2: 2482.36, 1: 2516.78}
-logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_4.log {2: 2482.36, 1: 2516.78, 4: 2519.3}
-logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_6.log {2: 2482.36, 1: 2516.78, 4: 2519.3, 6: 2580.03}
-logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_5.log {2: 2482.36, 1: 2516.78, 4: 2519.3, 6: 2580.03, 5: 2262.68}
-logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_3.log {2: 2482.36, 1: 2516.78, 4: 2519.3, 6: 2580.03, 5: 2262.68, 3: 2485.57}
-logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_2.log {2: 853.73}
-logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_1.log {2: 853.73, 1: 855.49}
-logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_4.log {2: 853.73, 1: 855.49, 4: 852.75}
-logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_6.log {2: 853.73, 1: 855.49, 4: 852.75, 6: 859.04}
-logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_5.log {2: 853.73, 1: 855.49, 4: 852.75, 6: 859.04, 5: 855.64}
-logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_3.log {2: 853.73, 1: 855.49, 4: 852.75, 6: 859.04, 5: 855.64, 3: 851.59}
-logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_2.log {2: 430.6}
-logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_1.log {2: 430.6, 1: 429.06}
-logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_4.log {2: 430.6, 1: 429.06, 4: 430.36}
-logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_6.log {2: 430.6, 1: 429.06, 4: 430.36, 6: 431.42}
-logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_5.log {2: 430.6, 1: 429.06, 4: 430.36, 6: 431.42, 5: 430.16}
-logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_3.log {2: 430.6, 1: 429.06, 4: 430.36, 6: 431.42, 5: 430.16, 3: 431.56}
-logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_1.log {1: 112.81}
-logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_4.log {1: 112.81, 4: 112.84}
-logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_6.log {1: 112.81, 4: 112.84, 6: 112.62}
-logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_5.log {1: 112.81, 4: 112.84, 6: 112.62, 5: 112.81}
-logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_3.log {1: 112.81, 4: 112.84, 6: 112.62, 5: 112.81, 3: 112.6}
-logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_2.log {2: 215.03}
-logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_1.log {2: 215.03, 1: 214.4}
-logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_4.log {2: 215.03, 1: 214.4, 4: 214.99}
-logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_6.log {2: 215.03, 1: 214.4, 4: 214.99, 6: 214.76}
-logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_5.log {2: 215.03, 1: 214.4, 4: 214.99, 6: 214.76, 5: 214.7}
-logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_3.log {2: 215.03, 1: 214.4, 4: 214.99, 6: 214.76, 5: 214.7, 3: 215.03}
-logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_2.log {2: 1408.27}
-logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_1.log {2: 1408.27, 1: 1285.65}
-logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_4.log {2: 1408.27, 1: 1285.65, 4: 1390.11}
-logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_6.log {2: 1408.27, 1: 1285.65, 4: 1390.11, 6: 1379.22}
-logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_5.log {2: 1408.27, 1: 1285.65, 4: 1390.11, 6: 1379.22, 5: 1395.64}
-logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_3.log {2: 1408.27, 1: 1285.65, 4: 1390.11, 6: 1379.22, 5: 1395.64, 3: 1348.14}
-{'bert': {'1n1g': {'average_speed': 112.74,
+logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_2.log {2: 2493.48}
+logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_1.log {2: 2493.48, 1: 2157.02}
+logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_4.log {2: 2493.48, 1: 2157.02, 4: 2463.7}
+logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_6.log {2: 2493.48, 1: 2157.02, 4: 2463.7, 6: 2501.03}
+logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_5.log {2: 2493.48, 1: 2157.02, 4: 2463.7, 6: 2501.03, 5: 2600.51}
+logs/ngc/tensorflow/bert/bz48/4n8g/bert_b48_fp32_3.log {2: 2493.48, 1: 2157.02, 4: 2463.7, 6: 2501.03, 5: 2600.51, 3: 2208.05}
+logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_2.log {2: 865.89}
+logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_1.log {2: 865.89, 1: 869.25}
+logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_4.log {2: 865.89, 1: 869.25, 4: 867.21}
+logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_6.log {2: 865.89, 1: 869.25, 4: 867.21, 6: 866.16}
+logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_5.log {2: 865.89, 1: 869.25, 4: 867.21, 6: 866.16, 5: 868.23}
+logs/ngc/tensorflow/bert/bz48/1n8g/bert_b48_fp32_3.log {2: 865.89, 1: 869.25, 4: 867.21, 6: 866.16, 5: 868.23, 3: 869.02}
+logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_2.log {2: 437.16}
+logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_1.log {2: 437.16, 1: 436.61}
+logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_4.log {2: 437.16, 1: 436.61, 4: 436.23}
+logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_6.log {2: 437.16, 1: 436.61, 4: 436.23, 6: 437.6}
+logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_5.log {2: 437.16, 1: 436.61, 4: 436.23, 6: 437.6, 5: 436.78}
+logs/ngc/tensorflow/bert/bz48/1n4g/bert_b48_fp32_3.log {2: 437.16, 1: 436.61, 4: 436.23, 6: 437.6, 5: 436.78, 3: 436.38}
+logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_2.log {2: 112.72}
+logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_1.log {2: 112.72, 1: 113.4}
+logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_4.log {2: 112.72, 1: 113.4, 4: 112.48}
+logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_6.log {2: 112.72, 1: 113.4, 4: 112.48, 6: 112.34}
+logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_5.log {2: 112.72, 1: 113.4, 4: 112.48, 6: 112.34, 5: 112.5}
+logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_3.log {2: 112.72, 1: 113.4, 4: 112.48, 6: 112.34, 5: 112.5, 3: 112.62}
+logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_2.log {2: 217.4}
+logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_1.log {2: 217.4, 1: 217.34}
+logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_4.log {2: 217.4, 1: 217.34, 4: 217.86}
+logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_6.log {2: 217.4, 1: 217.34, 4: 217.86, 6: 217.45}
+logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_5.log {2: 217.4, 1: 217.34, 4: 217.86, 6: 217.45, 5: 217.92}
+logs/ngc/tensorflow/bert/bz48/1n2g/bert_b48_fp32_3.log {2: 217.4, 1: 217.34, 4: 217.86, 6: 217.45, 5: 217.92, 3: 217.58}
+logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_2.log {2: 1381.6}
+logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_1.log {2: 1381.6, 1: 1367.84}
+logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_4.log {2: 1381.6, 1: 1367.84, 4: 1397.28}
+logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_6.log {2: 1381.6, 1: 1367.84, 4: 1397.28, 6: 1373.53}
+logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_5.log {2: 1381.6, 1: 1367.84, 4: 1397.28, 6: 1373.53, 5: 1373.08}
+logs/ngc/tensorflow/bert/bz48/2n8g/bert_b48_fp32_3.log {2: 1381.6, 1: 1367.84, 4: 1397.28, 6: 1373.53, 5: 1373.08, 3: 1379.36}
+{'bert': {'1n1g': {'average_speed': 112.6767,
                    'batch_size_per_device': 48,
-                   'median_speed': 112.81,
+                   'median_speed': 112.56,
                    'speedup': 1.0},
-          '1n2g': {'average_speed': 214.82,
+          '1n2g': {'average_speed': 217.5917,
                    'batch_size_per_device': 48,
-                   'median_speed': 214.88,
-                   'speedup': 1.9},
-          '1n4g': {'average_speed': 430.53,
+                   'median_speed': 217.51,
+                   'speedup': 1.93},
+          '1n4g': {'average_speed': 436.7933,
                    'batch_size_per_device': 48,
-                   'median_speed': 430.48,
-                   'speedup': 3.82},
-          '1n8g': {'average_speed': 854.71,
+                   'median_speed': 436.69,
+                   'speedup': 3.88},
+          '1n8g': {'average_speed': 867.6267,
                    'batch_size_per_device': 48,
-                   'median_speed': 854.61,
-                   'speedup': 7.58},
-          '2n8g': {'average_speed': 1367.84,
+                   'median_speed': 867.72,
+                   'speedup': 7.71},
+          '2n8g': {'average_speed': 1378.7817,
                    'batch_size_per_device': 48,
-                   'median_speed': 1384.66,
-                   'speedup': 12.27},
-          '4n8g': {'average_speed': 2474.45,
+                   'median_speed': 1376.44,
+                   'speedup': 12.23},
+          '4n8g': {'average_speed': 2403.965,
                    'batch_size_per_device': 48,
-                   'median_speed': 2501.18,
-                   'speedup': 22.17}}}
+                   'median_speed': 2478.59,
+                   'speedup': 22.02}}}
 Saving result to ./result/bz48_result.json
 ```
-> 注：logs/ngc/tensorflow/bert/bz48/1n1g/bert_b48_fp32_2.log 由于日志异常，故不参与计算
+
 
 ### 计算规则
+
 #### 1.测速脚本
 
 - extract_tensorflow_logs.py
+- extract_tensorflow_logs_time.py
 
+extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
-extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均
+extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20iter，取后100个iter的实际运行时间计算速度。
+
 #### 2.均值速度和中值速度
 
 - average_speed均值速度
@@ -273,23 +278,25 @@ extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter�
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 ### BERT-Base  batch size=48
 #### FP32 & Without XLA
-| 节点数 | GPU数 | samples/s(Tensorflow) | 加速比 |
+| 节点数 | GPU数 | samples/s | 加速比 |
 | --- | --- | --- | --- |
-| 1 | 1 | 112.81 | 1.00 |
-| 1 | 8 | 854.61 | 7.58 |
-| 2 | 16 | 1384.66 | 12.27 |
-| 4 | 32 | 2501.18 | 22.17 |
+| 1 | 1 | 112.56   | 1.00 |
+| 1 | 2 | 217.51    | 1.93 |
+| 1 | 4 | 436.69    | 3.88 |
+| 1 | 8 | 867.72 | 7.71 |
+| 2 | 16 | 1376.44 | 12.23 |
+| 4 | 32 | 2478.59   | 22.02 |
 
 
 
 ### BERT-Base  batch size=32
 #### FP32 & Without XLA
-| 节点数 | GPU数 | samples/s(OneFlow) | 加速比 | samples/s(Tensorflow) | 加速比 |
-| --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 145.2 | 1.00 | 107.06 | 1.00 |
-| 1 | 8 | 1043.0 | 7.18 | 791.76 | 7.40 |
-| 2 | 16 | 1890.3 | 13.02 | 1103.3 | 10.31 |
-| 4 | 32 | 3715.1 | 25.59 | 1967.05 | 18.37 |
-
-
+| 节点数 | GPU数 | samples/s | 加速比 |
+| --- | --- | --- | --- |
+| 1 | 1 | 106.8     | 1.00 |
+| 1 | 2 | 202.97    | 1.90   |
+| 1 | 4 | 406.68    | 3.81   |
+| 1 | 8 | 806.56 | 7.55   |
+| 2 | 16 | 1090.2    | 10.21  |
+| 4 | 32 | 1923.68   | 18.01 |
 
