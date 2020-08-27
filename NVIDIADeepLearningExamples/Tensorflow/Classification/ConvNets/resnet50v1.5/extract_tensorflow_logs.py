@@ -63,9 +63,8 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
             if " imgs_per_sec " in line:
                 p1 = re.compile(r' imgs_per_sec \: \d+.\d+ ', re.S)
                 s = re.findall(p1, line)
-                speed = float(s[0].split(" : ")[1].strip())
+                speed = round(float(s[0].split(" : ")[1].strip()), 2)
                 avg_speed_list.append(speed)
-
 
     # compute avg throughoutput
     avg_speed = round(np.mean(avg_speed_list[from_iter:to_iter]), 2)
@@ -85,6 +84,7 @@ def compute_speedup(result_dict, speed_dict):
         for d in run_case:
             speed_up = 1.0
             if result_dict[m]['1n1g']['average_speed']:
+                result_dict[m][d]['average_speed'] = compute_average(speed_dict[m][d])
                 result_dict[m][d]['median_speed'] = compute_median(speed_dict[m][d])
                 speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
@@ -136,4 +136,5 @@ def extract_result():
 
 
 if __name__ == "__main__":
+    assert args.warmup_batches >=20 and args.train_batches > args.warmup_batches
     extract_result()

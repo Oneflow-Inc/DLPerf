@@ -81,6 +81,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                     cost_time = (t2 - t1).total_seconds()
                     iter_num = to_line_num-from_line_num
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
+                    print("t1,t2", t1, t2)
                     break
 
 
@@ -101,6 +102,7 @@ def compute_speedup(result_dict, speed_dict):
         for d in run_case:
             speed_up = 1.0
             if result_dict[m]['1n1g']['average_speed']:
+                result_dict[m][d]['average_speed'] = compute_average(speed_dict[m][d])
                 result_dict[m][d]['median_speed'] = compute_median(speed_dict[m][d])
                 speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
@@ -152,4 +154,5 @@ def extract_result():
 
 
 if __name__ == "__main__":
+    assert args.warmup_batches >=20 and args.train_batches > args.warmup_batches
     extract_result()
