@@ -80,7 +80,7 @@ This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1,
 | Framework | Source | FP32<br>bsz=128 | FP32 XLA | AMP |
 | ---- | ---- | ---- | ---- | --- |
 | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.2](./OneFlow/ConvNets/rn50_fp32_report_0821.md) | TODO | TODO |
-| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [9496.91](./NVIDIADeepLearningExamples/Tensorflow/resnet50v1.5) | TODO | TODO |
+| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5) | [9496.91](./NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | TODO | TODO |
 | MxNet | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5) | **QJ** | TODO | TODO |
 | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets/resnet50v1.5) | **SX** | TODO | TODO |
 | PaddlePaddle | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | [9330.94](./PaddlePaddle/resnet50v1.5) | TODO | TODO |
