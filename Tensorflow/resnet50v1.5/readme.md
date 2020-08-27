@@ -1,7 +1,7 @@
-# 【DLPerf】Tensorflow-ResNet50V1.5测评
+# 【DLPerf】TensorFlow-ResNet50V1.5测评
 
 # Overview
-本次复现采用了[Tensorflow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的tensorflow2.3版的[ResNet50(v1.5)](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本次复现采用了[TensorFlow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的tensorflow2.3版的[ResNet50(v1.5)](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 
 - **Environment** 给出了测评时的硬件系统环境、软件版本等信息
@@ -21,7 +21,7 @@
 - NCCL：2.7.3
 ## 框架
 
-- **Tensorflow 2.3.0** 
+- **TensorFlow 2.3.0** 
 
   
 
@@ -32,7 +32,7 @@ python -m pip install tensorflow==2.3.0 -i https://mirror.baidu.com/pypi/simple
 ```
 ## 项目代码
 
-- [Tensorflow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)
+- [TensorFlow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)
    - [Resnet50_v1.5项目主页](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification)
 
 下载官方源码：
@@ -52,7 +52,7 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 ```
 ## 数据集
 
-本次训练使用了ImageNet2012的一个子集：train-00000-of-01024,train-00001-of-01024...train-0000511-of-01024共640512张图片，数据集格式为tfrecord，具体制作方法参考tensorflow官方。
+本次训练使用了ImageNet2012的一个子集：train-00000-of-01024,train-00001-of-01024...train-0000511-of-01024共640512张图片，数据集格式为tfrecord，具体制作方法参考TensorFlow官方。
 
 
 
