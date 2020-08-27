@@ -73,6 +73,10 @@ This section maintains the summary of the lastest test results. For more and det
 ### ResNet50-V1.5 Training Performance images/sec
 Our results were obtained by running the applicable training scripts on 4 server nodes with 8x NVIDIA-V100-16G GPUs each. The specific training script that was run is documented in the corresponding model's README.
 
+The difference between v1 and v1.5 is in the bottleneck blocks which require downsampling. ResNet v1 has stride = 2 in the first 1x1 convolution, whereas v1.5 has stride = 2 in the 3x3 convolution
+
+This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1, but comes with a small performance drawback (~5% imgs/sec).
+
 | Framework | Source | FP32<br>bsz=128 | FP32 XLA | AMP |
 | ---- | ---- | ---- | ---- | --- |
 | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.2](./OneFlow/ConvNets/rn50_fp32_report_0821.md) | TODO | TODO |
