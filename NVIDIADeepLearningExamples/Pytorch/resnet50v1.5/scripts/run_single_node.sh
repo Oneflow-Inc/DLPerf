@@ -24,7 +24,7 @@ do
 done
 
 i=1
-while [ $i -le 15 ]
+while [ $i -le 5 ]
 do
   bash ${WORKSPACE}/scripts/single_node_train.sh ${WORKSPACE} ${DATA_DIR}  8 128 120 $i
   echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Finished Test Case ${i}! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
