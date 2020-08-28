@@ -1,6 +1,6 @@
 # DLPerf - **D**eep**L**earning framework **Perf**ormace profiling toolkit
 ## Introduction
-This repository provides State-of-the-Art classical deeplearning neural network(DNN) models of different deepLearning frameworks that are easy to train and deploy, achieving the best reproducible performance with NVIDIA GPU Server Clusters.
+This repository provides State-of-the-Art classical deeplearning neural network(DNN) models of different deeplearning frameworks that are easy to train and deploy, achieving the best reproducible performance with NVIDIA GPU Server Clusters.
 
 DLPerf measures how fast a deeplearning framework can train DNN models, so both DL framwork and DNN models are involved in this benchmark test.
 
