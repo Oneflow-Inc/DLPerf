@@ -76,17 +76,8 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
 
 
 def compute_median(iter_dict):
-    def median(x):
-        length = len(x)
-        x.sort()
-        if (length % 2)== 1:
-            z=length // 2
-            y = x[z]
-        else:
-            y = (x[length//2]+x[length//2-1])/2
-        return y
     speed_list = [i for i in iter_dict.values()]
-    return round(median(speed_list), 2)
+    return round(np.median(speed_list), 2)
     
 
 def compute_speedup(result_dict, speed_dict):
