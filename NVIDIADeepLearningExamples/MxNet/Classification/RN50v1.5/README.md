@@ -2,7 +2,7 @@
 
 ## 概述 Overview
 
-本测试基于 [NVIDIA/DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples) 仓库中提供的 MxNet框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5) 实现，在 NVIDIA 官方提供的 [MxNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行单机单卡、单机多卡的结果复现及速度评测，并使用Horovod进行多机（2机、4机）的的训练，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [NVIDIA/DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples) 仓库中提供的 MxNet框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5) 实现，在 NVIDIA 官方提供的 [MxNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行单机单卡、单机多卡的结果复现及速度评测，并使用Horovod进行多机（2机、4机）的训练，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
@@ -16,7 +16,7 @@
 
   - GPU：Tesla V100（16G）×8
 
-- ####　软件
+- #### 软件
 
   - 驱动：Nvidia 440.33.01
 
@@ -226,11 +226,13 @@ Saving result to ./result/resnet50_result.json
 - extract_mxnet_logs.py
 - extract_mxnet_logs_time.py
 
-两个脚本略有不同：
+两个脚本略有不同，得到的结果稍有误差：
 
 extract_mxnet_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
 extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，取后100个iter的实际运行时间计算速度。
+
+本Readme展示的是extract_mxnet_logs_time.py 的计算结果
 
 #### 5.2 均值速度和中值速度
 
@@ -263,7 +265,7 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 | 2        | 16      | 5684.68   | 14.59   |
 | 4        | 32      | 10419.21  | 26.74   |
 
-NVIDIA的 MxNet 官方测评结果详见 [ResNet50 v1.5 For MxNet results]()
+NVIDIA的 MxNet 官方测评结果详见 [ResNet50 v1.5 For MxNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
-详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/cnn.tar.gz)
+详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/logs.zip)
 
