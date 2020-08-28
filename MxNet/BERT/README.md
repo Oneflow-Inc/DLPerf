@@ -16,7 +16,7 @@
 
   - GPU：Tesla V100（16G）×8
 
-- ####　软件
+- #### 软件
 
   - 驱动：Nvidia 440.33.01
 
@@ -66,18 +66,13 @@
 
 - #### 数据集
 
-  数据集制作参考[NVIDIA官方提供的MxNet数据集制作方法](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#getting-the-data)
+  数据集制作参考[gluon-nlp仓库提供的create_pretraining_data.py脚本](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/create_pretraining_data.py)
 
 - #### 镜像及容器
 
-  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#quick-start-guide)下载源码、拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
+  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#quick-start-guide)拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
 
   ```shell
-  git clone https://github.com/NVIDIA/DeepLearningExamples.git
-  cd DeepLearningExamples/MxNet/Classification/RN50v1.5/
-  
-  # 构建项目镜像 
-  # DeepLearningExamples/MxNet/Classification/RN50v1.5/目录下
   docker build . -t nvidia_rn50_mx:20.03
   
   # 启动容器
