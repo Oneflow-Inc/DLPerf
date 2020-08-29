@@ -14,8 +14,8 @@
 # Environment
 ## 系统
 
-- 系统：Ubuntu 16.04
-- 显卡：Tesla V100（16G）×8
+- 系统：Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- 显卡：Tesla V100-SXM2-16GB x 8
 - 驱动：440.33.01
 - CUDA：10.2
 - cuDNN：7.6.5
@@ -106,14 +106,9 @@ apt-get update
 apt-get install openssh-server
 ```
 **设置免密登录**
-1.容器生成ssh公钥
-```shell
-ssh-keygen -t rsa -C "xxxxx@xxxxx.com"
-cat /root/.ssh/id_rsa.pub  >>   /root/.ssh/authorized_keys
-```
-2.各个节点间：/root/.ssh/id_rsa.pub 互相放到/root/.ssh/authorized_keys中
-3.修改sshd中用于docker通信的Port端口号，以及相应配置：
-`vim /etc/ssh/sshd_config`
+
+- 1.各个节点间：/root/.ssh/id_rsa.pub 互相放到/root/.ssh/authorized_keys中
+- 2.修改sshd中用于docker通信的Port端口号，以及相应配置：`vim /etc/ssh/sshd_config`
 
 ```shell
 Port 10000
@@ -146,9 +141,10 @@ PubkeyAuthentication yes
 
 # Expect .ssh/authorized_keys2 to be disregarded by default in future.
 AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
+...
 ```
-4.重启ssh服务
-`service ssh restart`
+- 3.重启ssh服务`service ssh restart`
+
 # Training
 集群中有4台节点：
 
@@ -264,18 +260,19 @@ Saving result to ./result/bz48_result.json
 
 extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
-extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20iter，取后100个iter的实际运行时间计算速度。
+extract_tensorflow_logs_time.py则根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
 
 #### 2.均值速度和中值速度
 
 - average_speed均值速度
 
 - median_speed中值速度
-每个batch size进行5~7次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
 
 #### 3.加速比以中值速度计算
 脚本和表格中的 **加速比** 是以单机单卡下的中值速度为基准进行计算的。例如:
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
+
 ### BERT-Base  batch size=48
 #### FP32 & Without XLA
 | 节点数 | GPU数 | samples/s | 加速比 |

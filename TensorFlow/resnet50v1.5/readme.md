@@ -13,8 +13,8 @@
 # Environment
 ## 系统
 
-- 系统：Ubuntu 16.04
-- 显卡：Tesla V100（16G）×8
+- 系统：Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- 显卡：Tesla V100-SXM2-16GB x 8
 - 驱动：Nvidia 440.33.01
 - CUDA：10.2
 - cuDNN：7.6.5
@@ -163,13 +163,15 @@ Saving result to ./result/resnet50_result.json
 
 extract_tensorflow_logs.py根据官方在log中打印的速度，在600个iter中，排除前100iter，取后500个iter的速度做平均；
 
-extract_tensorflow_logs_time.py则排除前100iter，取后500个iter的实际运行时间计算速度。
+extract_paddle_logs_time.py则根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
 
 ### 2.均值速度和中值速度
 
 - average_speed均值速度
 
-- median_speed中值速度每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+- median_speed中值速度
+
+  每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
 ### 3.加速比以中值速度计算
 脚本和表格中的 **加速比** 是以单机单卡下的中值速度为基准进行计算的。例如:单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 ## ResNet50 V1.5 batch szie = 128

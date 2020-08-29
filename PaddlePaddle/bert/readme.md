@@ -12,8 +12,8 @@
 # Environment
 ## 系统
 
-- 系统：Ubuntu 16.04
-- 显卡：Tesla V100（16G）×8
+- 系统：Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- 显卡：Tesla V100-SXM2-16GB x 8
 - 驱动：Nvidia 440.33.01
 - CUDA：10.2
 - cuDNN：7.6.5
@@ -167,15 +167,14 @@ Saving result to ./result/bz64_result.json
 
 - extract_paddle_logs.py
 
-
-extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均
+extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
 #### 2.均值速度和中值速度
 
 - average_speed均值速度
 
 - median_speed中值速度
-  每个batch size进行5~7次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+  每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
 
 #### 3.加速比以中值速度计算
 
@@ -198,7 +197,7 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 ### FP32 & Without XLA
 | 节点数 | GPU数 | samples/s | 加速比 |
 | --- | --- | --- | --- |
-| 1 | 1 | 137.27    | 1 |
+| 1 | 1 | 137.27    | 1.00 |
 | 1 | 2 | 252.71    | 1.84   |
 | 1 | 4 | 441.74    | 3.22   |
 | 1 | 8 | 761.22    | 5.55 |
