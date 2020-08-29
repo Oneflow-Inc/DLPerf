@@ -367,11 +367,11 @@ Legend:
 
 数据集：
 
-![image-20200829122434371](C:\Users\oneflow\AppData\Roaming\Typora\typora-user-images\image-20200829122434371.png)
+![npz dataset](./debug_img/mxnet-bert-dataset.png)
 
 内存300G：
 
-![image-20200829122629240](C:\Users\oneflow\AppData\Roaming\Typora\typora-user-images\image-20200829122629240.png)
+![memory_300G](.debug_img/mxnet-memory-300G.png)
 
 ### 现象2：配置参数和环境变量无法降低训练时的CPU占用率，无法提升分布式训练速度
 
@@ -396,5 +396,5 @@ Thanks for your patience and nice answers. They help me a lot to find the final 
 
 训练时的CPU占用率表现为：
 
-![image-20200829121952990](C:\Users\oneflow\AppData\Roaming\Typora\typora-user-images\image-20200829121952990.png)
+![cpu_48x100](./debug_img/mxnet-cpu-100.png)
 
