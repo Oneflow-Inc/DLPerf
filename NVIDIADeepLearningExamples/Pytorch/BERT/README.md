@@ -7,26 +7,27 @@
 目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
 ## 内容目录 Table Of Contents
-- [环境 Environment](#---environment)
-  * [系统](#--)
-    + [硬件](#--)
-    + [软件](#--)
-  * [NGC 容器](#ngc---)
-      - [Feature support matrix](#feature-support-matrix)
-- [快速开始 Quick Start](#-----quick-start)
-  * [1. 前期准备](#1-----)
-    + [数据集](#---)
-    + [镜像及容器](#-----)
-    + [SSH 免密](#ssh---)
-  * [2. 运行测试](#2-----)
-  * [3. 数据处理](#3-----)
-- [性能结果 Performance](#-----performance)
-  * [FP32 & W/O XLA](#fp32---w-o-xla)
-    + [BERT-Base batch_size = 32](#bert-base-batch-size---32)
-    + [BERT-Base batch_size = 48](#bert-base-batch-size---48)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
+- [NVIDIA/DeepLearningExamples Pytorch BERT 测评](#nvidia-deeplearningexamples-pytorch-bert---)
+  * [概述 Overview](#---overview)
+  * [内容目录 Table Of Contents](#-----table-of-contents)
+  * [环境 Environment](#---environment)
+    + [系统](#--)
+      - [硬件](#--)
+      - [软件](#--)
+    + [NGC 容器](#ngc---)
+        * [Feature support matrix](#feature-support-matrix)
+  * [快速开始 Quick Start](#-----quick-start)
+    + [1. 前期准备](#1-----)
+      - [数据集](#---)
+      - [镜像及容器](#-----)
+      - [SSH 免密](#ssh---)
+    + [2. 运行测试](#2-----)
+    + [3. 数据处理](#3-----)
+  * [性能结果 Performance](#-----performance)
+    + [FP32 & W/O XLA](#fp32---w-o-xla)
+      - [BERT-Base batch_size = 32](#bert-base-batch-size---32)
+      - [BERT-Base batch_size = 48](#bert-base-batch-size---48)
 
 
 ## 环境 Environment
