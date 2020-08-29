@@ -12,7 +12,7 @@ pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for cnn benchmark")
-parser.add_argument("--log_dir", type=str, default="../logs/paddle/resnet50", required=True)
+parser.add_argument("--log_dir", type=str, default="../ngc/tensorflow", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
@@ -40,45 +40,42 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     batch_size = int(fname.split("_")[1].strip("b"))
     pricition = fname.split("_")[2]
     test_iter = int(fname.split("_")[3].strip(".log"))
+
+    total_batch_size = 0
     node_num = int(run_case[0])
     if len(run_case) == 4:
         card_num = int(run_case[-2])
     elif len(run_case) == 5:
         card_num = int(run_case[-3:-1])
 
-    total_batch_size = node_num * card_num * batch_size
     tmp_dict = {
         'average_speed': 0,
         'batch_size_per_device': batch_size,
     }
 
+    from_iter = 0 if args.warmup_batches < 20 else args.warmup_batches-20
+    to_iter = args.train_batches-20
     avg_speed_list = []
     # extract info from file content
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
-            if "elapse" in line:
-                p1 = re.compile(r".*elapse (.*?) sec", re.S)
-                item = re.findall(p1, line)
-                a = float(item[0].strip())
-                avg_speed_list.append(round((total_batch_size / a), 4))
+            if " imgs_per_sec " in line:
+                p1 = re.compile(r' imgs_per_sec \: \d+.\d+ ', re.S)
+                s = re.findall(p1, line)
+                speed = round(float(s[0].split(" : ")[1].strip()), 2)
+                avg_speed_list.append(speed)
 
     # compute avg throughoutput
-    avg_speed = round(np.mean(avg_speed_list[args.warmup_batches:args.train_batches]), 2)
+    avg_speed = round(np.mean(avg_speed_list[from_iter:to_iter]), 2)
     tmp_dict['average_speed'] = avg_speed
 
     result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
     result_dict[model][run_case]['batch_size_per_device'] = tmp_dict['batch_size_per_device']
-
     speed_dict[model][run_case][test_iter] = avg_speed
 
     print(log_file, speed_dict[model][run_case])
 
-
-def compute_median(iter_dict):
-    speed_list = [i for i in iter_dict.values()]
-    return round(np.median(speed_list), 2)
-    
 
 def compute_speedup(result_dict, speed_dict):
     model_list = [key for key in result_dict]  # eg.['vgg16', 'rn50']
@@ -91,6 +88,11 @@ def compute_speedup(result_dict, speed_dict):
                 result_dict[m][d]['median_speed'] = compute_median(speed_dict[m][d])
                 speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
+
+
+def compute_median(iter_dict):
+    speed_list = [i for i in iter_dict.values()]
+    return round(np.median(speed_list), 2)
 
 
 def compute_average(iter_dict):
@@ -125,5 +127,5 @@ def extract_result():
 
 
 if __name__ == "__main__":
+    assert args.warmup_batches >=20 and args.train_batches > args.warmup_batches
     extract_result()
-

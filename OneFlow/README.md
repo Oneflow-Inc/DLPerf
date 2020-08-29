@@ -1,4 +1,4 @@
-【DLPert】OneFlow Benchmark评测
+【DLPerf】OneFlow Benchmark评测
 ## Overview
 本目录提供一系列脚本用于OneFlow Benchmark评测，评测的主要目标是经典模型的吞吐率，目前评测完成的模型是ResNet50-V1.5和BERT base。
 

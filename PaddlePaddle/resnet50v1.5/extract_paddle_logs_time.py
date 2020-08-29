@@ -54,10 +54,11 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     }
 
     pt = re.compile(r"(\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2},\d{3})", re.S)
-    s1 = "train batch "+str(args.warmup_batches)
-    s2 = "train batch "+str(args.train_batches-1)
+    s1 = "train batch "+str(args.warmup_batches-1) + "]"
+    s2 = "train batch "+str(args.train_batches-1) + "]"
     start_time = ''
     end_time = ''
+    avg_speed=0
     avg_speed_list = []
     # extract info from file content
     with open(log_file) as f:
@@ -73,7 +74,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                     t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S,%f")
                     t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S,%f")
                     cost_time = (t2 - t1).total_seconds()
-                    iter_num = args.train_batches-1-args.warmup_batches
+                    iter_num = args.train_batches-args.warmup_batches
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
                     break
 
@@ -108,17 +109,8 @@ def compute_average(iter_dict):
 
 
 def compute_median(iter_dict):
-    def median(x):
-        length = len(x)
-        x.sort()
-        if (length % 2)== 1:
-            z=length // 2
-            y = x[z]
-        else:
-            y = (x[length//2]+x[length//2-1])/2
-        return y
     speed_list = [i for i in iter_dict.values()]
-    return round(median(speed_list), 2)
+    return round(np.median(speed_list), 2)
 
 
 def extract_result():
@@ -144,5 +136,6 @@ def extract_result():
 
 
 if __name__ == "__main__":
+    assert args.warmup_batches > 1
     extract_result()
 
