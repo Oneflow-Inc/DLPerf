@@ -28,8 +28,8 @@
 # Environment
 ## 系统
 
-- 系统：Ubuntu 16.04
-- 显卡：Tesla V100（16G）×8
+- 系统：Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- 显卡：Tesla V100-SXM2-16GB x 8
 - 驱动：Nvidia 440.33.01
 - CUDA：10.2
 - cuDNN：7.6.5
@@ -84,7 +84,7 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 
 ## 测评方法
 
-每个节点有8张显卡，这里设置batch_size=128，从1机1卡～4机32卡进行了多组训练。每组进行5~7次训练，每次训练过程只取第1个epoch的前120iter，计算训练速度时去掉前20iter，只取后100iter。最后将5~7次训练的速度取中位数得到最终速度，并最终以此计算加速比。
+每个节点有8张显卡，这里设置batch_size=128，从1机1卡～4机32卡进行了多组训练。每组进行6次训练，每次训练过程只取第1个epoch的前120iter，计算训练速度时去掉前20iter，只取后100iter。最后将6次训练的速度取中位数得到最终速度，并最终以此计算加速比。
 
 在下文的【Result】部分，我们提供了完整日志和用于根据log计算速度的代码。
 
@@ -188,14 +188,14 @@ Saving result to ./result/resnet50_result.json
 
 ### 1.测速脚本
 
-- extract_tensorflow_logs.py
-- extract_tensorflow_logs_time.py
+- extract_paddle_logs.py
+- extract_paddle_logs_time.py
 
 两个脚本略有不同：
 
-extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
+extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
-extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20iter，取后100个iter的实际运行时间计算速度。
+extract_paddle_logs_time.py则根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
 
 ### 2.均值速度和中值速度
 

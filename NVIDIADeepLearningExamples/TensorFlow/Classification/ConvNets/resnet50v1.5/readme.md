@@ -20,8 +20,8 @@
 # Environment
 ## 系统
 
-- 系统：Ubuntu 16.04
-- 显卡：Tesla V100（16G）×8
+- 系统：Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- 显卡：Tesla V100-SXM2-16GB x 8
 - 显卡驱动：NVIDIA 440.33.01
 - CUDA：10.2
 - cuDNN：7.6.5
@@ -124,9 +124,44 @@ apt-get install openssh-server
 ```
 **设置免密登录**
 
-- 节点间：/root/.ssh/id_rsa.pub 互相放到/root/.ssh/authorized_keys中；
-- 修改sshd中用于docker通信的Port端口号`vim /etc/ssh/sshd_config`
-- `service ssh restart`
+- 1.各个节点间：/root/.ssh/id_rsa.pub 互相放到/root/.ssh/authorized_keys中
+- 2.修改sshd中用于docker通信的Port端口号，以及相应配置：`vim /etc/ssh/sshd_config`
+```shell
+Port 10000
+#AddressFamily any
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+
+HostKey /root/.ssh/id_rsa
+#HostKey /etc/ssh/ssh_host_rsa_key
+#HostKey /etc/ssh/ssh_host_ecdsa_key
+#HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Ciphers and keying
+#RekeyLimit default none
+
+# Logging
+#SyslogFacility AUTH
+#LogLevel INFO
+
+# Authentication:
+
+#LoginGraceTime 2m
+PermitRootLogin yes
+#PermitRootLogin prohibit-password
+#StrictModes yes
+#MaxAuthTries 6
+#MaxSessions 10
+
+PubkeyAuthentication yes
+
+# Expect .ssh/authorized_keys2 to be disregarded by default in future.
+AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
+...
+```
+
+- 3.重启ssh服务`service ssh restart
+
 # Training
 集群中有4台节点：
 
@@ -234,7 +269,7 @@ Saving result to ./result/resnet50_result.json
 
 extract_tensorflow_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
-extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20iter，取后100个iter的实际运行时间计算速度。
+extract_tensorflow_logs_time.py则根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
 
 #### 2.均值速度和中值速度
 
@@ -242,7 +277,7 @@ extract_tensorflow_logs_time.py根据batch size和120个iter中，排除前20ite
 
 - median_speed中值速度
 
-  每个batch size进行5~7次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+  每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
 
 #### 3.加速比以中值速度计算
 
