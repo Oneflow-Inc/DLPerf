@@ -180,7 +180,7 @@ apt-get install openssh-server
 **设置免密登录**
 
 - 节点间的 /root/.ssh/id_rsa.pub 互相授权，添加到 /root/.ssh/authorized_keys 中；
-- 修改 sshd 中用于 docker 通信的端口号 `vim /etc/ssh/sshd_config`，修改 `Port`；
+- 修改 sshd 中用于 docker 通信的端口号 `vim /etc/ssh/sshd_config`，修改 `Port` 为空闲端口号；
 - 重启 ssh 服务，`service ssh restart`。
 
 ### 2. 运行测试
@@ -212,7 +212,7 @@ bash run_single_node.sh
 
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取5 次），每次训练过程只取第 1 个epoch 的前 120 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5~7 次训练的速度取中位数得到最终速度，并最终以此数据计算加速比。
+测试进行了多组训练（本测试中取 5 次），每次训练过程只取第 1 个 epoch 的前 120 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5~7 次训练的速度取中位数得到最终速度，并最终以此数据计算加速比。
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_PyTorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
