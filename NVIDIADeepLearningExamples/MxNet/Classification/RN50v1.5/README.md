@@ -1,8 +1,8 @@
-# NVIDIA/DeepLearningExamples MxNet ResNet50 v1.5 测评
+# NVIDIA/DeepLearningExamples MXNet ResNet50 v1.5 测评
 
 ## 概述 Overview
 
-本测试基于 [NVIDIA/DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples) 仓库中提供的 MxNet框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5) 实现，在 NVIDIA 官方提供的 [MxNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行单机单卡、单机多卡的结果复现及速度评测，并使用Horovod进行多机（2机、4机）的训练，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [NVIDIA/DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples) 仓库中提供的 MXNet框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) 实现，在 NVIDIA 官方提供的 [MXNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行单机单卡、单机多卡的结果复现及速度评测，并使用Horovod进行多机（2机、4机）的训练，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
@@ -14,11 +14,11 @@
 
 - #### 硬件
 
-  - GPU：Tesla V100（16G）×8
+  - GPU：8x Tesla V100-SXM2-16GB
 
 - #### 软件
 
-  - 驱动：Nvidia 440.33.01
+  - 驱动：NVIDIA 440.33.01
 
   - 系统：[ Ubuntu 16.04](http://releases.ubuntu.com/16.04/)
 
@@ -36,7 +36,7 @@
 
 - NCCL：2.5.6
 
-- **MxNet：1.6.0**
+- **MXNet：1.6.0**
 
 - OpenMPI 3.1.4
 
@@ -50,7 +50,7 @@
 
   #### Feature support matrix
 
-  | Feature                                                      | ResNet50 v1.5 MxNet |
+  | Feature                                                      | ResNet50 v1.5 MXNet |
   | ------------------------------------------------------------ | ------------------- |
   | Horovod Multi-GPU                                            | Yes                 |
   | Horovod Multi-Node                                           | Yes                 |
@@ -67,14 +67,15 @@
 
 - #### 数据集
 
-  数据集制作参考[NVIDIA官方提供的MxNet数据集制作方法](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#getting-the-data)
+  数据集制作参考[NVIDIA官方提供的MXNet数据集制作方法](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5#getting-the-data)
 
 - #### 镜像及容器
 
-  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#quick-start-guide)下载源码、拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
+  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5#getting-the-data)下载源码、拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
 
   ```shell
   git clone https://github.com/NVIDIA/DeepLearningExamples.git
+  git checkout e470c2150abf4179f873cabad23945bbc920cc5f
   cd DeepLearningExamples/MxNet/Classification/RN50v1.5/
   
   # 构建项目镜像 
@@ -93,7 +94,7 @@
 
 - #### SSH 免密
 
-  单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证MxNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
+  单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证MXNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
 
    **安装ssh服务端**
 
@@ -113,17 +114,15 @@
 
 - #### NGC 20.03 mxnet镜像运行DALI with CUDA 10.2 
 
-  注意： NVIDIA DeepLearningExamples 仓库的MxNet最新脚本用的还是19.07的镜像：
+  注意： NVIDIA DeepLearningExamples 仓库的MXNet最新脚本用的还是19.07的镜像：
 
   [`FROM nvcr.io/nvidia/mxnet:19.07-py3`](https://github.com/NVIDIA/DeepLearningExamples/blob/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/MxNet/Classification/RN50v1.5/Dockerfile#L1)
 
-  DLPerf仓库中的测试为了统一环境和驱动、第三方依赖的版本，所以都用了20.03的镜像，而mxnet-20.03的镜像，在CUDA 10.2 上无法运行dali-cpu和dali-gpu，原因是DALI的库没有在CUDA 10.2 上更新： https://github.com/NVIDIA/DALI/issues/906 
-
-  因此把 [dali.py](https://github.com/NVIDIA/DeepLearningExamples/blob/master/MxNet/Classification/RN50v1.5/dali.py) 中的nvJPEGDecoder替换成ImageDecoder
+  DLPerf仓库中的测试为了统一环境和驱动、第三方依赖的版本，都用了20.03的镜像。mxnet-20.03的镜像里用了与CUDA 10.2相匹配的DALI 0.19.0，而该容器内的脚本还是19.07镜像里的脚本，直接运行dali-cpu和dali-gpu会报错，因此需要把 [dali.py](https://github.com/NVIDIA/DeepLearningExamples/blob/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5/dali.py) 中的`nvJPEGDecoder`替换成`ImageDecoder`，详见： https://github.com/NVIDIA/DALI/issues/906 
 
 - #### 多机MPI运行
 
-  NGC 20.03 mxnet镜像中安装了OpenMPI，但是却没有将其加入到PATH中，导致找不到mpirun。需要手动将路径加入到PATH中
+  NGC 20.03 mxnet镜像中安装了OpenMPI，但是却没有将其加入到PATH中，导致找不到mpirun。需要手动将路径加入到PATH中。
 
   ```shell
   export LD_LIBRARY_PATH=/usr/local/cuda/compat/lib.real:/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/lib
@@ -155,19 +154,19 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 bash run_test.sh 
 ```
 
-针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **96**（注意：batch_size_per_device = 128会导致显存OOM，故MxNet resnet50v1.5 仅测试了batch size = 96的情况），进行测试，并将 log 信息保存在当前目录的`benchmark_log/ngc/mxnet/`对应分布式配置路径中。
+针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **96**（注意：batch_size_per_device = 128会导致显存OOM，故MXNet resnet50v1.5 仅测试了batch size = 96的情况），进行测试，并将 log 信息保存在当前目录的`benchmark_log/ngc/mxnet/`对应分布式配置路径中。
 
 ### 4. 数据处理
 
-测试进行了多组训练（本测试中取 7 次），每次训练过程只取第 1 个 epoch 的前 120 iter，计算训练速度时去掉前 20 iter，只取后 100 iter 的数据，以降低抖动。最后将 5~7 次训练的速度取中位数得到最终速度，并最终以此数据计算加速比。
+测试进行了多组训练（本测试中取 7 次），每次训练过程只取第 1 个 epoch 的前 120 iter，计算训练速度时去掉前 20 iter，只取后 100 iter 的数据，以降低抖动。最后将 7 次训练的速度取中位数得到最终速度，并最终以此数据计算加速比。
 
-运行，即可得到针对不同配置测试结果 log 数据处理的结果： 
+运行，即可得到针对不同配置测试 log 数据处理的结果： 
 
 ```shell
 python extract_mxnet_logs_time.py --log_dir=logs/ngc/mxnet/resnet50 --batch_size_per_device=96
 ```
 
-结果打印如下
+结果打印如下：
 
 ```shell
 logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_5.log {5: 10021.2}
@@ -232,7 +231,7 @@ extract_mxnet_logs.py根据官方在log中打印的速度，在120个iter中，�
 
 extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，取后100个iter的实际运行时间计算速度。
 
-本Readme展示的是extract_mxnet_logs_time.py 的计算结果
+本Readme展示的是extract_mxnet_logs_time.py的计算结果。
 
 #### 5.2 均值速度和中值速度
 
@@ -240,7 +239,7 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 - median_speed中值速度
 
-  每个batch size进行5~7次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+  每个batch size进行7次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
 
 #### 5.3 加速比以中值速度计算
 
@@ -252,7 +251,7 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 ## 性能结果 Performance
 
-该小节提供针对 NVIDIA MxNet 框架的 ResNet50 v1.5 模型单机测试的性能结果和完整 log 日志。
+该小节提供针对 NVIDIA MXNet 框架的 ResNet50 v1.5 模型单机测试的性能结果和完整 log 日志。
 
 ### FP32 & W/O XLA
 
@@ -265,7 +264,6 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 | 2        | 16      | 5684.68   | 14.59   |
 | 4        | 32      | 10419.21  | 26.74   |
 
-NVIDIA的 MxNet 官方测评结果详见 [ResNet50 v1.5 For MxNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
+NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
 详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/logs.zip)
-
