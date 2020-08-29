@@ -17,7 +17,7 @@ parser.add_argument("--log_dir", type=str, default="/workspace/rn50/scripts/ngc/
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
-parser.add_argument('--batch_size_per_device', type=int, default=32)
+parser.add_argument('--batch_size_per_device', type=int, default=128)
 
 args = parser.parse_args()
 
@@ -110,17 +110,8 @@ def compute_average(iter_dict):
     return round(total_speed / i, 2)
 
 def compute_median(iter_dict):
-    def median(x):
-        length = len(x)
-        x.sort()
-        if (length % 2)== 1:
-            z=length // 2
-            y = x[z]
-        else:
-            y = (x[length//2]+x[length//2-1])/2
-        return y
     speed_list = [i for i in iter_dict.values()]
-    return round(median(speed_list), 2)
+    return round(np.median(speed_list), 2)
 
 def extract_result():
     result_dict = AutoVivification()
