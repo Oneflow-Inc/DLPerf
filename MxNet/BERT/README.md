@@ -1,8 +1,8 @@
-# MxNet BERT-Base 测评
+# MXNet BERT-Base 测评
 
 ## 概述 Overview
 
-本测试基于 [gluon-nlp](https://github.com/dmlc/gluon-nlp) 仓库中提供的 MxNet框架的 [BERT-base](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) 实现，在 NVIDIA 官方提供的 [MxNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行1机1卡、1机8卡、2机16卡、4机32卡的结果复现及速度评测，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [gluon-nlp](https://github.com/dmlc/gluon-nlp) 仓库中提供的 MXNet框架的 [BERT-base](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) 实现，在 NVIDIA 官方提供的 [MXNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行1机1卡、1机8卡、2机16卡、4机32卡的结果复现及速度评测，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
@@ -14,11 +14,11 @@
 
 - #### 硬件
 
-  - GPU：Tesla V100（16G）×8
+  - GPU：8x Tesla V100-SXM2-16GB
 
 - #### 软件
 
-  - 驱动：Nvidia 440.33.01
+  - 驱动：NVIDIA 440.33.01
 
   - 系统：[ Ubuntu 16.04](http://releases.ubuntu.com/16.04/)
 
@@ -36,7 +36,7 @@
 
 - NCCL：2.5.6
 
-- **MxNet：1.6.0**
+- **MXNet：1.6.0**
 
 - OpenMPI 3.1.4
 
@@ -50,17 +50,15 @@
 
   #### Feature support matrix
 
-  | Feature                         | ResNet50 v1.5 MxNet |
-  | ------------------------------- | ------------------- |
-  | Horovod Multi-GPU               | Yes                 |
-  | Horovod Multi-Node              | Yes                 |
-  | Automatic mixed precision (AMP) | No                  |
+  | Feature                         | BERT-Base MXNet |
+  | ------------------------------- | --------------- |
+  | Horovod Multi-GPU               | Yes             |
+  | Horovod Multi-Node              | Yes             |
+  | Automatic mixed precision (AMP) | No              |
 
 
 
 ## 快速开始 Quick Start
-
-### 项目代码
 
 ### 1. 前期准备
 
@@ -70,7 +68,7 @@
 
 - #### 镜像及容器
 
-  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#quick-start-guide)拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
+  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5#quick-start-guide)拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
 
   ```shell
   docker build . -t nvidia_rn50_mx:20.03
@@ -87,7 +85,7 @@
 
 - #### SSH 免密
 
-  单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证MxNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
+  单机测试下无需配置，但测试2机、4机等多机情况下，则需要配置docker容器间的ssh免密登录，保证MXNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
 
    **安装ssh服务端**
 
@@ -125,9 +123,9 @@
 
 - #### 注释参数
 
-  - 注释掉 [`scripts/bert/data/pretrain.py`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/data/pretrain.py#L65) 的 round_to 参数。
+  - 注释掉 [`scripts/bert/data/pretrain.py`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/data/pretrain.py#L65) 的round_to参数。
 
-    原因是round_to 参数会报错：
+    原因是round_to参数会报错：
 
     ```shell
     <stderr>:TypeError: __init__() got an unexpected keyword argument 'round_to'
@@ -135,13 +133,13 @@
 
   - 注释掉 [`/scripts/bert/run_pretraining.py`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py) 里跟eval_dir相关的逻辑:
 
-    [line:95](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L95)  data_eval 允许为空
+    [line:95](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L95)  data_eval允许为空。
 
     ```
     parser.add_argument('--data_eval', type=str, required=False,
     ```
 
-    [line:443](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L443)  不进行eval
+    [line:443](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L443)  不进行eval。
 
     ```python
     #    if data_eval:
@@ -152,9 +150,9 @@
     #        evaluate(dataset_eval, model, ctxs, args.log_interval, args.dtype)
     ```
 
-    原因是加上eval会卡住很久
+    原因是加上eval会卡住很久。
 
-  - 训练120个iteration就结束：
+  - 训练120个iterations就结束：
 
     在 [`/scripts/bert/run_pretraining.py`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py) 中添加结束标记，用于在train step达到后就终止训练
 
@@ -187,17 +185,17 @@
 git clone https://github.com/Oneflow-Inc/DLPerf.git
 ````
 
-将本仓库 `DLPerf/MxNet/BERT/` 路径源码放至 `gluon-nlp/scripts/bert/` 下，执行脚本
+将本仓库 `DLPerf/MXNet/BERT/` 路径源码放至 `gluon-nlp/scripts/bert/` 下，执行脚本
 
 ```shell
 bash run_test.sh 
 ```
 
-针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **32**（注意：batch_size_per_device = 48及以上会导致显存OOM，故MxNet BERT-base 仅测试了batch size = 32和24的情况），进行测试，并将 log 信息保存在当前目录的`logs/mxnet/bert/bz32`对应分布式配置路径中。
+针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **32**（注意：batch_size_per_device = 48及以上会导致显存OOM，故MXNet BERT-base 仅测试了batch size = 32和24的情况），进行测试，并将 log 信息保存在当前目录的`logs/mxnet/bert/bz32`对应分布式配置路径中。
 
 ### 4. 数据处理
 
-测试进行了多组训练（本测试中取 7 次），每次训练过程只取第 1 个 epoch 的前 120 iter，计算训练速度时去掉前 20 iter，只取后 100 iter 的数据，以降低抖动。最后将 5~7 次训练的速度取中位数得到最终速度，并最终以此数据计算加速比。
+测试进行了多组训练（本测试中取 7 次），每次训练过程只取第 1 个 epoch 的前 120 iter，计算训练速度时去掉前 20 iter，只取后 100 iter 的数据，以降低抖动。最后将 7 次训练的速度取中位数得到最终速度，并最终以此数据计算加速比。
 
 运行，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
@@ -283,7 +281,7 @@ Saving result to ./result/bz32_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 MxNet 框架的BERT-base 模型单机测试的性能结果和完整 log 日志。
+该小节提供针对 MXNet 框架的BERT-base 模型单机测试的性能结果和完整 log 日志。
 
 ### FP32 & W/O XLA
 
@@ -309,13 +307,13 @@ Saving result to ./result/bz32_result.json
 
 
 
-详细 Log 信息可下载：[mxnet_bert_base_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/logs.zip)
+详细 Log 信息可下载：[mxnet_bert_base_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MXNet/bert/logs.zip)
 
 
 
-## MxNet BERT-base 多机加速比很低的问题
+## MXNet BERT-base 多机加速比很低的问题
 
-在测试MxNet BERT-base的多机过程中，发现性能表现很差，跟NVIDIA DeepLearningExample中的Resnet50多机性能表现相比差距巨大。我们尝试了多次，通过增删参数、环境变量、打印log等方式，排除了NCCL、RDMA等通信速度的问题，发现性能瓶颈不是网络传输和多卡同步的开销，而是CPU全部被占满了（48个线程都是几乎100%占用），导致没有能力供应多机多卡的计算。
+在测试MXNet BERT-base的多机过程中，发现性能表现不够理想，跟NVIDIA DeepLearningExample中的Resnet50多机性能表现相比差距巨大。我们尝试了多次，通过增删参数、设置环境变量、打印log等方式，排除了NCCL、RDMA等通信速度的问题，发现性能瓶颈不是网络传输和多卡同步的开销，而是CPU全部被占满了（48个线程都是几乎100%占用），导致没有能力供应多机多卡的计算。
 
 ### 测试环境
 
@@ -323,7 +321,7 @@ Saving result to ./result/bz32_result.json
 
 - Tesla V100-SXM2-16GB x 8
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
-- 48 CPU(s), Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+- Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
@@ -355,7 +353,7 @@ Legend:
 
 ### 测试容器
 
-测试容器使用的是[NGC 20.03 mxnet](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)容器，容器信息介绍见[此处](https://docs.nvidia.com/deeplearning/frameworks/mxnet-release-notes/rel_20-03.html#rel_20-03)，与NVIDIA DeepLearningExample里的MxNet ResNet50v1.5 测试环境一样。使用MxNet版本为[1.6.0](https://github.com/apache/incubator-mxnet/releases/tag/1.6.0)。
+测试容器使用的是[NGC 20.03 mxnet](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)容器，容器信息介绍见[此处](https://docs.nvidia.com/deeplearning/frameworks/mxnet-release-notes/rel_20-03.html#rel_20-03)，与NVIDIA DeepLearningExample里的MXNet ResNet50v1.5 测试环境一样。使用MXNet版本为[1.6.0](https://github.com/apache/incubator-mxnet/releases/tag/1.6.0)。
 
 ### 模型库
 
@@ -363,7 +361,7 @@ Legend:
 
 ### 现象1： 数据集part大小严重影响训练的启动时间
 
-我们使用了32个part的数据集文件，格式为npz，每个文件大小为280M。（相比之下OneFlow Benchmark中的数据集每个part大小为2G多）当part数量为32时，单机8卡、2机16卡的启动时间会很久（将近十分钟），同时可以观测到在训练之前CPU被100% * 48 占用。在单机8卡的训练中，内存占用超过300G。当把part数量降至8以后，启动速度变快很多。但是对训练速度无影响，仍然很慢。
+我们使用了32个part的数据集文件，格式为npz，每个文件大小为280M（相比之下OneFlow Benchmark中的数据集每个part大小为2G多）。当part数量为32时，单机8卡、2机16卡的启动时间会很久（将近十分钟），同时可以观测到在训练时CPU的48个物理线程均被占满。在单机8卡的训练中，内存占用超过300G。当把part数量降至8以后，启动速度变快很多。但是对训练速度无增益，仍然不够理想。
 
 数据集：
 
@@ -375,7 +373,7 @@ Legend:
 
 ### 现象2：配置参数和环境变量无法降低训练时的CPU占用率，无法提升分布式训练速度
 
-gluon-nlp的BERT训练参数只有一项跟加载数据集的线程数相关，为[`--num_data_workers`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L131)
+gluon-nlp的BERT训练参数有一项跟加载数据集的线程数相关，为[`--num_data_workers`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L131)
 
 ```python
 parser.add_argument('--num_data_workers', type=int, default=8,
@@ -384,7 +382,7 @@ parser.add_argument('--num_data_workers', type=int, default=8,
 
 在单机8卡、2机16卡的测试中，尝试设置`--num_data_workers=1,8,48` ，均不能影响训练时的CPU占用率。
 
-根据MxNet的官方issue [Why CPU load is so heavy during training? How can I reduce it](https://discuss.mxnet.io/t/why-cpu-load-is-so-heavy-during-training-how-can-i-reduce-it/2735/5) 中的介绍:
+根据MXNet的官方issue [Why CPU load is so heavy during training? How can I reduce it](https://discuss.mxnet.io/t/why-cpu-load-is-so-heavy-during-training-how-can-i-reduce-it/2735/5) 中的介绍:
 
 ```
 I managed to find a method to solve this problem by mannually set the environment variable ‘OMP_NUM_THREAD’ = 4 * num_GPU_used. The number of threads can be reduced by about 90 and everything works well. Maybe this variable is related to the data loading process since I find I cannot set it’s value to a too small one. It’s still a little strange that I thought this variable is only related to the performance when we use CPU to do training.
@@ -392,12 +390,13 @@ I managed to find a method to solve this problem by mannually set the environmen
 Thanks for your patience and nice answers. They help me a lot to find the final solution!
 ```
 
-尝试设置环境变量 `export OMP_NUM_THREAD = 1, 8, 32` 等，也不能影响训练时的CPU占用率
+尝试设置环境变量 `export OMP_NUM_THREAD = 1, 8, 32` 等，也不能影响训练时的CPU占用率。
 
 训练时的CPU占用率表现为：
 
 ![cpu_48x100](./debug_img/mxnet-cpu-100.png)
 
-### 求助：
+### 求助
 
-经过长时间的debug，仍然不能解决mxnet的bert-base的多机性能问题。我们怀疑有可能是gluon-nlp仓库的脚本的问题，比如读取数据集的脚本[pretraining_utils.py](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/pretraining_utils.py#L193)，或者是其定义的[nlp.utils.Parallel](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L281)调用了过多的CPU资源，导致了性能瓶颈。又或者是否是mxnet框架内部在训练时需要过多的CPU资源？不知道是否有了解相关内容的小伙伴可以复现一下我们的实验，或者帮助我们解决这个性能测试的问题？
+经过长时间的debug，仍然不能解决MXNet的BERT-Base的多机性能问题。我们怀疑有可能是gluon-nlp仓库的脚本问题，比如读取数据集的脚本[pretraining_utils.py](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/pretraining_utils.py#L193)，或者是其定义的[nlp.utils.Parallel](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L281)调用了过多的CPU资源，导致了性能瓶颈，又或者是MXNet框架内部在训练时需要过多的CPU资源？不知道是否有了解相关内容的小伙伴可以复现一下我们的实验，或者帮助我们解决这个性能测试的问题。
+
