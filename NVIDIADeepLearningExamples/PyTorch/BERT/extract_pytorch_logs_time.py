@@ -17,7 +17,7 @@ parser.add_argument("--log_dir", type=str, default="/workspace/examples/bert/tes
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
-parser.add_argument('--batch_size_per_device', type=int, default=128)
+parser.add_argument('--batch_size_per_device', type=int, default=32)
 
 args = parser.parse_args()
 
