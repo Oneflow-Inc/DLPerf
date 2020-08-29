@@ -66,11 +66,11 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
             if "Iteration: " in line:
                 line_num += 1
 
-                if line_num == 1:
+                if line_num == args.warmup_batches + 1:
                     start_time = re.findall(pt, line)[0]
                     continue
 
-                if line_num == (args.train_batches-args.warmup_batches):
+                if line_num == args.train_batches:
                     end_time = re.findall(pt, line)[0]
                     t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
                     t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")

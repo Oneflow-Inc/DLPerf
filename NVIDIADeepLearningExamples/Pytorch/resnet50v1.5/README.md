@@ -46,7 +46,7 @@
 
 - Python：3.6.9
 
-  更多容器细节请参考[NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
+  更多容器细节请参考 [NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
 
   #### Feature support matrix
 
@@ -74,7 +74,7 @@
 
 - #### 镜像及容器
 
-- 同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT#quick-start-guide)下载源码、拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
+  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT#quick-start-guide)下载源码、拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
 
   ```
   git clone https://github.com/NVIDIA/DeepLearningExamples.git
@@ -91,7 +91,7 @@
   -d nvidia_rn50_pt:20.03
   ```
 
-  - #### SSH 免密
+- #### SSH 免密
 
   单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证 Pytorch 官方的 mpi/nccl 分布式脚本运行时可以在单机上与其他节点互联。
 
@@ -149,33 +149,38 @@ python extract_pytorch_logs_time.py --log_dir [log_dir]
 结果打印如下
 
 ```
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_2.log {2: 368.51}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_4.log {2: 368.51, 4: 366.64}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_3.log {2: 368.51, 4: 366.64, 3: 370.01}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_5.log {2: 368.51, 4: 366.64, 3: 370.01, 5: 369.37}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_1.log {2: 368.51, 4: 366.64, 3: 370.01, 5: 369.37, 1: 370.14}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_7_9.log {7: 2792.23}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_4_6.log {7: 2792.23, 4: 2792.6}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_1_3.log {7: 2792.23, 4: 2792.6, 1: 2760.08}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_10_12.log {7: 2792.23, 4: 2792.6, 1: 2760.08, 10: 2815.68}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_13_15.log {7: 2792.23, 4: 2792.6, 1: 2760.08, 10: 2815.68, 13: 2822.88}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_2.log {2: 1443.67}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_4.log {2: 1443.67, 4: 1447.68}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_3.log {2: 1443.67, 4: 1447.68, 3: 1446.55}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_5.log {2: 1443.67, 4: 1447.68, 3: 1446.55, 5: 1440.3}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_1.log {2: 1443.67, 4: 1447.68, 3: 1446.55, 5: 1440.3, 1: 1433.26}
-{'r50': {'1n1g': {'average_speed': 368.93,
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_2.log {2: 369.95}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_4.log {2: 369.95, 4: 369.84}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_3.log {2: 369.95, 4: 369.84, 3: 369.48}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_5.log {2: 369.95, 4: 369.84, 3: 369.48, 5: 369.18}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_1.log {2: 369.95, 4: 369.84, 3: 369.48, 5: 369.18, 1: 370.22}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_2.log {2: 2861.8}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_7_9.log {2: 2861.8, 7: 690.53}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_4_6.log {2: 2861.8, 7: 690.53, 4: 684.0}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_1_3.log {2: 2861.8, 7: 690.53, 4: 684.0, 1: 674.18}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_10_12.log {2: 2861.8, 7: 690.53, 4: 684.0, 1: 674.18, 10: 702.77}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_4.log {2: 2861.8, 7: 690.53, 4: 2835.59, 1: 674.18, 10: 702.77}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_3.log {2: 2861.8, 7: 690.53, 4: 2835.59, 1: 674.18, 10: 702.77, 3: 2828.1}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_5.log {2: 2861.8, 7: 690.53, 4: 2835.59, 1: 674.18, 10: 702.77, 3: 2828.1, 5: 2833.19}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_13_15.log {2: 2861.8, 7: 690.53, 4: 2835.59, 1: 674.18, 10: 702.77, 3: 2828.1, 5: 2833.19, 13: 676.15}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_1.log {2: 2861.8, 7: 690.53, 4: 2835.59, 1: 2834.07, 10: 702.77, 3: 2828.1, 5: 2833.19, 13: 676.15}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_2.log {2: 1462.66}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_4.log {2: 1462.66, 4: 1462.36}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_3.log {2: 1462.66, 4: 1462.36, 3: 1459.57}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_5.log {2: 1462.66, 4: 1462.36, 3: 1459.57, 5: 1463.17}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_1.log {2: 1462.66, 4: 1462.36, 3: 1459.57, 5: 1463.17, 1: 1463.61}
+{'r50': {'1n1g': {'average_speed': 369.73,
                   'batch_size_per_device': 128,
-                  'median_speed': 369.37,
+                  'median_speed': 369.84,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1442.29,
+         '1n4g': {'average_speed': 1462.27,
                   'batch_size_per_device': 128,
-                  'median_speed': 1443.67,
-                  'speedup': 3.91},
-         '1n8g': {'average_speed': 2796.69,
+                  'median_speed': 1462.66,
+                  'speedup': 3.95},
+         '1n8g': {'average_speed': 2032.78,
                   'batch_size_per_device': 128,
-                  'median_speed': 2792.6,
-                  'speedup': 7.43}}}
+                  'median_speed': 2830.64,
+                  'speedup': 7.65}}}
 Saving result to ./result/_result.json
 ```
 
@@ -183,7 +188,7 @@ Saving result to ./result/_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 NVIDIA Pytorch 框架的 ResNet50 v1.5 模型测试的性能结果和完整 log 日志。
+该小节提供针对 NVIDIA Pytorch 框架的 ResNet50 v1.5 模型单机测试的性能结果和完整 log 日志。
 
 ### FP32 & W/O XLA
 
@@ -191,14 +196,14 @@ Saving result to ./result/_result.json
 
 | gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
 | ---------------- | --------------------- | ------------------ | ------- |
-| 1                | 128                   | 369.37             | 1.00    |
-| 4                | 128                   | 1443.67            | 3.91    |
-| 8                | 128                   | 2792.6             | 7.56    |
+| 1                | 128                   | 369.84             | 1.00    |
+| 4                | 128                   | 1462.66            | 3.91    |
+| 8                | 128                   | 2830.64            | 7.56    |
 
 NVIDIA的 Pytorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 results](https://github.com/NVIDIA/DeepLearningExamples/blob/master/PyTorch/Classification/ConvNets/resnet50v1.5/README.md#results)。
 
 Ray 的 Pytorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks).
 
-详细 Log 信息可下载：[ngc_pytorch_resnet50_v1.5.zip]()
+详细 Log 信息可下载：[ngc_pytorch_resnet50_v1.5.tar]()
 
 
