@@ -13,10 +13,10 @@ pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for cnn benchmark")
-parser.add_argument("--log_dir", type=str, default="../ngc/tensorflow", required=True)
+parser.add_argument("--log_dir", type=str, default="./logs/tensorflow/resnet50", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
-parser.add_argument('--warmup_batches', type=int, default=20)
-parser.add_argument('--train_batches', type=int, default=120)
+parser.add_argument('--warmup_batches', type=int, default=100)
+parser.add_argument('--train_batches', type=int, default=600)
 parser.add_argument('--batch_size_per_device', type=int, default=128)
 
 args = parser.parse_args()
@@ -57,26 +57,29 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
 
     avg_speed = 0
     # extract info from file content
-    pt = re.compile(r"(\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})", re.S)
+    pt = re.compile(r"(\d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})", re.S)
+
+    from_index = 1 if args.warmup_batches <= 100 else args.warmup_batches // 100
+    to_index = args.train_batches // 100
     start_time = ''
     end_time = ''
     line_num = 0
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
-            if " imgs_per_sec " in line:
-                line_num += 1
+            if "TimeHistory" in line: 
+                line_num+=1
 
-                if line_num == 1:
+                if line_num == from_index:
                     start_time = re.findall(pt, line)[0]
                     continue
 
-                if line_num == (args.train_batches-args.warmup_batches):
+                if line_num == to_index:
                     end_time = re.findall(pt, line)[0]
-                    t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
-                    t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
+                    t1 = datetime.datetime.strptime(start_time, "%H:%M:%S.%f")
+                    t2 = datetime.datetime.strptime(end_time, "%H:%M:%S.%f")
                     cost_time = (t2 - t1).total_seconds()
-                    iter_num = args.train_batches - args.warmup_batches
+                    iter_num = args.train_batches-args.warmup_batches
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
                     break
 
@@ -99,8 +102,14 @@ def compute_speedup(result_dict, speed_dict):
             speed_up = 1.0
             if result_dict[m]['1n1g']['average_speed']:
                 result_dict[m][d]['average_speed'] = compute_average(speed_dict[m][d])
-                speed_up = result_dict[m][d]['average_speed'] / result_dict[m]['1n1g']['average_speed']
+                result_dict[m][d]['median_speed'] = compute_median(speed_dict[m][d])
+                speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
+
+
+def compute_median(iter_dict):
+    speed_list = [i for i in iter_dict.values()]
+    return round(np.median(speed_list), 2)
 
 
 def compute_average(iter_dict):
@@ -135,4 +144,5 @@ def extract_result():
 
 
 if __name__ == "__main__":
+    assert args.warmup_batches % 100 == 0 and args.train_batches > args.warmup_batches
     extract_result()

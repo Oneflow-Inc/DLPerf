@@ -1,7 +1,6 @@
 import os
-import sys
-import glob
 import argparse
+from extract_util import extract_result 
 
 
 parser = argparse.ArgumentParser(description="flags for BERT benchmark")
@@ -10,6 +9,7 @@ parser.add_argument(
     required=False)
 parser.add_argument("--start_iter", type=int, default=19)
 parser.add_argument("--end_iter", type=int, default=119)
+parser.add_argument("--print_mode", type=str, default='markdown')
 args = parser.parse_args()
 
 
@@ -27,37 +27,13 @@ def extract_info_from_file(log_file):
         for line in f.readlines():
             ss = line.split(' ')
             if ss[0] in ['batch_size_per_device', 'gpu_num_per_node', 'num_nodes']:
-                result_dict[ss[0]] = ss[2].strip() 
-            elif ss[0] == 'step:': 
-                it = int(ss[1][:-1]) 
+                result_dict[ss[0]] = ss[2].strip()
+            elif ss[0] == 'step:':
+                it = int(ss[1][:-1])
                 result_dict[it] = ss[-1].strip()
 
-    return result_dict             
-
-
-def compute_throughput(result_dict):
-    assert args.start_iter in result_dict and args.end_iter in result_dict
-    duration = float(result_dict[args.end_iter]) - float(result_dict[args.start_iter])
-    
-    total_batch_size = int(result_dict['batch_size_per_device']) * \
-                       int(result_dict['gpu_num_per_node']) * int(result_dict['num_nodes'])        
-
-    num_examples = total_batch_size * (args.end_iter - args.start_iter)
-    throughput = num_examples / duration
-    throughput = '{:.1f}'.format(throughput)
-    print('|', result_dict['num_nodes'], '|', result_dict['gpu_num_per_node'], '|', result_dict['batch_size_per_device'], '|', throughput, '|')
-
-
-def extract_result():
-    logs_list = glob.glob(os.path.join(args.benchmark_log_dir, "*/*.log"))
-    logs_list = sorted(logs_list)
-    print('|', 'num_nodes', '|', 'gpu_num_per_node', '|', 'batch_size_per_device', '|', 'throughput', '|')
-    print('|', '--------', '|', '--------', '|', '--------', '|', '--------', '|')
-    for l in logs_list:
-        result_dict = extract_info_from_file(l)
-        compute_throughput(result_dict)
+    return result_dict
 
 
 if __name__ == "__main__":
-    extract_result()
-
+    extract_result(args, extract_info_from_file)
