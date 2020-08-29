@@ -398,3 +398,6 @@ Thanks for your patience and nice answers. They help me a lot to find the final 
 
 ![cpu_48x100](./debug_img/mxnet-cpu-100.png)
 
+### 求助：
+
+经过长时间的debug，仍然不能解决mxnet的bert-base的多机性能问题。我们怀疑有可能是gluon-nlp仓库的脚本的问题，比如读取数据集的脚本[pretraining_utils.py](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/pretraining_utils.py#L193)，或者是其定义的[nlp.utils.Parallel](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L281)调用了过多的CPU资源，导致了性能瓶颈。又或者是否是mxnet框架内部在训练时需要过多的CPU资源？不知道是否有了解相关内容的小伙伴可以复现一下我们的实验，或者帮助我们解决这个性能测试的问题？
