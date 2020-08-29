@@ -14,6 +14,7 @@
   * [环境 Environment](#---environment)
     + [系统](#--)
       - [硬件](#--)
+      - [软件](#--)
     + [NGC 容器](#ngc---)
       - [Feature support matrix](#feature-support-matrix)
   * [快速开始 Quick Start](#-----quick-start)
