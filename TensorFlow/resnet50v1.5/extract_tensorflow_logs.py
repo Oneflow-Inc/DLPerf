@@ -12,10 +12,10 @@ pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for cnn benchmark")
-parser.add_argument("--log_dir", type=str, default="../ngc/tensorflow", required=True)
+parser.add_argument("--log_dir", type=str, default="./logs/tensorflow/resnet50", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
-parser.add_argument('--warmup_batches', type=int, default=20)
-parser.add_argument('--train_batches', type=int, default=120)
+parser.add_argument('--warmup_batches', type=int, default=100)
+parser.add_argument('--train_batches', type=int, default=600)
 parser.add_argument('--batch_size_per_device', type=int, default=128)
 
 args = parser.parse_args()
@@ -53,21 +53,22 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
         'batch_size_per_device': batch_size,
     }
 
-    from_iter = 0 if args.warmup_batches < 20 else args.warmup_batches-20
-    to_iter = args.train_batches-20
+    
     avg_speed_list = []
     # extract info from file content
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
-            if " imgs_per_sec " in line:
-                p1 = re.compile(r' imgs_per_sec \: \d+.\d+ ', re.S)
+            if "TimeHistory" in line: 
+                p1 = re.compile(r'\, (\d+.\d+) examples/second ', re.S)
                 s = re.findall(p1, line)
-                speed = round(float(s[0].split(" : ")[1].strip()), 2)
+                speed = float(s[0].strip())
                 avg_speed_list.append(speed)
 
     # compute avg throughoutput
-    avg_speed = round(np.mean(avg_speed_list[from_iter:to_iter]), 2)
+    from_index = 1 if args.warmup_batches <= 100 else args.warmup_batches // 100
+    to_index = args.train_batches // 100
+    avg_speed = round(np.mean(avg_speed_list[from_index:to_index]), 2)
     tmp_dict['average_speed'] = avg_speed
 
     result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
@@ -91,17 +92,8 @@ def compute_speedup(result_dict, speed_dict):
 
 
 def compute_median(iter_dict):
-    def median(x):
-        length = len(x)
-        x.sort()
-        if (length % 2)== 1:
-            z=length // 2
-            y = x[z]
-        else:
-            y = (x[length//2]+x[length//2-1])/2
-        return y
     speed_list = [i for i in iter_dict.values()]
-    return round(median(speed_list), 2)
+    return round(np.median(speed_list), 2)
 
 
 def compute_average(iter_dict):
@@ -136,5 +128,5 @@ def extract_result():
 
 
 if __name__ == "__main__":
-    assert args.warmup_batches >=20 and args.train_batches > args.warmup_batches
+    assert args.warmup_batches % 100 == 0 and args.train_batches > args.warmup_batches
     extract_result()
