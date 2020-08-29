@@ -307,7 +307,7 @@ Saving result to ./result/bz32_result.json
 
 
 
-详细 Log 信息可下载：[mxnet_bert_base_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MXNet/bert/logs.zip)
+详细 Log 信息可下载：[mxnet_bert_base_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/logs.zip)
 
 
 
