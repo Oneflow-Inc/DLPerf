@@ -216,8 +216,8 @@ Saving result to ./result/_result.json
 | gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
 | ---------------- | --------------------- | ------------------ | ------- |
 | 1                | 128                   | 369.84             | 1.00    |
-| 4                | 128                   | 1462.66            | 3.91    |
-| 8                | 128                   | 2830.64            | 7.56    |
+| 4                | 128                   | 1462.66            | 3.95    |
+| 8                | 128                   | 2830.64            | 7.65    |
 
 NVIDIA的 Pytorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 results](https://github.com/NVIDIA/DeepLearningExamples/blob/master/PyTorch/Classification/ConvNets/resnet50v1.5/README.md#results)。
 
