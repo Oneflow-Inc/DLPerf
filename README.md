@@ -93,7 +93,7 @@ Our results were obtained by running the applicable training scripts on 4 server
 | Framework | Source | FP32<br>bsz=max | FP32<br>bsz=32 |FP32 XLA | AMP |
 | ---- | ---- | ---- | ---- | ---- | --- |
 | OneFlow | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0<br>bsz=96](./OneFlow/BERT/bert_base_fp32_report_0822.md) | [3715.1](./OneFlow/BERT/bert_base_fp32_report_0822.md) | TODO | TODO |
-| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | [2478.59<br/>bsz=48](./NVIDIADeepLearningExamples/Tensorflow/LanguageModeling/BERT) | [1923.68](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | TODO | TODO |
+| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | [2478.59<br/>bsz=48](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [1923.68](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | TODO | TODO |
 | MxNet | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/v0.10.x/scripts/bert) | **QJ** | **QJ** | TODO | TODO |
 | PyTorch | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT) | **SX** | **SX** | TODO | TODO |
 | PaddlePaddle | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | [3167.68<br/>bsz=96](./PaddlePaddle/bert) | [2073.6](./PaddlePaddle/bert) | TODO | TODO |
