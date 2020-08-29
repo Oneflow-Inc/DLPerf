@@ -47,6 +47,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     elif len(run_case) == 5:
         card_num = int(run_case[-3:-1])
 
+
     total_batch_size = node_num * card_num * batch_size
 
     tmp_dict = {
@@ -62,24 +63,27 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
-            if "Time " in line:
-                line_num += 1
+            if "Epoch: " in line:
+                pt1 = re.compile(r"\[.*\]\[(.*)\]")
+                init_time = re.findall(pt1, line)[0]
+                skip_time = int(init_time.split("/")[0])
+                if skip_time > 5:
+                    line_num +=1
                 
-                if line_num > args.warmup_batches:
-                    time = float(re.findall(pt, line)[0].strip())
-                    cost_time += time
+                    if line_num > args.warmup_batches:
+                        time = float(re.findall(pt, line)[0].strip())
+                        cost_time += time
 
-                if line_num == args.train_batches:
-                    iter_num = args.train_batches - args.warmup_batches
-                    avg_speed = round(float(total_batch_size / (cost_time / iter_num)), 2)
-                    break
+                    if line_num == args.train_batches:
+                        iter_num = args.train_batches - args.warmup_batches
+                        avg_speed = round(float(total_batch_size / (cost_time / iter_num)), 2)
+                        break
 
 
     # compute avg throughoutput
     tmp_dict['average_speed'] = avg_speed
     result_dict[model][run_case]['average_speed'] = avg_speed
     result_dict[model][run_case]['batch_size_per_device'] = tmp_dict['batch_size_per_device']
-
     speed_dict[model][run_case][test_iter] = avg_speed
 
     print(log_file, speed_dict[model][run_case])

@@ -380,52 +380,52 @@ python extract_pytorch_logs_time.py --log_dir [log_dir]
 结果打印如下
 
 ```
-/root/examples/imagenet/scripts/pytorch_dali/4n8g/r50_b128_fp32_2.log {2: 5950.55}
-/root/examples/imagenet/scripts/pytorch_dali/4n8g/r50_b128_fp32_4.log {2: 5950.55, 4: 6190.58}
-/root/examples/imagenet/scripts/pytorch_dali/4n8g/r50_b128_fp32_3.log {2: 5950.55, 4: 6190.58, 3: 6005.34}
-/root/examples/imagenet/scripts/pytorch_dali/4n8g/r50_b128_fp32_5.log {2: 5950.55, 4: 6190.58, 3: 6005.34, 5: 5996.19}
-/root/examples/imagenet/scripts/pytorch_dali/4n8g/r50_b128_fp32_1.log {2: 5950.55, 4: 6190.58, 3: 6005.34, 5: 5996.19, 1: 6003.22}
-/root/examples/imagenet/scripts/pytorch_dali/1n1g/r50_b128_fp32_2.log {2: 361.85}
-/root/examples/imagenet/scripts/pytorch_dali/1n1g/r50_b128_fp32_4.log {2: 361.85, 4: 361.91}
-/root/examples/imagenet/scripts/pytorch_dali/1n1g/r50_b128_fp32_3.log {2: 361.85, 4: 361.91, 3: 358.54}
-/root/examples/imagenet/scripts/pytorch_dali/1n1g/r50_b128_fp32_5.log {2: 361.85, 4: 361.91, 3: 358.54, 5: 359.12}
-/root/examples/imagenet/scripts/pytorch_dali/1n1g/r50_b128_fp32_1.log {2: 361.85, 4: 361.91, 3: 358.54, 5: 359.12, 1: 362.06}
-/root/examples/imagenet/scripts/pytorch_dali/2n8g/r50_b128_fp32_2.log {2: 3705.65}
-/root/examples/imagenet/scripts/pytorch_dali/2n8g/r50_b128_fp32_4.log {2: 3705.65, 4: 3641.8}
-/root/examples/imagenet/scripts/pytorch_dali/2n8g/r50_b128_fp32_3.log {2: 3705.65, 4: 3641.8, 3: 3884.38}
-/root/examples/imagenet/scripts/pytorch_dali/2n8g/r50_b128_fp32_5.log {2: 3705.65, 4: 3641.8, 3: 3884.38, 5: 3852.81}
-/root/examples/imagenet/scripts/pytorch_dali/2n8g/r50_b128_fp32_1.log {2: 3705.65, 4: 3641.8, 3: 3884.38, 5: 3852.81, 1: 3771.85}
-/root/examples/imagenet/scripts/pytorch_dali/1n8g/r50_b128_fp32_2.log {2: 1973.75}
-/root/examples/imagenet/scripts/pytorch_dali/1n8g/r50_b128_fp32_4.log {2: 1973.75, 4: 1950.92}
-/root/examples/imagenet/scripts/pytorch_dali/1n8g/r50_b128_fp32_3.log {2: 1973.75, 4: 1950.92, 3: 1885.99}
-/root/examples/imagenet/scripts/pytorch_dali/1n8g/r50_b128_fp32_5.log {2: 1973.75, 4: 1950.92, 3: 1885.99, 5: 1989.59}
-/root/examples/imagenet/scripts/pytorch_dali/1n8g/r50_b128_fp32_1.log {2: 1973.75, 4: 1950.92, 3: 1885.99, 5: 1989.59, 1: 2024.24}
-/root/examples/imagenet/scripts/pytorch_dali/1n4g/r50_b128_fp32_2.log {2: 1097.86}
-/root/examples/imagenet/scripts/pytorch_dali/1n4g/r50_b128_fp32_4.log {2: 1097.86, 4: 1043.71}
-/root/examples/imagenet/scripts/pytorch_dali/1n4g/r50_b128_fp32_3.log {2: 1097.86, 4: 1043.71, 3: 1108.06}
-/root/examples/imagenet/scripts/pytorch_dali/1n4g/r50_b128_fp32_5.log {2: 1097.86, 4: 1043.71, 3: 1108.06, 5: 1068.54}
-/root/examples/imagenet/scripts/pytorch_dali/1n4g/r50_b128_fp32_1.log {2: 1097.86, 4: 1043.71, 3: 1108.06, 5: 1068.54, 1: 1071.89}
-{'r50': {'1n1g': {'average_speed': 360.7,
+/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_2.log {2: 10155.2}
+/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_4.log {2: 10155.2, 4: 10315.82}
+/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_3.log {2: 10155.2, 4: 10315.82, 3: 10365.42}
+/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_5.log {2: 10155.2, 4: 10315.82, 3: 10365.42, 5: 10226.19}
+/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_1.log {2: 10155.2, 4: 10315.82, 3: 10365.42, 5: 10226.19, 1: 10297.15}
+/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_2.log {2: 358.15}
+/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_4.log {2: 358.15, 4: 359.85}
+/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_3.log {2: 358.15, 4: 359.85, 3: 356.86}
+/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_5.log {2: 358.15, 4: 359.85, 3: 356.86, 5: 357.91}
+/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_1.log {2: 358.15, 4: 359.85, 3: 356.86, 5: 357.91, 1: 357.9}
+/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_2.log {2: 5183.76}
+/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_4.log {2: 5183.76, 4: 5317.55}
+/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_3.log {2: 5183.76, 4: 5317.55, 3: 5260.32}
+/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_5.log {2: 5183.76, 4: 5317.55, 3: 5260.32, 5: 5251.01}
+/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_1.log {2: 5183.76, 4: 5317.55, 3: 5260.32, 5: 5251.01, 1: 5226.62}
+/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_2.log {2: 2703.92}
+/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_4.log {2: 2703.92, 4: 2741.19}
+/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_3.log {2: 2703.92, 4: 2741.19, 3: 2736.8}
+/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_5.log {2: 2703.92, 4: 2741.19, 3: 2736.8, 5: 2727.1}
+/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_1.log {2: 2703.92, 4: 2741.19, 3: 2736.8, 5: 2727.1, 1: 2744.35}
+/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_2.log {2: 1263.17}
+/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_4.log {2: 1263.17, 4: 1273.22}
+/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_3.log {2: 1263.17, 4: 1273.22, 3: 1279.97}
+/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_5.log {2: 1263.17, 4: 1273.22, 3: 1279.97, 5: 1305.19}
+/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_1.log {2: 1263.17, 4: 1273.22, 3: 1279.97, 5: 1305.19, 1: 1273.76}
+{'r50': {'1n1g': {'average_speed': 358.13,
                   'batch_size_per_device': 128,
-                  'median_speed': 361.85,
+                  'median_speed': 357.91,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1078.01,
+         '1n4g': {'average_speed': 1279.06,
                   'batch_size_per_device': 128,
-                  'median_speed': 1071.89,
-                  'speedup': 2.96},
-         '1n8g': {'average_speed': 1964.9,
+                  'median_speed': 1273.76,
+                  'speedup': 3.56},
+         '1n8g': {'average_speed': 2730.67,
                   'batch_size_per_device': 128,
-                  'median_speed': 1973.75,
-                  'speedup': 5.45},
-         '2n8g': {'average_speed': 3771.3,
+                  'median_speed': 2736.8,
+                  'speedup': 7.65},
+         '2n8g': {'average_speed': 5247.85,
                   'batch_size_per_device': 128,
-                  'median_speed': 3771.85,
-                  'speedup': 10.42},
-         '4n8g': {'average_speed': 6029.18,
+                  'median_speed': 5251.01,
+                  'speedup': 14.67},
+         '4n8g': {'average_speed': 10271.96,
                   'batch_size_per_device': 128,
-                  'median_speed': 6003.22,
-                  'speedup': 16.59}}}
-Saving result to ./result/_result.json
+                  'median_speed': 10297.15,
+                  'speedup': 28.77}}}
+Saving result to ./result/pytorch_result.json
 ```
 
 
@@ -436,27 +436,27 @@ Saving result to ./result/_result.json
 
 ### FP32 & W/O XLA & Use `torch.utils.data.DataLoader`
 
-- ### ResNet50 v1.5 batch_size = 128
+- ### ResNet50 v1.5 batch_size = 128, worker=48
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 355.15             | 1.00    |
-| 1        | 4                | 128                   | 1315.62            | 3.7     |
-| 1        | 8                | 128                   | 1396.33            | 3.93    |
-| 2        | 8                | 128                   | 2052.43            | 5.78    |
-| 4        | 8                | 128                   | 3307.07            | 9.31    |
+| 1        | 1                | 128                   | 354.4              | 1.00    |
+| 1        | 4                | 128                   | 1350.96            | 3.76    |
+| 1        | 8                | 128                   | 2719.07            | 4.61    |
+| 2        | 8                | 128                   | 5307.21            | 5.78    |
+| 4        | 8                | 128                   | 10632.33           | 9.31    |
 
 ### FP32 & W/O XLA & Use DALI
 
-- ### ResNet50 v1.5 batch_size = 128
+- ### ResNet50 v1.5 batch_size = 128，worker=48
 
 | node_num | pu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
 | -------- | --------------- | --------------------- | ------------------ | ------- |
-| 1        | 1               | 128                   | 361.85             | 1.00    |
-| 1        | 4               | 128                   | 1071.89            | 2.96    |
-| 1        | 8               | 128                   | 1973.75            | 5.45    |
-| 2        | 8               | 128                   | 3771.85            | 10.42   |
-| 4        | 8               | 128                   | 6003.22            | 16.59   |
+| 1        | 1               | 128                   | 357.91             | 1.00    |
+| 1        | 4               | 128                   | 1273.76            | 2.96    |
+| 1        | 8               | 128                   | 2736.8             | 5.45    |
+| 2        | 8               | 128                   | 5251.01            | 10.42   |
+| 4        | 8               | 128                   | 10297.15           | 16.59   |
 
 
 
