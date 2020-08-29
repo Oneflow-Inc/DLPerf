@@ -12,7 +12,7 @@
 
 ## 环境 Environment
 
-#### 系统
+### 系统
 
 - #### 硬件
 
@@ -28,7 +28,7 @@
 
   - cuDNN：7.6.5
 
-#### NGC 容器
+### NGC 容器
 
 - 系统：[ Ubuntu 18.04](http://releases.ubuntu.com/18.04/)
 
@@ -68,9 +68,62 @@
 
 考虑到性能测试无需花费大量时间（网络良好，梯子健全情况下大约一天）制备完整数据集，简易 Wikipedia 数据集制作可参考以下步骤：
 
-- 下载 Wikipedia 数据集并解压，取其 /AA 路径数据作为使用的 data sample
+- 下载 Wikipedia 数据集并解压，取其 /AA、/AB 等节选数据集路径数据作为使用的 data sample，放至 /workspace/examples/bert/data/extracted 下。
 
-- 修改
+- 修改 /workspace/examples/bert/data/WikicorpusTextFormatting.py，如下
+
+  ```
+  import glob
+  import os
+  import argparse
+  
+  class WikicorpusTextFormatting:
+      def __init__(self, args, recursive = False):
+          self.wiki_path = args.wiki_path
+          self.recursive = recursive
+          self.output_filename = args.output_filename
+  
+  
+      # This puts one article per line
+      def merge(self):
+          print("wiki_path: ", self.wiki_path)
+          print("output_filename: ", self.output_filename)
+          with open(self.output_filename, mode='w', newline='\n') as ofile:
+              for dirname in glob.glob(self.wiki_path + '/*/', recursive=False):
+                  for filename in glob.glob(dirname + 'wiki_*', recursive=self.recursive):
+                      print(filename)
+                      article_lines = []
+                      article_open = False
+  
+                      with open(filename, mode='r', newline='\n') as file:
+                          for line in file:
+                              if '<doc id=' in line:
+                                  article_open = True
+                              elif '</doc>' in line:
+                                  article_open = False
+                                  for oline in article_lines[1:]:
+                                      if oline != '\n':
+                                          ofile.write(oline.rstrip() + " ")
+                                  ofile.write("\n\n")
+                                  article_lines = []
+                              else:
+                                  if article_open:
+                                      article_lines.append(line)
+  
+  if __name__ == "__main__":
+      parser = argparse.ArgumentParser(description='Preprocessing Wiki Corpus...')
+  
+      parser.add_argument("--wiki_path", type=str, default="/workspace/bert/data/extracted", help="input wiki path")
+      parser.add_argument("--output_filename", type=str, default="/workspace/bert/data/formatted_one_article_per_line/wikicorpus_en_one_book_per_line.txt", help="output file name")
+      args = parser.parse_args()
+      wiki_corpus = WikicorpusTextFormatting(args, recursive=True)
+      wiki_corpus.merge()
+      print("merge done.")
+  ```
+
+  执行成功，会生成 data/formatted_one_article_per_line/wikicorpus_en_one_book_per_line.txt 文件
+
+  然后注释掉 /workspace/examples/bert/data/create_datasets_from_start.sh 中的 40 行之前`Download` 和  `Properly format the text files` 相关代码，直接进行 `Shard the text files` 和 `create HDF5 files PHase 1` 和 `Create HDF5 files Phase 2` 即可。
 
   可以先制作数据集，运行容器时绑定数据集路径（`-v ./data:/data/`），也可以先起容器，制作完数据集，使用 scp 传递数据集至容器内的 /workspace/rn50/data 路径下
 
@@ -130,7 +183,7 @@ apt-get install openssh-server
 git clone https://github.com/Oneflow-Inc/DLPerf.git
 ````
 
-将本仓库 /DLPerf/NVIDIADeepLearningExamples/Pytorch/BERT/scripts 下的源码放至 /workspace/examples/bert/test_scripts（需新建） 下，执行脚本
+将本仓库 /DLPerf/NVIDIADeepLearningExamples/Pytorch/BERT/scripts 目录源码移至 /workspace/examples/bert/test_scripts（需新建） 下，执行脚本
 
 ```
 bash run_single_node.sh
@@ -198,23 +251,23 @@ Saving result to ./result/pytorch_result.json
 
 - #### BERT-Base batch_size = 32
 
-| gpu_num_per_node | batch_size_per_device | samples/s(OneFlow) | speedup | samples/s(Pytorch) | speedup |
-| ---------------- | --------------------- | ------------------ | ------- | ------------------ | ------- |
-| 1                | 32                    | 145.2              | 1.00    | 119.77             | 1.00    |
-| 2                | 32                    |                    |         | 221.42             | 1.85    |
-| 4                | 32                    |                    |         | 459.24             | 3.83    |
-| 8                | 32                    | 1043.0             | 7.18    | 919.84             | 7.68    |
+| gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
+| ---------------- | --------------------- | ------------------ | ------- |
+| 1                | 32                    | 120.82             | 1.00    |
+| 2                | 32                    | 223.39             | 1.85    |
+| 4                | 32                    | 460.24             | 3.81    |
+| 8                | 32                    | 917.9              | 7.6     |
 
 - #### BERT-Base batch_size = 48
 
-| gpu_num_per_node | batch_size_per_device | samples/s(OneFlow) | speedup | samples/s(Pytorch) | speedup |
-| ---------------- | --------------------- | ------------------ | ------- | ------------------ | ------- |
-| 1                | 48                    | 145.2              | 1.00    | 123.92             | 1.00    |
-| 2                | 48                    |                    |         | 231.92             | 1.87    |
-| 4                | 48                    |                    |         | 472.87             | 3.82    |
-| 8                | 48                    | 1043.0             | 7.18    | 943.61             | 7.61    |
+| gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
+| ---------------- | --------------------- | ------------------ | ------- |
+| 1                | 48                    | 124.17             | 1.00    |
+| 2                | 48                    | 232.62             | 1.87    |
+| 4                | 48                    | 474.46             | 3.82    |
+| 8                | 48                    | 947.8              | 7.63    |
 
-NVIDIA的 Pytorch 官方测评结果请见 [BERT For PyTorch](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT#training-performance-results)
+NVIDIA的 Pytorch 官方测评结果详见 [BERT For PyTorch](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT#training-performance-results)
 
 详细 Log 信息可下载：[ngc_pytorch_bert.zip]()
 
