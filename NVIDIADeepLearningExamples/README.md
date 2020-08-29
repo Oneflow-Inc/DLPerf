@@ -38,7 +38,7 @@ Legend:
 
 ```
 
-软件环境使用的是[NGC 20.03](https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html)容器。单机测试结果与NVIDIA的官方公布结果相符，同时还测试了2机16卡、4机32卡的情况，用于比较NVIDIA优化后的各个框架的横向扩展性。
+软件环境使用的是[NGC 20.03](https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html)容器。单机测试结果与NVIDIA的官方公布结果相符，同时还增加了2机16卡、4机32卡的测试，用于比较NVIDIA优化后的各个框架的横向扩展性。
 
 
 具体各框架的性能评测结果、复现方式等信息详见各框架目录。
