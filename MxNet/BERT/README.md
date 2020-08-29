@@ -311,3 +311,90 @@ Saving result to ./result/bz32_result.json
 
 详细 Log 信息可下载：[mxnet_bert_base_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/logs.zip)
 
+
+
+## MxNet BERT-base 多机加速比很低的问题
+
+在测试MxNet BERT-base的多机过程中，发现性能表现很差，跟NVIDIA DeepLearningExample中的Resnet50多机性能表现相比差距巨大。我们尝试了多次，通过增删参数、环境变量、打印log等方式，排除了NCCL、RDMA等通信速度的问题，发现性能瓶颈不是网络传输和多卡同步的开销，而是CPU全部被占满了（48个线程都是几乎100%占用），导致没有能力供应多机多卡的计算。
+
+### 测试环境
+
+我们所有的测试都是在4台配置8卡V100-SXM2-16GB的服务器中进行，主要硬软件配置如下：
+
+- Tesla V100-SXM2-16GB x 8
+- InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
+- 48 CPU(s), Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+- Memory 384G
+- Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- CUDA Version: 10.2, Driver Version: 440.33.01
+- `nvidia-smi topo -m`
+
+```
+        GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    mlx5_0  CPU Affinity
+GPU0     X      NV1     NV1     NV2     NV2     SYS     SYS     SYS     NODE    0-11,24-35
+GPU1    NV1      X      NV2     NV1     SYS     NV2     SYS     SYS     NODE    0-11,24-35
+GPU2    NV1     NV2      X      NV2     SYS     SYS     NV1     SYS     PIX     0-11,24-35
+GPU3    NV2     NV1     NV2      X      SYS     SYS     SYS     NV1     PIX     0-11,24-35
+GPU4    NV2     SYS     SYS     SYS      X      NV1     NV1     NV2     SYS     12-23,36-47
+GPU5    SYS     NV2     SYS     SYS     NV1      X      NV2     NV1     SYS     12-23,36-47
+GPU6    SYS     SYS     NV1     SYS     NV1     NV2      X      NV2     SYS     12-23,36-47
+GPU7    SYS     SYS     SYS     NV1     NV2     NV1     NV2      X      SYS     12-23,36-47
+mlx5_0  NODE    NODE    PIX     PIX     SYS     SYS     SYS     SYS      X
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+```
+
+### 测试容器
+
+测试容器使用的是[NGC 20.03 mxnet](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)容器，容器信息介绍见[此处](https://docs.nvidia.com/deeplearning/frameworks/mxnet-release-notes/rel_20-03.html#rel_20-03)，与NVIDIA DeepLearningExample里的MxNet ResNet50v1.5 测试环境一样。使用MxNet版本为[1.6.0](https://github.com/apache/incubator-mxnet/releases/tag/1.6.0)。
+
+### 模型库
+
+模型库使用的是[gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e)仓库的BERT脚本[run_pretraining.py](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py)
+
+### 现象1： 数据集part大小严重影响训练的启动时间
+
+我们使用了32个part的数据集文件，格式为npz，每个文件大小为280M。（相比之下OneFlow Benchmark中的数据集每个part大小为2G多）当part数量为32时，单机8卡、2机16卡的启动时间会很久（将近十分钟），同时可以观测到在训练之前CPU被100% * 48 占用。在单机8卡的训练中，内存占用超过300G。当把part数量降至8以后，启动速度变快很多。但是对训练速度无影响，仍然很慢。
+
+数据集：
+
+![image-20200829122434371](C:\Users\oneflow\AppData\Roaming\Typora\typora-user-images\image-20200829122434371.png)
+
+内存300G：
+
+![image-20200829122629240](C:\Users\oneflow\AppData\Roaming\Typora\typora-user-images\image-20200829122629240.png)
+
+### 现象2：配置参数和环境变量无法降低训练时的CPU占用率，无法提升分布式训练速度
+
+gluon-nlp的BERT训练参数只有一项跟加载数据集的线程数相关，为[`--num_data_workers`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py#L131)
+
+```python
+parser.add_argument('--num_data_workers', type=int, default=8,
+                    help='Number of workers to pre-process data.')
+```
+
+在单机8卡、2机16卡的测试中，尝试设置`--num_data_workers=1,8,48` ，均不能影响训练时的CPU占用率。
+
+根据MxNet的官方issue [Why CPU load is so heavy during training? How can I reduce it](https://discuss.mxnet.io/t/why-cpu-load-is-so-heavy-during-training-how-can-i-reduce-it/2735/5) 中的介绍:
+
+```
+I managed to find a method to solve this problem by mannually set the environment variable ‘OMP_NUM_THREAD’ = 4 * num_GPU_used. The number of threads can be reduced by about 90 and everything works well. Maybe this variable is related to the data loading process since I find I cannot set it’s value to a too small one. It’s still a little strange that I thought this variable is only related to the performance when we use CPU to do training.
+
+Thanks for your patience and nice answers. They help me a lot to find the final solution!
+```
+
+尝试设置环境变量 `export OMP_NUM_THREAD = 1, 8, 32` 等，也不能影响训练时的CPU占用率
+
+训练时的CPU占用率表现为：
+
+![image-20200829121952990](C:\Users\oneflow\AppData\Roaming\Typora\typora-user-images\image-20200829121952990.png)
+
