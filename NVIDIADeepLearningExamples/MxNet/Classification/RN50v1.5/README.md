@@ -120,15 +120,6 @@
 
   DLPerf仓库中的测试为了统一环境和驱动、第三方依赖的版本，都用了20.03的镜像。mxnet-20.03的镜像里用了与CUDA 10.2相匹配的DALI 0.19.0，而该容器内的脚本还是19.07镜像里的脚本，直接运行dali-cpu和dali-gpu会报错，因此需要把 [dali.py](https://github.com/NVIDIA/DeepLearningExamples/blob/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5/dali.py) 中的`nvJPEGDecoder`替换成`ImageDecoder`，详见： https://github.com/NVIDIA/DALI/issues/906 
 
-- #### 多机MPI运行
-
-  NGC 20.03 mxnet镜像中安装了OpenMPI，但是却没有将其加入到PATH中，导致找不到mpirun。需要手动将路径加入到PATH中。
-
-  ```shell
-  export LD_LIBRARY_PATH=/usr/local/cuda/compat/lib.real:/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/lib
-  export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/mpi/bin/
-  ```
-
 ### 3. 运行测试
 
 本次测试集群中有 4 台节点：
