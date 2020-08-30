@@ -1,15 +1,19 @@
 # DLPerf Benchmark Test Report V1.0
-This report summrized the results of a series of tests performed on Aug 2020.  
+
+This report summarizes the results of a series of tests performed in Aug, 2020.  
 
 ## Test Environment
-All tests were performed on 4 GPU Servers with 8x Tesla V100-SXM2-16GB and following is the main hardware and software configurations for each:  
+
+All tests were performed on 4 Nodes with 8x Tesla V100-SXM2-16GB GPUs, the following is the main hardware and software configuration for each:  
+
 - Tesla V100-SXM2-16GB x 8
-- InfiniBand 100 Gb/sec (4X EDR)£¬ Mellanox Technologies MT27700 Family
+- InfiniBand 100 Gb/sec (4X EDR)ï¼Œ Mellanox Technologies MT27700 Family
 - Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
 - `nvidia-smi topo -m`
+
 ```
         GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    mlx5_0  CPU Affinity
 GPU0     X      NV1     NV1     NV2     NV2     SYS     SYS     SYS     NODE    0-11,24-35
@@ -34,78 +38,75 @@ Legend:
 
 ```
 
-## Evaluated DNN models 
-### ResNet50 V1.5
-| Framework Version | Docker From | DNN modeles source | Abbr |
-| ---- | ---- | ---- | ---- |
-| OneFlow 0.1.9 | NA | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | OF_rn50 |
-| TensorFlow 1.15.2 | nvcr.io/nvidia/tensorflow:20.03-tf1-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/Classification/ConvNets) | TF_NGC_rn50 |
-| MxNet 1.6.0 | nvcr.io/nvidia/mxnet:20.03-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5) | MX_NGC_rn50 |
-| PyTorch | nvcr.io/nvidia/pytorch:20.03-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets) | PT_NGC_rn50 |
-| PaddlePaddle 1.8.3.post107 | NA | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | PP_rn50 |
-| TensorFlow 2.3 | TODO | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | TF2_rn50 |
+## DNN models 
 
-### BERT Base Pretrain 
-| Framework Version | Docker From | DNN modeles source | Abbr |
-| ---- | ---- | ---- | ---- |
-| OneFlow 0.1.9 | NA | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | OF_bert |
-| TensorFlow 1.15.2 | nvcr.io/nvidia/tensorflow:20.03-tf1-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/TensorFlow/LanguageModeling/BERT) | TF_NGC_bert |
-| MxNet 1.6.0 | nvcr.io/nvidia/mxnet:20.03-py3 | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/v0.10.x/scripts/bert) | MX_bert |
-| PyTorch | nvcr.io/nvidia/pytorch:20.03-py3 | [DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT) | PT_NGC_bert |
-| PaddlePaddle 1.8.3.post107  | NA | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | PP_bert |
+### ResNet50 V1.5
+
+| Framework Version          | Docker From                             | DNN Model Sources                                            | Features       |
+| -------------------------- | --------------------------------------- | ------------------------------------------------------------ | -------------- |
+| OneFlow 0.1.9              | -                                       | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/637bb9cdb4cc1582f13bcc171acbc8a8089d9435/Classification/cnns) | official       |
+| TensorFlow 1.15.2          | nvcr.io/nvidia/tensorflow:20.03-tf1-py3 | [DeepLearningExamples/TensorFLow](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5) | DALI+Horovod   |
+| MXNet 1.6.0                | nvcr.io/nvidia/mxnet:20.03-py3          | [DeepLearningExamples/MxNet](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) | DALI+Horovod   |
+| PyTorch 1.5.0a0+8f84ded    | nvcr.io/nvidia/pytorch:20.03-py3        | [DeepLearningExamples/PyTorch](https://github.com/NVIDIA/DeepLearningExamples/tree/46ff3707e04683e41b79af0f94a74e45f8016786/PyTorch/Classification/ConvNets/resnet50v1.5) <br>[pytorch/examples](https://github.com/pytorch/examples/tree/4b119d735b802453479d739bf823f3f7d8d5d422/imagenet) | official, DALI |
+| PaddlePaddle 1.8.3.post107 | -                                       | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | official       |
+| TensorFlow 2.3             | -                                       | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | official       |
+
+### BERT Base Pretrain
+
+| Framework Version          | Docker From                             | DNN Model Sources                                            | Features |
+| -------------------------- | --------------------------------------- | ------------------------------------------------------------ | -------- |
+| OneFlow 0.1.9              | -                                       | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/637bb9cdb4cc1582f13bcc171acbc8a8089d9435/LanguageModeling/BERT) | official |
+| TensorFlow 1.15.2          | nvcr.io/nvidia/tensorflow:20.03-tf1-py3 | [DeepLearningExamples/TensorFlow](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | Horovod  |
+| MXNet 1.6.0                | nvcr.io/nvidia/mxnet:20.03-py3          | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | Horovod  |
+| PyTorch 1.5.0a0+8f84ded    | nvcr.io/nvidia/pytorch:20.03-py3        | [DeepLearningExamples/PyTorch](https://github.com/NVIDIA/DeepLearningExamples/tree/26c26761042c0e352238add07f0074e87ac66023/PyTorch/LanguageModeling/BERT) | APEX     |
+| PaddlePaddle 1.8.3.post107 | -                                       | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | official |
 
 ## Benchmark Test Options
-- Devices: 1 node(1 device), 1 node(8 devices), 2 nodes(8 devices), 4 nodes(8 devices)   
+
+- Devices Config: 1 node 1 device, 1 node 8 devices, 2 nodes 16 devices, 4 nodes 32 devices
 - DataType: Float32
-- XLA, TensorRT, AMP: Not Apply
+- XLA, TensorRT, AMP:  Not applicable.
 
 ## Benchmark Test Results
-### ResNet50 V1.5
-data source:
-- OF_rn50: [OneFlow ResNet50-V1.5 Benchmark Test Report](../OneFlow/ConvNets/rn50_fp32_report_0821.md)
-- TF_NGC_rn50: [NVIDIA-Tensorflow-ResNet50V1.5²âÆÀ](../NVIDIADeepLearningExamples/Tensorflow/Classification/ConvNets/resnet50v1.5)
-- MX_NGC_rn50: TODO
-- PT_NGC_rn50: TODO
-- PP_50: [¡¾DLPerf¡¿Paddle-ResNet50V1.5²âÆÀ](../PaddlePaddle/resnet50v1.5)
-- TF2_50: [¡¾DLPerf¡¿TensorFlow-ResNet50V1.5²âÆÀ](../TensorFlow/resnet50v1.5)
 
-#### batch size = 128
-| node num | device num | throughput<br>OF_rn50 | throughput<br>TF_NGC_rn50 | throughput<br>MX_NGC_rn50 | throughput<br>PT_NGC_rn50 | throughput<br>PP_rn50 | throughput<br>TF2_rn50 | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
-| 1 | 1 | 384.90 | 362.44 | TODO | TODO | 352.72 | 321.80 | 
-| 1 | 8 | 2969.50 | 2721.98 | TODO | TODO | 2625.38 | 2458.74 | 
-| 2 | 16 | 5906.60 | 5099.42 | TODO | TODO | 4895.27 | 4849.68 | 
-| 4 | 32 | 11711.20 | 9514.64 | TODO | TODO | 9348.17 | 9418.44 | 
+### ResNet50 V1.5
+
+#### batch size = 128,  FP32 & Without XLA
+
+| node num | device num | [OneFlow<br>throughput<br>(img/s)](../OneFlow/ConvNets/rn50_fp32_report_0821.md) | [TensorFlow 1.x<br>throughput<br>(img/s)](../NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | [MXNet<br>throughput<br>(img/s, bsz=96)](../NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | [PyTorch<br>throughput<br>(img/s)]() | [PaddlePaddle<br>throughput<br>(img/s)](../PaddlePaddle/resnet50v1.5) | [TensorFlow 2.x<br>throughput<br>(img/s)](../TensorFlow/resnet50v1.5) |
+| -------- | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1        | 1          | 384.90                                                       | 362.44                                                       | 389.71                                                       | TODO                                 | 352.72                                                       | 321.80                                                       |
+| 1        | 8          | 2969.50                                                      | 2721.98                                                      | 2947.72                                                      | TODO                                 | 2625.38                                                      | 2458.74                                                      |
+| 2        | 16         | 5906.60                                                      | 5099.42                                                      | 5684.68                                                      | TODO                                 | 4895.27                                                      | 4849.68                                                      |
+| 4        | 32         | 11711.20                                                     | 9514.64                                                      | 10419.21                                                     | TODO                                 | 9348.17                                                      | 9418.44                                                      |
+
+P.S. MXNet cannot work under this configuration with batch size 128, because of OOM.
 
 ### BERT Base Pretrain 
-data source:
-- OF_rn50: [OneFlow BERT Benchmark Test Report](../OneFlow/BERT/bert_base_fp32_report_0822.md)
-- TF_NGC_rn50: [¡¾DLPerf¡¿NVIDIA-Tensorflow-BERT²âÆÀ](../NVIDIADeepLearningExamples/Tensorflow/LanguageModeling/BERT)
-- MX_NGC_rn50: TODO
-- PT_NGC_rn50: TODO
-- PP_50: [¡¾DLPerf¡¿Paddle-BERT²âÆÀ](../PaddlePaddle/bert)
 
-#### batch size = 96
-| node num | device num | throughput<br>OF_bert | throughput<br>TF_NGC_bert | throughput<br>MX_bert | throughput<br>PT_NGC_bert | throughput<br>PP_bert |
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- |
-| 1 | 1 | 149.8 | OOM | TODO | TODO | 136.97 |
-| 1 | 8 | 1158.5 | OOM | TODO | TODO | 868.6 |
-| 2 | 16 | 2257.7 | OOM | TODO | TODO | 1631.36 |
-| 4 | 32 | 4456 | OOM | TODO | TODO | 3167.68 |
+#### batch size = 96,  FP32 & Without XLA
 
-#### batch size = 64 
-| node num | device num | throughput<br>OF_bert | throughput<br>TF_NGC_bert | throughput<br>MX_bert | throughput<br>PT_NGC_bert | throughput<br>PP_bert |
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- |
-| 1 | 1 | 149.8 | OOM | TODO | TODO | 137.27 |
-| 1 | 8 | 1138.9 | OOM | TODO | TODO | 761.22 |
-| 2 | 16 | 2189.3 | OOM | TODO | TODO | 1426.52 |
-| 4 | 32 | 4310.4 | OOM | TODO | TODO | 2736.78 |
+| node num | device num | [OneFlow<br>throughput<br>(sentences/sec)](../OneFlow/BERT/bert_base_fp32_report_0822.md) | [TensorFlow 1.x<br>throughput<br>(sentences/sec)](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [MXNet<br>throughput<br>(sentences/sec)](../MxNet/BERT) | [PyTorch<br>throughput<br>(sentences/sec)]() | [PaddlePaddle<br>throughput<br>(sentences/sec)](../PaddlePaddle/bert) |
+| -------- | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------ |
+| 1        | 1          | 149.8                                                        | OOM                                                          | OOM                                                     | TODO                                         | 136.97                                                       |
+| 1        | 8          | 1158.5                                                       | OOM                                                          | OOM                                                     | TODO                                         | 868.6                                                        |
+| 2        | 16         | 2257.7                                                       | OOM                                                          | OOM                                                     | TODO                                         | 1631.36                                                      |
+| 4        | 32         | 4456                                                         | OOM                                                          | OOM                                                     | TODO                                         | 3167.68                                                      |
 
-#### batch size = 32
-| node num | device num | throughput<br>OF_bert | throughput<br>TF_NGC_bert | throughput<br>MX_bert | throughput<br>PT_NGC_bert | throughput<br>PP_bert | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
-| 1 | 1 | 145.2 | 106.8 | TODO | TODO | 132.64 | 
-| 1 | 8 | 1043 | 806.56 | TODO | TODO | 615.12 | 
-| 2 | 16 | 1890.3 | 1090.2 | TODO | TODO | 1116.02 | 
-| 4 | 32 | 3715.1 | 1923.68 | TODO | TODO | 2073.6 |
+#### batch size = 64,  FP32 & Without XLA
 
+| node num | device num | [OneFlow<br/>throughput<br/>(sentences/sec)](../OneFlow/BERT/bert_base_fp32_report_0822.md) | [TensorFlow 1.x<br/>throughput<br/>(sentences/sec)](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [MXNet<br/>throughput<br/>(sentences/sec)](../MxNet/BERT) | [PyTorch<br/>throughput<br/>(sentences/sec)]() | [PaddlePaddle<br/>throughput<br/>(sentences/sec)](../PaddlePaddle/bert) |
+| -------- | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------ |
+| 1        | 1          | 149.8                                                        | OOM                                                          | OOM                                                       | TODO                                           | 137.27                                                       |
+| 1        | 8          | 1138.9                                                       | OOM                                                          | OOM                                                       | TODO                                           | 761.22                                                       |
+| 2        | 16         | 2189.3                                                       | OOM                                                          | OOM                                                       | TODO                                           | 1426.52                                                      |
+| 4        | 32         | 4310.4                                                       | OOM                                                          | OOM                                                       | TODO                                           | 2736.78                                                      |
+
+#### batch size = 32,  FP32 & Without XLA
+
+| node num | device num | [OneFlow<br/>throughput<br/>(sentences/sec)](../OneFlow/BERT/bert_base_fp32_report_0822.md) | [TensorFlow 1.x<br/>throughput<br/>(sentences/sec)](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [MXNet<br/>throughput<br/>(sentences/sec)](../MxNet/BERT) | [PyTorch<br/>throughput<br/>(sentences/sec)]() | [PaddlePaddle<br/>throughput<br/>(sentences/sec)](../PaddlePaddle/bert) |
+| -------- | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------ |
+| 1        | 1          | 145.2                                                        | 106.8                                                        | 127.05                                                    | TODO                                           | 132.64                                                       |
+| 1        | 8          | 1043                                                         | 806.56                                                       | 928.03                                                    | TODO                                           | 615.12                                                       |
+| 2        | 16         | 1890.3                                                       | 1090.2                                                       | 1136.44                                                   | TODO                                           | 1116.02                                                      |
+| 4        | 32         | 3715.1                                                       | 1923.68                                                      | 1895.50                                                   | TODO                                           | 2073.6                                                       |
