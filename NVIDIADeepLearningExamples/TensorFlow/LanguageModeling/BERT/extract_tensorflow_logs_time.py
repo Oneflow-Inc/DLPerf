@@ -17,7 +17,7 @@ parser.add_argument("--log_dir", type=str, default="./logs/ngc/tensorflow/bert",
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
-parser.add_argument('--batch_size_per_device', type=int, default=128)
+parser.add_argument('--batch_size_per_device', type=int, default=48)
 
 args = parser.parse_args()
 
@@ -62,11 +62,8 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
 
     s1 = "Iteration: "+str(args.warmup_batches)
     s2 = "Iteration: "+str(args.train_batches)
-    from_line_num = 1 if args.warmup_batches < 20 else args.warmup_batches-20+1
-    to_line_num = args.train_batches - 20
     start_time = ''
     end_time = ''
-    line_num = 0
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
@@ -144,5 +141,6 @@ def extract_result():
 
 
 if __name__ == "__main__":
+    # The iteration output in tensorflow log files is an integer multiple of 10
     assert args.warmup_batches % 10 ==0 and args.train_batches % 10 ==0
     extract_result()
