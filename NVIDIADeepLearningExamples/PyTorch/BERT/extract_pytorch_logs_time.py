@@ -12,12 +12,12 @@ import numpy as np
 pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
-parser = argparse.ArgumentParser(description="flags for cnn benchmark")
-parser.add_argument("--log_dir", type=str, default="./logs/ngc/tensorflow/bert", required=True)
+parser = argparse.ArgumentParser(description="flags for bert tests data process")
+parser.add_argument("--log_dir", type=str, default="/workspace/examples/bert/test_scripts/ngc/pytorch", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
-parser.add_argument('--batch_size_per_device', type=int, default=48)
+parser.add_argument('--batch_size_per_device', type=int, default=32)
 
 args = parser.parse_args()
 
@@ -39,9 +39,8 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     run_case = log_file.split("/")[-2]  # eg: 1n1g
     model = fname.split("_")[0]
     batch_size = int(fname.split("_")[1].strip("b"))
-    pricition = fname.split("_")[2]
+    precision = fname.split("_")[2]
     test_iter = int(fname.split("_")[3].strip(".log"))
-
     node_num = int(run_case[0])
     if len(run_case) == 4:
         card_num = int(run_case[-2])
@@ -57,22 +56,21 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
 
     avg_speed = 0
     # extract info from file content
-    pt = re.compile(r"(\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})", re.S)
-# 2020-08-26 18:06:39.031755
-
-    s1 = "Iteration: "+str(args.warmup_batches)
-    s2 = "Iteration: "+str(args.train_batches)
+    pt = re.compile(r"(\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})", re.S)
     start_time = ''
     end_time = ''
+    line_num = 0
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
-            if " throughput_train : " in line:
-                if s1 in line:
+            if "Iteration: " in line:
+                line_num += 1
+
+                if line_num == args.warmup_batches:
                     start_time = re.findall(pt, line)[0]
                     continue
 
-                if s2 in line:
+                if line_num == args.train_batches:
                     end_time = re.findall(pt, line)[0]
                     t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S.%f")
                     t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
@@ -80,6 +78,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                     iter_num = args.train_batches - args.warmup_batches
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
                     break
+
 
     # compute avg throughoutput
     tmp_dict['average_speed'] = avg_speed
@@ -103,20 +102,17 @@ def compute_speedup(result_dict, speed_dict):
                 speed_up = result_dict[m][d]['median_speed'] / compute_median(speed_dict[m]['1n1g'])
             result_dict[m][d]['speedup'] = round(speed_up, 2)
 
-
-def compute_median(iter_dict):
-    speed_list = [i for i in iter_dict.values()]
-    return round(np.median(speed_list), 2)
-
-
 def compute_average(iter_dict):
     i = 0
     total_speed = 0
     for iter in iter_dict:
         i += 1
         total_speed += iter_dict[iter]
-    return round(total_speed / i, 4)
+    return round(total_speed / i, 2)
 
+def compute_median(iter_dict):
+    speed_list = [i for i in iter_dict.values()]
+    return round(np.median(speed_list), 2)
 
 def extract_result():
     result_dict = AutoVivification()
@@ -141,6 +137,4 @@ def extract_result():
 
 
 if __name__ == "__main__":
-    # The iteration output in tensorflow log files is an integer multiple of 10
-    assert args.warmup_batches % 10 ==0 and args.train_batches % 10 ==0
     extract_result()

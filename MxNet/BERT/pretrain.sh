@@ -12,7 +12,7 @@ gpu_num_per_node=`expr ${a} / 2`
 gpu_num=`expr ${gpu_num_per_node} \* ${NODE_NUM}`
 total_bz=`expr ${BZ_PER_DEVICE} \* ${gpu_num}`
 
-log_folder=benchmark_log/ngc/mxnet/${NODE_NUM}n${gpu_num}g
+log_folder=logs/mxnet/bert/bz32/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
 log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_fp32_$TEST_NUM.log
 

@@ -144,5 +144,6 @@ def extract_result():
 
 
 if __name__ == "__main__":
+    # The iteration output in tensorflow log files is an integer multiple of 100
     assert args.warmup_batches % 100 == 0 and args.train_batches > args.warmup_batches
     extract_result()

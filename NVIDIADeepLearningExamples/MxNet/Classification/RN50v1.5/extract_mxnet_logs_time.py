@@ -13,7 +13,7 @@ pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for cnn benchmark")
-parser.add_argument("--log_dir", type=str, default="../ngc/tensorflow", required=True)
+parser.add_argument("--log_dir", type=str, default="logs/ngc/mxnet/rn50", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
