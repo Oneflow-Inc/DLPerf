@@ -103,15 +103,6 @@
 
 ### 2. 额外准备
 
-- #### 多机MPI运行
-
-  NGC 20.03 mxnet镜像中安装了OpenMPI，但是却没有将其加入到PATH中，导致找不到mpirun。需要手动将路径加入到PATH中
-
-  ```shell
-  export LD_LIBRARY_PATH=/usr/local/cuda/compat/lib.real:/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/lib
-  export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/mpi/bin/
-  ```
-
 - #### 下载gluon-nlp仓库源码
 
   ```shell
