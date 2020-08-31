@@ -25,17 +25,17 @@ More and more frameworks will be included in the future, such as MindSpore and M
 1. ResNet 50 Version 1.5
 2. BERT base
 
-There are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid to change any scripts and codes from origin. If we have to, changes were committed by git and mentioned in the documents.
+There are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were committed by git and mentioned in the documents.
 
 More DNN models will be tested in the future.
 
 ### Benchmark Test Scopes
 
-Each DNN model of a framework should be tested on a multi-nodes cluster with different batch sizes, enable XLA or not, enable auto mixed precision or not.
+Each DNN model of a framework should be tested on a multi-node cluster with different batch sizes, XLA enabled or not, auto mixed precision enabled or not.
 
-#### Multi-Nodes and Multi-Devices
+#### Multi-Node and Multi-Device
 
-We suggest to performance each test with 1-node-1-device, 1-node-8-devices, 2-nodes-16-devices, 4-nodes-32-devices. 
+We suggest to perform each test with 1-node-1-device, 1-node-8-devices, 2-nodes-16-devices, 4-nodes-32-devices. 
 
 #### Batch Size
 
@@ -95,7 +95,7 @@ This section maintains the summary of the latest results. For more and more deta
 
 ### ResNet50-V1.5 Training Performance images/sec
 
-Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. The specific training script that was run is documented in the corresponding model's README.
+Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. The specific training script that was run is documented in the corresponding model's README. The **bsz** means batch size per GPU.
 
 The difference between v1 and v1.5 is in the bottleneck blocks which require down sampling. ResNet50 v1 has stride = 2 in the first 1x1 convolution, whereas v1.5 has stride = 2 in the 3x3 convolution
 
@@ -103,7 +103,7 @@ This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1,
 
 | Framework      | Source                                                       | FP32 throughput<br>(img/s)  bsz=128                          | FP32 speedup<br>bsz=128 |
 | -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------- |
-| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.20](./OneFlow/ConvNets/rn50_fp32_report_0821.md)      | 30.43                   |
+| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.18](./OneFlow/ConvNets/rn50_fp32_report_0821.md)      | 30.43                   |
 | TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5) | [9514.64](./NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | 26.25                   |
 | MxNet          | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) | [10419.21](./NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | 26.74                   |
 | PyTorch        | [PyTorch-examples](https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) | [10632.33](./PyTorch/resnet50v1.5)                           | 30.00                   |
@@ -112,11 +112,11 @@ This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1,
 
 ### BERT base Pretraining Performance sentences/sec
 
-Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. The specific training script that was run is documented in the corresponding model's README.
+Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. The specific training script that was run is documented in the corresponding model's README. The **bsz** means batch size per GPU.
 
 | Framework      | Source                                                       | FP32 throughput<br>(sentences/sec), bsz=max                  | FP32 speedup<br>bsz=max | FP32 throughput<br>(sentences/sec), bsz=32                   | FP32 speedup<br/>bsz=32 |
 | -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------------------- |
-| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0<br>bsz=96](./OneFlow/BERT/bert_base_fp32_report_0822.md) | 29.75                   | [3715.1](./OneFlow/BERT/bert_base_fp32_report_0822.md)       | 25.59                   |
+| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4455.97<br>bsz=96](./OneFlow/BERT/bert_base_fp32_report_0822.md) | 29.75                   | [3715.1](./OneFlow/BERT/bert_base_fp32_report_0822.md)       | 25.59                   |
 | TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | [2478.59<br/>bsz=48](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | 22.02                   | [1923.68](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | 18.01                   |
 | MxNet          | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | [1895.50<br/>bsz=32](./MxNet/BERT)                           | 14.92                   | [1895.50](/MxNet/BERT)                                       | 14.92                   |
 | PaddlePaddle   | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | [3167.68<br/>bsz=96](./PaddlePaddle/bert)                    | 23.13                   | [2073.6](./PaddlePaddle/bert)                                | 15.63                   |
