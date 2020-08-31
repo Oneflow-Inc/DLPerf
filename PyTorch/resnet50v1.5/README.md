@@ -412,7 +412,7 @@ def get_dali_train_loader(dali_cpu=False):
 运行 /DLPerf/PyTorch/resnet50v1.5/extract_PyTorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
 ```
-python extract_pytorch_logs_time.py --log_dir /root/examples/imagenet/scripts/pytorch/ --warmup_batches 20 --train_batches 120 --batch_size_per_device 128
+python extract_pytorch_logs_time.py --log_dir /root/examples/imagenet/scripts/j48_pytorch_original --warmup_batches 20 --train_batches 120 --batch_size_per_device 128
 ```
 
 结果打印如下
