@@ -97,27 +97,27 @@ This section maintains the summary of the latest results. For more and more deta
 
 Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. The specific training script that was run is documented in the corresponding model's README.
 
-The difference between v1 and v1.5 is in the bottleneck blocks which require down sampling. ResNet v1 has stride = 2 in the first 1x1 convolution, whereas v1.5 has stride = 2 in the 3x3 convolution
+The difference between v1 and v1.5 is in the bottleneck blocks which require down sampling. ResNet50 v1 has stride = 2 in the first 1x1 convolution, whereas v1.5 has stride = 2 in the 3x3 convolution
 
 This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1, but comes with a small performance drawback (~5% images/sec).
 
-| Framework      | Source                                                       | FP32<br>bsz=128                                              | FP32 XLA | AMP  |
-| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------- | ---- |
-| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.2](./OneFlow/ConvNets/rn50_fp32_report_0821.md)       | TODO     | TODO |
-| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5) | [9514.64](./NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | TODO     | TODO |
-| MxNet          | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) | [10419.21](./NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | TODO     | TODO |
-| PyTorch        | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/46ff3707e04683e41b79af0f94a74e45f8016786/PyTorch/Classification/ConvNets) | **SX**                                                       | TODO     | TODO |
-| PaddlePaddle   | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | [9348.17](./PaddlePaddle/resnet50v1.5)                       | TODO     | TODO |
-| TensorFlow 2.x | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | [9418.44](./TensorFlow/resnet50v1.5)                         | TODO     | TODO |
+| Framework      | Source                                                       | FP32 throughput<br>(img/s)  bsz=128                          | FP32 speedup<br>bsz=128 |
+| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------- |
+| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.20](./OneFlow/ConvNets/rn50_fp32_report_0821.md)      | 30.43                   |
+| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5) | [9514.64](./NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | 26.25                   |
+| MxNet          | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) | [10419.21](./NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | 26.74                   |
+| PyTorch        | [PyTorch-examples](https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) | [10632.33](./Pytorch/resnet50v1.5)                           | 30.00                   |
+| PaddlePaddle   | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | [9348.17](./PaddlePaddle/resnet50v1.5)                       | 26.50                   |
+| TensorFlow 2.x | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | [9418.44](./TensorFlow/resnet50v1.5)                         | 29.27                   |
 
 ### BERT base Pretraining Performance sentences/sec
 
 Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. The specific training script that was run is documented in the corresponding model's README.
 
-| Framework      | Source                                                       | FP32<br>bsz=max                                              | FP32<br>bsz=32                                               | FP32 XLA | AMP  |
-| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | -------- | ---- |
-| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0<br>bsz=96](./OneFlow/BERT/bert_base_fp32_report_0822.md) | [3715.1](./OneFlow/BERT/bert_base_fp32_report_0822.md)       | TODO     | TODO |
-| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | [2478.59<br/>bsz=48](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [1923.68](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | TODO     | TODO |
-| MxNet          | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | [1895.50<br/>bsz=32](./MxNet/BERT)                           | [1895.50](/MxNet/BERT)                                       | TODO     | TODO |
-| PyTorch        | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/LanguageModeling/BERTT) | **SX**                                                       | **SX**                                                       | TODO     | TODO |
-| PaddlePaddle   | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | [3167.68<br/>bsz=96](./PaddlePaddle/bert)                    | [2073.6](./PaddlePaddle/bert)                                | TODO     | TODO |
+| Framework      | Source                                                       | FP32 throughput<br>(sentences/sec), bsz=max                  | FP32 speedup<br>bsz=max | FP32 throughput<br>(sentences/sec), bsz=32                   | FP32 speedup<br/>bsz=32 |
+| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------------------- |
+| OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4456.0<br>bsz=96](./OneFlow/BERT/bert_base_fp32_report_0822.md) | 29.75                   | [3715.1](./OneFlow/BERT/bert_base_fp32_report_0822.md)       | 25.59                   |
+| TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | [2478.59<br/>bsz=48](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | 22.02                   | [1923.68](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | 18.01                   |
+| MxNet          | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | [1895.50<br/>bsz=32](./MxNet/BERT)                           | 14.92                   | [1895.50](/MxNet/BERT)                                       | 14.92                   |
+| PaddlePaddle   | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | [3167.68<br/>bsz=96](./PaddlePaddle/bert)                    | 23.13                   | [2073.6](./PaddlePaddle/bert)                                | 15.63                   |
+
