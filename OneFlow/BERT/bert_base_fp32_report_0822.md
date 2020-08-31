@@ -44,10 +44,10 @@ Legend:
 
 - Data Type: Float32
 - XLA: 未采用
-- batch size per device: 96 64 32 24
+- batch size per device: 96 64 48 32 24
 - 测试有四组分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中位数作为最后结果。
 
-全部日志可以点击[此处](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/bert_base_logs_0822.tgz)获取。
+全部日志可以点击[0822 logs](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/bert_base_logs_0822.tgz)和[0829 logs](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/of_bert_base_bsz_24_48_logs_0829.tgz)获取。
 
 ## Test Results
 
