@@ -1,6 +1,6 @@
 # BERT base Benchmark Test Report
 
-本报告总结了2020-8-22进行的BERT base吞吐率评测。
+本报告总结了2020-8-22进行的BERT base吞吐率评测。另外在2020-8-29日进行了补充测试。
 
 ## Test Environment
 
