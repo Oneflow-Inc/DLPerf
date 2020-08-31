@@ -22,8 +22,8 @@ More and more frameworks will be included in the future, such as MindSpore and M
 
 2 classical deep neural network models are tested in this repository, they are:
 
-1. ResNet 50 Version 1.5
-2. BERT base
+1. ResNet-50 Version 1.5
+2. BERT-Base
 
 There are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were committed by git and mentioned in the documents.
 
