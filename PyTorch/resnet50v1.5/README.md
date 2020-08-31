@@ -418,52 +418,52 @@ python extract_pytorch_logs_time.py --log_dir /root/examples/imagenet/scripts/py
 结果打印如下
 
 ```
-/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_2.log {2: 10155.2}
-/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_4.log {2: 10155.2, 4: 10315.82}
-/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_3.log {2: 10155.2, 4: 10315.82, 3: 10365.42}
-/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_5.log {2: 10155.2, 4: 10315.82, 3: 10365.42, 5: 10226.19}
-/root/examples/imagenet/scripts/pytorch/4n8g/r50_b128_fp32_1.log {2: 10155.2, 4: 10315.82, 3: 10365.42, 5: 10226.19, 1: 10297.15}
-/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_2.log {2: 358.15}
-/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_4.log {2: 358.15, 4: 359.85}
-/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_3.log {2: 358.15, 4: 359.85, 3: 356.86}
-/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_5.log {2: 358.15, 4: 359.85, 3: 356.86, 5: 357.91}
-/root/examples/imagenet/scripts/pytorch/1n1g/r50_b128_fp32_1.log {2: 358.15, 4: 359.85, 3: 356.86, 5: 357.91, 1: 357.9}
-/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_2.log {2: 5183.76}
-/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_4.log {2: 5183.76, 4: 5317.55}
-/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_3.log {2: 5183.76, 4: 5317.55, 3: 5260.32}
-/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_5.log {2: 5183.76, 4: 5317.55, 3: 5260.32, 5: 5251.01}
-/root/examples/imagenet/scripts/pytorch/2n8g/r50_b128_fp32_1.log {2: 5183.76, 4: 5317.55, 3: 5260.32, 5: 5251.01, 1: 5226.62}
-/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_2.log {2: 2703.92}
-/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_4.log {2: 2703.92, 4: 2741.19}
-/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_3.log {2: 2703.92, 4: 2741.19, 3: 2736.8}
-/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_5.log {2: 2703.92, 4: 2741.19, 3: 2736.8, 5: 2727.1}
-/root/examples/imagenet/scripts/pytorch/1n8g/r50_b128_fp32_1.log {2: 2703.92, 4: 2741.19, 3: 2736.8, 5: 2727.1, 1: 2744.35}
-/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_2.log {2: 1263.17}
-/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_4.log {2: 1263.17, 4: 1273.22}
-/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_3.log {2: 1263.17, 4: 1273.22, 3: 1279.97}
-/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_5.log {2: 1263.17, 4: 1273.22, 3: 1279.97, 5: 1305.19}
-/root/examples/imagenet/scripts/pytorch/1n4g/r50_b128_fp32_1.log {2: 1263.17, 4: 1273.22, 3: 1279.97, 5: 1305.19, 1: 1273.76}
-{'r50': {'1n1g': {'average_speed': 358.13,
+/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_2.log {2: 10712.7}
+/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_4.log {2: 10712.7, 4: 10691.73}
+/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_3.log {2: 10712.7, 4: 10691.73, 3: 10632.33}
+/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_5.log {2: 10712.7, 4: 10691.73, 3: 10632.33, 5: 10525.77}
+/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_1.log {2: 10712.7, 4: 10691.73, 3: 10632.33, 5: 10525.77, 1: 10492.34}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_2.log {2: 357.54}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_4.log {2: 357.54, 4: 354.4}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_3.log {2: 357.54, 4: 354.4, 3: 355.32}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_5.log {2: 357.54, 4: 354.4, 3: 355.32, 5: 353.43}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_1.log {2: 357.54, 4: 354.4, 3: 355.32, 5: 353.43, 1: 351.21}
+/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_2.log {2: 3214.01}
+/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_4.log {2: 3214.01, 4: 5372.23}
+/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_3.log {2: 3214.01, 4: 5372.23, 3: 5356.77}
+/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_5.log {2: 3214.01, 4: 5372.23, 3: 5356.77, 5: 5307.21}
+/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_1.log {2: 3214.01, 4: 5372.23, 3: 5356.77, 5: 5307.21, 1: 3116.87}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_2.log {2: 2738.7}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_4.log {2: 2738.7, 4: 2736.87}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_3.log {2: 2738.7, 4: 2736.87, 3: 2715.03}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_5.log {2: 2738.7, 4: 2736.87, 3: 2715.03, 5: 2719.07}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_1.log {2: 2738.7, 4: 2736.87, 3: 2715.03, 5: 2719.07, 1: 2716.68}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_2.log {2: 1354.89}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_4.log {2: 1354.89, 4: 1351.49}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_3.log {2: 1354.89, 4: 1351.49, 3: 1321.26}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_5.log {2: 1354.89, 4: 1351.49, 3: 1321.26, 5: 1350.96}
+/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_1.log {2: 1354.89, 4: 1351.49, 3: 1321.26, 5: 1350.96, 1: 1350.46}
+{'r50': {'1n1g': {'average_speed': 354.38,
                   'batch_size_per_device': 128,
-                  'median_speed': 357.91,
+                  'median_speed': 354.4,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1279.06,
+         '1n4g': {'average_speed': 1345.81,
                   'batch_size_per_device': 128,
-                  'median_speed': 1273.76,
-                  'speedup': 3.56},
-         '1n8g': {'average_speed': 2730.67,
+                  'median_speed': 1350.96,
+                  'speedup': 3.81},
+         '1n8g': {'average_speed': 2725.27,
                   'batch_size_per_device': 128,
-                  'median_speed': 2736.8,
-                  'speedup': 7.65},
-         '2n8g': {'average_speed': 5247.85,
+                  'median_speed': 2719.07,
+                  'speedup': 7.67},
+         '2n8g': {'average_speed': 4473.42,
                   'batch_size_per_device': 128,
-                  'median_speed': 5251.01,
-                  'speedup': 14.67},
-         '4n8g': {'average_speed': 10271.96,
+                  'median_speed': 5307.21,
+                  'speedup': 14.98},
+         '4n8g': {'average_speed': 10610.97,
                   'batch_size_per_device': 128,
-                  'median_speed': 10297.15,
-                  'speedup': 28.77}}}
-Saving result to ./result/pytorch_result.json
+                  'median_speed': 10632.33,
+                  'speedup': 30.0}}}
+Saving result to ./result/_result.json
 ```
 
 
@@ -522,4 +522,4 @@ NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 result
 
 Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_PyTorch.html#benchmarks).
 
-详细 Log 信息可下载：[PyTorch_example_resnet50_v1.5.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/PyTorch/PyTorch_example_resnet50_v1.5.tar)
+详细 Log 信息可下载：[PyTorch_example_resnet50_v1.5.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PyTorch/pytorch_example_resnet50_v1.5.tar)
