@@ -106,7 +106,7 @@ This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1,
 | OneFlow        | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [11711.20](./OneFlow/ConvNets/rn50_fp32_report_0821.md)      | 30.43                   |
 | TensorFlow 1.x | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5) | [9514.64](./NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | 26.25                   |
 | MxNet          | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) | [10419.21](./NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | 26.74                   |
-| PyTorch        | [PyTorch-examples](https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) | [10632.33](./Pytorch/resnet50v1.5)                           | 30.00                   |
+| PyTorch        | [PyTorch-examples](https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) | [10632.33](./PyTorch/resnet50v1.5)                           | 30.00                   |
 | PaddlePaddle   | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | [9348.17](./PaddlePaddle/resnet50v1.5)                       | 26.50                   |
 | TensorFlow 2.x | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | [9418.44](./TensorFlow/resnet50v1.5)                         | 29.27                   |
 
