@@ -1,4 +1,4 @@
-# DLPerf - **D**eep **L**earning Framework **Perf**ormace Profiling Toolkit
+# DLPerf - **D**eep **L**earning Framework **Perf**ormance Profiling Toolkit
 
 ## Introduction
 
