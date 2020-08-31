@@ -474,6 +474,16 @@ Saving result to ./result/pytorch_result.json
 
 ### FP32 & W/O XLA & Use `torch.utils.data.DataLoader`
 
+- ### ResNet50 v1.5 batch_size = 128, worker=8
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 128                   | 354.81             | 1.00    |
+| 1        | 4                | 128                   | 1330.25            | 3.75    |
+| 1        | 8                | 128                   | 1630.24            | 4.59    |
+| 2        | 8                | 128                   | 3211.04            | 9.05    |
+| 4        | 8                | 128                   | 6410.82            | 18.07   |
+
 - ### ResNet50 v1.5 batch_size = 128, worker=48
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
@@ -485,6 +495,16 @@ Saving result to ./result/pytorch_result.json
 | 4        | 8                | 128                   | 10632.33           | 30.0    |
 
 ### FP32 & W/O XLA & Use DALI
+
+- ### ResNet50 v1.5 batch_size = 128, worker=8
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 128                   | 361.16             | 1.00    |
+| 1        | 4                | 128                   | 1314.3             | 3.64    |
+| 1        | 8                | 128                   | 2171.01            | 6.01    |
+| 2        | 8                | 128                   | 4221.2             | 11.69   |
+| 4        | 8                | 128                   | 8151.08            | 22.57   |
 
 - ### ResNet50 v1.5 batch_size = 128，worker=48
 
@@ -503,4 +523,3 @@ NVIDIA的 Pytorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 result
 Ray 的 Pytorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks).
 
 详细 Log 信息可下载：[pytorch_example_resnet50_v1.5.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Pytorch/pytorch_example_resnet50_v1.5.tar)
-
