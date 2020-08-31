@@ -107,9 +107,12 @@ Legend:
 | 4         | 8                | 24                    | 3312.17    | 23.66   |
 
 ### Throughput on different batch sizes
+
+下图展示了不同batch size情况下，1卡、8卡、16卡、32卡GPU的吞吐率，batch size越大吞吐率越高。
 ![Throughput on different batch sizes](imgs/of_bert_base_throughput.png)
 
 ### Speedup on different batch sizes
+下图展示了不同batch size情况下，加速比曲线，batch size越大加速比越高。
 ![Speed on different batch sizes](imgs/of_bert_base_speedup.png)
 
 ### Latency vs Throughput on different batch sizes
