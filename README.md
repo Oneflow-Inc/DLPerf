@@ -39,11 +39,11 @@ We suggest to perform each test with 1-node-1-device, 1-node-8-devices, 2-nodes-
 
 #### Batch Size
 
-We talk about batch size, it always means batch size per device during training in this repository. Total batch size will be scaled with total device number for training.
+In this repository, when talking about batch size, it always means the number of samples per device during training. The total batch size is scaled up with the total number of devices for training. 
 
-Each DL framework has different device memory management ability, so the maximum batch size per device is very different with DL frameworks. For this reason, we perform several group tests with different batch sizes.
+Because each DL framework has its own device memory management strategy, so the maximum batch size per device is different between DL frameworks. For this reason, we perform several group tests with different batch sizes.
 
-Normally, higher batch size produces higher performance.
+Normally, larger batch size produces better performance.
 
 #### XLA 
 
