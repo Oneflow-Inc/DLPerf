@@ -130,7 +130,7 @@ bash scripts/run_single_node.sh
 
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取 5 次），每次训练过程只取第 1 个 epoch 的前 120 iter，只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
+测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 120 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
@@ -197,4 +197,3 @@ NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 Result
 Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks).
 
 详细 Log 信息可下载：[ngc_pytorch_resnet50_v1.5.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/PyTorch/ngc_pytorch_resnet50_v1.5.tar)
-
