@@ -88,6 +88,12 @@ P.S.  In features:
 
 P.S. MXNet cannot work under this configuration with batch size 128, because of OOM (Out Of Memory).
 
+The following images show throughput and speedup of 6 implementations of ResNet50 V1.5.
+
+![r50_bz128_throughput](imgs/r50_bz128_throughput.png)
+
+![r50_bz128_speedup.png](imgs/r50_bz128_speedup.png)
+
 ### BERT Base Pretrain 
 
 #### batch size = 96,  FP32 & Without XLA
@@ -99,6 +105,12 @@ P.S. MXNet cannot work under this configuration with batch size 128, because of 
 | 2        | 16         | 2257.71                                                      | OOM                                                          | OOM                                                     | OOM                                                          | 1631.36                                                      |
 | 4        | 32         | 4455.97                                                      | OOM                                                          | OOM                                                     | OOM                                                          | 3167.68                                                      |
 
+The following images show throughput and speedup of 2 implementations of BERT base with batch size per device=96.
+
+![bert_base_bz_96_throughput.png](imgs/bert_base_bz_96_throughput.png)
+
+![bert_base_bz_96.png](imgs/bert_base_bz_96_speedup.png)
+
 #### batch size = 64,  FP32 & Without XLA
 
 | node num | device num | [OneFlow<br/>throughput<br/>(sentences/sec)](../OneFlow/BERT/bert_base_fp32_report_0822.md) | [TensorFlow 1.x<br/>throughput<br/>(sentences/sec)](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [MXNet<br/>throughput<br/>(sentences/sec)](../MxNet/BERT) | [PyTorch<br/>throughput<br/>(sentences/sec)](../NVIDIADeepLearningExamples/PyTorch/BERT) | [PaddlePaddle<br/>throughput<br/>(sentences/sec)](../PaddlePaddle/bert) |
@@ -107,6 +119,12 @@ P.S. MXNet cannot work under this configuration with batch size 128, because of 
 | 1        | 8          | 1138.89                                                      | OOM                                                          | OOM                                                       | OOM                                                          | 761.22                                                       |
 | 2        | 16         | 2189.30                                                      | OOM                                                          | OOM                                                       | OOM                                                          | 1426.52                                                      |
 | 4        | 32         | 4310.42                                                      | OOM                                                          | OOM                                                       | OOM                                                          | 2736.78                                                      |
+
+The following images show throughput and speedup of 2 implementations of BERT base with batch size per device=64.
+
+![bert_base_bz_64_throughput.png](imgs/bert_base_bz_64_throughput.png)
+
+![bert_base_bz_64_speedup.png](imgs/bert_base_bz_64_speedup.png)
 
 #### batch size = 32,  FP32 & Without XLA
 
@@ -118,4 +136,10 @@ P.S. MXNet cannot work under this configuration with batch size 128, because of 
 | 4        | 32         | 3715.08                                                      | 1923.68                                                      | 1895.50                                                   | TODO                                                         | 2073.60                                                      |
 
 P.S. TODO means that we have not done the test (like the NGC PyTorch BERT-base multi-node test), which will be added in the near future.
+
+The following images show throughput and speedup of 5 implementations of BERT base with batch size per device=32.
+
+![bert_base_bz_32_throughput.png](imgs/bert_base_bz_32_throughput.png)
+
+![bert_base_bz_32_speedup.png](imgs/bert_base_bz_32_speedup.png)
 
