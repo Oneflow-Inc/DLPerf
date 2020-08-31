@@ -2,7 +2,7 @@
 
 ## 概述 Overview
 
-本测评在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch/tags) 基于Pytorch [/examples](https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) 仓库中提供的 [ResNet50 v1.5](https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1/imagenet) 实现，对其进行单机单卡、单机多卡的结果复现及速度评测，同时根据 PyTorch 官方的分布式实现，添加 DALI 数据加载方式，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测评在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:PyTorch/tags) 基于PyTorch [/examples](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) 仓库中提供的 [ResNet50 v1.5](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1/imagenet) 实现，对其进行单机单卡、单机多卡的结果复现及速度评测，同时根据 PyTorch 官方的分布式实现，添加 DALI 数据加载方式，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
@@ -59,7 +59,7 @@
 
 - NCCL：2.5.6
 
-- Pytorch：1.5.0a0+8f84ded
+- PyTorch：1.5.0a0+8f84ded
 
 - OpenMPI 3.1.4
 
@@ -71,7 +71,7 @@
 
   #### Feature support matrix
 
-  | Feature                                                      | ResNet50 v1.5 Pytorch |
+  | Feature                                                      | ResNet50 v1.5 PyTorch |
   | ------------------------------------------------------------ | --------------------- |
   | Multi-gpu training                                           | Yes                   |
   | Multi-node training                                          | Yes                   |
@@ -112,7 +112,7 @@ cd ~ && git clone https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae
 
 - #### SSH 免密
 
-单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证 Pytorch 官方的 mpi/nccl 分布式脚本运行时可以在单机上与其他节点互联。
+单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证 PyTorch 官方的 mpi/nccl 分布式脚本运行时可以在单机上与其他节点互联。
 
 **安装ssh服务端**
 
@@ -147,13 +147,13 @@ apt-get install openssh-server
 git clone https://github.com/Oneflow-Inc/DLPerf.git
 ````
 
-将本仓库 /DLPerf/Pytorch/resnet50v1.5/scripts 路径源码放至 /examples/imagenet 下，执行脚本
+将本仓库 /DLPerf/PyTorch/resnet50v1.5/scripts 路径源码放至 /examples/imagenet 下，执行脚本
 
 ```
 bash scripts/run_single_node.sh
 ```
 
-针对单机单卡、4卡、8卡， batch_size 取 128 等情况分别测试，并将 log 信息保存在当前目录的 /pytorch/ 对应分布式配置路径中。
+针对单机单卡、4卡、8卡， batch_size 取 128 等情况分别测试，并将 log 信息保存在当前目录的 /PyTorch/ 对应分布式配置路径中。
 
 > 若测试 DALI 数据加载方式，则需对代码进行修改。
 
@@ -409,7 +409,7 @@ def get_dali_train_loader(dali_cpu=False):
 
 测试进行了多组训练（本测试中取 5 次），由于多卡训练时日志异步打印，每张卡第 1 个 iter 的处理时间是其他 iter 的几何倍，导致最后的平均值会产生较大误差，因此考虑将每张卡运行结果的前 5 iter 舍去。每次训练过程取第 1 个 epoch 的舍去 25 iter 后的数据，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
 
-运行 /DLPerf/Pytorch/resnet50v1.5/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
+运行 /DLPerf/PyTorch/resnet50v1.5/extract_PyTorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
 ```
 python extract_pytorch_logs_time.py --log_dir /root/examples/imagenet/scripts/pytorch/ --warmup_batches 20 --train_batches 120 --batch_size_per_device 128
@@ -470,13 +470,23 @@ Saving result to ./result/pytorch_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 NVIDIA Pytorch 框架的 ResNet50 v1.5 模型测试的性能结果和完整 log 日志。
+该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型测试的性能结果和完整 log 日志。
 
 ### FP32 & W/O XLA & Use `torch.utils.data.DataLoader`
 
+- ### ResNet50 v1.5 batch_size = 128, worker=8
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 128                   | 354.81             | 1.00    |
+| 1        | 4                | 128                   | 1330.25            | 3.75    |
+| 1        | 8                | 128                   | 1630.24            | 4.59    |
+| 2        | 8                | 128                   | 3211.04            | 9.05    |
+| 4        | 8                | 128                   | 6410.82            | 18.07   |
+
 - ### ResNet50 v1.5 batch_size = 128, worker=48
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 128                   | 354.4              | 1.00    |
 | 1        | 4                | 128                   | 1350.96            | 3.81    |
@@ -486,9 +496,19 @@ Saving result to ./result/pytorch_result.json
 
 ### FP32 & W/O XLA & Use DALI
 
+- ### ResNet50 v1.5 batch_size = 128, worker=8
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 128                   | 361.16             | 1.00    |
+| 1        | 4                | 128                   | 1314.3             | 3.64    |
+| 1        | 8                | 128                   | 2171.01            | 6.01    |
+| 2        | 8                | 128                   | 4221.2             | 11.69   |
+| 4        | 8                | 128                   | 8151.08            | 22.57   |
+
 - ### ResNet50 v1.5 batch_size = 128，worker=48
 
-| node_num | pu_num_per_node | batch_size_per_device | samples/s(Pytorch) | speedup |
+| node_num | pu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | --------------- | --------------------- | ------------------ | ------- |
 | 1        | 1               | 128                   | 357.91             | 1.00    |
 | 1        | 4               | 128                   | 1273.76            | 3.56    |
@@ -498,9 +518,8 @@ Saving result to ./result/pytorch_result.json
 
 
 
-NVIDIA的 Pytorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 results](https://github.com/NVIDIA/DeepLearningExamples/blob/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/LanguageModeling/BERT/README.md#results)。
+NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 results](https://github.com/NVIDIA/DeepLearningExamples/blob/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/LanguageModeling/BERT/README.md#results)。
 
-Ray 的 Pytorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks).
+Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_PyTorch.html#benchmarks).
 
-详细 Log 信息可下载：[pytorch_example_resnet50_v1.5.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Pytorch/pytorch_example_resnet50_v1.5.tar)
-
+详细 Log 信息可下载：[PyTorch_example_resnet50_v1.5.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/PyTorch/PyTorch_example_resnet50_v1.5.tar)
