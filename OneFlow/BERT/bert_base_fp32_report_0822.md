@@ -106,6 +106,15 @@ Legend:
 | 2         | 8                | 24                    | 1700.05    | 12.14   |
 | 4         | 8                | 24                    | 3312.17    | 23.66   |
 
+### Throughput on different batch sizes
+![Throughput on different batch sizes](imgs/of_bert_base_throughput.png)
+
+### Speedup on different batch sizes
+![Speed on different batch sizes](imgs/of_bert_base_speedup.png)
+
+### Latency vs Throughput on different batch sizes
+![Latency vs Throughput on different batch sizes](imgs/of_bert_base_latency_throughput.png)
+
 ### All Results
 #### 0822 logs
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput |
