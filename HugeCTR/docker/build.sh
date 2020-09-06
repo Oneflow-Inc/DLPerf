@@ -1,1 +1,1 @@
-ld -t hugectr:devel -f ./dockerfile
+docker build -t hugectr:devel . 
