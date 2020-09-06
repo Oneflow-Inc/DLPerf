@@ -3,7 +3,7 @@ log_root=./log
 for bsz in 512 1024 2048 4096 8192 16384 32768 65536 131072
 do
     echo "1 node 1 device test, total batch size is:${bsz}"
-    test_case=${log_root}/n1g1-bsz${bsz}
+    test_case=${log_root}/n1g1-bsz-${bsz}
     output_json_file=${test_case}.json
     mem_usage_file=${test_case}.mem
     hugectr_log_file=${test_case}.log
