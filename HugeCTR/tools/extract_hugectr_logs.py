@@ -63,11 +63,14 @@ def extract_loss_auc_acc(info, log_file):
             if len(ss) < 3:
                 continue
             if ss[1] == 'Iter:':
+                # [03d12h24m43s][HUGECTR][INFO]: Iter: 1 Time(1 iters): 0.009971s Loss: 0.624022 lr:0.001000
                 it = 'Iter' + ss[2]
                 info[it] = {'loss': ss[7]}            
             elif ss[2] == 'AUC:':
+                # [03d12h24m43s][HUGECTR][INFO]: Evaluation, AUC: 0.484451
                 info[it]['auc'] = ss[3].strip()
             elif ss[1] == 'eval_accuracy,':
+                # [7485.21, eval_accuracy, 0.484451, 0.002, 1, ]
                 info[it]['acc'] = ss[2][:-1]            
     print(info)
 
