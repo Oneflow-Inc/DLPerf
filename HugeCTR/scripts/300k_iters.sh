@@ -1,7 +1,7 @@
 bsz=512
 log_root=./log
 
-test_case=${log_root}/n1g1-300000iters
+test_case=${log_root}/n1g1-300000-iters-512
 output_json_file=${test_case}.json
 mem_usage_file=${test_case}.mem
 hugectr_log_file=${test_case}.log
