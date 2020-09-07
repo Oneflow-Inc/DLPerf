@@ -55,8 +55,14 @@ def parse_conf(conf_file):
     return info
 
 
+def write_line(f, lst, separator=',', start_end=False):
+    lst = ['', *lst, ''] if start_end else lst
+    f.write(separator.join(lst))
+    f.write('\n')
+
 def extract_loss_auc_acc(info, log_file):
     print('extract loss, auc and accuarcy from ', log_file)
+    metrics = []
     with open(log_file, 'r') as f:
         for line in f.readlines():
             ss = line.split(' ')
@@ -64,15 +70,25 @@ def extract_loss_auc_acc(info, log_file):
                 continue
             if ss[1] == 'Iter:':
                 # [03d12h24m43s][HUGECTR][INFO]: Iter: 1 Time(1 iters): 0.009971s Loss: 0.624022 lr:0.001000
-                it = 'Iter' + ss[2]
-                info[it] = {'loss': ss[7]}            
+                # it = {'Iter': ss[2], 'loss': ss[7]}            
+                it = [ss[2], ss[7]]            
             elif ss[2] == 'AUC:':
                 # [03d12h24m43s][HUGECTR][INFO]: Evaluation, AUC: 0.484451
-                info[it]['auc'] = ss[3].strip()
+                # it['auc'] = ss[3].strip()
+                it.append(ss[3].strip())
             elif ss[1] == 'eval_accuracy,':
                 # [7485.21, eval_accuracy, 0.484451, 0.002, 1, ]
-                info[it]['acc'] = ss[2][:-1]            
-    print(info)
+                # it['acc'] = ss[2][:-1]            
+                it.append(ss[2][:-1])
+                metrics.append(it)
+        info['metrics'] = metrics
+    #print(info)
+
+    with open(log_file[:-3] + 'csv', 'w') as f:
+        write_line(f, ['Iter', 'loss', 'auc', 'acc'])
+        for it in info['metrics']:
+            write_line(f, it)
+        
 
 def extract_latency(info, args, log_file, mem_file):
     print('extract latency from ', log_file)
@@ -90,7 +106,7 @@ def extract_latency(info, args, log_file, mem_file):
                     time_accumulate += float(ss[5][:-1])
                     num_iters += int(ss[3].split('(')[1])
         if num_iters > 0:
-            info['latency'] = time_accumulate / num_iters           
+            info['latency(ms)'] = time_accumulate / num_iters * 1000 #ms
 
     with open(mem_file, 'r') as f:
         for line in f.readlines():
@@ -98,14 +114,21 @@ def extract_latency(info, args, log_file, mem_file):
             if len(ss) < 5:
                 continue
             if ss[0] == 'max':
-                info['device0_max_memory_usage'] = int(float(ss[-1].strip()) / 1024 /1024)
-            
-    print(info)
+                info['device0_max_memory_usage(MB)'] = int(float(ss[-1].strip()) / 1024 /1024)
+    return info       
 
+def value_format(value):
+    if isinstance(value, float):
+        return '{:.3f}'.format(value)
+    elif isinstance(value, int):
+        return f'{value:,}'
+    else:
+        return str(value)
 
 if __name__ == "__main__":
     logs_list = glob.glob(os.path.join(args.benchmark_log_dir, "*.log"))
     logs_list = sorted(logs_list)
+    result_list = []
     for log_file in logs_list:
         json_file = log_file[:-3] + 'json'
         info = parse_conf(json_file)
@@ -114,5 +137,13 @@ if __name__ == "__main__":
             extract_loss_auc_acc(info, log_file)
         else:
             mem_file = log_file[:-3] + 'mem'
-            extract_latency(info, args, log_file, mem_file)
+            result_list.append(extract_latency(info, args, log_file, mem_file))
 
+    with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
+        titles = ['gpu', 'batchsize', 'max_iter', 'deep_vec_size', 'vocab_size', 'latency(ms)', 'device0_max_memory_usage(MB)']
+        write_line(f, titles, '|', True)
+        write_line(f, ['----' for _ in titles], '|', True)
+        for result in result_list:
+            cells = [value_format(result[title]) for title in titles]
+            write_line(f, cells, '|', True)
+    
