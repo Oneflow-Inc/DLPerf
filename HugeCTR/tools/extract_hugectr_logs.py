@@ -130,8 +130,9 @@ if __name__ == "__main__":
     logs_list = sorted(logs_list)
     result_list = []
     for log_file in logs_list:
-        json_file = log_file[:-3] + 'json'
+        json_file = log_file[:-4] + 'json'
         info = parse_conf(json_file)
+        info['log_file'] = os.path.basename(log_file)[:-3]
 
         if info['max_iter'] in [500, 300000]:
             extract_loss_auc_acc(info, log_file)
@@ -140,10 +141,13 @@ if __name__ == "__main__":
             result_list.append(extract_latency(info, args, log_file, mem_file))
 
     with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
-        titles = ['gpu', 'batchsize', 'max_iter', 'deep_vec_size', 'vocab_size', 'latency(ms)', 'device0_max_memory_usage(MB)']
+        titles = ['log_file', 'gpu', 'batchsize', 'max_iter', 'deep_vec_size', 'vocab_size', 'latency(ms)', 'device0_max_memory_usage(MB)']
         write_line(f, titles, '|', True)
         write_line(f, ['----' for _ in titles], '|', True)
         for result in result_list:
+            if 'latency(ms)' not in result.keys():
+                print(result['log_file'], 'is not complete!')
+                continue
             cells = [value_format(result[title]) for title in titles]
             write_line(f, cells, '|', True)
     
