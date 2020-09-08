@@ -8,6 +8,40 @@
 
 
 
+```shell
+# --num_data_workers 8 \  
+# 运行—启动5min   CPU占用 加载期：16核；训练期：16核跑满     内存：173G/377G   throughput=2.8K tks/s 
+mpirun -oversubscribe -np ${gpu_num} -H ${node_ip} \
+    -bind-to core -map-by slot \
+    -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH \
+    -mca pml ob1 -mca btl ^openib \
+    -mca plm_rsh_args "-p 22 -q -o StrictHostKeyChecking=no" \
+    -mca btl_tcp_if_include ib0 \
+python3 ${WORKSPACE}/run_pretraining.py ${CMD} 2>&1 | tee ${log_file}
+
+# --num_data_workers 8 \  
+# 运行—启动2min     CPU占用 加载期：48核；训练期：非固定16～24核，约16核跑满     内存：171G/377G   throughput=2.8K tks/s 
+mpirun -oversubscribe -np ${gpu_num} -H ${node_ip} \
+    -bind-to none -map-by slot \  #  -map-by numa也差不多一样
+    -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH \
+    -mca pml ob1 -mca btl ^openib \
+    -mca plm_rsh_args "-p 22 -q -o StrictHostKeyChecking=no" \
+    -mca btl_tcp_if_include ib0 \
+python3 ${WORKSPACE}/run_pretraining.py ${CMD} 2>&1 | tee ${log_file}
+
+# --num_data_workers 8 \  
+# 运行—启动5min     CPU占用 加载期：横向16核；训练期：16核跑满     内存：175G/377G   throughput=2.8K tks/s 
+mpirun -oversubscribe -np ${gpu_num} -H ${node_ip} \
+    -bind-to core -map-by socket \
+    -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH \
+    -mca pml ob1 -mca btl ^openib \
+    -mca plm_rsh_args "-p 22 -q -o StrictHostKeyChecking=no" \
+    -mca btl_tcp_if_include ib0 \
+python3 ${WORKSPACE}/run_pretraining.py ${CMD} 2>&1 | tee ${log_file}
+```
+
+
+
 ## 环境 Environment
 
 ### 系统
@@ -19,41 +53,31 @@
 - #### 软件
 
   - 驱动：NVIDIA 440.33.01
-
+  
   - 系统：[ Ubuntu 16.04](http://releases.ubuntu.com/16.04/)
-
+  
   - CUDA：10.2
-
+  
   - cuDNN：7.6.5
+  
+  - NCCL：2.7.3
+  
+  - OpenMPI 4.0.0
+  
+  - Horovod 0.19.5
+  
+  - Python：3.7.7
+  
+- #### 框架
+  
+  - **MXNet 1.6.0** 
 
-### NGC 容器 20.03
-
-- 系统：[ Ubuntu 18.04](http://releases.ubuntu.com/18.04/)
-
-- CUDA 10.2.89
-
-- cuDNN 7.6.5
-
-- NCCL：2.5.6
-
-- **MXNet：1.6.0**
-
-- OpenMPI 3.1.4
-
-- DALI 0.19.0
-
-- Horovod 0.19.0
-
-- Python：3.5
-
-  更多容器细节请参考 [NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
-
-  #### Feature support matrix
+- #### Feature support matrix
 
   | Feature                         | BERT-Base MXNet |
-  | ------------------------------- | --------------- |
+| ------------------------------- | --------------- |
   | Horovod Multi-GPU               | Yes             |
-  | Horovod Multi-Node              | Yes             |
+| Horovod Multi-Node              | Yes             |
   | Automatic mixed precision (AMP) | No              |
 
 
@@ -66,40 +90,33 @@
 
   数据集制作参考[gluon-nlp仓库提供的create_pretraining_data.py脚本](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/create_pretraining_data.py)
 
-- #### 镜像及容器
-
-  同时，根据 [NVIDIA 官方指导 Quick Start Guide](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5#quick-start-guide)拉取镜像（本次测试选用的是 NGC 20.03）、搭建容器，进入容器环境。
-
-  ```shell
-  docker build . -t nvidia_rn50_mx:20.03
   
-  # 启动容器
-  docker run -it \
-  --shm-size=16g --ulimit memlock=-1 --privileged --net=host \
-  --cap-add=IPC_LOCK --device=/dev/infiniband \
-  --name mxnet_dlperf \
-  -v /home/leinao/DLPerf/dataset/mxnet:/data/imagenet/train-val-recordio-passthrough \
-  -v /home/leinao/DLPerf/:/DLPerf/ \
-  nvidia_rn50_mx:20.03
-  ```
 
 - #### SSH 免密
 
-  单机测试下无需配置，但测试2机、4机等多机情况下，则需要配置docker容器间的ssh免密登录，保证MXNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
-
-   **安装ssh服务端**
-
-  ```shell
-  # 在容器内执行
-  apt-get update
-  apt-get install openssh-server
-  ```
+  单机测试下无需配置，但测试2机、4机等多机情况下，则需要配置节点间的ssh免密登录，保证MXNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
 
   **设置免密登录**
 
   - 节点间的 /root/.ssh/id_rsa.pub 互相授权，添加到 /root/.ssh/authorized_keys 中；
   - 修改 sshd 中用于 docker 通信的端口号 `vim /etc/ssh/sshd_config`，修改 `Port`；
   - 重启 ssh 服务，`service ssh restart`。
+  
+ - #### 环境安装
+```shell
+# 安装nccl
+cd /usr/local && sudo wget ttps://oneflow-static.oss-cn-beijing.aliyuncs.com/package/nvidia/nccl/centos/nccl_2.7.3-1%2Bcuda10.2_x86_64.txz
+sudo tar -xvf nccl_2.7.3-1+cuda10.2_x86_64.txz
+# vim ~/.bashrc
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/nccl_2.7.3-1+cuda10.2_x86_64/lib
+
+# 安装mxnet
+python3 -m pip install gluonnlp==0.10.0 mxnet-cu102mkl==1.6.0.post0 -i https://mirror.baidu.com/pypi/simple
+# 安装horovod（安装前，确保环境中已有nccl、openmpi）
+
+HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOROVOD_GPU_BROADCAST=NCCL python3 -m pip install --no-cache-dir horovod==0.19.5
+```
+
 
 ### 2. 额外准备
 
@@ -143,7 +160,7 @@
 
     原因是加上eval会卡住很久。
 
-  - 训练120个iterations就结束：
+  - 训练200个iterations就结束：
 
     在 [`/scripts/bert/run_pretraining.py`](https://github.com/dmlc/gluon-nlp/blob/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert/run_pretraining.py) 中添加结束标记，用于在train step达到后就终止训练
 

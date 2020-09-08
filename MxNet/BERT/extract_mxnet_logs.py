@@ -14,8 +14,8 @@ os.chdir(sys.path[0])
 parser = argparse.ArgumentParser(description="flags for benchmark")
 parser.add_argument("--log_dir", type=str, default=".logs/mxnet/bert", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
-parser.add_argument('--warmup_batches', type=int, default=20)
-parser.add_argument('--train_batches', type=int, default=120)
+parser.add_argument('--warmup_batches', type=int, default=100)
+parser.add_argument('--train_batches', type=int, default=200)
 parser.add_argument('--batch_size_per_device', type=int, default=32)
 
 args = parser.parse_args()
@@ -54,7 +54,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
         'batch_size_per_device': batch_size,
     }
 
-    from_iter = 20 if args.warmup_batches <= 20 else args.warmup_batches-20
+    from_iter = 100 if args.warmup_batches <= 100 else args.warmup_batches-100
     to_iter = args.train_batches
     # extract info from file content
     with open(log_file) as f:
@@ -62,11 +62,11 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
         speeds = list()
         for line in lines:
             if "throughput=" in line:
-                p1 = re.compile(r'throughput=(\d+.\d+)K ', re.S)
+                p1 = re.compile(r'latency=(\d+.\d+) ms\/batch', re.S)
                 s = re.findall(p1, line)
-                speed = round(float(s[0].strip()), 2)
-                speed = speed * node_num * card_num
-                speeds.append(speed*1000/128)
+                speed = round(float(s[0].strip()), 1)
+                speed = 1000.0 / speed * batch_size * node_num * card_num
+                speeds.append(speed)
 
 
     speeds = np.array(speeds).reshape(args.train_batches, node_num*card_num)
