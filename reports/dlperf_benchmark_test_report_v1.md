@@ -57,7 +57,7 @@ Legend:
 | -------------------------- | --------------------------------------- | ------------------------------------------------------------ | -------- |
 | OneFlow 0.1.9              | -                                       | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/637bb9cdb4cc1582f13bcc171acbc8a8089d9435/LanguageModeling/BERT) | official |
 | TensorFlow 1.15.2          | nvcr.io/nvidia/tensorflow:20.03-tf1-py3 | [DeepLearningExamples/TensorFlow](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | Horovod  |
-| MXNet 1.6.0                | nvcr.io/nvidia/mxnet:20.03-py3          | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | Horovod  |
+| MXNet 1.6.0                | -                                       | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | Horovod  |
 | PyTorch 1.5.0a0+8f84ded    | nvcr.io/nvidia/pytorch:20.03-py3        | [DeepLearningExamples/PyTorch](https://github.com/NVIDIA/DeepLearningExamples/tree/26c26761042c0e352238add07f0074e87ac66023/PyTorch/LanguageModeling/BERT) | APEX     |
 | PaddlePaddle 1.8.3.post107 | -                                       | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | official |
 
@@ -142,3 +142,4 @@ The following images show throughput and speedup of 5 implementations of BERT ba
 ![bert_base_bz_32_throughput.png](imgs/bert_base_bz_32_throughput.png)
 
 ![bert_base_bz_32_speedup.png](imgs/bert_base_bz_32_speedup.png)
+
