@@ -40,12 +40,11 @@
 
 - #### Feature support matrix
 
-  | Feature                         | BERT-Base MXNet |
-| ------------------------------- | --------------- |
-  | Horovod/MPI Multi-GPU           | Yes             |
-| Horovod/MPI Multi-Node          | Yes             |
-  | Automatic mixed precision (AMP) | No              |
-
+| Feature | BERT-Base MXNet |
+| ----------------------------------- | ------- |
+| Horovod/MPI Multi-GPU      |  Yes    |
+| Horovod/MPI Multi-Node    | Yes     |
+| Automatic mixed precision (AMP) |  No    |
 
 
 ## 快速开始 Quick Start
@@ -161,6 +160,7 @@ bash run_test.sh
 ```shell
 # batch size = 48
 bash run_test.sh 48
+
 # batch size = 64
 bash run_test.sh 64
 ```
@@ -254,6 +254,8 @@ python extract_mxnet_logs.py --log_dir=./logs/mxnet/bert/bz32 --batch_size_per_d
                '4n8g': {'average_speed': 3675.7,
                         'batch_size_per_device': 32,
                         'median_speed': 3671.45,
+                        'speedup': 24.46}}}
+Saving result to ./result/bz32_result.json
 ```
 
 
