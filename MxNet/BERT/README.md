@@ -42,8 +42,8 @@
 
   | Feature                         | BERT-Base MXNet |
 | ------------------------------- | --------------- |
-  | Horovod Multi-GPU               | Yes             |
-| Horovod Multi-Node              | Yes             |
+  | Horovod/MPI Multi-GPU           | Yes             |
+| Horovod/MPI Multi-Node          | Yes             |
   | Automatic mixed precision (AMP) | No              |
 
 
@@ -156,9 +156,7 @@ bash run_test.sh
 
 针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **32** 进行测试，并将 log 信息保存在当前目录的`logs/mxnet/bert/bz32`对应分布式配置路径中。
 
-
-
-默认对batch size32进行测试，您也可以指定其他大小的batch size，如：
+**默认对batch size=32进行测试** ，您也可以指定其他大小的batch size，如：
 
 ```shell
 # batch size = 48
@@ -174,6 +172,8 @@ bash run_test.sh 64
 - batch size=48: 14021MiB / 16160MiB
 
 - batch size=64: 14959MiB / 16160MiB
+
+- batch size=96:  OOM
 
   
 
@@ -263,8 +263,6 @@ python extract_mxnet_logs.py --log_dir=./logs/mxnet/bert/bz32 --batch_size_per_d
 #### 5.1 测速脚本
 
 - extract_mxnet_logs.py 根据官方在log中打印的速度，在200个iter中，排除前100iter，取后100个iter的速度做平均；
-
-
 
 #### 5.2 均值速度和中值速度
 
