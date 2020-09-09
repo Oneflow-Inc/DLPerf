@@ -120,7 +120,7 @@ The following images show throughput and speedup of 2 implementations of BERT ba
 | 2        | 16         | 2189.30                                                      | OOM                                                          | 2172.62                                                   | OOM                                                          | 1426.52                                                      |
 | 4        | 32         | 4310.42                                                      | OOM                                                          | 4340.89                                                   | OOM                                                          | 2736.78                                                      |
 
-The following images show throughput and speedup of 2 implementations of BERT base with batch size per device=64.
+The following images show throughput and speedup of 3 implementations of BERT base with batch size per device=64.
 
 ![bert_base_bz_64_throughput.png](imgs/bert_base_bz_64_throughput.png)
 
