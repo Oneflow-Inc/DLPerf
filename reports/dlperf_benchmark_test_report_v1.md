@@ -79,14 +79,12 @@ P.S.  In features:
 
 #### batch size = 128,  FP32 & Without XLA
 
-| node num | device num | [OneFlow<br>throughput<br>(img/s)](../OneFlow/ConvNets/rn50_fp32_report_0821.md) | [TensorFlow 1.x<br>throughput<br>(img/s)](../NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | [MXNet<br>throughput<br>(img/s, bsz=96)](../NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | [PyTorch<br>throughput<br>(img/s)](../PyTorch/resnet50v1.5) | [PaddlePaddle<br>throughput<br>(img/s)](../PaddlePaddle/resnet50v1.5) | [TensorFlow 2.x<br>throughput<br>(img/s)](../TensorFlow/resnet50v1.5) |
+| node num | device num | [OneFlow<br>throughput<br>(img/s)](../OneFlow/ConvNets/rn50_fp32_report_0821.md) | [TensorFlow 1.x<br>throughput<br>(img/s)](../NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | [MXNet<br>throughput<br>(img/s)](../NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | [PyTorch<br>throughput<br>(img/s)](../PyTorch/resnet50v1.5) | [PaddlePaddle<br>throughput<br>(img/s)](../PaddlePaddle/resnet50v1.5) | [TensorFlow 2.x<br>throughput<br>(img/s)](../TensorFlow/resnet50v1.5) |
 | -------- | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 1        | 1          | 384.85                                                       | 362.44                                                       | 389.71                                                       | 354.40                                                      | 352.72                                                       | 321.80                                                       |
-| 1        | 8          | 2969.45                                                      | 2721.98                                                      | 2947.72                                                      | 2719.07                                                     | 2625.38                                                      | 2458.74                                                      |
-| 2        | 16         | 5906.55                                                      | 5099.42                                                      | 5684.68                                                      | 5307.21                                                     | 4895.27                                                      | 4849.68                                                      |
-| 4        | 32         | 11711.18                                                     | 9514.64                                                      | 10419.21                                                     | 10632.33                                                    | 9348.17                                                      | 9418.44                                                      |
-
-P.S. MXNet cannot work under this configuration with batch size 128, because of OOM (Out Of Memory).
+| 1        | 1          | 384.85                                                       | 362.44                                                       | 391.88                                                       | 354.40                                                      | 352.72                                                       | 321.80                                                       |
+| 1        | 8          | 2969.45                                                      | 2721.98                                                      | 2999.50                                                      | 2719.07                                                     | 2625.38                                                      | 2458.74                                                      |
+| 2        | 16         | 5906.55                                                      | 5099.42                                                      | 5712.53                                                      | 5307.21                                                     | 4895.27                                                      | 4849.68                                                      |
+| 4        | 32         | 11711.18                                                     | 9514.64                                                      | 11233.92                                                     | 10632.33                                                    | 9348.17                                                      | 9418.44                                                      |
 
 The following images show throughput and speedup of 6 implementations of ResNet50 V1.5.
 
@@ -104,6 +102,8 @@ The following images show throughput and speedup of 6 implementations of ResNet5
 | 1        | 8          | 1158.51                                                      | OOM                                                          | OOM                                                     | OOM                                                          | 868.60                                                       |
 | 2        | 16         | 2257.71                                                      | OOM                                                          | OOM                                                     | OOM                                                          | 1631.36                                                      |
 | 4        | 32         | 4455.97                                                      | OOM                                                          | OOM                                                     | OOM                                                          | 3167.68                                                      |
+
+P.S. The OOM means Out Of Memory.
 
 The following images show throughput and speedup of 2 implementations of BERT base with batch size per device=96.
 
@@ -142,4 +142,3 @@ The following images show throughput and speedup of 5 implementations of BERT ba
 ![bert_base_bz_32_throughput.png](imgs/bert_base_bz_32_throughput.png)
 
 ![bert_base_bz_32_speedup.png](imgs/bert_base_bz_32_speedup.png)
-
