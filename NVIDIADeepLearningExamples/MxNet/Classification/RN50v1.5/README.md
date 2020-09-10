@@ -291,4 +291,5 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
-详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/logs.zip)
+详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5_logs_20200910.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/logs.zip)
+
