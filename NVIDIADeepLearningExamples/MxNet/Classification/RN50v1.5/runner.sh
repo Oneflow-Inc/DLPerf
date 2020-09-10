@@ -63,24 +63,20 @@ CMD+="--arch resnetv15 \
 --num-epochs 1"
 
 
-MXNET_UPDATE_ON_KVSTORE=0 
-MXNET_EXEC_ENABLE_ADDTO=1 
-MXNET_USE_TENSORRT=0
-MXNET_GPU_WORKER_NTHREADS=2
-MXNET_GPU_COPY_NTHREADS=1
-MXNET_OPTIMIZER_AGGREGATION_SIZE=54
-HOROVOD_CYCLE_TIME=0.1
-HOROVOD_FUSION_THRESHOLD=67108864
-HOROVOD_NUM_NCCL_STREAMS=2
-MXNET_HOROVOD_NUM_GROUPS=16
-MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN_FWD=999
-MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN_BWD=25
-
 echo "begin time: "; date;
-horovodrun -np ${gpu_num} \
--H ${node_ip} -p ${PORT} \
---start-timeout 600 \
-python ${WORKSPACE}/train.py ${CMD} 2>&1 | tee ${log_file}
+# horovodrun -np ${gpu_num} \
+# -H ${node_ip} -p ${PORT} \
+# --start-timeout 600 \
+# python3  train.py ${CMD} 2>&1 | tee ${log_file}
+
+
+mpirun --allow-run-as-root -oversubscribe -np ${gpu_num} -H ${node_ip} \
+    -bind-to none -map-by slot \
+    -x LD_LIBRARY_PATH -x PATH \
+    -mca pml ob1 -mca btl ^openib \
+    -mca plm_rsh_args "-p ${PORT}  -q -o StrictHostKeyChecking=no" \
+    -mca btl_tcp_if_include ib0 \
+python3  train.py ${CMD} 2>&1 | tee ${log_file}
 
 echo "Writting to ${log_file}"
 echo "end time: "; date;

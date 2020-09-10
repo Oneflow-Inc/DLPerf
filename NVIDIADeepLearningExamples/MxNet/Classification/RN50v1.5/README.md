@@ -44,7 +44,7 @@
 
 - Horovod 0.19.0
 
-- Python：3.5
+- Python：3.6.9
 
   更多容器细节请参考 [NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
 
@@ -52,8 +52,8 @@
 
   | Feature                                                      | ResNet50 v1.5 MXNet |
   | ------------------------------------------------------------ | ------------------- |
-  | Horovod Multi-GPU                                            | Yes                 |
-  | Horovod Multi-Node                                           | Yes                 |
+  | Horovod/MPI Multi-GPU                                        | Yes                 |
+  | Horovod/MPI Multi-Node                                       | Yes                 |
   | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                 |
   | Automatic mixed precision (AMP)                              | No                  |
 
@@ -118,7 +118,11 @@
 
   [`FROM nvcr.io/nvidia/mxnet:19.07-py3`](https://github.com/NVIDIA/DeepLearningExamples/blob/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/MxNet/Classification/RN50v1.5/Dockerfile#L1)
 
-  DLPerf仓库中的测试为了统一环境和驱动、第三方依赖的版本，都用了20.03的镜像。mxnet-20.03的镜像里用了与CUDA 10.2相匹配的DALI 0.19.0，而该容器内的脚本还是19.07镜像里的脚本，直接运行dali-cpu和dali-gpu会报错，因此需要把 [dali.py](https://github.com/NVIDIA/DeepLearningExamples/blob/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5/dali.py) 中的`nvJPEGDecoder`替换成`ImageDecoder`，详见： https://github.com/NVIDIA/DALI/issues/906 
+  DLPerf仓库中的测试为了统一环境和驱动、第三方依赖的版本，都用了20.03的镜像。mxnet-20.03的镜像里用了与CUDA 10.2相匹配的DALI 0.19.0，而该容器内的脚本还是19.07镜像里的脚本，直接运行dali-cpu和dali-gpu会报错，因此需要做一些修改：
+  
+  - 修改[Line34](https://github.com/NVIDIA/DeepLearningExamples/blob/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5/dali.py#L34) ----dali-fuse-decoder，将default=1改为default=0
+  
+  - 把 [dali.py](https://github.com/NVIDIA/DeepLearningExamples/blob/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5/dali.py) 中的`nvJPEGDecoder`替换成`ImageDecoder`，详见： https://github.com/NVIDIA/DALI/issues/906 
 
 ### 3. 运行测试
 
@@ -145,7 +149,13 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 bash run_test.sh 
 ```
 
-针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **96**（注意：batch_size_per_device = 128会导致显存OOM，故MXNet resnet50v1.5 仅测试了batch size = 96的情况），进行测试，并将 log 信息保存在当前目录的`benchmark_log/ngc/mxnet/`对应分布式配置路径中。
+针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **128**，进行测试。
+
+也可以指定其他batch size，如64：
+```shell
+bash run_test.sh 64
+```
+
 
 ### 4. 数据处理
 
@@ -154,57 +164,79 @@ bash run_test.sh
 运行，即可得到针对不同配置测试 log 数据处理的结果： 
 
 ```shell
-python extract_mxnet_logs_time.py --log_dir=logs/ngc/mxnet/resnet50 --batch_size_per_device=96
+python extract_mxnet_logs_time.py --log_dir=logs/ngc/mxnet/resnet50/bz128 --batch_size_per_device=128
 ```
 
 结果打印如下：
 
 ```shell
-logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_5.log {5: 10021.2}
-logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_4.log {5: 10021.2, 4: 10487.15}
-logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_1.log {5: 10021.2, 4: 10487.15, 1: 10440.1}
-logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_3.log {5: 10021.2, 4: 10487.15, 1: 10440.1, 3: 10144.31}
-logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_6.log {5: 10021.2, 4: 10487.15, 1: 10440.1, 3: 10144.31, 6: 10485.0}
-logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_7.log {5: 10021.2, 4: 10487.15, 1: 10440.1, 3: 10144.31, 6: 10485.0, 7: 10419.21}
-logs/ngc/mxnet/resnet50/4n8g/r50_b96_fp32_2.log {5: 10021.2, 4: 10487.15, 1: 10440.1, 3: 10144.31, 6: 10485.0, 7: 10419.21, 2: 10408.97}
-logs/ngc/mxnet/resnet50/1n8g/r50_b96_fp32_5.log {5: 2956.58}
-logs/ngc/mxnet/resnet50/1n8g/r50_b96_fp32_4.log {5: 2956.58, 4: 2951.01}
-logs/ngc/mxnet/resnet50/1n8g/r50_b96_fp32_1.log {5: 2956.58, 4: 2951.01, 1: 2941.18}
-logs/ngc/mxnet/resnet50/1n8g/r50_b96_fp32_3.log {5: 2956.58, 4: 2951.01, 1: 2941.18, 3: 2943.43}
-logs/ngc/mxnet/resnet50/1n8g/r50_b96_fp32_6.log {5: 2956.58, 4: 2951.01, 1: 2941.18, 3: 2943.43, 6: 2950.33}
-logs/ngc/mxnet/resnet50/1n8g/r50_b96_fp32_7.log {5: 2956.58, 4: 2951.01, 1: 2941.18, 3: 2943.43, 6: 2950.33, 7: 2947.72}
-logs/ngc/mxnet/resnet50/1n8g/r50_b96_fp32_2.log {5: 2956.58, 4: 2951.01, 1: 2941.18, 3: 2943.43, 6: 2950.33, 7: 2947.72, 2: 2947.5}
-logs/ngc/mxnet/resnet50/1n1g/r50_b96_fp32_5.log {5: 391.53}
-logs/ngc/mxnet/resnet50/1n1g/r50_b96_fp32_4.log {5: 391.53, 4: 389.71}
-logs/ngc/mxnet/resnet50/1n1g/r50_b96_fp32_1.log {5: 391.53, 4: 389.71, 1: 389.66}
-logs/ngc/mxnet/resnet50/1n1g/r50_b96_fp32_3.log {5: 391.53, 4: 389.71, 1: 389.66, 3: 391.13}
-logs/ngc/mxnet/resnet50/1n1g/r50_b96_fp32_6.log {5: 391.53, 4: 389.71, 1: 389.66, 3: 391.13, 6: 389.4}
-logs/ngc/mxnet/resnet50/1n1g/r50_b96_fp32_7.log {5: 391.53, 4: 389.71, 1: 389.66, 3: 391.13, 6: 389.4, 7: 389.28}
-logs/ngc/mxnet/resnet50/1n1g/r50_b96_fp32_2.log {5: 391.53, 4: 389.71, 1: 389.66, 3: 391.13, 6: 389.4, 7: 389.28, 2: 389.86}
-logs/ngc/mxnet/resnet50/2n8g/r50_b96_fp32_5.log {5: 5668.52}
-logs/ngc/mxnet/resnet50/2n8g/r50_b96_fp32_4.log {5: 5668.52, 4: 5684.68}
-logs/ngc/mxnet/resnet50/2n8g/r50_b96_fp32_1.log {5: 5668.52, 4: 5684.68, 1: 5688.68}
-logs/ngc/mxnet/resnet50/2n8g/r50_b96_fp32_3.log {5: 5668.52, 4: 5684.68, 1: 5688.68, 3: 5663.72}
-logs/ngc/mxnet/resnet50/2n8g/r50_b96_fp32_6.log {5: 5668.52, 4: 5684.68, 1: 5688.68, 3: 5663.72, 6: 5713.44}
-logs/ngc/mxnet/resnet50/2n8g/r50_b96_fp32_7.log {5: 5668.52, 4: 5684.68, 1: 5688.68, 3: 5663.72, 6: 5713.44, 7: 5711.74}
-logs/ngc/mxnet/resnet50/2n8g/r50_b96_fp32_2.log {5: 5668.52, 4: 5684.68, 1: 5688.68, 3: 5663.72, 6: 5713.44, 7: 5711.74, 2: 5671.87}
-{'r50': {'1n1g': {'average_speed': 390.08,
-                  'batch_size_per_device': 96,
-                  'median_speed': 389.71,
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_1.log {1: 11335.58}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_4.log {1: 11335.58, 4: 11219.77}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_7.log {1: 11335.58, 4: 11219.77, 7: 11366.1}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_2.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_3.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92, 3: 11373.04}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_6.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92, 3: 11373.04, 6: 11197.99}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_5.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92, 3: 11373.04, 6: 11197.99, 5: 11190.03}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_1.log {1: 3002.58}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_4.log {1: 3002.58, 4: 3003.46}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_7.log {1: 3002.58, 4: 3003.46, 7: 2995.12}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_2.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_3.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69, 3: 2989.87}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_6.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69, 3: 2989.87, 6: 2999.5}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_5.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69, 3: 2989.87, 6: 2999.5, 5: 3003.28}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_1.log {1: 1518.7}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_4.log {1: 1518.7, 4: 1516.14}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_7.log {1: 1518.7, 4: 1516.14, 7: 1516.27}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_2.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_3.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39, 3: 1519.6}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_6.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39, 3: 1519.6, 6: 1515.91}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_5.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39, 3: 1519.6, 6: 1515.91, 5: 1514.34}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_1.log {1: 391.88}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_4.log {1: 391.88, 4: 392.77}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_7.log {1: 391.88, 4: 392.77, 7: 391.13}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_2.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_3.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66, 3: 391.98}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_6.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66, 3: 391.98, 6: 392.43}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_5.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66, 3: 391.98, 6: 392.43, 5: 390.74}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_1.log {1: 766.63}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_4.log {1: 766.63, 4: 763.56}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_7.log {1: 766.63, 4: 763.56, 7: 761.13}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_2.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_3.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0, 3: 762.72}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_6.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0, 3: 762.72, 6: 766.56}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_5.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0, 3: 762.72, 6: 766.56, 5: 760.8}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_1.log {1: 5716.36}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_4.log {1: 5716.36, 4: 5704.89}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_7.log {1: 5716.36, 4: 5704.89, 7: 5766.9}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_2.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_3.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54, 3: 5661.06}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_6.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54, 3: 5661.06, 6: 5712.53}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_5.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54, 3: 5661.06, 6: 5712.53, 5: 5726.91}
+{'r50': {'1n1g': {'average_speed': 391.51,
+                  'batch_size_per_device': 128,
+                  'median_speed': 391.88,
                   'speedup': 1.0},
-         '1n8g': {'average_speed': 2948.25,
-                  'batch_size_per_device': 96,
-                  'median_speed': 2947.72,
-                  'speedup': 7.56},
-         '2n8g': {'average_speed': 5686.09,
-                  'batch_size_per_device': 96,
-                  'median_speed': 5684.68,
-                  'speedup': 14.59},
-         '4n8g': {'average_speed': 10343.71,
-                  'batch_size_per_device': 96,
-                  'median_speed': 10419.21,
-                  'speedup': 26.74}}}
-Saving result to ./result/resnet50_result.json
+         '1n2g': {'average_speed': 763.77,
+                  'batch_size_per_device': 128,
+                  'median_speed': 763.56,
+                  'speedup': 1.95},
+         '1n4g': {'average_speed': 1517.05,
+                  'batch_size_per_device': 128,
+                  'median_speed': 1516.27,
+                  'speedup': 3.87},
+         '1n8g': {'average_speed': 2998.64,
+                  'batch_size_per_device': 128,
+                  'median_speed': 2999.5,
+                  'speedup': 7.65},
+         '2n8g': {'average_speed': 5702.46,
+                  'batch_size_per_device': 128,
+                  'median_speed': 5712.53,
+                  'speedup': 14.58},
+         '4n8g': {'average_speed': 11273.78,
+                  'batch_size_per_device': 128,
+                  'median_speed': 11233.92,
+                  'speedup': 28.67}}}
+Saving result to ./result/bz128_result.json
 ```
 
 
@@ -246,15 +278,18 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 ### FP32 & W/O XLA
 
-- ### ResNet50 v1.5 batch_size = 96
+- ### ResNet50 v1.5 batch_size = 128
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 389.71    | 1.00    |
-| 1        | 8       | 2947.72   | 7.56    |
-| 2        | 16      | 5684.68   | 14.59   |
-| 4        | 32      | 10419.21  | 26.74   |
+| 1        | 1       | 391.88    | 1.00    |
+| 1        | 2       | 763.56    | 1.95    |
+| 1        | 4       | 1516.27   | 3.87    |
+| 1        | 8       | 2999.5    | 7.65    |
+| 2        | 16      | 5712.53   | 14.58   |
+| 4        | 32      | 11233.92  | 28.67   |
 
 NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
-详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/logs.zip)
+详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5_logs_20200910.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/logs.zip)
+
