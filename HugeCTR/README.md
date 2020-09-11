@@ -26,3 +26,8 @@ DLPerf/HugeCTR $ tree
 └── tools
     └── extract_hugectr_logs.py
 ```
+## Benchmark Test Cases
+### 500 Iterations Test
+This test aims to show the training loss convergency profile and validation area under the ROC Curve(AUC) during testing. 
+
+In order to show the tendency of the loss and auc curves clealy, the total training batch size is set to 512, 512 is a small value comparison to WDL industry production scenario. 
