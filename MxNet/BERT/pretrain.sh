@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 MODEL=${1:-"bert_base"}
 BZ_PER_DEVICE=${2:-32}
-ITER_NUM=${3:-120}
+ITER_NUM=${3:-200}
 GPUS=${4:-0}
 NODE_NUM=${5:-1}
 PRECISION=${6:-"float32"}
@@ -12,7 +12,7 @@ gpu_num_per_node=`expr ${a} / 2`
 gpu_num=`expr ${gpu_num_per_node} \* ${NODE_NUM}`
 total_bz=`expr ${BZ_PER_DEVICE} \* ${gpu_num}`
 
-log_folder=logs/mxnet/bert/bz32/${NODE_NUM}n${gpu_num_per_node}g
+log_folder=logs/mxnet/bert/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
 log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_fp32_$TEST_NUM.log
 
@@ -49,12 +49,23 @@ CMD+="--dtype ${PRECISION} \
 --num_steps ${ITER_NUM} \
 --log_interval 1 \
 --ckpt_interval 1000 \
+--num_data_workers 8 \
+--no_compute_acc \
 --data ${ONE_PART_NPY} "
 
 echo "begin time: "; date;
-horovodrun -np ${gpu_num} -H ${node_ip} -p ${PORT} \
---start-timeout 600 \
+# horovodrun -np ${gpu_num} -H ${node_ip}   -p ${PORT} \
+# --start-timeout 600 \
+# python3 ${WORKSPACE}/run_pretraining.py ${CMD} 2>&1 | tee ${log_file}
+
+mpirun -oversubscribe -np ${gpu_num} -H ${node_ip} \
+    -bind-to none -map-by slot \
+    -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH \
+    -mca pml ob1 -mca btl ^openib \
+    -mca plm_rsh_args "-p 22 -q -o StrictHostKeyChecking=no" \
+    -mca btl_tcp_if_include ib0 \
 python3 ${WORKSPACE}/run_pretraining.py ${CMD} 2>&1 | tee ${log_file}
+
 
 echo "Writting log to $log_file"
 echo "end time: "; date;
