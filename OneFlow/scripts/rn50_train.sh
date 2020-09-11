@@ -24,7 +24,6 @@ python3 ./$BENCH_ROOT/of_cnn_train_val.py \
     --train_data_part_num=$DATA_PART_NUM \
     --num_nodes=$NUM_NODES \
     --gpu_num_per_node=$GPU_NUM_PER_NODE \
-    --model_update="momentum" \
     --learning_rate=0.001 \
     --loss_print_every_n_iter=20 \
     --batch_size_per_device=$BSZ_PER_DEVICE \
