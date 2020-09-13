@@ -30,27 +30,27 @@ DLPerf/HugeCTR $ tree
 ### 500 Iterations Test
 This test aims to show the training loss convergency profile and validation area under the ROC Curve(AUC) during 500 steps testing. 
 
-In order to show the tendency of the loss and auc curves clealy, the total training batch size is set to 512, 512 is a small value comparison to WDL industry production scenario. Validation should be performed every training step.
+To show the tendency of the loss and AUC curves clearly, the total training batch size is set to 512, 512 is a small value compared to the WDL industry production scenario. Validation should be performed every training step.
 
 ### 300,000 Iterations Test
-This test aims to show the training loss profile and validation area under the ROC Curve(AUC) during 300,000 steps testing. Compare to 500 iters test, we print loss and auc every 1000 steps, it will bring us a long period view of loss and auc curves.
+This test aims to show the training loss profile and validation area under the ROC Curve(AUC) during 300,000 steps testing. Compare to 500 iters test, we print loss and AUC every 1000 steps, it will bring us a long period view of loss and AUC curves.
 
 ### Fixed Total Batch Size Test
-This test will keep total batch size as a constant value(default is 16384), each test case adopts different number of GPU devices, such as 1, 2, 4, 8, 16, 32.
+This test will keep the total batch size as a constant value(default is 16384), each test case adopts a different number of GPU devices, such as 1, 2, 4, 8, 16, 32.
 
-Latency and GPU device memory usage should be recored in this test.
+Latency and GPU device memory usage should be recorded in this test.
 
 ### Fixed Batch Size per Device Test
-This test will keep batch size per device as a constant value(default is 16384), each test case adopts different number of GPU devices, such as 1, 2, 4, 8, 16, 32, the total batch size is scaled up with the total number of devices of the test case.
+This test will keep batch size per device as a constant value(default is 16384), each test case adopts a different number of GPU devices, such as 1, 2, 4, 8, 16, 32, the total batch size is scaled up with the total number of devices of the test case.
 
-Latency and GPU device memory usage should be recored in this test.
+Latency and GPU device memory usage should be recorded in this test.
 
 ### Batch Size Double Test
-This test uses one GPU device, the first case's batch size is 512, the batch size of the subsequent case is doubled and so on.
+This test uses one GPU device, the first case's batch size is 512, the batch size of the subsequent case is doubled, and so on.
 
-Latency and GPU device memory usage should be recored in this test.
+Latency and GPU device memory usage should be recorded in this test.
 
 ### Vocabulary Size Double Test
-This test uses devices as much as possible, the first case's vocabulary size is 3,200,000, the vocabsize size of the subsequent case is doubled and so on.
+This test uses devices as much as possible, the first case's vocabulary size is 3,200,000, the vocab size of the subsequent case is doubled, and so on.
 
-Latency and GPU device memory usage should be recored in this test.
+Latency and GPU device memory usage should be recorded in this test.
