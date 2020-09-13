@@ -49,4 +49,7 @@ This report summarized HugeCTR test on one node with 8 x Tesla V100 on Sep 8th 2
 |n1g8-vocab_x2-51200000|[0, 1, 2, 3, 4, 5, 6, 7]|16,384|1,100|16|51,200,000|52.986|13,145|
 
 ## 500 Iterations Test
+![500 Iters profile](imgs/500_iters_loss_auc.png)
+
 ## 300,000 Iterations Test
+![300k Iters profile](imgs/300k_iters_loss_auc.png)
