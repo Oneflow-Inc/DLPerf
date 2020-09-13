@@ -38,19 +38,19 @@ This test aims to show the training loss profile and validation area under the R
 ### Fixed Total Batch Size Test
 This test will keep total batch size as a constant value(default is 16384), each test case adopts different number of GPU devices, such as 1, 2, 4, 8, 16, 32.
 
-Latency and GPU device memory usage is recored in this test.
+Latency and GPU device memory usage should be recored in this test.
 
 ### Fixed Batch Size per Device Test
 This test will keep batch size per device as a constant value(default is 16384), each test case adopts different number of GPU devices, such as 1, 2, 4, 8, 16, 32, the total batch size is scaled up with the total number of devices of the test case.
 
-Latency and GPU device memory usage is recored in this test.
+Latency and GPU device memory usage should be recored in this test.
 
 ### Batch Size Double Test
 This test uses one GPU device, the first case's batch size is 512, the batch size of the subsequent case is doubled and so on.
 
-Latency and GPU device memory usage is recored in this test.
+Latency and GPU device memory usage should be recored in this test.
 
 ### Vocabulary Size Double Test
 This test uses devices as much as possible, the first case's vocabulary size is 3,200,000, the vocabsize size of the subsequent case is doubled and so on.
 
-Latency and GPU device memory usage is recored in this test.
+Latency and GPU device memory usage should be recored in this test.
