@@ -53,6 +53,7 @@
 | ----------------------------- | --------------------- |
 | Multi-node,multi-gpu training | Yes                   |
 | NVIDIA NCCL                   | Yes                   |
+| Mixed precision               | Yes                   |
 
 # Quick Start
 
