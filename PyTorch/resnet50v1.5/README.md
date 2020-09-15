@@ -8,18 +8,16 @@
 
 ## 内容目录 Table Of Content
 
-  * [概述 Overview](#---overview)
+   * [概述 Overview](#---overview)
   * [内容目录 Table Of Content](#-----table-of-content)
   * [环境 Environment](#---environment)
     + [系统](#--)
       - [硬件](#--)
       - [软件](#--)
-    + [NGC 容器](#ngc---)
       - [Feature support matrix](#feature-support-matrix)
   * [快速开始 Quick Start](#-----quick-start)
     + [1. 前期准备](#1-----)
       - [数据集](#---)
-      - [镜像及容器](#-----)
       - [SSH 免密](#ssh---)
     + [2. 运行测试](#2-----)
       - [单机测试](#----)
@@ -27,18 +25,13 @@
     + [3. 数据处理](#3-----)
   * [性能结果 Performance](#-----performance)
     + [FP32 & W/O XLA & Use `torch.utils.data.DataLoader`](#fp32---w-o-xla---use--torchutilsdatadataloader-)
-    + [容器环境内](#-----)
+    + [物理机环境内](#------)
       - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8)
       - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48)
-    + [物理机环境内](#------)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-1)
-      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-1)
     + [FP32 & W/O XLA & Use DALI](#fp32---w-o-xla---use-dali)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-2)
-      - [ResNet50 v1.5 batch_size = 128，worker=48](#resnet50-v15-batch-size---128-worker-48)
     + [物理机环境内](#-------1)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-3)
-      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-2)
+      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-1)
+      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-2)
 
 ## 环境 Environment
 
