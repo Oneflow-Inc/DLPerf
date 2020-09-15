@@ -11,7 +11,7 @@ total_bz=`expr ${BATCH_SIZE} \* ${GPU_COUNT}`
 LR=$(awk -v total_bz="$total_bz" 'BEGIN{print  total_bz / 1000}')
 
 
-LOG_FOLDER=../logs/paddle/resnet50/1n${GPU_COUNT}g
+LOG_FOLDER=../logs/paddle/resnet50/bz${BATCH_SIZE}/bz${BATCH_SIZE}/1n${GPU_COUNT}g
 mkdir -p $LOG_FOLDER
 LOGFILE=${LOG_FOLDER}/r50_b${BATCH_SIZE}_${DTYPE}_${TEST_NUM}.log
 
@@ -41,7 +41,7 @@ echo "Use fp16 : $use_fp16"
 python3  $MULTI_PROCESS  \
         train.py \
         --data_dir=${DATA_DIR} \
-        --total_images=651468 \
+        --total_images=1302936 \
         --class_dim=1000 \
         --validate=False \
         --model="ResNet50"  \

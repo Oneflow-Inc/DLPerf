@@ -15,7 +15,7 @@ node_num=$(echo $nodes | tr ',' '\n' | wc -l)
 NUM_EPOCH=`expr ${node_num} \* 4`
 
 
-LOG_FOLDER=../logs/paddle/resnet50/${node_num}n${GPUS_PER_NODE}g
+LOG_FOLDER=../logs/paddle/resnet50/bz${BATCH_SIZE}/${node_num}n${GPUS_PER_NODE}g
 mkdir -p $LOG_FOLDER
 LOGFILE=${LOG_FOLDER}/r50_b${BATCH_SIZE}_${DTYPE}_${TEST_NUM}.log
 
@@ -40,13 +40,13 @@ python3 -m paddle.distributed.launch --cluster_node_ips=${nodes} \
 --node_ip=$CURRENT_NODE \
 train.py \
         --data_dir=${DATA_DIR} \
-        --total_images=651468 \
+        --total_images=1302936 \
         --class_dim=1000 \
         --validate=False \
         --batch_size=$total_bz \
         --image_shape 3 $IMAGE_SIZE $IMAGE_SIZE \
-	    --print_step=1 \
-	    --save_step=10000 \
+      	--print_step=1 \
+	      --save_step=10000 \
         --lr_strategy=piecewise_decay \
         --lr=0.256 \
         --momentum_rate=0.875 \
