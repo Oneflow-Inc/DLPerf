@@ -1,35 +1,44 @@
-esNet50 v1.5 测评
+# PyTorch ResNet50 v1.5 测评
 
 ## 概述 Overview
 
-本测评在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:PyTorch/tags) 基于PyTorch [/examples](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) 仓库中提供的 [ResNet50 v1.5](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1/imagenet) 实现，对其进行单机单卡、单机多卡的结果复现及速度评测，同时根据 PyTorch 官方的分布式实现，添加 DALI 数据加载方式，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测评在类脑服务器物理机环境下基于PyTorch [/examples](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) 仓库中提供的 [ResNet50 v1.5](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1/imagenet) 实现，对其进行单机单卡、单机多卡的结果复现及速度评测，同时根据 PyTorch 官方的分布式实现，添加 DALI 数据加载方式，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
 ## 内容目录 Table Of Content
 
-* [概述 Overview](#---overview)
-* [内容目录 Table Of Content](#-----table-of-content)
-* [环境 Environment](#---environment)
-  + [系统](#--)
-    - [硬件](#--)
-    - [软件](#--)
-  + [NGC 容器](#ngc---)
-    - [Feature support matrix](#feature-support-matrix)
-* [快速开始 Quick Start](#-----quick-start)
-  + [项目代码](#----)
-  + [1. 前期准备](#1-----)
-    - [数据集](#---)
-    - [SSH 免密](#ssh---)
-  + [2. 运行测试](#2-----)
-    - [单机测试](#----)
-    - [多机测试](#----)
-  + [3. 数据处理](#3-----)
-* [性能结果 Performance](#-----performance)
-  + [FP32 & W/O XLA & Use `torch.utils.data.DataLoader`](#fp32---w-o-xla---use--torchutilsdatadataloader-)
-  + [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48)
-  + [FP32 & W/O XLA & Use DALI](#fp32---w-o-xla---use-dali)
-  + [ResNet50 v1.5 batch_size = 128，worker=48](#resnet50-v15-batch-size---128-worker-48)
+  * [概述 Overview](#---overview)
+  * [内容目录 Table Of Content](#-----table-of-content)
+  * [环境 Environment](#---environment)
+    + [系统](#--)
+      - [硬件](#--)
+      - [软件](#--)
+    + [NGC 容器](#ngc---)
+      - [Feature support matrix](#feature-support-matrix)
+  * [快速开始 Quick Start](#-----quick-start)
+    + [1. 前期准备](#1-----)
+      - [数据集](#---)
+      - [镜像及容器](#-----)
+      - [SSH 免密](#ssh---)
+    + [2. 运行测试](#2-----)
+      - [单机测试](#----)
+      - [多机测试](#----)
+    + [3. 数据处理](#3-----)
+  * [性能结果 Performance](#-----performance)
+    + [FP32 & W/O XLA & Use `torch.utils.data.DataLoader`](#fp32---w-o-xla---use--torchutilsdatadataloader-)
+    + [容器环境内](#-----)
+      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8)
+      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48)
+    + [物理机环境内](#------)
+      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-1)
+      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-1)
+    + [FP32 & W/O XLA & Use DALI](#fp32---w-o-xla---use-dali)
+      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-2)
+      - [ResNet50 v1.5 batch_size = 128，worker=48](#resnet50-v15-batch-size---128-worker-48)
+    + [物理机环境内](#-------1)
+      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-3)
+      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-2)
 
 ## 环境 Environment
 
@@ -57,35 +66,15 @@ esNet50 v1.5 测评
   - DALI：0.19.0
   - Python：3.7.6
 
-### NGC 容器
+#### Feature support matrix
 
-- 系统：[ Ubuntu 18.04](http://releases.ubuntu.com/18.04/)
-
-- CUDA 10.2.89
-
-- cuDNN 7.6.5
-
-- NCCL：2.5.6
-
-- PyTorch：1.5.0a0+8f84ded
-
-- OpenMPI 3.1.4
-
-- DALI 0.19.0
-
-- Python：3.6.9
-
-  更多容器细节请参考 [NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
-
-  #### Feature support matrix
-
-  | Feature                                                      | ResNet50 v1.5 PyTorch |
-  | ------------------------------------------------------------ | --------------------- |
-  | Multi-gpu training                                           | Yes                   |
-  | Multi-node training                                          | Yes                   |
-  | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                   |
-  | NVIDIA NCCL                                                  | Yes                   |
-  | Automatic mixed precision (AMP)                              | No                    |
+| Feature                                                      | ResNet50 v1.5 PyTorch |
+| ------------------------------------------------------------ | --------------------- |
+| Multi-gpu training                                           | Yes                   |
+| Multi-node training                                          | Yes                   |
+| [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                   |
+| NCCL                                                         | Yes                   |
+| Automatic mixed precision (AMP)                              | No                    |
 
 
 
@@ -96,27 +85,6 @@ esNet50 v1.5 测评
 - #### 数据集
 
 根据 [ImageNet training in PyTorch](fqJuQjPL73) 准备 ImageNet 数据集，只需下载、解压 train、validation 数据集到对应路径即可，使用原始图片进行训练。
-
-- #### 镜像及容器
-
-拉取 NGC 20.03 的镜像、搭建容器，进入容器环境，下载源码。
-
-```
-# 下载镜像
-docker pull nvcr.io/nvidia/pytorch:20.03-py3 
-
-# 启动容器
-docker run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
---name pt_bert  --net host \
---cap-add=IPC_LOCK --device=/dev/infiniband \
--v ./data:/data/ \
--d pytorch:20.03-py3  
-
-# 进入容器后
-cd ~ && git clone https://github.com/pytorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1/
-```
-
-
 
 - #### SSH 免密
 
@@ -426,51 +394,56 @@ python extract_pytorch_logs_time.py --log_dir /root/examples/imagenet/scripts/j4
 结果打印如下
 
 ```
-/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_2.log {2: 10712.7}
-/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_4.log {2: 10712.7, 4: 10691.73}
-/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_3.log {2: 10712.7, 4: 10691.73, 3: 10632.33}
-/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_5.log {2: 10712.7, 4: 10691.73, 3: 10632.33, 5: 10525.77}
-/root/examples/imagenet/scripts/j48_pytorch_original/4n8g/r50_b128_fp32_1.log {2: 10712.7, 4: 10691.73, 3: 10632.33, 5: 10525.77, 1: 10492.34}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_2.log {2: 357.54}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_4.log {2: 357.54, 4: 354.4}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_3.log {2: 357.54, 4: 354.4, 3: 355.32}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_5.log {2: 357.54, 4: 354.4, 3: 355.32, 5: 353.43}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n1g/r50_b128_fp32_1.log {2: 357.54, 4: 354.4, 3: 355.32, 5: 353.43, 1: 351.21}
-/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_2.log {2: 3214.01}
-/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_4.log {2: 3214.01, 4: 5372.23}
-/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_3.log {2: 3214.01, 4: 5372.23, 3: 5356.77}
-/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_5.log {2: 3214.01, 4: 5372.23, 3: 5356.77, 5: 5307.21}
-/root/examples/imagenet/scripts/j48_pytorch_original/2n8g/r50_b128_fp32_1.log {2: 3214.01, 4: 5372.23, 3: 5356.77, 5: 5307.21, 1: 3116.87}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_2.log {2: 2738.7}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_4.log {2: 2738.7, 4: 2736.87}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_3.log {2: 2738.7, 4: 2736.87, 3: 2715.03}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_5.log {2: 2738.7, 4: 2736.87, 3: 2715.03, 5: 2719.07}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n8g/r50_b128_fp32_1.log {2: 2738.7, 4: 2736.87, 3: 2715.03, 5: 2719.07, 1: 2716.68}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_2.log {2: 1354.89}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_4.log {2: 1354.89, 4: 1351.49}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_3.log {2: 1354.89, 4: 1351.49, 3: 1321.26}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_5.log {2: 1354.89, 4: 1351.49, 3: 1321.26, 5: 1350.96}
-/root/examples/imagenet/scripts/j48_pytorch_original/1n4g/r50_b128_fp32_1.log {2: 1354.89, 4: 1351.49, 3: 1321.26, 5: 1350.96, 1: 1350.46}
-{'r50': {'1n1g': {'average_speed': 354.38,
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_42.log {42: 8940.3}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_2.log {42: 8940.3, 2: 8468.23}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_4.log {42: 8940.3, 2: 8468.23, 4: 8781.78}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_3.log {42: 8940.3, 2: 8468.23, 4: 8781.78, 3: 8648.47}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_52.log {42: 8940.3, 2: 8468.23, 4: 8781.78, 3: 8648.47, 52: 8851.62}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_32.log {42: 8940.3, 2: 8468.23, 4: 8781.78, 3: 8648.47, 52: 8851.62, 32: 8654.31}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_5.log {42: 8940.3, 2: 8468.23, 4: 8781.78, 3: 8648.47, 52: 8851.62, 32: 8654.31, 5: 9046.34}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_12.log {42: 8940.3, 2: 8468.23, 4: 8781.78, 3: 8648.47, 52: 8851.62, 32: 8654.31, 5: 9046.34, 12: 8973.6}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_22.log {42: 8940.3, 2: 8468.23, 4: 8781.78, 3: 8648.47, 52: 8851.62, 32: 8654.31, 5: 9046.34, 12: 8973.6, 22: 8515.95}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/4n8g/r50_b128_fp32_1.log {42: 8940.3, 2: 8468.23, 4: 8781.78, 3: 8648.47, 52: 8851.62, 32: 8654.31, 5: 9046.34, 12: 8973.6, 22: 8515.95, 1: 8853.15}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n1g/r50_b128_fp32_2.log {2: 353.62}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n1g/r50_b128_fp32_4.log {2: 353.62, 4: 354.44}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n1g/r50_b128_fp32_3.log {2: 353.62, 4: 354.44, 3: 354.02}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n1g/r50_b128_fp32_5.log {2: 353.62, 4: 354.44, 3: 354.02, 5: 354.47}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n1g/r50_b128_fp32_1.log {2: 353.62, 4: 354.44, 3: 354.02, 5: 354.47, 1: 354.61}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/2n8g/r50_b128_fp32_2.log {2: 4484.64}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/2n8g/r50_b128_fp32_4.log {2: 4484.64, 4: 4401.46}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/2n8g/r50_b128_fp32_3.log {2: 4484.64, 4: 4401.46, 3: 4347.27}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/2n8g/r50_b128_fp32_5.log {2: 4484.64, 4: 4401.46, 3: 4347.27, 5: 4372.33}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/2n8g/r50_b128_fp32_1.log {2: 4484.64, 4: 4401.46, 3: 4347.27, 5: 4372.33, 1: 4038.81}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n8g/r50_b128_fp32_2.log {2: 2277.07}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n8g/r50_b128_fp32_4.log {2: 2277.07, 4: 2311.41}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n8g/r50_b128_fp32_3.log {2: 2277.07, 4: 2311.41, 3: 2244.24}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n8g/r50_b128_fp32_5.log {2: 2277.07, 4: 2311.41, 3: 2244.24, 5: 2243.7}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n8g/r50_b128_fp32_1.log {2: 2277.07, 4: 2311.41, 3: 2244.24, 5: 2243.7, 1: 2185.75}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n4g/r50_b128_fp32_2.log {2: 1367.67}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n4g/r50_b128_fp32_4.log {2: 1367.67, 4: 1336.61}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n4g/r50_b128_fp32_3.log {2: 1367.67, 4: 1336.61, 3: 1367.89}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n4g/r50_b128_fp32_5.log {2: 1367.67, 4: 1336.61, 3: 1367.89, 5: 1340.95}
+/home/leinao/examples/imagenet/scripts/physical_j8_dali/1n4g/r50_b128_fp32_1.log {2: 1367.67, 4: 1336.61, 3: 1367.89, 5: 1340.95, 1: 1369.97}
+{'r50': {'1n1g': {'average_speed': 354.23,
                   'batch_size_per_device': 128,
-                  'median_speed': 354.4,
+                  'median_speed': 354.44,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1345.81,
+         '1n4g': {'average_speed': 1356.62,
                   'batch_size_per_device': 128,
-                  'median_speed': 1350.96,
-                  'speedup': 3.81},
-         '1n8g': {'average_speed': 2725.27,
+                  'median_speed': 1367.67,
+                  'speedup': 3.86},
+         '1n8g': {'average_speed': 2252.43,
                   'batch_size_per_device': 128,
-                  'median_speed': 2719.07,
-                  'speedup': 7.67},
-         '2n8g': {'average_speed': 4473.42,
+                  'median_speed': 2244.24,
+                  'speedup': 6.33},
+         '2n8g': {'average_speed': 4328.9,
                   'batch_size_per_device': 128,
-                  'median_speed': 5307.21,
-                  'speedup': 14.98},
-         '4n8g': {'average_speed': 10610.97,
+                  'median_speed': 4372.33,
+                  'speedup': 12.34},
+         '4n8g': {'average_speed': 8773.38,
                   'batch_size_per_device': 128,
-                  'median_speed': 10632.33,
-                  'speedup': 30.0}}}
+                  'median_speed': 8816.7,
+                  'speedup': 24.88}}}
 Saving result to ./result/_result.json
 ```
 
@@ -481,30 +454,6 @@ Saving result to ./result/_result.json
 该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型测试的性能结果和完整 log 日志。
 
 ### FP32 & W/O XLA & Use `torch.utils.data.DataLoader`
-
-- ### 容器环境内
-
-  - #### ResNet50 v1.5 batch_size = 128, worker=8
-
-  | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-  | -------- | ---------------- | --------------------- | ------------------ | ------- |
-  | 1        | 1                | 128                   | 354.81             | 1.00    |
-  | 1        | 4                | 128                   | 1330.25            | 3.75    |
-  | 1        | 8                | 128                   | 1630.24            | 4.59    |
-  | 2        | 8                | 128                   | 3211.04            | 9.05    |
-  | 4        | 8                | 128                   | 6410.82            | 18.07   |
-
-  
-
-  - #### ResNet50 v1.5 batch_size = 128, worker=48
-
-  | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-  | -------- | ---------------- | --------------------- | ------------------ | ------- |
-  | 1        | 1                | 128                   | 354.4              | 1.00    |
-  | 1        | 4                | 128                   | 1350.96            | 3.81    |
-  | 1        | 8                | 128                   | 2719.07            | 7.67    |
-  | 2        | 8                | 128                   | 5307.21            | 14.98   |
-  | 4        | 8                | 128                   | 10632.33           | 30.0    |
 
 - ### 物理机环境内
 
@@ -530,49 +479,27 @@ Saving result to ./result/_result.json
 
 ### FP32 & W/O XLA & Use DALI
 
-- ###　容器环境内
+- ### 物理机环境内
 
   - #### ResNet50 v1.5 batch_size = 128, worker=8
 
   | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
   | -------- | ---------------- | --------------------- | ------------------ | ------- |
-  | 1        | 1                | 128                   | 361.16             | 1.00    |
-  | 1        | 4                | 128                   | 1314.3             | 3.64    |
-  | 1        | 8                | 128                   | 2171.01            | 6.01    |
-  | 2        | 8                | 128                   | 4221.2             | 11.69   |
-  | 4        | 8                | 128                   | 8151.08            | 22.57   |
+  | 1        | 1                | 128                   | 354.44             | 1.00    |
+  | 1        | 4                | 128                   | 1367.67            | 3.86    |
+  | 1        | 8                | 128                   | 2244.24            | 6.33    |
+  | 2        | 8                | 128                   | 4372.33            | 12.34   |
+  | 4        | 8                | 128                   | 8816.7             | 24.88   |
 
-  - #### ResNet50 v1.5 batch_size = 128，worker=48
+  - #### ResNet50 v1.5 batch_size = 128, worker=8
 
   | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
   | -------- | ---------------- | --------------------- | ------------------ | ------- |
-  | 1        | 1                | 128                   | 357.91             | 1.00    |
-  | 1        | 4                | 128                   | 1273.76            | 3.56    |
-  | 1        | 8                | 128                   | 2736.8             | 7.65    |
-  | 2        | 8                | 128                   | 5251.01            | 14.67   |
-  | 4        | 8                | 128                   | 10297.15           | 28.77   |
-
-- ### 物理机环境内
-
-- #### ResNet50 v1.5 batch_size = 128, worker=8
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 354.44             | 1.00    |
-| 1        | 4                | 128                   | 1367.67            | 3.86    |
-| 1        | 8                | 128                   | 2244.24            | 6.33    |
-| 2        | 8                | 128                   | 4372.33            | 12.34   |
-| 4        | 8                | 128                   | 8816.7             | 24.88   |
-
-- #### ResNet50 v1.5 batch_size = 128, worker=48
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 350.66             | 1.00    |
-| 1        | 4                | 128                   | 1306.49            | 3.73    |
-| 1        | 8                | 128                   | 2707.42            | 7.72    |
-| 2        | 8                | 128                   | 5193.09            | 14.81   |
-| 4        | 8                | 128                   | 10032.72           | 28.61   |
+  | 1        | 1                | 128                   | 350.66             | 1.00    |
+  | 1        | 4                | 128                   | 1306.49            | 3.73    |
+  | 1        | 8                | 128                   | 2707.42            | 7.72    |
+  | 2        | 8                | 128                   | 5193.09            | 14.81   |
+  | 4        | 8                | 128                   | 10032.72           | 28.61   |
 
 
 
@@ -580,6 +507,4 @@ NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 result
 
 Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_PyTorch.html#benchmarks).
 
-详细 Log 信息可下载：[PyTorch_example_resnet50_v1.5.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PyTorch/pytorch_example_resnet50_v1.5.tar)
-
-
+详细 Log 信息可下载：[physical_pytorch_example_resnet50_v1.5.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PyTorch/physical_pytorch_example_resnet50_v1.5.tar)
