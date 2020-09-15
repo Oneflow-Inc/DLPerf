@@ -72,6 +72,7 @@
   | Feature                                                      | ResNet50 v1.5 PyTorch |
   | ------------------------------------------------------------ | --------------------- |
   | Multi-gpu training                                           | Yes                   |
+  | Multi-node training                                          | Yes                   |
   | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                   |
   | Automatic mixed precision (AMP)                              | No                    |
 
@@ -128,9 +129,110 @@ bash scripts/run_single_node.sh
 
 针对单机单卡、2卡、4卡、8卡， batch_size 取 128 等情况进行测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中。
 
+- #### 多机测试
+
+多机测试，一定要确保数据集存在各节点测试机器的相同路径下，各脚本的行为要一致，尤其是修改要保持同步。
+
+典型地，多机测试时，需要在 /workspace/rn50/main.py 中 310 行的 `torch.cuda.set_device(args.gpu)` 下对方增加 `args.gpu = torch.cuda.device_count()`，即
+
+```
+308     if args.distributed:
+309         args.gpu = args.local_rank % torch.cuda.device_count()
+310         torch.cuda.set_device(args.gpu)
+311         args.gpu = torch.cuda.device_count() # modify here
+312         dist.init_process_group(backend="nccl", init_method="env://")
+313         args.world_size = torch.distributed.get_world_size()
+```
+
+4 台机器都需要增加。
+
+- ##### 两机测试
+
+以 NODE1 和 NODE2 为例，run_two_nodes.sh 脚本已填入 2 台机器对应的 IP 及端口号，NODE1 上的脚本 single_node_train.sh 中`--node_rank` 默认为0，还需自行将 NODE2 机器上相同路径下的脚本 37 行 `--node_rank` 改为 1，在 2 台机器上同时运行脚本，打印 log 如下：
+
+```
++ '[' -z ngc/pytorch/2n8g/r50_b128_fp32_5.log ']'
++ tee ngc/pytorch/2n8g/r50_b128_fp32_5.log
++ python /workspace/rn50/multiproc.py --nnodes 2 --node_rank 0 --nproc_per_node 8 --master_addr 10.11.0.2 --master_port=22333 /workspace/rn50/main.py --data-backend dali-cpu --raport-file /workspace/rn50/raport.json -j8 -p 1 --lr 1.024 --optimizer-batch-size -1 --warmup 8 --arch resnet50 -c fanin --label-smoothing 0.1 --lr-schedule cosine --mom 0.125 --wd 3.0517578125e-05 --workspace /workspace/rn50 -b 128 --epochs 1 --prof 121 --training-only --no-checkpoints /data/image
+=> creating model '('resnet50', 'fanin', 1000)'
+Version: {'net': <class 'image_classification.resnet.ResNet'>, 'block': <class 'image_classification.resnet.Bottleneck'>, 'layers': [3, 4, 6, 3], 'widths': [64, 128, 256, 512], 'expansion': 4}
+Config: {'conv': <class 'torch.nn.modules.conv.Conv2d'>, 'conv_init': 'fan_in', 'nonlinearity': 'relu', 'last_bn_0_init': False, 'activation': <function <lambda> at 0x7f9ab49a19d8>}
+read 886372 files from 698 directories
+read 50000 files from 1000 directories
+DLL 2020-09-15 14:28:53.498443 - PARAMETER data : /data/image  data_backend : dali-cpu  arch : resnet50  model_config : fanin  num_classes : 1000  workers : 8  epochs : 1  run_epochs : -1  batch_size : 128  optimizer_batch_size : -1  lr : 1.024  lr_schedule : cosine  warmup : 8  label_smoothing : 0.1  mixup : 0.0  momentum : 0.125  weight_decay : 3.0517578125e-05  bn_weight_decay : False  nesterov : False  print_freq : 1  resume : None  pretrained_weights :   fp16 : False  static_loss_scale : 1  dynamic_loss_scale : False  prof : 121  amp : False  seed : None  gather_checkpoints : False  raport_file : /workspace/rn50/raport.json  evaluate : False  training_only : True  save_checkpoints : False  checkpoint_filename : checkpoint.pth.tar  workspace : /workspace/rn50  memory_format : nchw  distributed : True  local_rank : 0  gpu : 8  world_size : 16 
+ ! Weight decay NOT applied to BN parameters 
+98
+63
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+RUNNING EPOCHS FROM 0 TO 1
+DLL 2020-09-15 14:29:13.473765 - Epoch: 0 Iteration: 1  train.loss : 7.09304  train.total_ips : 267.44 img/s
+DLL 2020-09-15 14:29:14.427490 - Epoch: 0 Iteration: 2  train.loss : 6.93504  train.total_ips : 4294.91 img/s
+DLL 2020-09-15 14:29:15.018767 - Epoch: 0 Iteration: 3  train.loss : 6.85957  train.total_ips : 6928.79 img/s
+DLL 2020-09-15 14:29:15.387051 - Epoch: 0 Iteration: 4  train.loss : 6.80420  train.total_ips : 11124.52 img/s
+DLL 2020-09-15 14:29:15.791445 - Epoch: 0 Iteration: 5  train.loss : 6.75717  train.total_ips : 10131.38 img/s
+DLL 2020-09-15 14:29:16.161849 - Epoch: 0 Iteration: 6  train.loss : 6.73528  train.total_ips : 11064.93 img/s
+DLL 2020-09-15 14:29:16.538463 - Epoch: 0 Iteration: 7  train.loss : 6.72415  train.total_ips : 10879.48 img/s
+DLL 2020-09-15 14:29:16.946395 - Epoch: 0 Iteration: 8  train.loss : 6.71593  train.total_ips : 10044.52 img/s
+DLL 2020-09-15 14:29:17.334849 - Epoch: 0 Iteration: 9  train.loss : 6.69474  train.total_ips : 10547.30 img/s
+DLL 2020-09-15 14:29:17.744287 - Epoch: 0 Iteration: 10  train.loss : 6.69965  train.total_ips : 10007.33 img/s
+DLL 2020-09-15 14:29:18.159381 - Epoch: 0 Iteration: 11  train.loss : 6.69236  train.total_ips : 9872.60 img/s
+DLL 2020-09-15 14:29:18.553769 - Epoch: 0 Iteration: 12  train.loss : 6.67351  train.total_ips : 10393.54 img/s
+```
+
+
+
+- ##### 多机测试
+
+以本集群为例，最多支持 4 机 32 卡，run_multi_nodes.sh 脚本已设置 NODE1 为 master node，设置好其 IP 及端口号，还需自行将 NODE3 机器上相同路径下的脚本 37 行 `--node_rank` 中的改为 2， NODE4 的 `--node_rank` 改为 3，在 4 台机器上同时运行脚本，打印 log 如下：
+
+```
++ '[' -z ngc/pytorch/4n8g/r50_b128_fp32_5.log ']'
++ tee ngc/pytorch/4n8g/r50_b128_fp32_5.log
++ python /workspace/rn50/multiproc.py --nnodes 4 --node_rank 0 --nproc_per_node 8 --master_addr 10.11.0.2 --master_port=22333 /workspace/rn50/main.py --data-backend dali-cpu --raport-file /workspace/rn50/raport.json -j8 -p 1 --lr 1.024 --optimizer-batch-size -1 --warmup 8 --arch resnet50 -c fanin --label-smoothing 0.1 --lr-schedule cosine --mom 0.125 --wd 3.0517578125e-05 --workspace /workspace/rn50 -b 128 --epochs 1 --prof 121 --training-only --no-checkpoints /data/image
+=> creating model '('resnet50', 'fanin', 1000)'
+Version: {'net': <class 'image_classification.resnet.ResNet'>, 'block': <class 'image_classification.resnet.Bottleneck'>, 'layers': [3, 4, 6, 3], 'widths': [64, 128, 256, 512], 'expansion': 4}
+Config: {'conv': <class 'torch.nn.modules.conv.Conv2d'>, 'conv_init': 'fan_in', 'nonlinearity': 'relu', 'last_bn_0_init': False, 'activation': <function <lambda> at 0x7f9ab49a19d8>}
+read 886372 files from 698 directories
+read 50000 files from 1000 directories
+DLL 2020-09-15 14:28:53.498443 - PARAMETER data : /data/image  data_backend : dali-cpu  arch : resnet50  model_config : fanin  num_classes : 1000  workers : 8  epochs : 1  run_epochs : -1  batch_size : 128  optimizer_batch_size : -1  lr : 1.024  lr_schedule : cosine  warmup : 8  label_smoothing : 0.1  mixup : 0.0  momentum : 0.125  weight_decay : 3.0517578125e-05  bn_weight_decay : False  nesterov : False  print_freq : 1  resume : None  pretrained_weights :   fp16 : False  static_loss_scale : 1  dynamic_loss_scale : False  prof : 121  amp : False  seed : None  gather_checkpoints : False  raport_file : /workspace/rn50/raport.json  evaluate : False  training_only : True  save_checkpoints : False  checkpoint_filename : checkpoint.pth.tar  workspace : /workspace/rn50  memory_format : nchw  distributed : True  local_rank : 0  gpu : 8  world_size : 32 
+ ! Weight decay NOT applied to BN parameters 
+98
+63
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+libibverbs: Warning: no userspace device-specific driver found for /sys/class/infiniband_verbs/uverbs0
+RUNNING EPOCHS FROM 0 TO 1
+DLL 2020-09-15 14:29:13.473765 - Epoch: 0 Iteration: 1  train.loss : 7.09304  train.total_ips : 267.44 img/s
+DLL 2020-09-15 14:29:14.427490 - Epoch: 0 Iteration: 2  train.loss : 6.93504  train.total_ips : 4294.91 img/s
+DLL 2020-09-15 14:29:15.018767 - Epoch: 0 Iteration: 3  train.loss : 6.85957  train.total_ips : 6928.79 img/s
+DLL 2020-09-15 14:29:15.387051 - Epoch: 0 Iteration: 4  train.loss : 6.80420  train.total_ips : 11124.52 img/s
+DLL 2020-09-15 14:29:15.791445 - Epoch: 0 Iteration: 5  train.loss : 6.75717  train.total_ips : 10131.38 img/s
+DLL 2020-09-15 14:29:16.161849 - Epoch: 0 Iteration: 6  train.loss : 6.73528  train.total_ips : 11064.93 img/s
+DLL 2020-09-15 14:29:16.538463 - Epoch: 0 Iteration: 7  train.loss : 6.72415  train.total_ips : 10879.48 img/s
+DLL 2020-09-15 14:29:16.946395 - Epoch: 0 Iteration: 8  train.loss : 6.71593  train.total_ips : 10044.52 img/s
+DLL 2020-09-15 14:29:17.334849 - Epoch: 0 Iteration: 9  train.loss : 6.69474  train.total_ips : 10547.30 img/s
+DLL 2020-09-15 14:29:17.744287 - Epoch: 0 Iteration: 10  train.loss : 6.69965  train.total_ips : 10007.33 img/s
+DLL 2020-09-15 14:29:18.159381 - Epoch: 0 Iteration: 11  train.loss : 6.69236  train.total_ips : 9872.60 img/s
+DLL 2020-09-15 14:29:18.553769 - Epoch: 0 Iteration: 12  train.loss : 6.67351  train.total_ips : 10393.54 img/s
+```
+
+
+
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 120 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
+测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 121 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
@@ -141,38 +243,51 @@ python extract_pytorch_logs_time.py --log_dir /workspace/rn50/scripts/ngc/pytorc
 结果打印如下
 
 ```
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_2.log {2: 366.27}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_4.log {2: 366.27, 4: 366.14}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_3.log {2: 366.27, 4: 366.14, 3: 365.81}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_5.log {2: 366.27, 4: 366.14, 3: 365.81, 5: 365.51}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_1.log {2: 366.27, 4: 366.14, 3: 365.81, 5: 365.51, 1: 366.54}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_2.log {2: 2833.72}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_7_9.log {2: 2833.72, 7: 688.8}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_4_6.log {2: 2833.72, 7: 688.8, 4: 682.28}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_1_3.log {2: 2833.72, 7: 688.8, 4: 682.28, 1: 672.63}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_10_12.log {2: 2833.72, 7: 688.8, 4: 682.28, 1: 672.63, 10: 701.07}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_4.log {2: 2833.72, 7: 688.8, 4: 2808.11, 1: 672.63, 10: 701.07}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_3.log {2: 2833.72, 7: 688.8, 4: 2808.11, 1: 672.63, 10: 701.07, 3: 2800.71}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_5.log {2: 2833.72, 7: 688.8, 4: 2808.11, 1: 672.63, 10: 701.07, 3: 2800.71, 5: 2803.56}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_13_15.log {2: 2833.72, 7: 688.8, 4: 2808.11, 1: 672.63, 10: 701.07, 3: 2800.71, 5: 2803.56, 13: 674.42}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_1.log {2: 2833.72, 7: 688.8, 4: 2808.11, 1: 2806.66, 10: 701.07, 3: 2800.71, 5: 2803.56, 13: 674.42}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_2.log {2: 1448.06}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_4.log {2: 1448.06, 4: 1447.61}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_3.log {2: 1448.06, 4: 1447.61, 3: 1445.03}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_5.log {2: 1448.06, 4: 1447.61, 3: 1445.03, 5: 1448.58}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_1.log {2: 1448.06, 4: 1447.61, 3: 1445.03, 5: 1448.58, 1: 1449.08}
-{'r50': {'1n1g': {'average_speed': 366.05,
+/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_2.log {2: 10240.09}
+/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_4.log {2: 10240.09, 4: 10434.28}
+/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_3.log {2: 10240.09, 4: 10434.28, 3: 10309.35}
+/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_5.log {2: 10240.09, 4: 10434.28, 3: 10309.35, 5: 10182.42}
+/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_1.log {2: 10240.09, 4: 10434.28, 3: 10309.35, 5: 10182.42, 1: 10309.2}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_2.log {2: 366.94}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_4.log {2: 366.94, 4: 366.52}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_3.log {2: 366.94, 4: 366.52, 3: 365.77}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_5.log {2: 366.94, 4: 366.52, 3: 365.77, 5: 366.52}
+/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_1.log {2: 366.94, 4: 366.52, 3: 365.77, 5: 366.52, 1: 367.11}
+/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_2.log {2: 5450.13}
+/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_4.log {2: 5450.13, 4: 5258.84}
+/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_3.log {2: 5450.13, 4: 5258.84, 3: 5320.09}
+/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_5.log {2: 5450.13, 4: 5258.84, 3: 5320.09, 5: 5249.85}
+/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_1.log {2: 5450.13, 4: 5258.84, 3: 5320.09, 5: 5249.85, 1: 5403.83}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_2.log {2: 2813.92}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_4.log {2: 2813.92, 4: 2793.62}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_3.log {2: 2813.92, 4: 2793.62, 3: 2846.66}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_5.log {2: 2813.92, 4: 2793.62, 3: 2846.66, 5: 2843.81}
+/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_1.log {2: 2813.92, 4: 2793.62, 3: 2846.66, 5: 2843.81, 1: 2816.58}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_2.log {2: 1450.99}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_4.log {2: 1450.99, 4: 1449.73}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_3.log {2: 1450.99, 4: 1449.73, 3: 1442.41}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_5.log {2: 1450.99, 4: 1449.73, 3: 1442.41, 5: 1445.58}
+/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_1.log {2: 1450.99, 4: 1449.73, 3: 1442.41, 5: 1445.58, 1: 1448.3}
+{'r50': {'1n1g': {'average_speed': 366.57,
                   'batch_size_per_device': 128,
-                  'median_speed': 366.14,
+                  'median_speed': 366.52,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1447.67,
+         '1n4g': {'average_speed': 1447.4,
                   'batch_size_per_device': 128,
-                  'median_speed': 1448.06,
+                  'median_speed': 1448.3,
                   'speedup': 3.95},
-         '1n8g': {'average_speed': 2014.63,
+         '1n8g': {'average_speed': 2822.92,
                   'batch_size_per_device': 128,
-                  'median_speed': 2802.14,
-                  'speedup': 7.65}}}
+                  'median_speed': 2816.58,
+                  'speedup': 7.68},
+         '2n8g': {'average_speed': 5336.55,
+                  'batch_size_per_device': 128,
+                  'median_speed': 5320.09,
+                  'speedup': 14.52},
+         '4n8g': {'average_speed': 10295.07,
+                  'batch_size_per_device': 128,
+                  'median_speed': 10309.2,
+                  'speedup': 28.13}}}
 Saving result to ./result/_result.json
 ```
 
@@ -186,11 +301,13 @@ Saving result to ./result/_result.json
 
 - ### ResNet50 v1.5 batch_size = 128
 
-| gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| ---------------- | --------------------- | ------------------ | ------- |
-| 1                | 128                   | 366.14             | 1.00    |
-| 4                | 128                   | 1448.06            | 3.95    |
-| 8                | 128                   | 2802.14            | 7.65    |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 128                   | 366.52             | 1.00    |
+| 1        | 4                | 128                   | 1448.3             | 3.95    |
+| 1        | 8                | 128                   | 2816.58            | 7.68    |
+| 2        | 8                | 128                   | 5320.09            | 14.52   |
+| 4        | 8                | 128                   | 10309.2            | 28.13   |
 
 NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 Results](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5#results)。
 
