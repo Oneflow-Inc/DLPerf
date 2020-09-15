@@ -1,4 +1,4 @@
-esNet50 v1.5 测评
+# PyTorch ResNet50 v1.5 测评
 
 ## 概述 Overview
 
@@ -8,37 +8,40 @@ esNet50 v1.5 测评
 
 ## 内容目录 Table Of Content
 
-  * [概述 Overview](#---overview)
-  * [内容目录 Table Of Content](#-----table-of-content)
-  * [环境 Environment](#---environment)
-    + [系统](#--)
-      - [硬件](#--)
-      - [软件](#--)
-    + [NGC 容器](#ngc---)
-      - [Feature support matrix](#feature-support-matrix)
-  * [快速开始 Quick Start](#-----quick-start)
-    + [1. 前期准备](#1-----)
-      - [数据集](#---)
-      - [镜像及容器](#-----)
-      - [SSH 免密](#ssh---)
-    + [2. 运行测试](#2-----)
-      - [单机测试](#----)
-      - [多机测试](#----)
-    + [3. 数据处理](#3-----)
-  * [性能结果 Performance](#-----performance)
-    + [FP32 & W/O XLA & Use `torch.utils.data.DataLoader`](#fp32---w-o-xla---use--torchutilsdatadataloader-)
-    + [容器环境内](#-----)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8)
-      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48)
-    + [物理机环境内](#------)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-1)
-      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-1)
-    + [FP32 & W/O XLA & Use DALI](#fp32---w-o-xla---use-dali)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-2)
-      - [ResNet50 v1.5 batch_size = 128，worker=48](#resnet50-v15-batch-size---128-worker-48)
-    + [物理机环境内](#-------1)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-3)
-      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-2)
+- [概述 Overview](#---overview)
+- [内容目录 Table Of Content](#-----table-of-content)
+- [环境 Environment](#---environment)
+  * [系统](#--)
+    + [硬件](#--)
+    + [软件](#--)
+  * [NGC 容器](#ngc---)
+    + [Feature support matrix](#feature-support-matrix)
+- [快速开始 Quick Start](#-----quick-start)
+  * [1. 前期准备](#1-----)
+    + [数据集](#---)
+    + [镜像及容器](#-----)
+    + [SSH 免密](#ssh---)
+  * [2. 运行测试](#2-----)
+    + [单机测试](#----)
+    + [多机测试](#----)
+  * [3. 数据处理](#3-----)
+- [性能结果 Performance](#-----performance)
+  * [FP32 & W/O XLA & Use `torch.utils.data.DataLoader`](#fp32---w-o-xla---use--torchutilsdatadataloader-)
+  * [容器环境内](#-----)
+    + [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8)
+    + [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48)
+  * [物理机环境内](#------)
+    + [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-1)
+    + [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-1)
+  * [FP32 & W/O XLA & Use DALI](#fp32---w-o-xla---use-dali)
+  * [容器环境内](#------1)
+    + [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-2)
+    + [ResNet50 v1.5 batch_size = 128，worker=48](#resnet50-v15-batch-size---128-worker-48)
+  * [物理机环境内](#-------1)
+    + [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-3)
+    + [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-4)
+
+
 
 ## 环境 Environment
 
@@ -539,7 +542,7 @@ Saving result to ./result/_result.json
 
 ### FP32 & W/O XLA & Use DALI
 
-- ###　容器环境内
+- ### 容器环境内
 
   - #### ResNet50 v1.5 batch_size = 128, worker=8
 
@@ -563,25 +566,25 @@ Saving result to ./result/_result.json
 
 - ### 物理机环境内
 
-- #### ResNet50 v1.5 batch_size = 128, worker=8
+  - #### ResNet50 v1.5 batch_size = 128, worker=8
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 354.44             | 1.00    |
-| 1        | 4                | 128                   | 1367.67            | 3.86    |
-| 1        | 8                | 128                   | 2244.24            | 6.33    |
-| 2        | 8                | 128                   | 4372.33            | 12.34   |
-| 4        | 8                | 128                   | 8816.7             | 24.88   |
+  | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+  | -------- | ---------------- | --------------------- | ------------------ | ------- |
+  | 1        | 1                | 128                   | 354.44             | 1.00    |
+  | 1        | 4                | 128                   | 1367.67            | 3.86    |
+  | 1        | 8                | 128                   | 2244.24            | 6.33    |
+  | 2        | 8                | 128                   | 4372.33            | 12.34   |
+  | 4        | 8                | 128                   | 8816.7             | 24.88   |
 
-- #### ResNet50 v1.5 batch_size = 128, worker=48
+  - #### ResNet50 v1.5 batch_size = 128, worker=8
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 350.66             | 1.00    |
-| 1        | 4                | 128                   | 1306.49            | 3.73    |
-| 1        | 8                | 128                   | 2707.42            | 7.72    |
-| 2        | 8                | 128                   | 5193.09            | 14.81   |
-| 4        | 8                | 128                   | 10032.72           | 28.61   |
+  | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+  | -------- | ---------------- | --------------------- | ------------------ | ------- |
+  | 1        | 1                | 128                   | 350.66             | 1.00    |
+  | 1        | 4                | 128                   | 1306.49            | 3.73    |
+  | 1        | 8                | 128                   | 2707.42            | 7.72    |
+  | 2        | 8                | 128                   | 5193.09            | 14.81   |
+  | 4        | 8                | 128                   | 10032.72           | 28.61   |
 
 
 
@@ -590,5 +593,3 @@ NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 result
 Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_PyTorch.html#benchmarks).
 
 详细 Log 信息可下载：[PyTorch_example_resnet50_v1.5.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PyTorch/pytorch_example_resnet50_v1.5.tar)
-
-
