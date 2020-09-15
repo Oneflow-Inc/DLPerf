@@ -177,48 +177,48 @@ bash run_multi_node.sh 128 fp16
 执行以下命令，即可计算各种测试配置下的吞吐率及加速比：
 
 ```shell
-python extract_paddle_logs.py  --log_dir=logs/paddle/resnet50 --batch_size_per_device=128
+python extract_paddle_logs.py  --log_dir=logs/paddle/resnet50/bz128 --batch_size_per_device=128
 ```
 
 输出：
 
 ```shell
-logs/paddle/resnet50/4n8g/r50_b128_fp32_1.log {1: 9256.12}
-logs/paddle/resnet50/4n8g/r50_b128_fp32_4.log {1: 9256.12, 4: 9353.71}
-logs/paddle/resnet50/4n8g/r50_b128_fp32_2.log {1: 9256.12, 4: 9353.71, 2: 9349.71}
-logs/paddle/resnet50/4n8g/r50_b128_fp32_3.log {1: 9256.12, 4: 9353.71, 2: 9349.71, 3: 9359.18}
-logs/paddle/resnet50/4n8g/r50_b128_fp32_6.log {1: 9256.12, 4: 9353.71, 2: 9349.71, 3: 9359.18, 6: 9306.93}
-logs/paddle/resnet50/4n8g/r50_b128_fp32_5.log {1: 9256.12, 4: 9353.71, 2: 9349.71, 3: 9359.18, 6: 9306.93, 5: 9346.64}
-logs/paddle/resnet50/1n8g/r50_b128_fp32_1.log {1: 2612.02}
-logs/paddle/resnet50/1n8g/r50_b128_fp32_4.log {1: 2612.02, 4: 2636.74}
-logs/paddle/resnet50/1n8g/r50_b128_fp32_2.log {1: 2612.02, 4: 2636.74, 2: 2624.97}
-logs/paddle/resnet50/1n8g/r50_b128_fp32_3.log {1: 2612.02, 4: 2636.74, 2: 2624.97, 3: 2624.23}
-logs/paddle/resnet50/1n8g/r50_b128_fp32_6.log {1: 2612.02, 4: 2636.74, 2: 2624.97, 3: 2624.23, 6: 2634.72}
-logs/paddle/resnet50/1n8g/r50_b128_fp32_5.log {1: 2612.02, 4: 2636.74, 2: 2624.97, 3: 2624.23, 6: 2634.72, 5: 2625.79}
-logs/paddle/resnet50/1n4g/r50_b128_fp32_1.log {1: 1353.06}
-logs/paddle/resnet50/1n4g/r50_b128_fp32_4.log {1: 1353.06, 4: 1354.14}
-logs/paddle/resnet50/1n4g/r50_b128_fp32_2.log {1: 1353.06, 4: 1354.14, 2: 1361.98}
-logs/paddle/resnet50/1n4g/r50_b128_fp32_3.log {1: 1353.06, 4: 1354.14, 2: 1361.98, 3: 1363.45}
-logs/paddle/resnet50/1n4g/r50_b128_fp32_6.log {1: 1353.06, 4: 1354.14, 2: 1361.98, 3: 1363.45, 6: 1357.79}
-logs/paddle/resnet50/1n4g/r50_b128_fp32_5.log {1: 1353.06, 4: 1354.14, 2: 1361.98, 3: 1363.45, 6: 1357.79, 5: 1359.48}
-logs/paddle/resnet50/1n1g/r50_b128_fp32_1.log {1: 354.32}
-logs/paddle/resnet50/1n1g/r50_b128_fp32_4.log {1: 354.32, 4: 352.08}
-logs/paddle/resnet50/1n1g/r50_b128_fp32_2.log {1: 354.32, 4: 352.08, 2: 354.71}
-logs/paddle/resnet50/1n1g/r50_b128_fp32_3.log {1: 354.32, 4: 352.08, 2: 354.71, 3: 353.04}
-logs/paddle/resnet50/1n1g/r50_b128_fp32_6.log {1: 354.32, 4: 352.08, 2: 354.71, 3: 353.04, 6: 352.39}
-logs/paddle/resnet50/1n1g/r50_b128_fp32_5.log {1: 354.32, 4: 352.08, 2: 354.71, 3: 353.04, 6: 352.39, 5: 352.07}
-logs/paddle/resnet50/1n2g/r50_b128_fp32_1.log {1: 661.22}
-logs/paddle/resnet50/1n2g/r50_b128_fp32_4.log {1: 661.22, 4: 637.27}
-logs/paddle/resnet50/1n2g/r50_b128_fp32_2.log {1: 661.22, 4: 637.27, 2: 641.5}
-logs/paddle/resnet50/1n2g/r50_b128_fp32_3.log {1: 661.22, 4: 637.27, 2: 641.5, 3: 648.13}
-logs/paddle/resnet50/1n2g/r50_b128_fp32_6.log {1: 661.22, 4: 637.27, 2: 641.5, 3: 648.13, 6: 621.58}
-logs/paddle/resnet50/1n2g/r50_b128_fp32_5.log {1: 661.22, 4: 637.27, 2: 641.5, 3: 648.13, 6: 621.58, 5: 647.83}
-logs/paddle/resnet50/2n8g/r50_b128_fp32_1.log {1: 4894.51}
-logs/paddle/resnet50/2n8g/r50_b128_fp32_4.log {1: 4894.51, 4: 4892.93}
-logs/paddle/resnet50/2n8g/r50_b128_fp32_2.log {1: 4894.51, 4: 4892.93, 2: 4906.09}
-logs/paddle/resnet50/2n8g/r50_b128_fp32_3.log {1: 4894.51, 4: 4892.93, 2: 4906.09, 3: 4919.23}
-logs/paddle/resnet50/2n8g/r50_b128_fp32_6.log {1: 4894.51, 4: 4892.93, 2: 4906.09, 3: 4919.23, 6: 4896.04}
-logs/paddle/resnet50/2n8g/r50_b128_fp32_5.log {1: 4894.51, 4: 4892.93, 2: 4906.09, 3: 4919.23, 6: 4896.04, 5: 4882.73}
+logs/paddle/resnet50/bz128/4n8g/r50_b128_fp32_1.log {1: 9256.12}
+logs/paddle/resnet50/bz128/4n8g/r50_b128_fp32_4.log {1: 9256.12, 4: 9353.71}
+logs/paddle/resnet50/bz128/4n8g/r50_b128_fp32_2.log {1: 9256.12, 4: 9353.71, 2: 9349.71}
+logs/paddle/resnet50/bz128/4n8g/r50_b128_fp32_3.log {1: 9256.12, 4: 9353.71, 2: 9349.71, 3: 9359.18}
+logs/paddle/resnet50/bz128/4n8g/r50_b128_fp32_6.log {1: 9256.12, 4: 9353.71, 2: 9349.71, 3: 9359.18, 6: 9306.93}
+logs/paddle/resnet50/bz128/4n8g/r50_b128_fp32_5.log {1: 9256.12, 4: 9353.71, 2: 9349.71, 3: 9359.18, 6: 9306.93, 5: 9346.64}
+logs/paddle/resnet50/bz128/1n8g/r50_b128_fp32_1.log {1: 2612.02}
+logs/paddle/resnet50/bz128/1n8g/r50_b128_fp32_4.log {1: 2612.02, 4: 2636.74}
+logs/paddle/resnet50/bz128/1n8g/r50_b128_fp32_2.log {1: 2612.02, 4: 2636.74, 2: 2624.97}
+logs/paddle/resnet50/bz128/1n8g/r50_b128_fp32_3.log {1: 2612.02, 4: 2636.74, 2: 2624.97, 3: 2624.23}
+logs/paddle/resnet50/bz128/1n8g/r50_b128_fp32_6.log {1: 2612.02, 4: 2636.74, 2: 2624.97, 3: 2624.23, 6: 2634.72}
+logs/paddle/resnet50/bz128/1n8g/r50_b128_fp32_5.log {1: 2612.02, 4: 2636.74, 2: 2624.97, 3: 2624.23, 6: 2634.72, 5: 2625.79}
+logs/paddle/resnet50/bz128/1n4g/r50_b128_fp32_1.log {1: 1353.06}
+logs/paddle/resnet50/bz128/1n4g/r50_b128_fp32_4.log {1: 1353.06, 4: 1354.14}
+logs/paddle/resnet50/bz128/1n4g/r50_b128_fp32_2.log {1: 1353.06, 4: 1354.14, 2: 1361.98}
+logs/paddle/resnet50/bz128/1n4g/r50_b128_fp32_3.log {1: 1353.06, 4: 1354.14, 2: 1361.98, 3: 1363.45}
+logs/paddle/resnet50/bz128/1n4g/r50_b128_fp32_6.log {1: 1353.06, 4: 1354.14, 2: 1361.98, 3: 1363.45, 6: 1357.79}
+logs/paddle/resnet50/bz128/1n4g/r50_b128_fp32_5.log {1: 1353.06, 4: 1354.14, 2: 1361.98, 3: 1363.45, 6: 1357.79, 5: 1359.48}
+logs/paddle/resnet50/bz128/1n1g/r50_b128_fp32_1.log {1: 354.32}
+logs/paddle/resnet50/bz128/1n1g/r50_b128_fp32_4.log {1: 354.32, 4: 352.08}
+logs/paddle/resnet50/bz128/1n1g/r50_b128_fp32_2.log {1: 354.32, 4: 352.08, 2: 354.71}
+logs/paddle/resnet50/bz128/1n1g/r50_b128_fp32_3.log {1: 354.32, 4: 352.08, 2: 354.71, 3: 353.04}
+logs/paddle/resnet50/bz128/1n1g/r50_b128_fp32_6.log {1: 354.32, 4: 352.08, 2: 354.71, 3: 353.04, 6: 352.39}
+logs/paddle/resnet50/bz128/1n1g/r50_b128_fp32_5.log {1: 354.32, 4: 352.08, 2: 354.71, 3: 353.04, 6: 352.39, 5: 352.07}
+logs/paddle/resnet50/bz128/1n2g/r50_b128_fp32_1.log {1: 661.22}
+logs/paddle/resnet50/bz128/1n2g/r50_b128_fp32_4.log {1: 661.22, 4: 637.27}
+logs/paddle/resnet50/bz128/1n2g/r50_b128_fp32_2.log {1: 661.22, 4: 637.27, 2: 641.5}
+logs/paddle/resnet50/bz128/1n2g/r50_b128_fp32_3.log {1: 661.22, 4: 637.27, 2: 641.5, 3: 648.13}
+logs/paddle/resnet50/bz128/1n2g/r50_b128_fp32_6.log {1: 661.22, 4: 637.27, 2: 641.5, 3: 648.13, 6: 621.58}
+logs/paddle/resnet50/bz128/1n2g/r50_b128_fp32_5.log {1: 661.22, 4: 637.27, 2: 641.5, 3: 648.13, 6: 621.58, 5: 647.83}
+logs/paddle/resnet50/bz128/2n8g/r50_b128_fp32_1.log {1: 4894.51}
+logs/paddle/resnet50/bz128/2n8g/r50_b128_fp32_4.log {1: 4894.51, 4: 4892.93}
+logs/paddle/resnet50/bz128/2n8g/r50_b128_fp32_2.log {1: 4894.51, 4: 4892.93, 2: 4906.09}
+logs/paddle/resnet50/bz128/2n8g/r50_b128_fp32_3.log {1: 4894.51, 4: 4892.93, 2: 4906.09, 3: 4919.23}
+logs/paddle/resnet50/bz128/2n8g/r50_b128_fp32_6.log {1: 4894.51, 4: 4892.93, 2: 4906.09, 3: 4919.23, 6: 4896.04}
+logs/paddle/resnet50/bz128/2n8g/r50_b128_fp32_5.log {1: 4894.51, 4: 4892.93, 2: 4906.09, 3: 4919.23, 6: 4896.04, 5: 4882.73}
 {'r50': {'1n1g': {'average_speed': 353.1,
                   'batch_size_per_device': 128,
                   'median_speed': 352.72,
@@ -243,7 +243,7 @@ logs/paddle/resnet50/2n8g/r50_b128_fp32_5.log {1: 4894.51, 4: 4892.93, 2: 4906.0
                   'batch_size_per_device': 128,
                   'median_speed': 9348.17,
                   'speedup': 26.5}}}
-Saving result to ./result/resnet50_result.json
+Saving result to ./result/bz128_result.json
 ```
 
 ## 计算规则
@@ -267,7 +267,7 @@ README展示的是extract_paddle_logs.py的计算结果。
 
 - median_speed中值速度
 
-  每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+  每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
 
 ### 3.加速比以中值速度计算
 
@@ -299,7 +299,43 @@ README展示的是extract_paddle_logs.py的计算结果。
 | 2        | 16      | 6065.4    | 10.16   |
 | 4        | 32      | 11431.66  | 19.16   |
 
-附：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+
+
+## ResNet50 V1.5 bsz = 256
+
+### FP16 & Without XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 570.23    | 1       |
+| 1        | 2       | 716.32    | 1.26    |
+| 1        | 4       | 2055.89   | 3.61    |
+| 1        | 8       | 3304.96   | 5.8     |
+| 2        | 16      | 6030.58   | 10.58   |
+| 4        | 32      | 9260.06   | 16.24   |
+
+
+
+## ResNet50 V1.5 bsz = 288
+
+### FP16 & Without XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 571.75    | 1       |
+| 1        | 2       | 714.61    | 1.25    |
+| 1        | 4       | 2036.61   | 3.56    |
+| 1        | 8       | 3288.42   | 5.75    |
+| 2        | 16      | 6020.51   | 10.53   |
+| 4        | 32      | 9665.62   | 16.91   |
+
+
+
+- 注：以上测试未加dali,后期考虑补充
+
+- 附：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+
+
 
 ## 完整日志
 
