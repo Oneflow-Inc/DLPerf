@@ -15,16 +15,6 @@ done
 
 
 i=1
-while [ $i -le $TEST_NUM ]
-do
-  bash $SHELL_FOLDER/single_node_train.sh  0,1 ${BATCH_SIZE}  $i    $DTYPE
-  echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-  let i++
-  sleep 20
-done
-
-
-i=1
 while [ $i -le  $TEST_NUM ]
 do
   bash $SHELL_FOLDER/single_node_train.sh  0,1,2,3 ${BATCH_SIZE}  $i    $DTYPE

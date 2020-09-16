@@ -5,7 +5,7 @@ SHELL_FOLDER=$(dirname $(readlink -f "$0"))
 NODE1='10.11.0.2:11111'     
 NODE2='10.11.0.3:11111'
 NODE3='10.11.0.4:11111'
-NODE4='10.11.0.5:11111'    
+NODE4='10.11.0.5:11111 '    
 nodes=$NODE1,$NODE2,$NODE3,$NODE4
 
 i=1

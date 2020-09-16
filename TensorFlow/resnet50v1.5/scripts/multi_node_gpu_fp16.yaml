@@ -18,7 +18,7 @@ train_dataset:
   image_size: 224
   num_classes: 1000
   num_examples: 640512
-  batch_size: 128
+  batch_size: 256
   use_per_replica_batch_size: True
   dtype: 'float16'
   mean_subtract: True

@@ -36,7 +36,7 @@ python3 classifier_trainer.py \
   --dataset=imagenet \
   --model_dir=$MODEL_DIR \
   --data_dir=$DATA_DIR \
-  --config_file=configs/examples/resnet/imagenet/multi_node_gpu.yaml \
+  --config_file=$config_file  \
   --params_override='runtime.num_gpus='$num_gpu   2>&1 | tee ${LOGFILE}
 
 echo "Writting log to ${LOGFILE}"
