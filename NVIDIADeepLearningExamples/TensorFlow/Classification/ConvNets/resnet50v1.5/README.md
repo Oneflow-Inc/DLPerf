@@ -358,7 +358,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 1        | 4       | 3505.67   | 3.66    |
 | 1        | 8       | 6826.68   | 7.12    |
 | 2        | 16      | 11045.94  | 11.53   |
-| 4        | 32      | TODO      | TODO    |
+| 4        | 32      | 23008.59  | 24.01   |
 
 ## ResNet50 V1.5 bsz = 256
 
@@ -370,9 +370,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 1        | 4       | 3583.6    | 3.65    |
 | 1        | 8       | OOM       | OOM     |
 | 2        | 16      | 11592.8   | 11.8    |
-| 4        | 32      | TODO      | TODO    |
+| 4        | 32      | 23804.8   | 24.23   |
 
 ## 完整日志
 
-[logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/logs.zip)
-
+-  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
+-  [resnet50_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp32.zip) 
