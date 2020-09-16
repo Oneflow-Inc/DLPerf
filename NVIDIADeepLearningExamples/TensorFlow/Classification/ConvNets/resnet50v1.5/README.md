@@ -4,7 +4,7 @@
 
 本仓库复现了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中Tensorflow版[ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)，目的在于速度测评，得到1机、2机、4机情况下的吞吐率及加速比，评判框架在分布式训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，测试覆盖了 FP32精度和FP16混合精度，后续将持续维护增加XLA 等其他方式的测评。
 
 
 
@@ -36,7 +36,7 @@
 | ------------------------------------------------------------ | ------------------------- |
 | [Horovod Multi-gpu](https://github.com/horovod/horovod)      | Yes                       |
 | [Horovod Multi-node](https://github.com/horovod/horovod)     | Yes                       |
-| Automatic mixed precision (AMP)                              | No                        |
+| Automatic mixed precision (AMP)                              | Yes                       |
 | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                       |
 
 # Quick Start
@@ -53,10 +53,10 @@ git clone https://github.com/NVIDIA/DeepLearningExamples
 cd DeepLearningExamples && git checkout fed7ba99cde958fda12c9e81d12b3d7e738e0590
 ```
 
-1.将本页面scripts路径下脚本：`single_node_train.sh`、`multi_node_train.sh`放入
- `/DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training`下；
+将本页面scripts文件夹下的脚本放入：
+ `/DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training`目录下。
 
-2.将scripts中的脚本：`SINGLE_NODE_RN50_FP32_1E.sh`、`TWO_NODE_RN50_FP32_1E.sh`和`MULTI_NODE_RN50_FP32_1E.sh`放入`resnet50v1.5/training/FP32`路径下
+
 
 
 ## NGC容器
@@ -188,22 +188,44 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 ```shell
 docker exec -it tf_resnet /bin/bash
 cd /workspace/rn50v15
-bash ./resnet50v1.5/training/FP32/SINGLE_NODE_RN50_FP32_1E.sh
+bash resnet50v1.5/training/run_single_node.sh
 ```
 
-执行脚本，即可运行单机1卡、4卡、8卡的训练，分别测试6次。
+执行脚本，即可运行单机1卡、4卡、8卡的训练，分别测试5次。默认测试FP32、batch size=128的情况。
+
+### 混合精度
+
+可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=256的FP16混合精度训练：
+
+`bash resnet50v1.5/training/run_single_node.sh 256 fp16`
+
+
 
 ## 2机16卡
 
-容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/FP32/TWO_NODE_RN50_FP32_1E.sh`
+容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/run_two_node.sh`
 
-即可运行2机16卡的训练，同样默认测试6次。
+即可运行2机16卡的训练，同样默认测试5次。
+
+### 混合精度
+
+可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=256的2机FP16混合精度训练：
+
+`bash resnet50v1.5/training/run_two_node.sh 256 fp16`
+
+
 
 ## 4机32卡
 
-容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/FP32/MULTI_NODE_RN50_FP32_1E.sh`
+容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/run_multi_node.sh`
 
-即可运行4机32卡的训练，默认测试6次。
+即可运行4机32卡的训练，默认测试5次。
+
+### 混合精度
+
+可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=256的4机FP16混合精度训练：
+
+`bash resnet50v1.5/training/run_multi_node.sh 256 fp16`
 
 
 # Result
@@ -316,8 +338,6 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 5099.42   | 14.07   |
 | 4        | 32      | 9514.64   | 26.25   |
 
-
-
 附：[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/709456cdd7a0f2ae03fe42846ec6a24dceee536e/TensorFlow/Classification/RN50v1.5#nvidia-dgx-1-8x-v100-16g-1)
 
 | node_num | gpu_num | samples/s | speedup |
@@ -325,6 +345,30 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 1        | 1       | 364.9     | 1.00    |
 | 1        | 4       | 1419.4    | 3.88    |
 | 1        | 8       | 2778.5    | 7.61    |
+
+
+
+## ResNet50 V1.5 bsz = 224
+
+### FP16 & Without XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 958.25    | 1       |
+| 1        | 4       | 3505.67   | 3.66    |
+| 1        | 8       | 6826.68   | 7.12    |
+| 2        | 16      | TODO      | TODO    |
+| 4        | 32      | TODO      | TODO    |
+
+## ResNet50 V1.5 bsz = 256
+
+### FP16 & Without XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 982.4     | 1       |
+| 1        | 4       | 3583.6    | 3.65    |
+| 1        | 8       | OOM       | OOM     |
 
 ## 完整日志
 
