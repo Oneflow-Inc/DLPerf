@@ -4,7 +4,7 @@
 
 本测试基于 [NVIDIA/DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples) 仓库中提供的 MXNet框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) 实现，在 NVIDIA 官方提供的 [MXNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行单机单卡、单机多卡的结果复现及速度评测，并使用Horovod进行多机（2机、4机）的训练，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试已覆盖 FP32 精度、FP6混合精度，后续将持续维护，增加XLA 等多种方式的测评。
 
 
 
@@ -55,7 +55,7 @@
   | Horovod/MPI Multi-GPU                                        | Yes                 |
   | Horovod/MPI Multi-Node                                       | Yes                 |
   | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                 |
-  | Automatic mixed precision (AMP)                              | No                  |
+  | Automatic mixed precision (AMP)                              | Yes                 |
 
 
 
@@ -151,10 +151,21 @@ bash run_test.sh
 
 针对1机1卡、1机8卡、2机16卡、4机32卡， batch_size_per_device = **128**，进行测试。
 
-也可以指定其他batch size，如64：
+默认测试FP32、batch size=128，也可以指定其他batch size，如64：
 ```shell
 bash run_test.sh 64
 ```
+
+#### 混合精度
+
+修改run_test.sh中的DTYPE参数为"fp16"即可，或者运行脚本时指定参数，如：
+
+```shell
+bash run_test.sh 256 fp16
+```
+
+即可对batch size=256，FP16混合精度的条件进行测试。
+
 
 
 ### 4. 数据处理
@@ -164,78 +175,78 @@ bash run_test.sh 64
 运行，即可得到针对不同配置测试 log 数据处理的结果： 
 
 ```shell
-python extract_mxnet_logs_time.py --log_dir=logs/ngc/mxnet/resnet50/bz128 --batch_size_per_device=128
+python extract_mxnet_logs.py --log_dir=logs/ngc/mxnet/resnet50/bz128 --batch_size_per_device=128
 ```
 
 结果打印如下：
 
 ```shell
-logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_1.log {1: 11335.58}
-logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_4.log {1: 11335.58, 4: 11219.77}
-logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_7.log {1: 11335.58, 4: 11219.77, 7: 11366.1}
-logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_2.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92}
-logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_3.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92, 3: 11373.04}
-logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_6.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92, 3: 11373.04, 6: 11197.99}
-logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_5.log {1: 11335.58, 4: 11219.77, 7: 11366.1, 2: 11233.92, 3: 11373.04, 6: 11197.99, 5: 11190.03}
-logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_1.log {1: 3002.58}
-logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_4.log {1: 3002.58, 4: 3003.46}
-logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_7.log {1: 3002.58, 4: 3003.46, 7: 2995.12}
-logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_2.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69}
-logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_3.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69, 3: 2989.87}
-logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_6.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69, 3: 2989.87, 6: 2999.5}
-logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_5.log {1: 3002.58, 4: 3003.46, 7: 2995.12, 2: 2996.69, 3: 2989.87, 6: 2999.5, 5: 3003.28}
-logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_1.log {1: 1518.7}
-logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_4.log {1: 1518.7, 4: 1516.14}
-logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_7.log {1: 1518.7, 4: 1516.14, 7: 1516.27}
-logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_2.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39}
-logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_3.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39, 3: 1519.6}
-logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_6.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39, 3: 1519.6, 6: 1515.91}
-logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_5.log {1: 1518.7, 4: 1516.14, 7: 1516.27, 2: 1518.39, 3: 1519.6, 6: 1515.91, 5: 1514.34}
-logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_1.log {1: 391.88}
-logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_4.log {1: 391.88, 4: 392.77}
-logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_7.log {1: 391.88, 4: 392.77, 7: 391.13}
-logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_2.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66}
-logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_3.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66, 3: 391.98}
-logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_6.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66, 3: 391.98, 6: 392.43}
-logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_5.log {1: 391.88, 4: 392.77, 7: 391.13, 2: 389.66, 3: 391.98, 6: 392.43, 5: 390.74}
-logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_1.log {1: 766.63}
-logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_4.log {1: 766.63, 4: 763.56}
-logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_7.log {1: 766.63, 4: 763.56, 7: 761.13}
-logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_2.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0}
-logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_3.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0, 3: 762.72}
-logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_6.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0, 3: 762.72, 6: 766.56}
-logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_5.log {1: 766.63, 4: 763.56, 7: 761.13, 2: 765.0, 3: 762.72, 6: 766.56, 5: 760.8}
-logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_1.log {1: 5716.36}
-logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_4.log {1: 5716.36, 4: 5704.89}
-logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_7.log {1: 5716.36, 4: 5704.89, 7: 5766.9}
-logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_2.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54}
-logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_3.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54, 3: 5661.06}
-logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_6.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54, 3: 5661.06, 6: 5712.53}
-logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_5.log {1: 5716.36, 4: 5704.89, 7: 5766.9, 2: 5628.54, 3: 5661.06, 6: 5712.53, 5: 5726.91}
-{'r50': {'1n1g': {'average_speed': 391.51,
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_1.log {1: 11434.12}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_4.log {1: 11434.12, 4: 11305.35}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_7.log {1: 11434.12, 4: 11305.35, 7: 11461.68}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_2.log {1: 11434.12, 4: 11305.35, 7: 11461.68, 2: 11331.93}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_3.log {1: 11434.12, 4: 11305.35, 7: 11461.68, 2: 11331.93, 3: 11429.36}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_6.log {1: 11434.12, 4: 11305.35, 7: 11461.68, 2: 11331.93, 3: 11429.36, 6: 11313.33}
+logs/ngc/mxnet/resnet50/bz128/4n8g/r50_b128_fp32_5.log {1: 11434.12, 4: 11305.35, 7: 11461.68, 2: 11331.93, 3: 11429.36, 6: 11313.33, 5: 11283.49}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_1.log {1: 3008.52}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_4.log {1: 3008.52, 4: 3009.46}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_7.log {1: 3008.52, 4: 3009.46, 7: 2999.97}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_2.log {1: 3008.52, 4: 3009.46, 7: 2999.97, 2: 3001.01}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_3.log {1: 3008.52, 4: 3009.46, 7: 2999.97, 2: 3001.01, 3: 2993.87}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_6.log {1: 3008.52, 4: 3009.46, 7: 2999.97, 2: 3001.01, 3: 2993.87, 6: 3008.01}
+logs/ngc/mxnet/resnet50/bz128/1n8g/r50_b128_fp32_5.log {1: 3008.52, 4: 3009.46, 7: 2999.97, 2: 3001.01, 3: 2993.87, 6: 3008.01, 5: 3006.98}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_1.log {1: 1520.55}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_4.log {1: 1520.55, 4: 1518.04}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_7.log {1: 1520.55, 4: 1518.04, 7: 1517.28}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_2.log {1: 1520.55, 4: 1518.04, 7: 1517.28, 2: 1521.26}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_3.log {1: 1520.55, 4: 1518.04, 7: 1517.28, 2: 1521.26, 3: 1522.3}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_6.log {1: 1520.55, 4: 1518.04, 7: 1517.28, 2: 1521.26, 3: 1522.3, 6: 1517.98}
+logs/ngc/mxnet/resnet50/bz128/1n4g/r50_b128_fp32_5.log {1: 1520.55, 4: 1518.04, 7: 1517.28, 2: 1521.26, 3: 1522.3, 6: 1517.98, 5: 1516.09}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_1.log {1: 392.24}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_4.log {1: 392.24, 4: 393.53}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_7.log {1: 392.24, 4: 393.53, 7: 391.77}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_2.log {1: 392.24, 4: 393.53, 7: 391.77, 2: 390.09}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_3.log {1: 392.24, 4: 393.53, 7: 391.77, 2: 390.09, 3: 392.63}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_6.log {1: 392.24, 4: 393.53, 7: 391.77, 2: 390.09, 3: 392.63, 6: 392.85}
+logs/ngc/mxnet/resnet50/bz128/1n1g/r50_b128_fp32_5.log {1: 392.24, 4: 393.53, 7: 391.77, 2: 390.09, 3: 392.63, 6: 392.85, 5: 391.58}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_1.log {1: 767.39}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_4.log {1: 767.39, 4: 764.6}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_7.log {1: 767.39, 4: 764.6, 7: 761.98}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_2.log {1: 767.39, 4: 764.6, 7: 761.98, 2: 765.98}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_3.log {1: 767.39, 4: 764.6, 7: 761.98, 2: 765.98, 3: 763.76}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_6.log {1: 767.39, 4: 764.6, 7: 761.98, 2: 765.98, 3: 763.76, 6: 767.85}
+logs/ngc/mxnet/resnet50/bz128/1n2g/r50_b128_fp32_5.log {1: 767.39, 4: 764.6, 7: 761.98, 2: 765.98, 3: 763.76, 6: 767.85, 5: 761.6}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_1.log {1: 5758.49}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_4.log {1: 5758.49, 4: 5755.92}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_7.log {1: 5758.49, 4: 5755.92, 7: 5803.52}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_2.log {1: 5758.49, 4: 5755.92, 7: 5803.52, 2: 5685.5}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_3.log {1: 5758.49, 4: 5755.92, 7: 5803.52, 2: 5685.5, 3: 5717.04}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_6.log {1: 5758.49, 4: 5755.92, 7: 5803.52, 2: 5685.5, 3: 5717.04, 6: 5765.72}
+logs/ngc/mxnet/resnet50/bz128/2n8g/r50_b128_fp32_5.log {1: 5758.49, 4: 5755.92, 7: 5803.52, 2: 5685.5, 3: 5717.04, 6: 5765.72, 5: 5767.21}
+{'r50': {'1n1g': {'average_speed': 392.1,
                   'batch_size_per_device': 128,
-                  'median_speed': 391.88,
+                  'median_speed': 392.24,
                   'speedup': 1.0},
-         '1n2g': {'average_speed': 763.77,
+         '1n2g': {'average_speed': 764.74,
                   'batch_size_per_device': 128,
-                  'median_speed': 763.56,
+                  'median_speed': 764.6,
                   'speedup': 1.95},
-         '1n4g': {'average_speed': 1517.05,
+         '1n4g': {'average_speed': 1519.07,
                   'batch_size_per_device': 128,
-                  'median_speed': 1516.27,
+                  'median_speed': 1518.04,
                   'speedup': 3.87},
-         '1n8g': {'average_speed': 2998.64,
+         '1n8g': {'average_speed': 3003.97,
                   'batch_size_per_device': 128,
-                  'median_speed': 2999.5,
-                  'speedup': 7.65},
-         '2n8g': {'average_speed': 5702.46,
+                  'median_speed': 3006.98,
+                  'speedup': 7.67},
+         '2n8g': {'average_speed': 5750.49,
                   'batch_size_per_device': 128,
-                  'median_speed': 5712.53,
-                  'speedup': 14.58},
-         '4n8g': {'average_speed': 11273.78,
+                  'median_speed': 5758.49,
+                  'speedup': 14.68},
+         '4n8g': {'average_speed': 11365.61,
                   'batch_size_per_device': 128,
-                  'median_speed': 11233.92,
-                  'speedup': 28.67}}}
+                  'median_speed': 11331.93,
+                  'speedup': 28.89}}}
 Saving result to ./result/bz128_result.json
 ```
 
@@ -282,14 +293,29 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 391.88    | 1.00    |
-| 1        | 2       | 763.56    | 1.95    |
-| 1        | 4       | 1516.27   | 3.87    |
-| 1        | 8       | 2999.5    | 7.65    |
-| 2        | 16      | 5712.53   | 14.58   |
-| 4        | 32      | 11233.92  | 28.67   |
+| 1        | 1       | 392.24    | 1.00    |
+| 1        | 2       | 764.6     | 1.95    |
+| 1        | 4       | 1518.04   | 3.87    |
+| 1        | 8       | 3006.98   | 7.67    |
+| 2        | 16      | 5758.49   | 14.68   |
+| 4        | 32      | 11331.93  | 28.89   |
+
+## FP16 & W/O XLA
+
+- ### ResNet50 v1.5 batch_size = 256
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1337.1    | 1       |
+| 1        | 4       | 4815.16   | 3.60    |
+| 1        | 8       | 8816.38   | 6.59    |
+| 2        | 16      | 15246.71  | 11.4    |
+| 4        | 32      | 28381.23  | 21.23   |
 
 NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
-详细 Log 信息可下载：[ngc_mxnet_resnet50_v1.5_logs_20200910.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/logs.zip)
+详细 Log 信息可下载：
 
+- [resnet50_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/resnet50_fp32.zip) 
+
+- [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/MxNet/cnn/resnet50_fp16.zip) 

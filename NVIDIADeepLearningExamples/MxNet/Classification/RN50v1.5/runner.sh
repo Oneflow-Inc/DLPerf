@@ -4,7 +4,7 @@ BZ_PER_DEVICE=${2:-32}
 ITER_NUM=${3:-120}
 GPUS=${4:-0}
 NODE_NUM=${5:-1}
-PRECISION=${6:-"float32"}
+DTYPE=${6:-"fp32"}
 TEST_NUM=${7:-1}
 
 a=`expr ${#GPUS} + 1`
@@ -12,9 +12,16 @@ gpu_num_per_node=`expr ${a} / 2`
 gpu_num=`expr ${gpu_num_per_node} \* ${NODE_NUM}`
 total_bz=`expr ${BZ_PER_DEVICE} \* ${gpu_num}`
 
-log_folder=logs/ngc/mxnet/resnet50/${NODE_NUM}n${gpu_num_per_node}g
+if  [ "$DTYPE" == "fp16" ] ; then
+  PRECISION="float16"
+else
+  PRECISION="float32"
+fi
+
+
+log_folder=logs/ngc/mxnet/resnet50/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
-log_file=$log_folder/r50_b${BZ_PER_DEVICE}_fp32_$TEST_NUM.log
+log_file=$log_folder/r50_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 
 
 if [ ${NODE_NUM} -eq 1 ] ; then
@@ -31,9 +38,9 @@ echo ${node_ip}
 
 CMD=""
 case $PRECISION in
-    "float32") CMD+="--dtype float32 --input-layout NHWC ";;
-    "float16") CMD+="--dtype float32 --fuse-bn-relu 1 --fuse-bn-add-relu 1 \\
-                  --input-layout NCHW --conv-layout NHWC --batchnorm-layout NHWC \\
+    "float32") CMD+="--dtype float32 --input-layout NHWC --fuse-bn-relu 0 --fuse-bn-add-relu 0 ";;
+    "float16") CMD+="--dtype float16 --fuse-bn-relu 1 --fuse-bn-add-relu 1 \
+                  --input-layout NCHW --conv-layout NHWC --batchnorm-layout NHWC \
                   --pooling-layout NHWC ";;
 esac
 
@@ -52,8 +59,6 @@ CMD+="--arch resnetv15 \
 --mom 0.875 \
 --wd 3.0517578125e-05 \
 --label-smoothing 0.1 \
---fuse-bn-add-relu 0 \
---fuse-bn-relu 0 \
 --kv-store horovod \
 --data-backend dali-gpu \
 --benchmark-iters ${ITER_NUM} \
