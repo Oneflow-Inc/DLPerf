@@ -4,7 +4,7 @@
 
 本测试基于 [NVIDIA/DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples) 仓库中提供的 MXNet框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) 实现，在 NVIDIA 官方提供的 [MXNet 20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags)中进行单机单卡、单机多卡的结果复现及速度评测，并使用Horovod进行多机（2机、4机）的训练，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试已覆盖 FP32 精度、FP6混合精度，后续将持续维护，增加XLA 等多种方式的测评。
+目前，该测试已覆盖 FP32 精度、FP16混合精度，后续将持续维护，增加XLA 等多种方式的测评。
 
 
 
@@ -312,7 +312,7 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 | 2        | 16      | 15246.71  | 11.4    |
 | 4        | 32      | 28381.23  | 21.23   |
 
-NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
+NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
 详细 Log 信息可下载：
 
