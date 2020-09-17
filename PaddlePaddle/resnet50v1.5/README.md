@@ -4,7 +4,7 @@
 
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的paddle版[ResNet50 v1.5](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试覆盖了FP32精度和FP16混合精度，后续将持续维护，增加XLA 等多种方式的测评。
 
 
 
@@ -328,8 +328,6 @@ README展示的是extract_paddle_logs.py的计算结果。
 | 1        | 8       | 3288.42   | 5.75    |
 | 2        | 16      | 6020.51   | 10.53   |
 | 4        | 32      | 9665.62   | 16.91   |
-
-
 
 - 注：以上测试未加dali,后期考虑补充
 
