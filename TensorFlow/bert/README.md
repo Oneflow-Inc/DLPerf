@@ -3,7 +3,7 @@
 # Overview
 本次复现采用了[Tensorflow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的tf2.x版[BERT](https://github.com/tensorflow/models/tree/r2.3.0/official/nlp/bert)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试仅覆盖单机情况下的FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
 
 
@@ -187,7 +187,7 @@ Saving result to ./result/bz64_result.json
 
 - extract_tensorflow_logs_time.py
 
-extract_paddle_logs_time.py根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
+extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
 
 ### 2.均值速度和中值速度
 
