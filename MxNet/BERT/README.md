@@ -190,71 +190,71 @@ python extract_mxnet_logs.py --log_dir=./logs/mxnet/bert/bz32 --batch_size_per_d
 结果打印如下
 
 ```shell
-./logs/mxnet/bert/bz32/4n8g/bert_base_b32_fp32_3.log {3: 3666.21}
-./logs/mxnet/bert/bz32/4n8g/bert_base_b32_fp32_4.log {3: 3666.21, 4: 3698.92}
-./logs/mxnet/bert/bz32/4n8g/bert_base_b32_fp32_6.log {3: 3666.21, 4: 3698.92, 6: 3658.23}
-./logs/mxnet/bert/bz32/4n8g/bert_base_b32_fp32_1.log {3: 3666.21, 4: 3698.92, 6: 3658.23, 1: 3693.44}
-./logs/mxnet/bert/bz32/4n8g/bert_base_b32_fp32_5.log {3: 3666.21, 4: 3698.92, 6: 3658.23, 1: 3693.44, 5: 3671.45}
-./logs/mxnet/bert/bz32/4n8g/bert_base_b32_fp32_7.log {3: 3666.21, 4: 3698.92, 6: 3658.23, 1: 3693.44, 5: 3671.45, 7: 3673.42}
-./logs/mxnet/bert/bz32/4n8g/bert_base_b32_fp32_2.log {3: 3666.21, 4: 3698.92, 6: 3658.23, 1: 3693.44, 5: 3671.45, 7: 3673.42, 2: 3668.26}
-./logs/mxnet/bert/bz32/1n8g/bert_base_b32_fp32_3.log {3: 1036.56}
-./logs/mxnet/bert/bz32/1n8g/bert_base_b32_fp32_4.log {3: 1036.56, 4: 1047.02}
-./logs/mxnet/bert/bz32/1n8g/bert_base_b32_fp32_6.log {3: 1036.56, 4: 1047.02, 6: 1075.79}
-./logs/mxnet/bert/bz32/1n8g/bert_base_b32_fp32_1.log {3: 1036.56, 4: 1047.02, 6: 1075.79, 1: 1061.91}
-./logs/mxnet/bert/bz32/1n8g/bert_base_b32_fp32_5.log {3: 1036.56, 4: 1047.02, 6: 1075.79, 1: 1061.91, 5: 1058.6}
-./logs/mxnet/bert/bz32/1n8g/bert_base_b32_fp32_7.log {3: 1036.56, 4: 1047.02, 6: 1075.79, 1: 1061.91, 5: 1058.6, 7: 1050.76}
-./logs/mxnet/bert/bz32/1n8g/bert_base_b32_fp32_2.log {3: 1036.56, 4: 1047.02, 6: 1075.79, 1: 1061.91, 5: 1058.6, 7: 1050.76, 2: 1075.74}
-./logs/mxnet/bert/bz32/1n4g/bert_base_b32_fp32_3.log {3: 549.03}
-./logs/mxnet/bert/bz32/1n4g/bert_base_b32_fp32_4.log {3: 549.03, 4: 538.91}
-./logs/mxnet/bert/bz32/1n4g/bert_base_b32_fp32_6.log {3: 549.03, 4: 538.91, 6: 536.96}
-./logs/mxnet/bert/bz32/1n4g/bert_base_b32_fp32_1.log {3: 549.03, 4: 538.91, 6: 536.96, 1: 537.05}
-./logs/mxnet/bert/bz32/1n4g/bert_base_b32_fp32_5.log {3: 549.03, 4: 538.91, 6: 536.96, 1: 537.05, 5: 533.45}
-./logs/mxnet/bert/bz32/1n4g/bert_base_b32_fp32_7.log {3: 549.03, 4: 538.91, 6: 536.96, 1: 537.05, 5: 533.45, 7: 549.75}
-./logs/mxnet/bert/bz32/1n4g/bert_base_b32_fp32_2.log {3: 549.03, 4: 538.91, 6: 536.96, 1: 537.05, 5: 533.45, 7: 549.75, 2: 538.5}
-./logs/mxnet/bert/bz32/1n1g/bert_base_b32_fp32_3.log {3: 149.53}
-./logs/mxnet/bert/bz32/1n1g/bert_base_b32_fp32_4.log {3: 149.53, 4: 149.88}
-./logs/mxnet/bert/bz32/1n1g/bert_base_b32_fp32_6.log {3: 149.53, 4: 149.88, 6: 150.04}
-./logs/mxnet/bert/bz32/1n1g/bert_base_b32_fp32_1.log {3: 149.53, 4: 149.88, 6: 150.04, 1: 150.11}
-./logs/mxnet/bert/bz32/1n1g/bert_base_b32_fp32_5.log {3: 149.53, 4: 149.88, 6: 150.04, 1: 150.11, 5: 150.12}
-./logs/mxnet/bert/bz32/1n1g/bert_base_b32_fp32_7.log {3: 149.53, 4: 149.88, 6: 150.04, 1: 150.11, 5: 150.12, 7: 150.9}
-./logs/mxnet/bert/bz32/1n1g/bert_base_b32_fp32_2.log {3: 149.53, 4: 149.88, 6: 150.04, 1: 150.11, 5: 150.12, 7: 150.9, 2: 150.14}
-./logs/mxnet/bert/bz32/1n2g/bert_base_b32_fp32_3.log {3: 273.02}
-./logs/mxnet/bert/bz32/1n2g/bert_base_b32_fp32_4.log {3: 273.02, 4: 270.28}
-./logs/mxnet/bert/bz32/1n2g/bert_base_b32_fp32_6.log {3: 273.02, 4: 270.28, 6: 272.09}
-./logs/mxnet/bert/bz32/1n2g/bert_base_b32_fp32_1.log {3: 273.02, 4: 270.28, 6: 272.09, 1: 267.29}
-./logs/mxnet/bert/bz32/1n2g/bert_base_b32_fp32_5.log {3: 273.02, 4: 270.28, 6: 272.09, 1: 267.29, 5: 269.99}
-./logs/mxnet/bert/bz32/1n2g/bert_base_b32_fp32_7.log {3: 273.02, 4: 270.28, 6: 272.09, 1: 267.29, 5: 269.99, 7: 268.86}
-./logs/mxnet/bert/bz32/1n2g/bert_base_b32_fp32_2.log {3: 273.02, 4: 270.28, 6: 272.09, 1: 267.29, 5: 269.99, 7: 268.86, 2: 271.05}
-./logs/mxnet/bert/bz32/2n8g/bert_base_b32_fp32_3.log {3: 1854.88}
-./logs/mxnet/bert/bz32/2n8g/bert_base_b32_fp32_4.log {3: 1854.88, 4: 1844.1}
-./logs/mxnet/bert/bz32/2n8g/bert_base_b32_fp32_6.log {3: 1854.88, 4: 1844.1, 6: 1835.11}
-./logs/mxnet/bert/bz32/2n8g/bert_base_b32_fp32_5.log {3: 1854.88, 4: 1844.1, 6: 1835.11, 5: 1847.2}
-./logs/mxnet/bert/bz32/2n8g/bert_base_b32_fp32_7.log {3: 1854.88, 4: 1844.1, 6: 1835.11, 5: 1847.2, 7: 1841.41}
-./logs/mxnet/bert/bz32/2n8g/bert_base_b32_fp32_2.log {3: 1854.88, 4: 1844.1, 6: 1835.11, 5: 1847.2, 7: 1841.41, 2: 1848.74}
-{'bert-base': {'1n1g': {'average_speed': 150.1,
-                        'batch_size_per_device': 32,
-                        'median_speed': 150.11,
-                        'speedup': 1.0},
-               '1n2g': {'average_speed': 270.37,
-                        'batch_size_per_device': 32,
-                        'median_speed': 270.28,
-                        'speedup': 1.8},
-               '1n4g': {'average_speed': 540.52,
-                        'batch_size_per_device': 32,
-                        'median_speed': 538.5,
-                        'speedup': 3.59},
-               '1n8g': {'average_speed': 1058.05,
-                        'batch_size_per_device': 32,
-                        'median_speed': 1058.6,
-                        'speedup': 7.05},
-               '2n8g': {'average_speed': 1845.24,
-                        'batch_size_per_device': 32,
-                        'median_speed': 1845.65,
-                        'speedup': 12.3},
-               '4n8g': {'average_speed': 3675.7,
-                        'batch_size_per_device': 32,
-                        'median_speed': 3671.45,
-                        'speedup': 24.46}}}
+./logs/mxnet/bert/bz32/4n8g/bert_b32_fp32_4.log {4: 3698.92}
+./logs/mxnet/bert/bz32/4n8g/bert_b32_fp32_7.log {4: 3698.92, 7: 3673.42}
+./logs/mxnet/bert/bz32/4n8g/bert_b32_fp32_6.log {4: 3698.92, 7: 3673.42, 6: 3658.23}
+./logs/mxnet/bert/bz32/4n8g/bert_b32_fp32_3.log {4: 3698.92, 7: 3673.42, 6: 3658.23, 3: 3666.21}
+./logs/mxnet/bert/bz32/4n8g/bert_b32_fp32_5.log {4: 3698.92, 7: 3673.42, 6: 3658.23, 3: 3666.21, 5: 3671.45}
+./logs/mxnet/bert/bz32/4n8g/bert_b32_fp32_2.log {4: 3698.92, 7: 3673.42, 6: 3658.23, 3: 3666.21, 5: 3671.45, 2: 3668.26}
+./logs/mxnet/bert/bz32/4n8g/bert_b32_fp32_1.log {4: 3698.92, 7: 3673.42, 6: 3658.23, 3: 3666.21, 5: 3671.45, 2: 3668.26, 1: 3693.44}
+./logs/mxnet/bert/bz32/1n8g/bert_b32_fp32_4.log {4: 1047.02}
+./logs/mxnet/bert/bz32/1n8g/bert_b32_fp32_7.log {4: 1047.02, 7: 1050.76}
+./logs/mxnet/bert/bz32/1n8g/bert_b32_fp32_6.log {4: 1047.02, 7: 1050.76, 6: 1075.79}
+./logs/mxnet/bert/bz32/1n8g/bert_b32_fp32_3.log {4: 1047.02, 7: 1050.76, 6: 1075.79, 3: 1036.56}
+./logs/mxnet/bert/bz32/1n8g/bert_b32_fp32_5.log {4: 1047.02, 7: 1050.76, 6: 1075.79, 3: 1036.56, 5: 1058.6}
+./logs/mxnet/bert/bz32/1n8g/bert_b32_fp32_2.log {4: 1047.02, 7: 1050.76, 6: 1075.79, 3: 1036.56, 5: 1058.6, 2: 1075.74}
+./logs/mxnet/bert/bz32/1n8g/bert_b32_fp32_1.log {4: 1047.02, 7: 1050.76, 6: 1075.79, 3: 1036.56, 5: 1058.6, 2: 1075.74, 1: 1061.91}
+./logs/mxnet/bert/bz32/1n4g/bert_b32_fp32_4.log {4: 538.91}
+./logs/mxnet/bert/bz32/1n4g/bert_b32_fp32_7.log {4: 538.91, 7: 549.75}
+./logs/mxnet/bert/bz32/1n4g/bert_b32_fp32_6.log {4: 538.91, 7: 549.75, 6: 536.96}
+./logs/mxnet/bert/bz32/1n4g/bert_b32_fp32_3.log {4: 538.91, 7: 549.75, 6: 536.96, 3: 549.03}
+./logs/mxnet/bert/bz32/1n4g/bert_b32_fp32_5.log {4: 538.91, 7: 549.75, 6: 536.96, 3: 549.03, 5: 533.45}
+./logs/mxnet/bert/bz32/1n4g/bert_b32_fp32_2.log {4: 538.91, 7: 549.75, 6: 536.96, 3: 549.03, 5: 533.45, 2: 538.5}
+./logs/mxnet/bert/bz32/1n4g/bert_b32_fp32_1.log {4: 538.91, 7: 549.75, 6: 536.96, 3: 549.03, 5: 533.45, 2: 538.5, 1: 537.05}
+./logs/mxnet/bert/bz32/1n1g/bert_b32_fp32_4.log {4: 149.88}
+./logs/mxnet/bert/bz32/1n1g/bert_b32_fp32_7.log {4: 149.88, 7: 150.9}
+./logs/mxnet/bert/bz32/1n1g/bert_b32_fp32_6.log {4: 149.88, 7: 150.9, 6: 150.04}
+./logs/mxnet/bert/bz32/1n1g/bert_b32_fp32_3.log {4: 149.88, 7: 150.9, 6: 150.04, 3: 149.53}
+./logs/mxnet/bert/bz32/1n1g/bert_b32_fp32_5.log {4: 149.88, 7: 150.9, 6: 150.04, 3: 149.53, 5: 150.12}
+./logs/mxnet/bert/bz32/1n1g/bert_b32_fp32_2.log {4: 149.88, 7: 150.9, 6: 150.04, 3: 149.53, 5: 150.12, 2: 150.14}
+./logs/mxnet/bert/bz32/1n1g/bert_b32_fp32_1.log {4: 149.88, 7: 150.9, 6: 150.04, 3: 149.53, 5: 150.12, 2: 150.14, 1: 150.11}
+./logs/mxnet/bert/bz32/1n2g/bert_b32_fp32_4.log {4: 270.28}
+./logs/mxnet/bert/bz32/1n2g/bert_b32_fp32_7.log {4: 270.28, 7: 268.86}
+./logs/mxnet/bert/bz32/1n2g/bert_b32_fp32_6.log {4: 270.28, 7: 268.86, 6: 272.09}
+./logs/mxnet/bert/bz32/1n2g/bert_b32_fp32_3.log {4: 270.28, 7: 268.86, 6: 272.09, 3: 273.02}
+./logs/mxnet/bert/bz32/1n2g/bert_b32_fp32_5.log {4: 270.28, 7: 268.86, 6: 272.09, 3: 273.02, 5: 269.99}
+./logs/mxnet/bert/bz32/1n2g/bert_b32_fp32_2.log {4: 270.28, 7: 268.86, 6: 272.09, 3: 273.02, 5: 269.99, 2: 271.05}
+./logs/mxnet/bert/bz32/1n2g/bert_b32_fp32_1.log {4: 270.28, 7: 268.86, 6: 272.09, 3: 273.02, 5: 269.99, 2: 271.05, 1: 267.29}
+./logs/mxnet/bert/bz32/2n8g/bert_b32_fp32_4.log {4: 1844.1}
+./logs/mxnet/bert/bz32/2n8g/bert_b32_fp32_7.log {4: 1844.1, 7: 1841.41}
+./logs/mxnet/bert/bz32/2n8g/bert_b32_fp32_6.log {4: 1844.1, 7: 1841.41, 6: 1835.11}
+./logs/mxnet/bert/bz32/2n8g/bert_b32_fp32_3.log {4: 1844.1, 7: 1841.41, 6: 1835.11, 3: 1854.88}
+./logs/mxnet/bert/bz32/2n8g/bert_b32_fp32_5.log {4: 1844.1, 7: 1841.41, 6: 1835.11, 3: 1854.88, 5: 1847.2}
+./logs/mxnet/bert/bz32/2n8g/bert_b32_fp32_2.log {4: 1844.1, 7: 1841.41, 6: 1835.11, 3: 1854.88, 5: 1847.2, 2: 1848.74}
+{'bert': {'1n1g': {'average_speed': 150.1,
+                   'batch_size_per_device': 32,
+                   'median_speed': 150.11,
+                   'speedup': 1.0},
+          '1n2g': {'average_speed': 270.37,
+                   'batch_size_per_device': 32,
+                   'median_speed': 270.28,
+                   'speedup': 1.8},
+          '1n4g': {'average_speed': 540.52,
+                   'batch_size_per_device': 32,
+                   'median_speed': 538.5,
+                   'speedup': 3.59},
+          '1n8g': {'average_speed': 1058.05,
+                   'batch_size_per_device': 32,
+                   'median_speed': 1058.6,
+                   'speedup': 7.05},
+          '2n8g': {'average_speed': 1845.24,
+                   'batch_size_per_device': 32,
+                   'median_speed': 1845.65,
+                   'speedup': 12.3},
+          '4n8g': {'average_speed': 3675.7,
+                   'batch_size_per_device': 32,
+                   'median_speed': 3671.45,
+                   'speedup': 24.46}}}
 Saving result to ./result/bz32_result.json
 ```
 
@@ -325,4 +325,22 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 1845.65   | 12.30   |
 | 4        | 32      | 3671.45   | 24.46   |
 
-详细 Log 信息可下载：[mxnet_bert_base_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/logs.zip)
+
+
+### FP16 & W/O XLA
+
+- ### BERT-base batch_size = 64
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 473.76    | 1.00    |
+| 1        | 2       | 811.6     | 1.71    |
+| 1        | 4       | 1623.56   | 3.43    |
+| 1        | 8       | 3107.1    | 6.56    |
+| 2        | 16      | 5723.26   | 12.08   |
+| 4        | 32      | 11269.14  | 23.79   |
+
+详细 Log 信息可下载：
+
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/bert_fp32.zip)
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/bert_fp16.zip)
