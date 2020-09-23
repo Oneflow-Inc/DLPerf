@@ -7,7 +7,6 @@
 目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
 
 ## 内容目录 Table Of Content
-
   * [概述 Overview](#---overview)
   * [内容目录 Table Of Content](#-----table-of-content)
   * [环境 Environment](#---environment)
@@ -29,6 +28,8 @@
   * [性能结果 Performance](#-----performance)
     + [FP32 & W/O XLA](#fp32---w-o-xla)
     + [ResNet50 v1.5 batch_size = 128](#resnet50-v15-batch-size---128)
+    + [AMP & W/O XLA](#amp---w-o-xla)
+    + [ResNet50 v1.5 batch_size = 256](#resnet50-v15-batch-size---256)
 
 ## 环境 Environment
 
@@ -147,6 +148,8 @@ bash scripts/run_single_node.sh
 
 4 台机器都需要增加。
 
+另外，需要测试混合精度（AMP），应该修改 `PREC`的精度选项（`amp`）。
+
 - ##### 两机测试
 
 以 NODE1 和 NODE2 为例，run_two_nodes.sh 脚本已填入 2 台机器对应的 IP 及端口号，NODE1 上的脚本 single_node_train.sh 中`--node_rank` 默认为0，还需自行将 NODE2 机器上相同路径下的脚本 37 行 `--node_rank` 改为 1，在 2 台机器上同时运行脚本，打印 log 如下：
@@ -233,7 +236,7 @@ DLL 2020-09-15 14:29:18.553769 - Epoch: 0 Iteration: 12  train.loss : 6.67351  t
 
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 121 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
+测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 150 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
@@ -244,51 +247,51 @@ python extract_pytorch_logs_time.py --log_dir /workspace/rn50/scripts/ngc/pytorc
 结果打印如下
 
 ```
-/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_2.log {2: 10240.09}
-/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_4.log {2: 10240.09, 4: 10434.28}
-/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_3.log {2: 10240.09, 4: 10434.28, 3: 10309.35}
-/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_5.log {2: 10240.09, 4: 10434.28, 3: 10309.35, 5: 10182.42}
-/workspace/rn50/scripts/ngc/pytorch/4n8g/r50_b128_fp32_1.log {2: 10240.09, 4: 10434.28, 3: 10309.35, 5: 10182.42, 1: 10309.2}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_2.log {2: 366.94}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_4.log {2: 366.94, 4: 366.52}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_3.log {2: 366.94, 4: 366.52, 3: 365.77}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_5.log {2: 366.94, 4: 366.52, 3: 365.77, 5: 366.52}
-/workspace/rn50/scripts/ngc/pytorch/1n1g/r50_b128_fp32_1.log {2: 366.94, 4: 366.52, 3: 365.77, 5: 366.52, 1: 367.11}
-/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_2.log {2: 5450.13}
-/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_4.log {2: 5450.13, 4: 5258.84}
-/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_3.log {2: 5450.13, 4: 5258.84, 3: 5320.09}
-/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_5.log {2: 5450.13, 4: 5258.84, 3: 5320.09, 5: 5249.85}
-/workspace/rn50/scripts/ngc/pytorch/2n8g/r50_b128_fp32_1.log {2: 5450.13, 4: 5258.84, 3: 5320.09, 5: 5249.85, 1: 5403.83}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_2.log {2: 2813.92}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_4.log {2: 2813.92, 4: 2793.62}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_3.log {2: 2813.92, 4: 2793.62, 3: 2846.66}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_5.log {2: 2813.92, 4: 2793.62, 3: 2846.66, 5: 2843.81}
-/workspace/rn50/scripts/ngc/pytorch/1n8g/r50_b128_fp32_1.log {2: 2813.92, 4: 2793.62, 3: 2846.66, 5: 2843.81, 1: 2816.58}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_2.log {2: 1450.99}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_4.log {2: 1450.99, 4: 1449.73}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_3.log {2: 1450.99, 4: 1449.73, 3: 1442.41}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_5.log {2: 1450.99, 4: 1449.73, 3: 1442.41, 5: 1445.58}
-/workspace/rn50/scripts/ngc/pytorch/1n4g/r50_b128_fp32_1.log {2: 1450.99, 4: 1449.73, 3: 1442.41, 5: 1445.58, 1: 1448.3}
-{'r50': {'1n1g': {'average_speed': 366.57,
+/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_9.log {9: 10617.46}
+/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_8.log {9: 10617.46, 8: 10577.92}
+/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_6.log {9: 10617.46, 8: 10577.92, 6: 10607.4}
+/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_7.log {9: 10617.46, 8: 10577.92, 6: 10607.4, 7: 10649.85}
+/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_10.log {9: 10617.46, 8: 10577.92, 6: 10607.4, 7: 10649.85, 10: 10632.18}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_2.log {2: 366.98}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_4.log {2: 366.98, 4: 366.53}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_3.log {2: 366.98, 4: 366.53, 3: 366.29}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_5.log {2: 366.98, 4: 366.53, 3: 366.29, 5: 367.04}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_1.log {2: 366.98, 4: 366.53, 3: 366.29, 5: 367.04, 1: 367.85}
+/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_2.log {2: 5489.18}
+/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_4.log {2: 5489.18, 4: 5502.26}
+/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_3.log {2: 5489.18, 4: 5502.26, 3: 5447.03}
+/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_5.log {2: 5489.18, 4: 5502.26, 3: 5447.03, 5: 5496.7}
+/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_1.log {2: 5489.18, 4: 5502.26, 3: 5447.03, 5: 5496.7, 1: 5476.2}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_2.log {2: 2829.88}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_4.log {2: 2829.88, 4: 2829.35}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_3.log {2: 2829.88, 4: 2829.35, 3: 2867.44}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_5.log {2: 2829.88, 4: 2829.35, 3: 2867.44, 5: 2819.69}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_1.log {2: 2829.88, 4: 2829.35, 3: 2867.44, 5: 2819.69, 1: 2818.83}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_2.log {2: 1447.67}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_4.log {2: 1447.67, 4: 1433.25}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_3.log {2: 1447.67, 4: 1433.25, 3: 1447.8}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_5.log {2: 1447.67, 4: 1433.25, 3: 1447.8, 5: 1444.6}
+/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_1.log {2: 1447.67, 4: 1433.25, 3: 1447.8, 5: 1444.6, 1: 1449.13}
+{'r50': {'1n1g': {'average_speed': 366.94,
                   'batch_size_per_device': 128,
-                  'median_speed': 366.52,
+                  'median_speed': 366.98,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1447.4,
+         '1n4g': {'average_speed': 1444.49,
                   'batch_size_per_device': 128,
-                  'median_speed': 1448.3,
-                  'speedup': 3.95},
-         '1n8g': {'average_speed': 2822.92,
+                  'median_speed': 1447.67,
+                  'speedup': 3.94},
+         '1n8g': {'average_speed': 2833.04,
                   'batch_size_per_device': 128,
-                  'median_speed': 2816.58,
-                  'speedup': 7.68},
-         '2n8g': {'average_speed': 5336.55,
+                  'median_speed': 2829.35,
+                  'speedup': 7.71},
+         '2n8g': {'average_speed': 5482.27,
                   'batch_size_per_device': 128,
-                  'median_speed': 5320.09,
-                  'speedup': 14.52},
-         '4n8g': {'average_speed': 10295.07,
+                  'median_speed': 5489.18,
+                  'speedup': 14.96},
+         '4n8g': {'average_speed': 10616.96,
                   'batch_size_per_device': 128,
-                  'median_speed': 10309.2,
-                  'speedup': 28.13}}}
+                  'median_speed': 10617.46,
+                  'speedup': 28.93}}}
 Saving result to ./result/_result.json
 ```
 
@@ -296,7 +299,7 @@ Saving result to ./result/_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型单机测试的性能结果和完整 log 日志。
+该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型使用IB（Infinite Band）网络单多机测试的性能结果和完整 log 日志。
 
 ### FP32 & W/O XLA
 
@@ -304,11 +307,29 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 366.52             | 1.00    |
-| 1        | 4                | 128                   | 1448.3             | 3.95    |
-| 1        | 8                | 128                   | 2816.58            | 7.68    |
-| 2        | 8                | 128                   | 5320.09            | 14.52   |
-| 4        | 8                | 128                   | 10309.2            | 28.13   |
+| 1        | 1                | 128                   | 366.98             | 1.00    |
+| 1        | 4                | 128                   | 1447.67            | 3.94    |
+| 1        | 8                | 128                   | 2829.35            | 7.71    |
+| 2        | 8                | 128                   | 5489.18            | 14.96   |
+| 4        | 8                | 128                   | 10617.46           | 28.93   |
+
+
+
+### AMP & W/O XLA
+
+- ### ResNet50 v1.5 batch_size = 256
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 256                   | 803.96             | 1.00    |
+| 1        | 4                | 256                   | 3127.18            | 3.89    |
+| 1        | 8                | 256                   | 5522.86            | 6.87    |
+| 2        | 8                | 256                   | 10517.95           | 13.08   |
+| 4        | 8                | 256                   | 18824.17           | 23.41   |
+
+同时，可支持的 max batch size=256。
+
+
 
 NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 Results](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5#results)。
 
