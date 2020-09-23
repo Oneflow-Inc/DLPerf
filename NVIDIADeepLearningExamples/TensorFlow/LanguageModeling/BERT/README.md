@@ -4,7 +4,7 @@
 
 本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[BERT](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试已覆盖 FP32、FP16精度，后续将持续维护，增加XLA 等多种方式的测评。
 
 
 
@@ -359,6 +359,37 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 | 2        | 16      | 1090.2    | 10.21   |
 | 4        | 32      | 1923.68   | 18.01   |
 
+
+
+### BERT-Base  batch size=64
+
+#### FP16 & Without XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 210.96    | 1.00    |
+| 1        | 2       | 395.65    | 1.88    |
+| 1        | 4       | 802.91    | 3.81    |
+| 1        | 8       | 1584.32   | 7.51    |
+| 2        | 16      | 2632.31   | 12.48   |
+| 4        | 32      | 4927.57   | 23.36   |
+
+#### FP16 & With XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 470.42    | 1.00    |
+| 1        | 2       | 763.95    | 1.62    |
+| 1        | 4       | 1679.11   | 3.57    |
+| 1        | 8       | 3138.26   | 6.67    |
+| 2        | 16      | 3451.84   | 7.34    |
+| 4        | 32      | 6085.24   | 12.94   |
+
+
+
 ### 完整日志
 
-[log.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/logs.zip)
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp32.zip) 
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp16.zip) 
+- [bert_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp16_xla.zip) 
+

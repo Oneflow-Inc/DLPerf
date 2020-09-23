@@ -12,18 +12,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+rm -rf /results/*
 echo "Container nvidia build = " $NVIDIA_BUILD_ID
 
 DATA_DIR=${1:-"data"}
 GPUS_PER_NODE=${2:-8}
 train_batch_size=${3:-32}
-precision="fp32"
-use_xla="false"
 train_steps=${4:-120}
 bert_model="base"
-max_pred_per_seq=${5:-20}
-seq_len=${6:-128}
+max_pred_per_seq=20
+seq_len=128
+precision=${5:-"fp32"}
+use_xla=${6:-"false"}
 NODES=${7:-$NODE1,$NODE2}
 TEST_NUM=${8:-1}
 num_accumulation_steps=1
@@ -65,9 +65,9 @@ DATESTAMP=`date +'%y%m%d%H%M%S'`
 
 #Edit to save logs & checkpoints in a different directory
 RESULTS_DIR=${RESULTS_DIR:-/results/${TAG}_${DATESTAMP}}
-LOG_FOLDER=../ngc/tensorflow/bert/${node_num}n${GPUS_PER_NODE}g
+LOG_FOLDER=../ngc/tensorflow/bert/bz${train_batch_size}/${node_num}n${GPUS_PER_NODE}g
 mkdir -p $LOG_FOLDER
-LOGFILE=${LOG_FOLDER}/bert_b${train_batch_size}_fp32_$TEST_NUM.log
+LOGFILE=${LOG_FOLDER}/bert_b${train_batch_size}_${precision}_$TEST_NUM.log
 mkdir -m 777 -p $RESULTS_DIR
 printf "Saving checkpoints to %s\n" "$RESULTS_DIR"
 printf "Logs written to %s\n" "$LOGFILE"
