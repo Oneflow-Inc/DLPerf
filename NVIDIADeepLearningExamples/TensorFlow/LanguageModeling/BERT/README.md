@@ -8,34 +8,6 @@
 
 
 
-- [Overview](#overview)
-- [Environment](#environment)
-  * [系统](#--)
-  * [NGC容器](#ngc--)
-  * [Feature support matrix](#feature-support-matrix)
-- [Quick Start](#quick-start)
-  * [项目代码](#----)
-  * [NGC容器](#ngc---1)
-  * [数据集](#---)
-  * [SSH配置(可选)](#ssh------)
-- [Training](#training)
-  * [单机](#--)
-  * [2机16卡](#2-16-)
-  * [4机32卡](#4-32-)
-  * [Result](#result)
-    + [吞吐率及加速比](#-------)
-    + [计算规则](#----)
-      - [1.测速脚本](#1----)
-      - [2.均值速度和中值速度](#2---------)
-      - [3.加速比以中值速度计算](#3----------)
-    + [BERT-Base  batch size=48](#bert-base--batch-size-48)
-      - [FP32 & Without XLA](#fp32---without-xla)
-    + [BERT-Base  batch size=32](#bert-base--batch-size-32)
-      - [FP32 & Without XLA](#fp32---without-xla-1)
-    + [完整日志](#----)
-
-
-
 # Environment
 
 ## 系统
@@ -64,6 +36,7 @@
 | ------------------ | ------------------------- |
 | Horovod Multi-GPU  | Yes                       |
 | Horovod Multi-Node | Yes                       |
+| Automatic mixed precision (AMP) | Yes                       |
 
 # Quick Start
 
@@ -208,7 +181,23 @@ cd /workspace/bert
 bash SINGLE_NODE_BERT_FP32_1E.sh
 ```
 
-执行脚本，对单机1卡、2卡、4卡、8卡分别做6次测试。默认batch size为32，也可以通过参数指定batch size如：`bash SINGLE_NODE_BERT_FP32_1E.sh  48`
+执行脚本，对单机1卡、2卡、4卡、8卡分别做5次测试（默认测试fp32+batch size32）。也可以通过参数指定batch size如：`bash SINGLE_NODE_BERT_FP32_1E.sh  48`
+
+### 混合精度&XLA
+
+可以修改脚本中的变量，或直接指定运行参数，例如：
+
+- batch size=64 使用fp16混合精度：
+
+```shell
+bash   SINGLE_NODE_BERT_FP32_1E.sh    64   'fp16'
+```
+
+- batch size=64 使用fp16混合精度 + XLA：
+
+```shell
+bash   SINGLE_NODE_BERT_FP32_1E.sh    64   'fp16'     'true'
+```
 
 ## 2机16卡
 
@@ -216,13 +205,33 @@ bash SINGLE_NODE_BERT_FP32_1E.sh
 
 如2机：NODE1='10.11.0.2'   NODE2='10.11.0.3' 的训练，需在两台机器上分别准备好数据集后，NODE1节点进入容器/workspace/bert下，执行脚本:
 
-`bash TWO_NODE_BERT_FP32_1E.sh`即可运行2机16卡的训练，同样默认测试6次。
+`bash TWO_NODE_BERT_FP32_1E.sh`即可运行2机16卡的训练，同样默认测试5次。
+
+### 混合精度&XLA
+
+可以修改脚本中的变量，或直接指定运行参数，例如：
+
+- batch size=64 使用fp16混合精度 + XLA：
+
+```shell
+bash   TWO_NODE_BERT_FP32_1E.sh    64   'fp16'    'true'
+```
 
 ## 4机32卡
 
 流程同上，NODE1节点进入容器/workspace/bert目录下，执行脚本:
 
-`bash MULTI_NODE_BERT_FP32_1E.sh`即可运行4机32卡的训练，测试6次。
+`bash MULTI_NODE_BERT_FP32_1E.sh`即可运行4机32卡的训练，测试5次。
+
+### 混合精度&XLA
+
+可以修改脚本中的变量，或直接指定运行参数，例如：
+
+- batch size=64 使用fp16混合精度 + XLA：
+
+```shell
+bash   MULTI_NODE_BERT_FP32_1E.sh    64   'fp16'    'true'
+```
 
 ## Result
 
@@ -323,7 +332,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 - median_speed中值速度
 
-  每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
+  每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
 
 #### 3.加速比以中值速度计算
 
