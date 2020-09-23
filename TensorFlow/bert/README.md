@@ -123,6 +123,16 @@ bash run_single_node.sh
 ```
 对单机1卡、2卡、4卡、8卡分别做5组测试。单机脚本默认的batch size为32，可以通过参数指定，如指定batch size为48或64：`bash run_single_node.sh 48`，`bash run_single_node.sh 64`
 
+### 混合精度
+
+可以通过修改脚本`run_single_node.sh`中的变量，也可直接通过参数指定以开启混合精度，如：
+
+```shell
+bash run_single_node.sh 64 5 'fp16'
+```
+
+表示开启fp16混合精度，batch size=64，每组测试5次。
+
 
 
 ## 多机
@@ -134,9 +144,12 @@ bash run_single_node.sh
 
 # Result
 ## 完整日志
-[logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/logs.zip)
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp32.zip)
+
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp16.zip)
 
 ## 加速比
+
 执行以下脚本计算各个情况下的加速比：
 ```shell
 python extract_tensorflow_logs_time.py --log_dir=logs/tensorflow/bert/bz64 --batch_size_per_device=64
@@ -234,3 +247,16 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 177.18    | 1.71    |
 | 1        | 4       | 347.83    | 3.36    |
 | 1        | 8       | 675.82    | 6.52    |
+
+
+
+## BERT-Base  batch size=64
+
+### FP16 & Without XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 228.66    | 1.00    |
+| 1        | 2       | 385.19    | 1.68    |
+| 1        | 4       | 746.9     | 3.27    |
+| 1        | 8       | 1402.41   | 6.13    |
