@@ -16,10 +16,11 @@ if [ "$DTYPE" = "fp16" ] ; then
     PRECISION="float16"
 else
     PRECISION="float32"
+fi
 
 log_folder=logs/mxnet/bert/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
-log_file=$log_folder/bert_b${BZ_PER_DEVICE}_fp32_$TEST_NUM.log
+log_file=$log_folder/bert_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 
 if [ ${NODE_NUM} -eq 1 ] ; then
     node_ip=localhost:${gpu_num_per_node}
