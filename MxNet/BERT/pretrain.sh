@@ -4,7 +4,7 @@ BZ_PER_DEVICE=${2:-32}
 ITER_NUM=${3:-200}
 GPUS=${4:-0}
 NODE_NUM=${5:-1}
-PRECISION=${6:-"float32"}
+DTYPE=${6:-"fp32"}
 TEST_NUM=${7:-1}
 
 a=`expr ${#GPUS} + 1`
@@ -12,9 +12,14 @@ gpu_num_per_node=`expr ${a} / 2`
 gpu_num=`expr ${gpu_num_per_node} \* ${NODE_NUM}`
 total_bz=`expr ${BZ_PER_DEVICE} \* ${gpu_num}`
 
+if [ "$DTYPE" = "fp16" ] ; then
+    PRECISION="float16"
+else
+    PRECISION="float32"
+
 log_folder=logs/mxnet/bert/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
-log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_fp32_$TEST_NUM.log
+log_file=$log_folder/bert_b${BZ_PER_DEVICE}_fp32_$TEST_NUM.log
 
 if [ ${NODE_NUM} -eq 1 ] ; then
     node_ip=localhost:${gpu_num_per_node}
@@ -26,8 +31,6 @@ else
     echo "Not a valid node."
 fi
 
-echo ${node_ip}
-
 
 ONE_PART_NPY=$(eval ls ${DATA_DIR}/* | tr " " "\n" | awk '{printf "%s,",$1}' | sed s'/.$//')
 
@@ -36,6 +39,7 @@ case $MODEL in
     "bert_base") CMD+="--model bert_12_768_12 ";;
     "bert_large") CMD+="--model bert_24_1024_16 ";;
 esac
+
 
 CMD+="--dtype ${PRECISION} \
 --warmup_ratio 1 \
@@ -49,7 +53,6 @@ CMD+="--dtype ${PRECISION} \
 --num_steps ${ITER_NUM} \
 --log_interval 1 \
 --ckpt_interval 1000 \
---num_data_workers 8 \
 --no_compute_acc \
 --data ${ONE_PART_NPY} "
 
@@ -60,7 +63,7 @@ echo "begin time: "; date;
 
 mpirun -oversubscribe -np ${gpu_num} -H ${node_ip} \
     -bind-to none -map-by slot \
-    -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH \
+    -x LD_LIBRARY_PATH -x PATH \
     -mca pml ob1 -mca btl ^openib \
     -mca plm_rsh_args "-p 22 -q -o StrictHostKeyChecking=no" \
     -mca btl_tcp_if_include ib0 \
