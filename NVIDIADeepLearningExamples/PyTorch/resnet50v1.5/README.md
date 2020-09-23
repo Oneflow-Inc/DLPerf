@@ -76,7 +76,7 @@
   | Multi-gpu training                                           | Yes                   |
   | Multi-node training                                          | Yes                   |
   | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                   |
-  | Automatic mixed precision (AMP)                              | No                    |
+  | Automatic mixed precision (AMP)                              | Yes                   |
 
 
 
