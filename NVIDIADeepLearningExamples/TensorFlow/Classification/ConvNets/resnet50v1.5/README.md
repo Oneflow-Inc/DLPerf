@@ -338,14 +338,6 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 5099.42   | 14.07   |
 | 4        | 32      | 9514.64   | 26.25   |
 
-附：[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/709456cdd7a0f2ae03fe42846ec6a24dceee536e/TensorFlow/Classification/RN50v1.5#nvidia-dgx-1-8x-v100-16g-1)
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 364.9     | 1.00    |
-| 1        | 4       | 1419.4    | 3.88    |
-| 1        | 8       | 2778.5    | 7.61    |
-
 
 
 ## ResNet50 V1.5 bsz = 224
@@ -360,9 +352,23 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 11176.38  | 11.78   |
 | 4        | 32      | 23732.09  | 25.01   |
 
+### FP16 & With XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1191.92   | 1       |
+| 1        | 4       | 4339.29   | 3.64    |
+| 1        | 8       | 8495.91   | 7.13    |
+| 2        | 16      | 12373.99  | 10.38   |
+| 4        | 32      | 23690.35  | 19.88   |
+
+[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/709456cdd7a0f2ae03fe42846ec6a24dceee536e/TensorFlow/Classification/RN50v1.5#nvidia-dgx-1-8x-v100-16g-1)
+
 
 
 ## 完整日志
 
 -  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
 -  [resnet50_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp32.zip) 
+-  [resnet50_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16_xla.zip)
+
