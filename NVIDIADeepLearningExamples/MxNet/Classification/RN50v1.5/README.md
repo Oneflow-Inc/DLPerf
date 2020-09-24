@@ -306,11 +306,12 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 1337.1    | 1       |
-| 1        | 4       | 4815.16   | 3.60    |
-| 1        | 8       | 8816.38   | 6.59    |
-| 2        | 16      | 15246.71  | 11.4    |
-| 4        | 32      | 28381.23  | 21.23   |
+| 1        | 1       | 1338.28 | 1       |
+| 1        | 2| 2506.12 | 1.87    |
+| 1        | 4       | 4810.64 | 3.59    |
+| 1        | 8       | 9175.71 | 6.86 |
+| 2        | 16      | 16372.52 | 12.23 |
+| 4        | 32      | 31521.51 | 23.55 |
 
 NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/master/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
