@@ -195,9 +195,9 @@ bash resnet50v1.5/training/run_single_node.sh
 
 ### 混合精度
 
-可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=256的FP16混合精度训练：
+可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=224的FP16混合精度训练：
 
-`bash resnet50v1.5/training/run_single_node.sh 256 fp16`
+`bash resnet50v1.5/training/run_single_node.sh 224 amp`
 
 
 
@@ -209,9 +209,9 @@ bash resnet50v1.5/training/run_single_node.sh
 
 ### 混合精度
 
-可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=256的2机FP16混合精度训练：
+可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=224的2机FP16混合精度训练：
 
-`bash resnet50v1.5/training/run_two_node.sh 256 fp16`
+`bash resnet50v1.5/training/run_two_node.sh 224  amp`
 
 
 
@@ -223,9 +223,9 @@ bash resnet50v1.5/training/run_single_node.sh
 
 ### 混合精度
 
-可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=256的4机FP16混合精度训练：
+可以通过参数指定进行FP16混合精度的训练，如以下脚本将进行bath size=224的4机FP16混合精度训练：
 
-`bash resnet50v1.5/training/run_multi_node.sh 256 fp16`
+`bash resnet50v1.5/training/run_multi_node.sh 224  amp`
 
 
 # Result
@@ -316,7 +316,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 - median_speed中值速度
 
-  每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
+  每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
 
 #### 3.加速比以中值速度计算
 
@@ -354,23 +354,13 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 958.25    | 1       |
-| 1        | 4       | 3505.67   | 3.66    |
-| 1        | 8       | 6826.68   | 7.12    |
-| 2        | 16      | 11045.94  | 11.53   |
-| 4        | 32      | 23008.59  | 24.01   |
+| 1        | 1       | 949.08    | 1       |
+| 1        | 4       | 3470.85   | 3.66    |
+| 1        | 8       | 6880.57   | 7.25    |
+| 2        | 16      | 11176.38  | 11.78   |
+| 4        | 32      | 23732.09  | 25.01   |
 
-## ResNet50 V1.5 bsz = 256
 
-### FP16 & Without XLA
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 982.4     | 1       |
-| 1        | 4       | 3583.6    | 3.65    |
-| 1        | 8       | OOM       | OOM     |
-| 2        | 16      | 11592.8   | 11.8    |
-| 4        | 32      | 23804.8   | 24.23   |
 
 ## 完整日志
 

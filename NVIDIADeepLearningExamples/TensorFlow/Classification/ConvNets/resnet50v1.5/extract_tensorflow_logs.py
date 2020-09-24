@@ -38,6 +38,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     run_case = log_file.split("/")[-2]  # eg: 1n1g
     model = fname.split("_")[0]
     batch_size = int(fname.split("_")[1].strip("b"))
+    
     pricition = fname.split("_")[2]
     test_iter = int(fname.split("_")[3].strip(".log"))
 
