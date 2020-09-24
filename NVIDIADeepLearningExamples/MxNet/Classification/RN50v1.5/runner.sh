@@ -27,9 +27,9 @@ log_file=$log_folder/r50_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 if [ ${NODE_NUM} -eq 1 ] ; then
     node_ip=localhost:${gpu_num_per_node}
 elif [ ${NODE_NUM} -eq 2 ] ; then
-	node_ip=${NODE1}:${gpu_num_per_node},${NODE2}:${gpu_num_per_node}
+  node_ip=${NODE1}:${gpu_num_per_node},${NODE2}:${gpu_num_per_node}
 elif [ ${NODE_NUM} -eq 4 ] ; then
-	node_ip=${NODE1}:${gpu_num_per_node},${NODE2}:${gpu_num_per_node},${NODE3}:${gpu_num_per_node},${NODE4}:${gpu_num_per_node}
+  node_ip=${NODE1}:${gpu_num_per_node},${NODE2}:${gpu_num_per_node},${NODE3}:${gpu_num_per_node},${NODE4}:${gpu_num_per_node}
 else
     echo "Not a valid node."
 fi
@@ -67,21 +67,33 @@ CMD+="--arch resnetv15 \
 --save-frequency 0 \
 --num-epochs 1"
 
+export MXNET_UPDATE_ON_KVSTORE=0 
+export MXNET_EXEC_ENABLE_ADDTO=1 
+export MXNET_USE_TENSORRT=0
+export MXNET_GPU_WORKER_NTHREADS=2
+export MXNET_GPU_COPY_NTHREADS=1
+export MXNET_OPTIMIZER_AGGREGATION_SIZE=54
+export HOROVOD_CYCLE_TIME=0.1
+export HOROVOD_FUSION_THRESHOLD=67108864
+export HOROVOD_NUM_NCCL_STREAMS=2
+export MXNET_HOROVOD_NUM_GROUPS=16
+export MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN_FWD=999
+export MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN_BWD=25
 
 echo "begin time: "; date;
-# horovodrun -np ${gpu_num} \
-# -H ${node_ip} -p ${PORT} \
-# --start-timeout 600 \
-# python3  train.py ${CMD} 2>&1 | tee ${log_file}
-
-
-mpirun --allow-run-as-root -oversubscribe -np ${gpu_num} -H ${node_ip} \
-    -bind-to none -map-by slot \
-    -x LD_LIBRARY_PATH -x PATH \
-    -mca pml ob1 -mca btl ^openib \
-    -mca plm_rsh_args "-p ${PORT}  -q -o StrictHostKeyChecking=no" \
-    -mca btl_tcp_if_include ib0 \
+horovodrun -np ${gpu_num} \
+-H ${node_ip} -p ${PORT} \
+--start-timeout 600 \
 python3  train.py ${CMD} 2>&1 | tee ${log_file}
+
+
+# mpirun --allow-run-as-root -oversubscribe -np ${gpu_num} -H ${node_ip} \
+#     -bind-to none -map-by slot \
+#     -x LD_LIBRARY_PATH -x PATH \
+#     -mca pml ob1 -mca btl ^openib \
+#     -mca plm_rsh_args "-p ${PORT}  -q -o StrictHostKeyChecking=no" \
+#     -mca btl_tcp_if_include ib0 \
+# python3  train.py ${CMD} 2>&1 | tee ${log_file}
 
 echo "Writting to ${log_file}"
 echo "end time: "; date;

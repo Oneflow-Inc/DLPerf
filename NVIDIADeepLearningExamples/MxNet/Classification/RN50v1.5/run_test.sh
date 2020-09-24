@@ -2,7 +2,7 @@
 SHELL_FOLDER=$(dirname $(readlink -f "$0"))
 BZ_PER_DEVICE=${1:-128}
 DTYPE=${2:-"fp32"}
-TEST_NUM=${3:-7}
+TEST_NUM=${3:-5}
 
 export DATA_DIR=/data/imagenet/train-val-recordio-passthrough
 
