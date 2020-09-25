@@ -48,12 +48,10 @@
 - 系统：[ Ubuntu 16.04](http://releases.ubuntu.com/16.04/)
 
   - CUDA：10.2
-
-- cuDNN：7.6.5
+  - cuDNN：7.6.5
 
   - NCCL：2.7.3
-
-- PyTorch：1.6.0
+  - PyTorch：1.6.0
 
   - OpenMPI：4.0.0
   - DALI：0.19.0
@@ -77,7 +75,7 @@
 
 - #### 数据集
 
-根据 [ImageNet training in PyTorch](fqJuQjPL73) 准备 ImageNet 数据集，只需下载、解压 train、validation 数据集到对应路径即可，使用原始图片进行训练。
+根据 [Requirements](https://github.com/pytorch/examples/tree/49e1a8847c8c4d8d3c576479cb2fe2fd2ac583de/imagenet#requirements) 准备 ImageNet 数据集，只需下载、解压 train、validation 数据集到对应路径即可，使用原始图片进行训练。
 
 - #### SSH 免密
 
@@ -484,7 +482,7 @@ Saving result to ./result/_result.json
   | 2        | 8                | 128                   | 4372.33            | 12.34   |
   | 4        | 8                | 128                   | 8816.7             | 24.88   |
 
-  - #### ResNet50 v1.5 batch_size = 128, worker=8
+  - #### ResNet50 v1.5 batch_size = 128, worker=48
 
   | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
   | -------- | ---------------- | --------------------- | ------------------ | ------- |
