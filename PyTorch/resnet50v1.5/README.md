@@ -8,7 +8,8 @@
 
 ## 内容目录 Table Of Content
 
-   * [概述 Overview](#---overview)
+- [PyTorch ResNet50 v1.5 测评](#pytorch-resnet50-v15---)
+  * [概述 Overview](#---overview)
   * [内容目录 Table Of Content](#-----table-of-content)
   * [环境 Environment](#---environment)
     + [系统](#--)
@@ -31,7 +32,7 @@
     + [FP32 & W/O XLA & Use DALI](#fp32---w-o-xla---use-dali)
     + [物理机环境内](#-------1)
       - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-1)
-      - [ResNet50 v1.5 batch_size = 128, worker=8](#resnet50-v15-batch-size---128--worker-8-2)
+      - [ResNet50 v1.5 batch_size = 128, worker=48](#resnet50-v15-batch-size---128--worker-48-1)
 
 ## 环境 Environment
 
