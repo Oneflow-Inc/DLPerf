@@ -4,7 +4,7 @@
 
 本测评在类脑服务器物理机环境下基于PyTorch [/examples](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1) 仓库中提供的 [ResNet50 v1.5](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1/imagenet) 实现，对其进行单机单卡、单机多卡的结果复现及速度评测，同时根据 PyTorch 官方的分布式实现，添加 DALI 数据加载方式，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练等多种方式的测评。
 
 ## 内容目录 Table Of Content
 
