@@ -2,11 +2,12 @@
 
 ## 概述 Overview
 
-本测试基于 [NVIDIA/DeepLearningExamples/Classification/ConvNets/](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets) 仓库中提供的 PyTorch 框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5) 实现，在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch/tags)中进行单机单卡、单机多卡的结果复现及速度评测，评判框架在分布式训练情况下的横向拓展能力。
+本测试基于 [NVIDIA/DeepLearningExamples/Classification/ConvNets/](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets) 仓库中提供的 PyTorch 框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5) 实现，在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch/tags)中进行单机单卡、单机多卡、多机多卡的结果复现及速度评测，评判框架在分布式训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试覆盖 FP32 及混合精度，后续将持续维护，增加使用其他优化方式的测评。
 
 ## 内容目录 Table Of Content
+
   * [概述 Overview](#---overview)
   * [内容目录 Table Of Content](#-----table-of-content)
   * [环境 Environment](#---environment)
@@ -148,11 +149,11 @@ bash scripts/run_single_node.sh
 
 4 台机器都需要增加。
 
-另外，需要测试混合精度（AMP），应该修改 `PREC`的精度选项（`amp`）。
+另外，需要测试混合精度（AMP），应该修改 `PREC` 的精度选项（`amp`）。
 
 - ##### 两机测试
 
-以 NODE1 和 NODE2 为例，run_two_nodes.sh 脚本已填入 2 台机器对应的 IP 及端口号，NODE1 上的脚本 single_node_train.sh 中`--node_rank` 默认为0，还需自行将 NODE2 机器上相同路径下的脚本 37 行 `--node_rank` 改为 1，在 2 台机器上同时运行脚本，打印 log 如下：
+以 NODE1 和 NODE2 为例，run_two_nodes.sh 脚本已填入 2 台机器对应的 IP 及端口号，NODE1 上的脚本 single_node_train.sh 中 `--node_rank` 默认为 0，还需自行将 NODE2 机器上相同路径下的脚本 37 行 `--node_rank` 改为 1，在 2 台机器上同时运行脚本，打印 log 如下：
 
 ```
 + '[' -z ngc/pytorch/2n8g/r50_b128_fp32_5.log ']'
@@ -301,7 +302,7 @@ Saving result to ./result/_result.json
 
 该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型使用IB（Infinite Band）网络单多机测试的性能结果和完整 log 日志。
 
-### FP32 & W/O XLA
+### FP32 
 
 - ### ResNet50 v1.5 batch_size = 128
 
@@ -315,7 +316,7 @@ Saving result to ./result/_result.json
 
 
 
-### AMP & W/O XLA
+### AMP 
 
 - ### ResNet50 v1.5 batch_size = 256
 
