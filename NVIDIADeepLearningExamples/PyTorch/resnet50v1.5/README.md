@@ -150,7 +150,7 @@ bash scripts/run_single_node.sh
 
 4 台机器都需要增加。
 
-另外，需要测试混合精度（AMP），应该修改 `PREC` 的精度选项（`amp`）。
+另外，需要测试混合精度（AMP）时，应该修改 `PREC` 的精度选项（`amp`）。
 
 - ##### 两机测试
 
