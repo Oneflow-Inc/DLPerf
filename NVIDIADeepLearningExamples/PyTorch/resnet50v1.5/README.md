@@ -8,6 +8,7 @@
 
 ## 内容目录 Table Of Content
 
+- [NVIDIA/DeepLearningExamples PyTorch ResNet50 v1.5 测评](#nvidia-deeplearningexamples-pytorch-resnet50-v15---)
   * [概述 Overview](#---overview)
   * [内容目录 Table Of Content](#-----table-of-content)
   * [环境 Environment](#---environment)
@@ -27,9 +28,9 @@
         * [多机测试](#-----1)
     + [3. 数据处理](#3-----)
   * [性能结果 Performance](#-----performance)
-    + [FP32 & W/O XLA](#fp32---w-o-xla)
+    + [FP32](#fp32)
     + [ResNet50 v1.5 batch_size = 128](#resnet50-v15-batch-size---128)
-    + [AMP & W/O XLA](#amp---w-o-xla)
+    + [AMP](#amp)
     + [ResNet50 v1.5 batch_size = 256](#resnet50-v15-batch-size---256)
 
 ## 环境 Environment
