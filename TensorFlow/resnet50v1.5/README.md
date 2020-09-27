@@ -2,7 +2,7 @@
 
 # Overview
 
-本次复现采用了[TensorFlow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的tensorflow2.3版的[ResNet50 v1.5](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本次复现采用了[TensorFlow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的TensorFlow2.3版的[ResNet50 v1.5](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试覆盖了FP32精度、FP16混合精度，后续将持续维护，增加XLA 等多种方式的测评。
 
@@ -92,7 +92,7 @@ bash run_single_node.sh
 
 ### 混合精度
 
-可以通过在脚本中指定变量：DTYPE="fp16"来开启混合精度训练，或者直接在运行脚本时传递如下参数：
+可以通过在脚本中指定变量：`DTYPE="fp16"` 来开启混合精度训练，或者直接在运行脚本时传递如下参数：
 
 ```shell
 bash run_single_node.sh 256 fp16
@@ -107,9 +107,9 @@ bash run_single_node.sh 320 fp16
 
 ## 2机16卡
 
-2机、4机等多机情况下，需要在所有机器节点上相同路径准备同样的数据集、以完成分布式训练。
+2机、4机等多机情况下，需要在所有机器节点上相同路径准备同样的数据集、以完成分布式训练。需要注意的是，多机时各个节点需要在对应的.yam配置文件中，设置task_index。如：2机FP32时，NODE1节点two_node_gpu.yaml的task_index设置为0，NODE2节点的task_index设置为1。
 
-如2机：NODE1='10.11.0.2'     NODE2='10.11.0.3' 的训练，需在两台机器上分别准备好数据集后，NODE1节点`models/official/vision/image_classification/`目录下,执行脚本:
+如2机：NODE1='10.11.0.2'     NODE2='10.11.0.3' 的训练，需在NODE1节点`models/official/vision/image_classification/`目录下,执行脚本:
 
 ```shell
 bash run_two_node.sh
@@ -129,7 +129,7 @@ fp16混合精度条件下，默认测试的batch_size=256，可以修改two_node
 
 ## 4机32卡
 
-流程同上，在4个机器节点上分别执行：
+流程同上，NODE1至NODE4节点需要分别在.yam配置文件中，设置task_index为0至3，然后在4个机器节点上分别执行：
 
 ```shell
 bash run_multi_node.sh
