@@ -16,7 +16,7 @@
       - [硬件](#--)
       - [软件](#--)
     + [NGC 容器](#ngc---)
-        * [Feature support matrix](#feature-support-matrix)
+      * [Feature support matrix](#feature-support-matrix)
   * [快速开始 Quick Start](#-----quick-start)
     + [1. 前期准备](#1-----)
       - [数据集](#---)
@@ -32,8 +32,8 @@
       - [BERT-Base batch_size = 32](#bert-base-batch-size---32)
       - [BERT-Base batch_size = 48](#bert-base-batch-size---48)
   * [FP16](#fp16)
-      - [BERT-Base batch_size = 64](#bert-base-batch-size---64)
-      - [BERT-Base batch_size = 96](#bert-base-batch-size---96)
+    - [BERT-Base batch_size = 64](#bert-base-batch-size---64)
+    - [BERT-Base batch_size = 96](#bert-base-batch-size---96)
 
 ## 环境 Environment
 
@@ -352,11 +352,11 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 32                    | 119.69             | 1.00    |
-| 1        | 4                | 32                    | 457.17             | 3.82    |
-| 1        | 8                | 32                    | 921.98             | 7.7     |
-| 2        | 8                | 32                    | 1495.71            | 12.5    |
-| 4        | 8                | 32                    | 2882.5             | 24.08   |
+| 1        | 1                | 32                    | 119.6              | 1.00    |
+| 1        | 4                | 32                    | 457.72             | 3.83    |
+| 1        | 8                | 32                    | 921.32             | 7.7     |
+| 2        | 8                | 32                    | 1499.4             | 12.54   |
+| 4        | 8                | 32                    | 2885.81            | 24.13   |
 
 - #### BERT-Base batch_size = 48
 
