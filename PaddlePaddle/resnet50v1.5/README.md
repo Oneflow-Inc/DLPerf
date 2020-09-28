@@ -8,30 +8,6 @@
 
 
 
-- [Overview](#overview)
-- [Environment](#environment)
-  * [系统](#--)
-  * [框架](#--)
-  * [Feature support matrix](#feature-support-matrix)
-- [Quick Start](#quick-start)
-  * [项目代码](#----)
-  * [框架安装](#----)
-  * [NCCL](#nccl)
-  * [数据集](#---)
-- [Training](#training)
-  * [单机](#--)
-  * [2机16卡](#2-16-)
-  * [4机32卡](#4-32-)
-- [Result](#result)
-  * [吞吐率及加速比](#-------)
-  * [计算规则](#----)
-    + [1.测速脚本](#1----)
-    + [2.均值速度和中值速度](#2---------)
-    + [3.加速比以中值速度计算](#3----------)
-  * [ResNet50 V1.5 bsz = 128](#resnet50-v15-bsz---128)
-    + [FP32 & Without XLA](#fp32---without-xla)
-  * [完整日志](#----)
-
 # Environment
 
 ## 系统
@@ -145,7 +121,7 @@ NODE2节点`models/PaddleCV/image_classification/`目录下，修改run_two_node
 可以通过参数指定fp16及batch_size：
 
 ```shell
-bash run_two_node.sh 128 fp16
+bash run_two_node.sh 256  fp16
 ```
 
 
@@ -165,7 +141,7 @@ bash run_multi_node.sh
 可以通过参数指定fp16及batch_size：
 
 ```shell
-bash run_multi_node.sh 128 fp16
+bash run_multi_node.sh 256 fp16
 ```
 
 
@@ -288,50 +264,21 @@ README展示的是extract_paddle_logs.py的计算结果。
 | 2        | 16      | 4895.27   | 13.88   |
 | 4        | 32      | 9348.17   | 26.50   |
 
-### FP16 & Without XLA
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 596.79    | 1       |
-| 1        | 2       | 721.61    | 1.21    |
-| 1        | 4       | 2217.51   | 3.72    |
-| 1        | 8       | 3286.19   | 5.51    |
-| 2        | 16      | 6065.4    | 10.16   |
-| 4        | 32      | 11431.66  | 19.16   |
 
 
-
-## ResNet50 V1.5 bsz = 256
+## ResNet50 V1.5 bsz = 224
 
 ### FP16 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 570.23    | 1       |
-| 1        | 2       | 716.32    | 1.26    |
-| 1        | 4       | 2055.89   | 3.61    |
-| 1        | 8       | 3304.96   | 5.8     |
-| 2        | 16      | 6030.58   | 10.58   |
-| 4        | 32      | 9260.06   | 16.24   |
+| 1        | 1       | 1034.64   | 1       |
+| 1        | 4       | 3332.87   | 3.22    |
+| 1        | 8       | 4380.66   | 4.23    |
+| 2        | 16      | 6358.43   | 6.15    |
+| 4        | 32      | 10633.22  | 10.2    |
 
-
-
-## ResNet50 V1.5 bsz = 288
-
-### FP16 & Without XLA
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 571.75    | 1       |
-| 1        | 2       | 714.61    | 1.25    |
-| 1        | 4       | 2036.61   | 3.56    |
-| 1        | 8       | 3288.42   | 5.75    |
-| 2        | 16      | 6020.51   | 10.53   |
-| 4        | 32      | 9665.62   | 16.91   |
-
-- 注：以上测试未加dali,后期考虑补充
-
-- 附：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+- 注：本测试使用了表现较优的reader_thread参数，但由于未成功安装dali及paddle-dali插件，故多卡/多机的加速比仍然较差，附加dali后的数据可参考：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
 
 
 
