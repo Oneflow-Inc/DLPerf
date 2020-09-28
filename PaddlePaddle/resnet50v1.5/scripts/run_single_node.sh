@@ -13,15 +13,6 @@ do
 done
 
 
-i=1
-while [ $i -le 5 ]
-do
-  bash $SHELL_FOLDER/single_node_train.sh $MODEL  0,1 ${BATCH_SIZE} 224    $i    $DTYPE
-  echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-  let i++
-  sleep 20
-done
-
 
 i=1
 while [ $i -le 5 ]
@@ -31,6 +22,7 @@ do
   let i++
   sleep 20
 done
+
 
 
 i=1
