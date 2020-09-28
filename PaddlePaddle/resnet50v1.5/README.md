@@ -278,7 +278,7 @@ README展示的是extract_paddle_logs.py的计算结果。
 | 2        | 16      | 6358.43   | 6.15    |
 | 4        | 32      | 10633.22  | 10.2    |
 
-- 注：本测试使用了表现较优的reader_thread参数，但由于未成功安装dali及paddle-dali插件，故多卡/多机的加速比仍然较差，附加dali后的数据可参考：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+- 注：本测试使用了表现较优的reader_thread参数(单机1卡和8卡设为8；4卡设为12；多机均设为8)，但由于未成功安装dali及paddle-dali插件，故多卡/多机的加速比仍然较差，附加dali后的数据可参考：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
 
 
 
