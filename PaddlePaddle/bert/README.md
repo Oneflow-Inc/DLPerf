@@ -4,36 +4,7 @@
 
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的[BERT](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
-
-
-
-- [Overview](#overview)
-- [Environment](#environment)
-  * [系统](#--)
-  * [框架](#--)
-- [Quick Start](#quick-start)
-  * [项目代码](#----)
-  * [框架安装](#----)
-  * [NCCL](#nccl)
-  * [数据集](#---)
-- [Training](#training)
-  * [单机](#--)
-  * [2机16卡](#2-16-)
-  * [4机32卡](#4-32-)
-- [Result](#result)
-  * [吞吐率及加速比](#-------)
-    + [计算规则](#----)
-      - [1.测速脚本](#1----)
-      - [2.均值速度和中值速度](#2---------)
-      - [3.加速比以中值速度计算](#3----------)
-  * [BERT-Base  batch size=32](#bert-base--batch-size-32)
-    + [FP32 & Without XLA](#fp32---without-xla)
-  * [BERT-Base  batch size=64](#bert-base--batch-size-64)
-    + [FP32 & Without XLA](#fp32---without-xla-1)
-  * [BERT-Base  batch size=96](#bert-base--batch-size-96)
-    + [FP32 & Without XLA](#fp32---without-xla-2)
-  * [完整日志](#----)
+目前，该测试仅覆盖了FP32及FP16混合精度，后续将持续维护，增加dali等多种方式的测评。
 
 
 
@@ -282,3 +253,4 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 ## 完整日志
 
 [bert.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert.zip)
+
