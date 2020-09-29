@@ -4,7 +4,7 @@
 
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的[BERT](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖了FP32及FP16混合精度，后续将持续维护，增加dali等多种方式的测评。
+目前，该测试覆盖了FP32及FP16混合精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -88,7 +88,7 @@ bash make_pretrain_data.sh
 bash run_single_node.sh
 ```
 
-对单机1卡、2卡、4卡、8卡分别做6组测试。单机多机脚本默认的batch size为32，可以通过参数指定，如指定batch size为64，`bash run_single_node.sh 64`，或96，`bash run_single_node.sh 96`。
+对单机1卡、2卡、4卡、8卡分别做5次测试。单机多机脚本默认的batch size为32，可以通过参数指定，如指定batch size为64，`bash run_single_node.sh 64`，或96，`bash run_single_node.sh 96`。
 
 ## 2机16卡
 
@@ -101,7 +101,7 @@ bash run_single_node.sh
 bash run_two_node.sh
 ```
 
-NODE2节点`models/PaddleNLP/pretrain_language_models/BERT/`目录下，修改run_two_node.sh脚本中的`CURRENT_NODE=$NODE2`，再执行`bash run_two_node.sh `，即可运行2机16卡的训练，同样默认测试6次。
+NODE2节点`models/PaddleNLP/pretrain_language_models/BERT/`目录下，修改run_two_node.sh脚本中的`CURRENT_NODE=$NODE2`，再执行`bash run_two_node.sh `，即可运行2机16卡的训练，同样默认测试5次。
 
 ## 4机32卡
 
@@ -111,7 +111,13 @@ NODE2节点`models/PaddleNLP/pretrain_language_models/BERT/`目录下，修改ru
 bash run_multi_node.sh
 ```
 
-以运行4机32卡的训练，默认测试6组。
+以运行4机32卡的训练，默认测试5次。
+
+## 混合精度
+
+运行FP16混合精度测试很简单，只需修改脚本参数或者运行时指定，例如通过如下命令：
+
+`bash run_multi_node.sh   64   fp16`，即可运行batch size=64，FP16混合精度的测试
 
 # Result
 
@@ -250,7 +256,22 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1631.36   | 11.91   |
 | 4        | 32      | 3167.68   | 23.13   |
 
+
+
+## BERT-Base  batch size=64
+
+### FP16 & Without XLA
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 289.23    | 1       |
+| 1        | 4       | 784.52    | 2.71    |
+| 1        | 8       | 1298.96   | 4.49    |
+| 2        | 16      | 1999.38   | 6.91    |
+| 4        | 32      | 3406.36   | 11.78   |
+
 ## 完整日志
 
-[bert.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert.zip)
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert/bert_fp32.zip)
 
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert/bert_fp16.zip)
