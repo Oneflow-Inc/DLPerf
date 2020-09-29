@@ -5,19 +5,19 @@ import glob
 import json
 import argparse
 import pprint
+import time
 import datetime
-
 import numpy as np
 
 pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for benchmark")
-parser.add_argument("--log_dir", type=str, default="./logs/paddle/resnet50", required=True)
+parser.add_argument("--log_dir", type=str, default="./logs/tensorflow/bert", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
-parser.add_argument('--batch_size_per_device', type=int, default=128)
+parser.add_argument('--batch_size_per_device', type=int, default=32)
 
 args = parser.parse_args()
 
@@ -41,6 +41,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     batch_size = int(fname.split("_")[1].strip("b"))
     pricition = fname.split("_")[2]
     test_iter = int(fname.split("_")[3].strip(".log"))
+
     node_num = int(run_case[0])
     if len(run_case) == 4:
         card_num = int(run_case[-2])
@@ -48,41 +49,48 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
         card_num = int(run_case[-3:-1])
 
     total_batch_size = node_num * card_num * batch_size
+
     tmp_dict = {
         'average_speed': 0,
         'batch_size_per_device': batch_size,
     }
 
-    pt = re.compile(r"(\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2},\d{3})", re.S)
-    s1 = "train batch "+str(args.warmup_batches-1) + "]"
-    s2 = "train batch "+str(args.train_batches-1) + "]"
+    avg_speed = 0
+    # extract info from file content
+    pt = re.compile(r"(\d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})", re.S)
+
+    from_index = 20 if args.warmup_batches <= 20 else args.warmup_batches
+    to_index = args.train_batches
     start_time = ''
     end_time = ''
-    avg_speed=0
-    avg_speed_list = []
-    # extract info from file content
+    line_num = 0
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
-            if "elapse" in line:
-                if s1 in line:
+            if "Train Step:" in line: 
+                line_num+=1
+
+                if line_num == from_index:
                     start_time = re.findall(pt, line)[0]
                     continue
 
-                if s2 in line:
+                if line_num == to_index:
                     end_time = re.findall(pt, line)[0]
-                    t1 = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S,%f")
-                    t2 = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S,%f")
+                    t1 = datetime.datetime.strptime(start_time, "%H:%M:%S.%f")
+                    t2 = datetime.datetime.strptime(end_time, "%H:%M:%S.%f")
                     cost_time = (t2 - t1).total_seconds()
                     iter_num = args.train_batches-args.warmup_batches
                     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
                     break
 
+
     # compute avg throughoutput
     tmp_dict['average_speed'] = avg_speed
     result_dict[model][run_case]['average_speed'] = avg_speed
     result_dict[model][run_case]['batch_size_per_device'] = tmp_dict['batch_size_per_device']
+
     speed_dict[model][run_case][test_iter] = avg_speed
+
     print(log_file, speed_dict[model][run_case])
 
 
@@ -99,6 +107,11 @@ def compute_speedup(result_dict, speed_dict):
             result_dict[m][d]['speedup'] = round(speed_up, 2)
 
 
+def compute_median(iter_dict):
+    speed_list = [i for i in iter_dict.values()]
+    return round(np.median(speed_list), 2)
+
+
 def compute_average(iter_dict):
     i = 0
     total_speed = 0
@@ -106,11 +119,6 @@ def compute_average(iter_dict):
         i += 1
         total_speed += iter_dict[iter]
     return round(total_speed / i, 2)
-
-
-def compute_median(iter_dict):
-    speed_list = [i for i in iter_dict.values()]
-    return round(np.median(speed_list), 2)
 
 
 def extract_result():
@@ -136,6 +144,5 @@ def extract_result():
 
 
 if __name__ == "__main__":
-    assert args.warmup_batches > 1
+    assert args.train_batches > args.warmup_batches
     extract_result()
-
