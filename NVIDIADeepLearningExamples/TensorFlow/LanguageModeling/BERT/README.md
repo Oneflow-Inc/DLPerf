@@ -2,7 +2,7 @@
 
 # Overview
 
-本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[BERT](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[BERT](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试已覆盖 FP32、FP16精度，后续将持续维护，增加XLA 等多种方式的测评。
 
@@ -34,8 +34,8 @@
 
 | Feature            | ResNet-50 v1.5 TensorFlow |
 | ------------------ | ------------------------- |
-| Horovod Multi-GPU  | Yes                       |
-| Horovod Multi-Node | Yes                       |
+| Horovod Multi-gpu | Yes                       |
+| Horovod Multi-node | Yes                       |
 | Automatic mixed precision (AMP) | Yes                       |
 
 # Quick Start
@@ -181,7 +181,7 @@ cd /workspace/bert
 bash SINGLE_NODE_BERT_FP32_1E.sh
 ```
 
-执行脚本，对单机1卡、2卡、4卡、8卡分别做5次测试（默认测试fp32+batch size32）。也可以通过参数指定batch size如：`bash SINGLE_NODE_BERT_FP32_1E.sh  48`
+执行脚本，对单机1卡、2卡、4卡、8卡分别做5次测试（默认测试fp32+batch size32）。也可以通过参数指定batch size，如：`bash SINGLE_NODE_BERT_FP32_1E.sh  48`
 
 ### 混合精度&XLA
 
