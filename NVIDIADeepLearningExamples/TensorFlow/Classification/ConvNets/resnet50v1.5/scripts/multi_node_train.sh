@@ -43,14 +43,18 @@ CMD="--arch=resnet50 --mode=train --iter_unit=batch --num_iter=${NUM_STEP} \
     --results_dir=${LOG_FOLDER}/results --weight_init=fan_in ${OTHER} \
     --display_every=1  --gpu_memory_fraction=0.98"
 
-# if [[ ${GPUS_PER_NODE} -eq 1 ]]; then
-#     python3 main.py ${CMD}
-# else
-#     mpiexec --allow-run-as-root ${BIND_TO_SOCKET} -np ${GPUS_PER_NODE} python3 main.py ${CMD}
-# fi
+if [[ ${gpu_num} -eq 1 ]]; then
+    python3 main.py ${CMD}
+else
+    mpirun --allow-run-as-root --bind-to socket -np ${gpu_num} -H $NODES \
+             -bind-to none -map-by slot -x LD_LIBRARY_PATH -x PATH -mca pml ob1 -mca btl ^openib \
+             -mca plm_rsh_args "-p 12345  -q -o StrictHostKeyChecking=no" \
+             -mca btl_tcp_if_include ib0 \
+    python3 main.py ${CMD}  2>&1 | tee ${LOGFILE}
+fi
 
-horovodrun  -p 12345 -np $gpu_num \
-    -H $NODES  \
-    python3 main.py ${CMD} 2>&1 | tee ${LOGFILE}
+# horovodrun  -p 12345 -np $gpu_num \
+#     -H $NODES  \
+#     python3 main.py ${CMD} 2>&1 | tee ${LOGFILE}
 
 echo "Writting log to ${LOGFILE}"

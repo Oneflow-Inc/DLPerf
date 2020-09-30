@@ -221,11 +221,41 @@ bash resnet50v1.5/training/run_single_node.sh
 
 即可运行4机32卡的训练，默认测试5次。
 
-### 混合精度
+## 混合精度&XLA
 
-可以通过参数指定进行FP16混合精度的训练，如以下命令将进行bath size=224的4机FP16混合精度训练：
+### FP6混合精度
 
-`bash resnet50v1.5/training/run_multi_node.sh 224  amp`
+可以通过参数指定进行FP16混合精度的训练，如以下命令将进行bath size=224的FP6混合精度训练
+
+- 单机混合精度训练：
+
+  - `bash resnet50v1.5/training/run_single_node.sh 224 amp`
+
+- 2机混合精度训练：
+
+  - `bash resnet50v1.5/training/run_two_node.sh 224  amp`
+
+- 4机混合精度训练：
+
+  - `bash resnet50v1.5/training/run_multi_node.sh 224  amp`
+
+  
+
+### 启用XLA
+
+所有训练默认使用dali，所以以上脚本中都加有参数USE_DALI=1：
+
+```shel
+USE_DALI=1  bash ${WORKSPACE}/resnet50v1.5/training/single_node_train.sh ${WORKSPACE}   ${DATA_DIR}    1   $NUM_STEP   $BATCH_SIZE   $DTYPE   $i
+```
+
+同样，需要启用XLA只需要加上USE_XLA=1即可：
+
+```she
+USE_DALI=1 USE_XLA=1 bash ${WORKSPACE}/resnet50v1.5/training/single_node_train.sh ....
+```
+
+
 
 
 # Results
@@ -346,23 +376,23 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 949.08    | 1       |
-| 1        | 4       | 3470.85   | 3.66    |
-| 1        | 8       | 6880.57   | 7.25    |
-| 2        | 16      | 11176.38  | 11.78   |
-| 4        | 32      | 23732.09  | 25.01   |
+| 1        | 1       | 945.18    | 1       |
+| 1        | 4       | 3546.02   | 3.75    |
+| 1        | 8       | 6903.42   | 7.3     |
+| 2        | 16      | 11256.53  | 11.91   |
+| 4        | 32      | 23752.18  | 25.13   |
 
 ### FP16 & With XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 1191.92   | 1       |
-| 1        | 4       | 4339.29   | 3.64    |
-| 1        | 8       | 8495.91   | 7.13    |
-| 2        | 16      | 12373.99  | 10.38   |
-| 4        | 32      | 23690.35  | 19.88   |
+| 1        | 1       | 1198.55   | 1       |
+| 1        | 4       | 4360.83   | 3.64    |
+| 1        | 8       | 8588.45   | 7.17    |
+| 2        | 16      | 12517.73  | 10.44   |
+| 4        | 32      | 23566.01  | 19.66   |
 
-[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/709456cdd7a0f2ae03fe42846ec6a24dceee536e/TensorFlow/Classification/RN50v1.5#nvidia-dgx-1-8x-v100-16g-1)
+[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
 
 

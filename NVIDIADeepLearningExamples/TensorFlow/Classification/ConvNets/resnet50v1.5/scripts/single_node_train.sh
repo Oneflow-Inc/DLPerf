@@ -31,11 +31,11 @@ case $DTYPE in
 esac
 
 CMD="--arch=resnet50 --mode=train --iter_unit=batch --num_iter=${NUM_STEP} \
-    --batch_size=${BATCH_SIZE} --warmup_steps=0 --use_cosine_lr --label_smoothing 0.1 \
-    --lr_init=0.256 --lr_warmup_epochs=8 --momentum=0.875 --weight_decay=3.0517578125e-05 \
+    --batch_size=${BATCH_SIZE} --warmup_steps=10000 --use_cosine_lr --label_smoothing 0.1 \
+    --lr_init=0.001 --lr_warmup_epochs=8 --momentum=0.875 --weight_decay=3.0517578125e-05 \
     ${CMD} --data_dir=${DATA_DIR}/tfrecords ${USE_DALI} ${USE_XLA} \
     --results_dir=${LOG_FOLDER}/results --weight_init=fan_in ${OTHER} \
-    --display_every=1  --gpu_memory_fraction=0.98"
+    --display_every=1"
 
 if [[ ${NUM_GPU} -eq 1 ]]; then
     python3 main.py ${CMD}  2>&1 | tee ${LOGFILE}
