@@ -396,6 +396,18 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
+注意：
+
+1.官方测速[采用的脚本](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#benchmarking) 是纯为了跑速度的，很多参数并没有和训练时的参数对齐（label_smoothing设为0、use_cosine_lr=False、use_static_loss_scaling=False等）而[官方amp的训练脚本](https://github.com/NVIDIA/DeepLearningExamples/blob/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5/training/GENERIC.sh)中这些参数都是有的。我们测速的原则是真实反应各框架，在真实训练过程中的速度，所以加上了这些参数。
+
+2.本次测速时最大能跑到的batch size为224，跑官方宣称的256时会OOM(out of memory)，故理论上batch size=224的数据相比256会差一些；
+
+3.速度差异的原因还有可能是机器环境不同，数据集制作方式不同，后期考虑用更统一和规范的数据集进行测试。
+
+
+
+
+
 ## 完整日志
 
 -  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
