@@ -2,12 +2,13 @@
 
 ## 概述 Overview
 
-本测试基于 [NVIDIA/DeepLearningExamples/PyTorch/LanguageModeling/BERT/](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4) 仓库中提供的 PyTorch 框架的 BERT 实现，在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:PyTorch/tags)中进行单机单卡、单机多卡的结果复现及速度评测，同时增加分布式实现，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [NVIDIA/DeepLearningExamples/PyTorch/LanguageModeling/BERT/](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4) 仓库中提供的 PyTorch 框架的 BERT 实现，在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:PyTorch/tags)中进行单机单卡、单机多卡、多机多卡的结果复现及速度评测，同时增加分布式实现，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试覆盖 FP32 及混合精度，后续将持续维护，增加使用其他优化方式的测评。
 
 ## 内容目录 Table Of Contents
 
+- [NVIDIA/DeepLearningExamples PyTorch BERT 测评](#nvidia-deeplearningexamples-pytorch-bert---)
   * [概述 Overview](#---overview)
   * [内容目录 Table Of Contents](#-----table-of-contents)
   * [环境 Environment](#---environment)
@@ -15,22 +16,24 @@
       - [硬件](#--)
       - [软件](#--)
     + [NGC 容器](#ngc---)
-        * [Feature support matrix](#feature-support-matrix)
+      * [Feature support matrix](#feature-support-matrix)
   * [快速开始 Quick Start](#-----quick-start)
     + [1. 前期准备](#1-----)
       - [数据集](#---)
       - [镜像及容器](#-----)
       - [SSH 免密](#ssh---)
+      - [Adam 算法](#adam---)
     + [2. 运行测试](#2-----)
+      - [单机测试](#----)
+      - [多机测试](#----)
     + [3. 数据处理](#3-----)
   * [性能结果 Performance](#-----performance)
     + [FP32](#fp32)
       - [BERT-Base batch_size = 32](#bert-base-batch-size---32)
       - [BERT-Base batch_size = 48](#bert-base-batch-size---48)
   * [FP16](#fp16)
-      - [BERT-Base batch_size = 64](#bert-base-batch-size---64)
-      - [BERT-Base batch_size = 96](#bert-base-batch-size---96)
-
+    - [BERT-Base batch_size = 64](#bert-base-batch-size---64)
+    - [BERT-Base batch_size = 96](#bert-base-batch-size---96)
 
 ## 环境 Environment
 
@@ -75,8 +78,9 @@
   | Feature                         | BERT PyTorch |
   | ------------------------------- | ------------ |
   | Multi-gpu training              | Yes          |
-  | Multi-node                      | Yes           |
-  | Automatic mixed precision (AMP) | Yes           |
+  | Multi-node                      | Yes          |
+  | Automatic mixed precision (AMP) | Yes          |
+  | NVIDIA NCCL                     | Yes          |
 
 
 
@@ -183,6 +187,23 @@ apt-get install openssh-server
 - 修改 sshd 中用于 docker 通信的端口号 `vim /etc/ssh/sshd_config`，修改 `Port` 为空闲端口号；
 - 重启 ssh 服务，`service ssh restart`。
 
+
+
+- #### Adam 算法
+
+为了保持算法一致性，脚本 /workspace/examples/bert/run_pretraining.py 中的 `FusedLAMB` 被替换为 `FusedAdam`，该脚本需做如下修改：
+
+```
+43 from apex.optimizers import `FusedLAMB, FusedAdam # add FusedAdam
+.....
+# modify FusedLAMB with FusedAdam
+322     optimizer = FusedAdam(optimizer_grouped_parameters,
+323                           lr=args.learning_rate,
+324                           bias_correction=False)
+```
+
+如此即可。
+
 ### 2. 运行测试
 
 本次测试集群中有 4 台节点：
@@ -194,7 +215,7 @@ apt-get install openssh-server
 
 每个节点有 8 张 V100 显卡， 每张显卡显存 16 G。
 
-- **单机测试**
+- #### 单机测试
 
 在容器内下载本仓库源码：
 
@@ -212,21 +233,29 @@ bash run_single_node.sh
 
 如需测试 `fp16`，直接修改脚本中的 `PREC` 为 `fp16` 即可。
 
-- **多机测试**
+- #### 多机测试
 
-将本仓库 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/scripts 目录源码移至 /workspace/examples/bert/test_scripts（需新建） 下，2 机 16 卡 执行脚本
+多机测试，一定要确保数据集存在各节点测试机器的相同路径下，各脚本的行为要一致，尤其是修改要保持同步。
+
+如需测试 `fp16`，直接修改脚本中的 `PREC` 为 `fp16` 即可。
+
+- **两机测试**
+
+以 NODE1 和 NODE2 为例，run_two_nodes.sh 脚本已填入 2 台机器对应的 IP 及端口号，NODE1 上的脚本 single_node_train.sh 中 `--node_rank` 默认为 0，还需自行将 NODE2 机器上相同路径下的脚本 108 行 `--node_rank` 改为 1，在 2 台机器上同时运行脚本，
 
 ```
 bash run_two_node.sh
 ```
 
-4 机 32 卡 执行脚本：
+- **多机测试**
+
+以本集群为例，最多支持 4 机 32 卡，run_multi_nodes.sh 脚本已设置 NODE1 为 master node，设置好其 IP 及端口号，还需自行将 NODE3 机器上相同路径下的脚本 108 行 `--node_rank` 中的改为 2， NODE4 的 `--node_rank` 改为 3，在 4 台机器上同时运行脚本，
 
 ```
 bash run_multi_nodes.sh
 ```
 
-即可执行多节点 batch_size 分别取 32、48 等情况的集成测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中。
+即可执行多节点 batch_size 分别取 32、48 等情况的集成测试，并将 log 信息保存在当前目录的对应分布式配置路径中。
 
 ### 3. 数据处理
 
@@ -323,11 +352,11 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 32                    | 119.69             | 1.00    |
-| 1        | 4                | 32                    | 457.17             | 3.82    |
-| 1        | 8                | 32                    | 921.98             | 7.7     |
-| 2        | 8                | 32                    | 1495.71            | 12.5    |
-| 4        | 8                | 32                    | 2882.5             | 24.08   |
+| 1        | 1                | 32                    | 119.6              | 1.00    |
+| 1        | 4                | 32                    | 457.72             | 3.83    |
+| 1        | 8                | 32                    | 921.32             | 7.7     |
+| 2        | 8                | 32                    | 1499.4             | 12.54   |
+| 4        | 8                | 32                    | 2885.81            | 24.13   |
 
 - #### BERT-Base batch_size = 48
 
@@ -363,7 +392,7 @@ Saving result to ./result/_result.json
 | 2        | 8                | 96                    | 5426.07            | 11.74   |
 | 4        | 8                | 96                    | 10349.12           | 22.38   |
 
-
+同时，可支持的 max batch size=96。
 
 NVIDIA的 PyTorch 官方测评结果详见 [BERT For PyTorch - Performance Results](https://github.com/NVIDIA/DeepLearningExamples/blob/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/LanguageModeling/BERT/README.md#results)
 
