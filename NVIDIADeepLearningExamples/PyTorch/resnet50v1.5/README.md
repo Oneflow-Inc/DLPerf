@@ -92,19 +92,127 @@
 
 - #### 镜像及容器
 
-  拉取 NGC 20.03 的镜像、搭建容器，进入容器环境。
+拉取 NGC 20.03 的镜像、搭建容器，进入容器环境。
 
-  ```
-  # 下载镜像
-  docker pull nvcr.io/nvidia/pytorch:20.03-py3 
-  
-  # 启动容器
-  docker run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
-  --name pt_bert  --net host \
-  --cap-add=IPC_LOCK --device=/dev/infiniband \
-  -v ./data:/data/ \
-  -d pytorch:20.03-py3 
-  ```
+```
+# 下载镜像
+docker pull nvcr.io/nvidia/pytorch:20.03-py3 
+
+# 启动容器
+docker run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
+--name pt_bert  --net host \
+--cap-add=IPC_LOCK --device=/dev/infiniband \
+-v ./data:/data/ \
+-d pytorch:20.03-py3 
+```
+
+- #### 安装 IB 驱动
+
+测试机器上的容器环境内未查找到 IB 驱动，会导致测试时 NCCL 库只能使用 Socket 通信，无法达到最佳测试效果，因此需要额外安装，首先安装依赖
+
+```
+apt install dpatch libelf1 libmnl0 libltdl-dev lsof chrpath debhelper pciutils tk bison graphviz ethtool kmod gfortran swig flex tcl
+```
+
+更换为阿里云源
+
+```
+cp /etc/apt/sources.list /etc/apt/sources.list.bak
+
+vim /etc/apt/sources.list
+```
+
+将下列源址复制进 /etc/apt/sources.list 中
+
+```
+deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+
+ 
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+
+ 
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+```
+
+更新源
+
+```
+apt-get update
+```
+
+下载[软件 MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar 源码包](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar)并解压
+
+```
+wget http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar && tar -xvf MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar
+```
+
+进入源码包路径，安装
+
+```
+cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-space-only --without-fw-update --all --force 
+```
+
+安装时出现
+
+```
+......
+Installing srptools-41mlnx1...
+Installing mlnx-ethtool-5.4...
+Installing mlnx-iproute2-5.4.0...
+Installing neohost-backend-1.5.0...
+Failed to install neohost-backend DEB
+Collecting debug info...
+See /tmp/MLNX_OFED_LINUX.24525.logs/neohost-backend.debinstall.log
+```
+
+可以忽略。完成后，检查驱动是否安装成功
+
+```
+ibstat
+```
+
+打印
+
+```
+root@VS002:/workspace/rn50# ibstat
+CA 'mlx5_0'
+        CA type: MT4115
+        Number of ports: 1
+        Firmware version: 12.27.1016
+        Hardware version: 0
+        Node GUID: 0x506b4b0300f37674
+        System image GUID: 0x506b4b0300f37674
+        Port 1:
+                State: Active
+                Physical state: LinkUp
+                Rate: 100
+                Base lid: 56
+                LMC: 0
+                SM lid: 27
+                Capability mask: 0x2651e848
+                Port GUID: 0x506b4b0300f37674
+                Link layer: InfiniBand
+```
+
+即为成功。
+
+
 
 ### 2. 运行测试
 
