@@ -60,20 +60,21 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     avg_speed_list = []
     s1 = "Iteration: " + str(args.warmup_batches)
     s2 = "Iteration: " + str(args.train_batches)
-    p1 = re.compile(r'Iteration\: (\d+) ', re.S)
+    p1 = re.compile(r'Iteration\: (\d+)0 ', re.S)
     p2 = re.compile(r'throughput_train \: (\d+\.\d+) seq/s', re.S)
     # extract info from file content
-    ii = 0
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
             if " throughput_train " in line:
                 if not "Iteration: "in line:
                     continue
-                ii+=1
-                iter_num = re.findall(p1, line)[0]
-                speed = re.findall(p2, line)[0].strip()
-                avg_speed_list.append(float(speed))
+                try:
+                    iter_num = re.findall(p1, line)[0]
+                    speed = re.findall(p2, line)[0].strip()
+                    avg_speed_list.append(float(speed))
+                except:
+                    pass
 
     # compute avg throughoutput
     avg_speed = round(np.mean(avg_speed_list[from_iter:to_iter]), 2)
