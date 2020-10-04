@@ -445,6 +445,6 @@ Saving result to ./result/_result.json
 
 NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 Results](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5#results)。
 
-Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks).
+Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks)。
 
 详细 Log 信息可下载：[ngc_pytorch_resnet50_v1.5.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Pytorch/ngc_pytorch_resnet50_v1.5.tar)。
