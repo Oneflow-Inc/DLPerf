@@ -243,57 +243,57 @@ DLL 2020-09-15 14:29:18.553769 - Epoch: 0 Iteration: 12  train.loss : 6.67351  t
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
 ```
-python extract_pytorch_logs_time.py --log_dir /workspace/rn50/scripts/ngc/pytorch --warmup_batches 20 --train_batches 120 --batch_size_per_device 128
+python extract_pytorch_logs_time.py --log_dir /workspace/rn50/scripts/j5_amp_ngc/pytorch/ --warmup_batches 20 --train_batches 120 --batch_size_per_device 256
 ```
 
 结果打印如下
 
 ```
-/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_9.log {9: 10617.46}
-/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_8.log {9: 10617.46, 8: 10577.92}
-/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_6.log {9: 10617.46, 8: 10577.92, 6: 10607.4}
-/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_7.log {9: 10617.46, 8: 10577.92, 6: 10607.4, 7: 10649.85}
-/workspace/rn50/scripts/fp32_ngc/pytorch/4n8g/r50_b128_fp32_10.log {9: 10617.46, 8: 10577.92, 6: 10607.4, 7: 10649.85, 10: 10632.18}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_2.log {2: 366.98}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_4.log {2: 366.98, 4: 366.53}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_3.log {2: 366.98, 4: 366.53, 3: 366.29}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_5.log {2: 366.98, 4: 366.53, 3: 366.29, 5: 367.04}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n1g/r50_b128_fp32_1.log {2: 366.98, 4: 366.53, 3: 366.29, 5: 367.04, 1: 367.85}
-/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_2.log {2: 5489.18}
-/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_4.log {2: 5489.18, 4: 5502.26}
-/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_3.log {2: 5489.18, 4: 5502.26, 3: 5447.03}
-/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_5.log {2: 5489.18, 4: 5502.26, 3: 5447.03, 5: 5496.7}
-/workspace/rn50/scripts/fp32_ngc/pytorch/2n8g/r50_b128_fp32_1.log {2: 5489.18, 4: 5502.26, 3: 5447.03, 5: 5496.7, 1: 5476.2}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_2.log {2: 2829.88}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_4.log {2: 2829.88, 4: 2829.35}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_3.log {2: 2829.88, 4: 2829.35, 3: 2867.44}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_5.log {2: 2829.88, 4: 2829.35, 3: 2867.44, 5: 2819.69}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n8g/r50_b128_fp32_1.log {2: 2829.88, 4: 2829.35, 3: 2867.44, 5: 2819.69, 1: 2818.83}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_2.log {2: 1447.67}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_4.log {2: 1447.67, 4: 1433.25}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_3.log {2: 1447.67, 4: 1433.25, 3: 1447.8}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_5.log {2: 1447.67, 4: 1433.25, 3: 1447.8, 5: 1444.6}
-/workspace/rn50/scripts/fp32_ngc/pytorch/1n4g/r50_b128_fp32_1.log {2: 1447.67, 4: 1433.25, 3: 1447.8, 5: 1444.6, 1: 1449.13}
-{'r50': {'1n1g': {'average_speed': 366.94,
-                  'batch_size_per_device': 128,
-                  'median_speed': 366.98,
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/4n8g/r50_b256_amp_3.log {3: 22978.13}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/4n8g/r50_b256_amp_5.log {3: 22978.13, 5: 22053.98}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/4n8g/r50_b256_amp_2.log {3: 22978.13, 5: 22053.98, 2: 22551.16}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/4n8g/r50_b256_amp_4.log {3: 22978.13, 5: 22053.98, 2: 22551.16, 4: 23049.75}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/4n8g/r50_b256_amp_1.log {3: 22978.13, 5: 22053.98, 2: 22551.16, 4: 23049.75, 1: 22364.13}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n1g/r50_b256_fp16_4.log {4: 802.4}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n1g/r50_b256_fp16_1.log {4: 802.4, 1: 803.69}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n1g/r50_b256_fp16_5.log {4: 802.4, 1: 803.69, 5: 802.9}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n1g/r50_b256_fp16_3.log {4: 802.4, 1: 803.69, 5: 802.9, 3: 803.66}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n1g/r50_b256_fp16_2.log {4: 802.4, 1: 803.69, 5: 802.9, 3: 803.66, 2: 793.9}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/2n8g/r50_b256_amp_3.log {3: 11991.94}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/2n8g/r50_b256_amp_5.log {3: 11991.94, 5: 11964.81}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/2n8g/r50_b256_amp_2.log {3: 11991.94, 5: 11964.81, 2: 11896.95}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/2n8g/r50_b256_amp_4.log {3: 11991.94, 5: 11964.81, 2: 11896.95, 4: 11999.35}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/2n8g/r50_b256_amp_1.log {3: 11991.94, 5: 11964.81, 2: 11896.95, 4: 11999.35, 1: 12046.71}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n8g/r50_b256_fp16_4.log {4: 6173.05}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n8g/r50_b256_fp16_1.log {4: 6173.05, 1: 6135.08}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n8g/r50_b256_fp16_5.log {4: 6173.05, 1: 6135.08, 5: 6160.56}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n8g/r50_b256_fp16_3.log {4: 6173.05, 1: 6135.08, 5: 6160.56, 3: 6154.66}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n8g/r50_b256_fp16_2.log {4: 6173.05, 1: 6135.08, 5: 6160.56, 3: 6154.66, 2: 6130.69}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n4g/r50_b256_fp16_4.log {4: 3137.67}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n4g/r50_b256_fp16_1.log {4: 3137.67, 1: 3129.63}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n4g/r50_b256_fp16_5.log {4: 3137.67, 1: 3129.63, 5: 3144.55}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n4g/r50_b256_fp16_3.log {4: 3137.67, 1: 3129.63, 5: 3144.55, 3: 3137.44}
+/workspace/rn50/scripts/j5_amp_ngc/pytorch/1n4g/r50_b256_fp16_2.log {4: 3137.67, 1: 3129.63, 5: 3144.55, 3: 3137.44, 2: 3119.23}
+{'r50': {'1n1g': {'average_speed': 801.31,
+                  'batch_size_per_device': 256,
+                  'median_speed': 802.9,
                   'speedup': 1.0},
-         '1n4g': {'average_speed': 1444.49,
-                  'batch_size_per_device': 128,
-                  'median_speed': 1447.67,
-                  'speedup': 3.94},
-         '1n8g': {'average_speed': 2833.04,
-                  'batch_size_per_device': 128,
-                  'median_speed': 2829.35,
-                  'speedup': 7.71},
-         '2n8g': {'average_speed': 5482.27,
-                  'batch_size_per_device': 128,
-                  'median_speed': 5489.18,
-                  'speedup': 14.96},
-         '4n8g': {'average_speed': 10616.96,
-                  'batch_size_per_device': 128,
-                  'median_speed': 10617.46,
-                  'speedup': 28.93}}}
+         '1n4g': {'average_speed': 3133.7,
+                  'batch_size_per_device': 256,
+                  'median_speed': 3137.44,
+                  'speedup': 3.91},
+         '1n8g': {'average_speed': 6150.81,
+                  'batch_size_per_device': 256,
+                  'median_speed': 6154.66,
+                  'speedup': 7.67},
+         '2n8g': {'average_speed': 11979.95,
+                  'batch_size_per_device': 256,
+                  'median_speed': 11991.94,
+                  'speedup': 14.94},
+         '4n8g': {'average_speed': 22599.43,
+                  'batch_size_per_device': 256,
+                  'median_speed': 22551.16,
+                  'speedup': 28.09}}}
 Saving result to ./result/_result.json
 ```
 
@@ -301,7 +301,7 @@ Saving result to ./result/_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型使用IB（Infinite Band）网络单多机测试的性能结果和完整 log 日志。
+该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型使用 IB（Infinite Band）网络单多机测试的性能结果和完整 log 日志。
 
 ### FP32 
 
@@ -309,11 +309,11 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 366.98             | 1.00    |
-| 1        | 4                | 128                   | 1447.67            | 3.94    |
-| 1        | 8                | 128                   | 2829.35            | 7.71    |
-| 2        | 8                | 128                   | 5489.18            | 14.96   |
-| 4        | 8                | 128                   | 10617.46           | 28.93   |
+| 1        | 1                | 128                   | 367.29             | 1.00    |
+| 1        | 4                | 128                   | 1449.48            | 3.95    |
+| 1        | 8                | 128                   | 2887.65            | 7.86    |
+| 2        | 8                | 128                   | 5716.79            | 15.56   |
+| 4        | 8                | 128                   | 10597.77           | 28.85   |
 
 
 
@@ -323,11 +323,11 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 256                   | 803.96             | 1.00    |
-| 1        | 4                | 256                   | 3127.18            | 3.89    |
-| 1        | 8                | 256                   | 5522.86            | 6.87    |
-| 2        | 8                | 256                   | 10517.95           | 13.08   |
-| 4        | 8                | 256                   | 18824.17           | 23.41   |
+| 1        | 1                | 256                   | 802.9              | 1.00    |
+| 1        | 4                | 256                   | 3137.44            | 3.91    |
+| 1        | 8                | 256                   | 6154.66            | 7.67    |
+| 2        | 8                | 256                   | 11991.94           | 14.94   |
+| 4        | 8                | 256                   | 22551.16           | 28.09   |
 
 同时，可支持的 max batch size=256。
 
