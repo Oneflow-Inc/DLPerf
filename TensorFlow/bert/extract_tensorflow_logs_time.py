@@ -5,17 +5,18 @@ import glob
 import json
 import argparse
 import pprint
-
+import time
+import datetime
 import numpy as np
 
 pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for benchmark")
-parser.add_argument("--log_dir", type=str, default=".logs/mxnet/bert", required=True)
+parser.add_argument("--log_dir", type=str, default="./logs/tensorflow/bert", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
-parser.add_argument('--warmup_batches', type=int, default=100)
-parser.add_argument('--train_batches', type=int, default=200)
+parser.add_argument('--warmup_batches', type=int, default=20)
+parser.add_argument('--train_batches', type=int, default=120)
 parser.add_argument('--batch_size_per_device', type=int, default=32)
 
 args = parser.parse_args()
@@ -41,41 +42,53 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     pricition = fname.split("_")[2]
     test_iter = int(fname.split("_")[3].strip(".log"))
 
-
-    total_batch_size = 0
     node_num = int(run_case[0])
     if len(run_case) == 4:
         card_num = int(run_case[-2])
     elif len(run_case) == 5:
         card_num = int(run_case[-3:-1])
 
+    total_batch_size = node_num * card_num * batch_size
+
     tmp_dict = {
         'average_speed': 0,
         'batch_size_per_device': batch_size,
     }
 
-    from_iter = 100 if args.warmup_batches <= 100 else args.warmup_batches-100
-    to_iter = args.train_batches
+    avg_speed = 0
     # extract info from file content
+    pt = re.compile(r"(\d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})", re.S)
+
+    from_index = 20 if args.warmup_batches <= 20 else args.warmup_batches
+    to_index = args.train_batches
+    start_time = ''
+    end_time = ''
+    line_num = 0
     with open(log_file) as f:
         lines = f.readlines()
-        speeds = list()
         for line in lines:
-            if "throughput=" in line:
-                p1 = re.compile(r'latency=(\d+.\d+) ms\/batch', re.S)
-                s = re.findall(p1, line)
-                speed = round(float(s[0].strip()), 1)
-                speed = 1000.0 / speed * batch_size * node_num * card_num
-                speeds.append(speed)
+            if "Train Step:" in line: 
+                line_num+=1
+
+                if line_num == from_index:
+                    start_time = re.findall(pt, line)[0]
+                    continue
+
+                if line_num == to_index:
+                    end_time = re.findall(pt, line)[0]
+                    t1 = datetime.datetime.strptime(start_time, "%H:%M:%S.%f")
+                    t2 = datetime.datetime.strptime(end_time, "%H:%M:%S.%f")
+                    cost_time = (t2 - t1).total_seconds()
+                    iter_num = args.train_batches-args.warmup_batches
+                    avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
+                    break
 
 
-    speeds = np.array(speeds).reshape(args.train_batches, node_num*card_num)
-    speeds = np.median(speeds, axis=1)
-    avg_speed = round(np.mean(speeds[from_iter:to_iter]), 2)
+    # compute avg throughoutput
     tmp_dict['average_speed'] = avg_speed
-
-    result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
+    result_dict[model][run_case]['average_speed'] = avg_speed
     result_dict[model][run_case]['batch_size_per_device'] = tmp_dict['batch_size_per_device']
+
     speed_dict[model][run_case][test_iter] = avg_speed
 
     print(log_file, speed_dict[model][run_case])

@@ -2,20 +2,20 @@
 OUTPUT_DIR=../output
 MODEL=${1:-"bert_base"}
 gpus=${2:-"0,1,2,3,4,5,6,7"}
-bz_per_device=${3:-32}
+BATCH_SIZE=${3:-32}
 TEST_NUM=${4:-1}
+DTYPE=${5:-"fp32"}
 
 a=`expr ${#gpus} + 1`
 NUM_GPU=`expr ${a} / 2`
-paddle_batch_size=`expr ${bz_per_device} \* 128`
+paddle_batch_size=`expr ${BATCH_SIZE} \* 128`
 echo "Use gpus: $gpus"
-echo "Batch size : $bz_per_device"
-echo "Paddle Batch size : $paddle_batch_size"
+echo "Batch size per device : $BATCH_SIZE, Paddle Batch size : $paddle_batch_size"
 
 
-LOG_FOLDER=../paddle/bert/1n${NUM_GPU}g
+LOG_FOLDER=./logs/paddle/bert/bz${BATCH_SIZE}/1n${NUM_GPU}g
 mkdir -p $LOG_FOLDER
-LOGFILE=${LOG_FOLDER}/bert_b${bz_per_device}_fp32_$TEST_NUM.log
+LOGFILE=${LOG_FOLDER}/bert_b${BATCH_SIZE}_${DTYPE}_$TEST_NUM.log
 
 export CUDA_VISIBLE_DEVICES=${gpus}
 if [ "$MODEL" = "bert_base" ] ; then
@@ -33,17 +33,25 @@ else
 fi
 
 
+if  [ "$DTYPE" == "fp16" ] ; then
+  use_fp16=True
+else
+  use_fp16=False
+fi
+
+
 # Change your train arguments:
-python -u ./train.py --is_distributed false\
-        --use_cuda true\
-        --weight_sharing true\
-        --batch_size ${paddle_batch_size}\
-        --data_dir ${PADDLE_BERT_DATA_DIR:-'data/train'}\
+python -u ./train.py --is_distributed false \
+        --use_cuda true \
+        --use_fast_executor true \
+        --weight_sharing true \
+        --batch_size ${paddle_batch_size} \
+        --data_dir ${PADDLE_BERT_DATA_DIR:-'data/train'} \
         --validation_set_dir ${PADDLE_BERT_DATA_DIR:-'data/train'} \
         --bert_config_path ${CONFIG_PATH:-'data/demo_config/bert_config.json'} \
         --vocab_path ${VOCAB_PATH} \
         --generate_neg_sample true\
-        --save_steps 10000\
+        --save_steps 10000 \
         --learning_rate 1e-4 \
         --weight_decay 0.01 \
         --warmup_steps 120 \
@@ -51,7 +59,7 @@ python -u ./train.py --is_distributed false\
         --max_seq_len ${max_seq_len} \
         --skip_steps 1 \
         --validation_steps 1000 \
-        --use_fp16 false \
+        --use_fp16 ${use_fp16} \
         --verbose true \
         --checkpoints $OUTPUT_DIR/paddle/runtime_output/checkpoints  2>&1 | tee $LOGFILE
 
