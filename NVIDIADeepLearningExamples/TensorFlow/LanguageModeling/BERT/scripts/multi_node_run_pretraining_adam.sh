@@ -65,7 +65,7 @@ DATESTAMP=`date +'%y%m%d%H%M%S'`
 
 #Edit to save logs & checkpoints in a different directory
 RESULTS_DIR=${RESULTS_DIR:-/results/${TAG}_${DATESTAMP}}
-LOG_FOLDER=../ngc/tensorflow/bert/bz${train_batch_size}/${node_num}n${GPUS_PER_NODE}g
+LOG_FOLDER=../logs//ngc/tensorflow/bert/bz${train_batch_size}/${node_num}n${GPUS_PER_NODE}g
 mkdir -p $LOG_FOLDER
 LOGFILE=${LOG_FOLDER}/bert_b${train_batch_size}_${precision}_$TEST_NUM.log
 mkdir -m 777 -p $RESULTS_DIR
