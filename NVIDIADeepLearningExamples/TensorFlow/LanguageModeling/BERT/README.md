@@ -4,7 +4,7 @@
 
 本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[BERT](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试已覆盖 FP32、FP16精度，后续将持续维护，增加XLA 等多种方式的测评。
+目前，该测试已覆盖 FP32、FP16精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -178,10 +178,10 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 ```shell
 docker exec -it nvidia_bert_tf /bin/bash
 cd /workspace/bert
-bash SINGLE_NODE_BERT_FP32_1E.sh
+bash run_single_node.sh
 ```
 
-执行脚本，对单机1卡、2卡、4卡、8卡分别做5次测试（默认测试fp32+batch size32）。也可以通过参数指定batch size，如：`bash SINGLE_NODE_BERT_FP32_1E.sh  48`
+执行脚本，对单机1卡、2卡、4卡、8卡分别做5次测试（默认测试fp32+batch size32）。也可以通过参数指定batch size，如：`bash run_single_node.sh  48`
 
 ### 混合精度&XLA
 
@@ -190,13 +190,13 @@ bash SINGLE_NODE_BERT_FP32_1E.sh
 - batch size=64 使用fp16混合精度：
 
 ```shell
-bash   SINGLE_NODE_BERT_FP32_1E.sh    64   'fp16'
+bash   run_single_node.sh    64   fp16
 ```
 
 - batch size=64 使用fp16混合精度 + XLA：
 
 ```shell
-bash   SINGLE_NODE_BERT_FP32_1E.sh    64   'fp16'     'true'
+bash   run_single_node.sh    64   fp16     true
 ```
 
 ## 2机16卡
@@ -205,7 +205,7 @@ bash   SINGLE_NODE_BERT_FP32_1E.sh    64   'fp16'     'true'
 
 如2机：NODE1='10.11.0.2'   NODE2='10.11.0.3' 的训练，需在两台机器上分别准备好数据集后，NODE1节点进入容器/workspace/bert下，执行脚本:
 
-`bash TWO_NODE_BERT_FP32_1E.sh`即可运行2机16卡的训练，同样默认测试5次。
+`bash run_two_node.sh`即可运行2机16卡的训练，同样默认测试5次。
 
 ### 混合精度&XLA
 
@@ -214,14 +214,14 @@ bash   SINGLE_NODE_BERT_FP32_1E.sh    64   'fp16'     'true'
 - batch size=64 使用fp16混合精度 + XLA：
 
 ```shell
-bash   TWO_NODE_BERT_FP32_1E.sh    64   'fp16'    'true'
+bash   run_two_node.sh    64   fp16    true
 ```
 
 ## 4机32卡
 
 流程同上，NODE1节点进入容器/workspace/bert目录下，执行脚本:
 
-`bash MULTI_NODE_BERT_FP32_1E.sh`即可运行4机32卡的训练，测试5次。
+`bash run_multi_node.sh`即可运行4机32卡的训练，测试5次。
 
 ### 混合精度&XLA
 
@@ -230,7 +230,7 @@ bash   TWO_NODE_BERT_FP32_1E.sh    64   'fp16'    'true'
 - batch size=64 使用fp16混合精度 + XLA：
 
 ```shell
-bash   MULTI_NODE_BERT_FP32_1E.sh    64   'fp16'    'true'
+bash   run_multi_node.sh    64   fp16    true
 ```
 
 ## Result
@@ -346,12 +346,11 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 112.56    | 1.00    |
-| 1        | 2       | 217.51    | 1.93    |
-| 1        | 4       | 436.69    | 3.88    |
-| 1        | 8       | 867.72    | 7.71    |
-| 2        | 16      | 1376.44   | 12.23   |
-| 4        | 32      | 2478.59   | 22.02   |
+| 1        | 1       | 107.33    | 1       |
+| 1        | 4       | 397.71    | 3.71    |
+| 1        | 8       | 790.03    | 7.36    |
+| 2        | 16      | 1404.04   | 13.08   |
+| 4        | 32      | 3089.74   | 27.4    |
 
 
 
@@ -361,12 +360,11 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 106.8     | 1.00    |
-| 1        | 2       | 202.97    | 1.90    |
-| 1        | 4       | 406.68    | 3.81    |
-| 1        | 8       | 806.56    | 7.55    |
-| 2        | 16      | 1090.2    | 10.21   |
-| 4        | 32      | 1923.68   | 18.01   |
+| 1        | 1       | 112.76    | 1       |
+| 1        | 4       | 430.43    | 3.82    |
+| 1        | 8       | 855.45    | 7.59    |
+| 2        | 16      | 1576.88   | 13.98   |
+| 4        | 32      | 2727.9    | 25.42   |
 
 
 
@@ -376,23 +374,21 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 210.96    | 1.00    |
-| 1        | 2       | 395.65    | 1.88    |
-| 1        | 4       | 802.91    | 3.81    |
-| 1        | 8       | 1584.32   | 7.51    |
-| 2        | 16      | 2632.31   | 12.48   |
-| 4        | 32      | 4927.57   | 23.36   |
+| 1        | 1       | 183.25    | 1       |
+| 1        | 4       | 721.56    | 3.94    |
+| 1        | 8       | 1452.59   | 7.93    |
+| 2        | 16      | 2653.74   | 14.48   |
+| 4        | 32      | 5189.07   | 28.32   |
 
 #### FP16 & With XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 470.42    | 1.00    |
-| 1        | 2       | 763.95    | 1.62    |
-| 1        | 4       | 1679.11   | 3.57    |
-| 1        | 8       | 3138.26   | 6.67    |
-| 2        | 16      | 3451.84   | 7.34    |
-| 4        | 32      | 6085.24   | 12.94   |
+| 1        | 1       | 422.53    | 1       |
+| 1        | 4       | 1552.11   | 3.67    |
+| 1        | 8       | 3112.73   | 7.37    |
+| 2        | 16      | 5050.86   | 11.95   |
+| 4        | 32      | 9409.2    | 22.27   |
 
 
 
