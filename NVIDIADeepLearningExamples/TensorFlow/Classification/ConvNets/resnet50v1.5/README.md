@@ -169,6 +169,29 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 
 - 3.重启ssh服务`service ssh restart`
 
+## IB驱动安装（可选）
+
+如果服务器之间支持IB(**InfiniBand**)网络，则可以安装IB驱动，使得多机情况下各个节点间的通信速率明显提升，从而加速框架在多机环境下的训练，提升加速比。
+
+```shell
+apt-get update
+apt install dpatch libelf1 libmnl0 libltdl-dev lsof chrpath debhelper pciutils tk bison graphviz ethtool kmod gfortran swig flex tcl
+```
+
+从[NVIDIA官网](https://www.mellanox.com/products/InfiniBand-VPI-Software)下载适合操作系统及相应版本的IB驱动包，如果是nvidia-ngc容器，可以直接使用我们提高好的驱动包：下载[IB驱动 MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar 源码包](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar)并解压
+
+```
+wget http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar && tar -xvf MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar
+```
+
+进入源码包路径，安装
+
+```
+cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-space-only --without-fw-update --all --force 
+```
+
+完成后，可以通过`ibstat`命令检查驱动是否安装成功。
+
 # Training
 
 集群中有4台节点：
