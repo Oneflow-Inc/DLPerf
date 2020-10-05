@@ -379,8 +379,8 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 1        | 1       | 945.18    | 1       |
 | 1        | 4       | 3546.02   | 3.75    |
 | 1        | 8       | 6903.42   | 7.3     |
-| 2        | 16      | 11256.53  | 11.91   |
-| 4        | 32      | 23752.18  | 25.13   |
+| 2        | 16      | 12021.09  | 12.72   |
+| 4        | 32      | 24734.22  | 26.17   |
 
 ### FP16 & With XLA
 
@@ -389,8 +389,8 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 1        | 1       | 1198.55   | 1       |
 | 1        | 4       | 4360.83   | 3.64    |
 | 1        | 8       | 8588.45   | 7.17    |
-| 2        | 16      | 12517.73  | 10.44   |
-| 4        | 32      | 23566.01  | 19.66   |
+| 2        | 16      | 14931.03  | 12.46   |
+| 4        | 32      | 29171.69  | 24.34   |
 
 [NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
@@ -410,7 +410,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 ## 完整日志
 
--  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
 -  [resnet50_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp32.zip) 
+-  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
 -  [resnet50_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16_xla.zip)
 
