@@ -37,7 +37,7 @@ do
   echo "start training on ${host}"
   ssh $USER@$host 'rm -rf ~/oneflow_temp/*'
   scp -r $BENCH_ROOT ./$LOCAL_RUN $USER@$host:~/oneflow_temp
-  ssh $USER@$host "cd ~/oneflow_temp; nohup ./$LOCAL_RUN $NUM_NODES $GPU_NUM_PER_NODE $BSZ $ips 1>oneflow.log 2>&1 </dev/null &"
+  ssh $USER@$host "conda activate oneflow; cd ~/oneflow_temp; nohup ./$LOCAL_RUN $NUM_NODES $GPU_NUM_PER_NODE $BSZ $ips 1>oneflow.log 2>&1 </dev/null &"
 done
 
 #3 copy files to master host and start work
@@ -45,7 +45,7 @@ host=${hosts[0]}
 echo "start training on ${host}"
 ssh $USER@$host 'rm -rf ~/oneflow_temp/*'
 scp -r $BENCH_ROOT ./$LOCAL_RUN $USER@$host:~/oneflow_temp
-ssh $USER@$host "cd ~/oneflow_temp; ./$LOCAL_RUN $NUM_NODES $GPU_NUM_PER_NODE $BSZ $ips > oneflow.log"
+ssh $USER@$host "conda activate oneflow; cd ~/oneflow_temp; ./$LOCAL_RUN $NUM_NODES $GPU_NUM_PER_NODE $BSZ $ips > oneflow.log"
 
 echo "done"
 
