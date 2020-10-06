@@ -351,6 +351,17 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 6684.57   | 12.94   |
 | 4        | 32      | 13376.76  | 25.9    |
 
+- #### BERT-base batch_size = 128
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 544.31    | 1       |
+| 1        | 2       | 1000.15   | 1.84    |
+| 1        | 4       | 1970.59   | 3.62    |
+| 1        | 8       | 3825.21   | 7.03    |
+| 2        | 16      | 7327.5    | 13.46   |
+| 4        | 32      | 14822.31  | 27.33   |
+
 详细 Log 信息可下载：
 
 - [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/bert_fp32.zip)
