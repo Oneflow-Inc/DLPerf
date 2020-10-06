@@ -288,11 +288,11 @@ Saving result to ./result/bz32_result.json
 
 ### FP32 & W/O XLA
 
-- ### BERT-base batch_size = 64
+- #### BERT-base batch_size = 64
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 156.76    | 1.00    |
+| 1        | 1       | 156.76    | 1       |
 | 1        | 2       | 295.42    | 1.88    |
 | 1        | 4       | 587.71    | 3.75    |
 | 1        | 8       | 1153.08   | 7.36    |
@@ -301,11 +301,11 @@ Saving result to ./result/bz32_result.json
 
 
 
-- ### BERT-base batch_size = 48
+- #### BERT-base batch_size = 48
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 153.75    | 1.00    |
+| 1        | 1       | 153.75    | 1       |
 | 1        | 2       | 287.77    | 1.87    |
 | 1        | 4       | 572.64    | 3.72    |
 | 1        | 8       | 1127.41   | 7.33    |
@@ -314,11 +314,11 @@ Saving result to ./result/bz32_result.json
 
 
 
-- ### BERT-base batch_size = 32
+- #### BERT-base batch_size = 32
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 150.11    | 1.00    |
+| 1        | 1       | 150.11    | 1       |
 | 1        | 2       | 270.28    | 1.80    |
 | 1        | 4       | 538.5     | 3.59    |
 | 1        | 8       | 1058.6    | 7.05    |
@@ -329,18 +329,30 @@ Saving result to ./result/bz32_result.json
 
 ### FP16 & W/O XLA
 
-- ### BERT-base batch_size = 64
+- #### BERT-base batch_size = 64
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 473.76    | 1.00    |
+| 1        | 1       | 473.76    | 1       |
 | 1        | 2       | 811.6     | 1.71    |
 | 1        | 4       | 1623.56   | 3.43    |
 | 1        | 8       | 3107.1    | 6.56    |
 | 2        | 16      | 5723.26   | 12.08   |
 | 4        | 32      | 11269.14  | 23.79   |
 
+- #### BERT-base batch_size = 96
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 516.54    | 1       |
+| 1        | 2       | 925.52    | 1.79    |
+| 1        | 4       | 1837.08   | 3.56    |
+| 1        | 8       | 3579.0    | 6.93    |
+| 2        | 16      | 6684.57   | 12.94   |
+| 4        | 32      | 13376.76  | 25.9    |
+
 详细 Log 信息可下载：
 
 - [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/bert_fp32.zip)
 - [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/bert_fp16.zip)
+
