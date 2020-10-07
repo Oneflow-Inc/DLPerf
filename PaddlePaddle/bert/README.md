@@ -4,7 +4,7 @@
 
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的[BERT](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试覆盖了FP32及FP16混合精度，后续将持续维护，增加更多方式的测评。
+目前，该测试覆盖了FP32、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -219,7 +219,7 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 
 ## BERT-Base  FP32
 
-### batch size=32 & Without XLA
+### batch size=32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -230,7 +230,7 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1116.02   | 8.41    |
 | 4        | 32      | 2073.6    | 15.63   |
 
-### batch size=64 & Without XLA
+### batch size=64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -241,7 +241,7 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1426.52   | 10.39   |
 | 4        | 32      | 2736.78   | 19.94   |
 
-### batch size=96 & Without XLA
+### batch size=96 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -254,7 +254,7 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 
 ## BERT-Base  FP16
 
-### batch size=64 & Without XLA
+### batch size=64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |

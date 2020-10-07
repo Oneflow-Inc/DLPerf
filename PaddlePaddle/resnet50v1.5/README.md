@@ -4,7 +4,7 @@
 
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的paddle版[ResNet50 v1.5](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试覆盖了FP32精度和FP16混合精度，后续将持续维护，增加dali等多种方式的测评。
+目前，该测试覆盖了FP32、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -251,9 +251,9 @@ README展示的是extract_paddle_logs.py的计算结果。
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-## ResNet50 V1.5 FP32
+## ResNet50 v1.5 FP32
 
-### batch size = 128 & Without XLA
+### batch size = 128 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -266,9 +266,9 @@ README展示的是extract_paddle_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 FP16
+## ResNet50 v1.5 FP16
 
-### batch size = 224 & Without XLA
+### batch size = 224 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |

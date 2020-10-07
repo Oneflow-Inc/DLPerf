@@ -218,7 +218,7 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 
 ## BERT-Base FP32
 
-### batch szie = 64 & Without XLA
+### batch size = 64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -227,7 +227,7 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 402.02    | 3.56    |
 | 1        | 8       | 805.43    | 7.13    |
 
-### batch size=48 & Without XLA
+### batch size=48 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -236,7 +236,7 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 384.59    | 3.53    |
 | 1        | 8       | 752.21    | 6.9     |
 
-### batch size=32 & Without XLA
+### batch size=32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -249,7 +249,7 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 
 ## BERT-Base  FP16
 
-### batch size=64 & Without XLA
+### batch size=64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
