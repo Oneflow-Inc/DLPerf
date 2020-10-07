@@ -3,7 +3,7 @@
 # Overview
 本次复现采用了[Tensorflow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的tf2.x版[BERT](https://github.com/tensorflow/models/tree/r2.3.0/official/nlp/bert)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖单机情况下的FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试仅覆盖单机情况下的FP32、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -216,9 +216,9 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-## BERT-Base batch szie = 64
+## BERT-Base FP32
 
-### FP32 & Without XLA
+### batch szie = 64 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -227,9 +227,7 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 402.02    | 3.56    |
 | 1        | 8       | 805.43    | 7.13    |
 
-## BERT-Base  batch size=48
-
-### FP32 & Without XLA
+### batch size=48 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -238,8 +236,7 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 384.59    | 3.53    |
 | 1        | 8       | 752.21    | 6.9     |
 
-## BERT-Base  batch size=32
-### FP32 & Without XLA
+### batch size=32 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -250,9 +247,9 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 
 
 
-## BERT-Base  batch size=64
+## BERT-Base  FP16
 
-### FP16 & Without XLA
+### batch size=64 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
