@@ -251,9 +251,9 @@ README展示的是extract_paddle_logs.py的计算结果。
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-## ResNet50 V1.5 bsz = 128
+## ResNet50 V1.5 FP32
 
-### FP32 & Without XLA
+### batch size = 128 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -266,9 +266,9 @@ README展示的是extract_paddle_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 bsz = 224
+## ResNet50 V1.5 FP16
 
-### FP16 & Without XLA
+### batch size = 224 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
