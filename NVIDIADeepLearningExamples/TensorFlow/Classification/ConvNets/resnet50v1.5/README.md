@@ -4,7 +4,7 @@
 
 本仓库复现了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)，目的在于速度测评，得到1机、2机、4机情况下的吞吐率及加速比，评判框架在分布式训练情况下的横向拓展能力。
 
-目前，测试覆盖了 FP32精度、FP16混合精度以及XLA，后续将持续维护增加更多方式的测评。
+目前，测试覆盖了 FP32、FP16混合精度以及XLA，后续将持续维护增加更多方式的测评。
 
 
 
