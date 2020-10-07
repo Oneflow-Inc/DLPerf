@@ -4,7 +4,7 @@
 
 本次复现采用了[TensorFlow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的TensorFlow2.3版的[ResNet50 v1.5](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试覆盖了FP32精度、FP16混合精度，后续将持续维护，增加XLA 等多种方式的测评。
+目前，该测试覆盖了FP32精度、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -246,9 +246,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-## ResNet50 V1.5 batch size = 128
+## ResNet50 V1.5 FP32
 
-### FP32 & Without XLA
+### batch size = 128 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -261,9 +261,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 batch size = 128
+## ResNet50 V1.5 FP16
 
-### FP16 & Without XLA
+### batch size = 128 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -274,11 +274,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 8418.2    | 8.97    |
 | 4        | 32      | 16250.19  | 17.32   |
 
-
-
-## ResNet50 V1.5 batch size = 256
-
-### FP16 & Without XLA
+### batch size = 256 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -288,9 +284,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 9870.15   | 9.18    |
 | 4        | 32      | 19314.31  | 17.96   |
 
-## ResNet50 V1.5 batch size = 320
-
-### FP16 & Without XLA
+### batch size = 320 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
