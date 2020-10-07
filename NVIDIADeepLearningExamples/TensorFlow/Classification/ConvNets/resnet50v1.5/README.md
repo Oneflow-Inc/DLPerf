@@ -379,9 +379,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 bsz = 128
+## ResNet50 V1.5 FP32
 
-### FP32 & Without XLA
+### batch size = 128 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -391,11 +391,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 5099.42   | 14.07   |
 | 4        | 32      | 9514.64   | 26.25   |
 
+## ResNet50 V1.5 FP16
 
-
-## ResNet50 V1.5 bsz = 224
-
-### FP16 & Without XLA
+### batch size = 224 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -405,7 +403,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 12021.09  | 12.72   |
 | 4        | 32      | 24734.22  | 26.17   |
 
-### FP16 & With XLA
+### batch size = 224 & with xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
