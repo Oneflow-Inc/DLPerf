@@ -257,3 +257,11 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 385.19    | 1.68    |
 | 1        | 4       | 746.9     | 3.27    |
 | 1        | 8       | 1402.41   | 6.13    |
+
+
+
+## 完整日志
+
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp32.zip) 
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp16.zip)
+
