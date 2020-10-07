@@ -246,7 +246,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-## ResNet50 V1.5 batch szie = 128
+## ResNet50 V1.5 batch size = 128
 
 ### FP32 & Without XLA
 
@@ -261,7 +261,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 batch szie = 128
+## ResNet50 V1.5 batch size = 128
 
 ### FP16 & Without XLA
 
@@ -276,7 +276,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 batch szie = 256
+## ResNet50 V1.5 batch size = 256
 
 ### FP16 & Without XLA
 
@@ -288,7 +288,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 9870.15   | 9.18    |
 | 4        | 32      | 19314.31  | 17.96   |
 
-## ResNet50 V1.5 batch szie = 320
+## ResNet50 V1.5 batch size = 320
 
 ### FP16 & Without XLA
 
