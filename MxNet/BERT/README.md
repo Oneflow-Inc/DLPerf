@@ -4,7 +4,7 @@
 
 本测试基于 [gluon-nlp](https://github.com/dmlc/gluon-nlp) 仓库中提供的 MXNet框架的 [BERT-base](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) 实现，进行了1机1卡、1机8卡、2机16卡、4机32卡的结果复现及速度评测，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试覆盖了FP32 精度、混合精度，后续将持续维护，增加XLA 等多种方式的测评。
+目前，该测试覆盖了FP32 精度、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -286,9 +286,9 @@ Saving result to ./result/bz32_result.json
 
 该小节提供针对 MXNet 框架的BERT-base 模型单机测试的性能结果和完整 log 日志。
 
-### FP32 & W/O XLA
+### BERT-base FP32
 
-- #### BERT-base batch_size = 64
+#### batch size = 64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -299,9 +299,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 2172.62   | 13.86   |
 | 4        | 32      | 4340.89   | 27.69   |
 
-
-
-- #### BERT-base batch_size = 48
+#### batch size = 48 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -312,9 +310,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 2067.72   | 13.45   |
 | 4        | 32      | 4105.29   | 26.7    |
 
-
-
-- #### BERT-base batch_size = 32
+#### batch size = 32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -327,9 +323,9 @@ Saving result to ./result/bz32_result.json
 
 
 
-### FP16 & W/O XLA
+### BERT-base FP16
 
-- #### BERT-base batch_size = 64
+#### batch size = 64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -340,7 +336,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 5723.26   | 12.08   |
 | 4        | 32      | 11269.14  | 23.79   |
 
-- #### BERT-base batch_size = 96
+#### batch size = 96 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -351,7 +347,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 6684.57   | 12.94   |
 | 4        | 32      | 13376.76  | 25.9    |
 
-- #### BERT-base batch_size = 128
+#### batch size = 128 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |

@@ -4,7 +4,7 @@
 
 本仓库复现了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)，目的在于速度测评，得到1机、2机、4机情况下的吞吐率及加速比，评判框架在分布式训练情况下的横向拓展能力。
 
-目前，测试覆盖了 FP32精度、FP16混合精度以及XLA，后续将持续维护增加更多方式的测评。
+目前，测试覆盖了 FP32、FP16混合精度以及XLA，后续将持续维护增加更多方式的测评。
 
 
 
@@ -379,9 +379,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 bsz = 128
+## ResNet50 V1.5 FP32
 
-### FP32 & Without XLA
+### batch size = 128 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -391,11 +391,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 5099.42   | 14.07   |
 | 4        | 32      | 9514.64   | 26.25   |
 
+## ResNet50 V1.5 FP16
 
-
-## ResNet50 V1.5 bsz = 224
-
-### FP16 & Without XLA
+### batch size = 224 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -405,7 +403,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 12021.09  | 12.72   |
 | 4        | 32      | 24734.22  | 26.17   |
 
-### FP16 & With XLA
+### batch size = 224 & with xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |

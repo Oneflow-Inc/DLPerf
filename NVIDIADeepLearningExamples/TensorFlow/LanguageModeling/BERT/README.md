@@ -4,7 +4,7 @@
 
 本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[BERT](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试已覆盖 FP32、FP16精度，后续将持续维护，增加更多方式的测评。
+目前，该测试已覆盖 FP32、FP16混合精度以及XLA，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -363,9 +363,9 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-### BERT-Base  batch size=48
+### BERT-Base  FP32
 
-#### FP32 & Without XLA
+#### batch size=48 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -375,11 +375,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 | 2        | 16      | 1404.04   | 13.08   |
 | 4        | 32      | 3089.74   | 27.4    |
 
-
-
-### BERT-Base  batch size=32
-
-#### FP32 & Without XLA
+#### batch size=32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -391,9 +387,9 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 
 
-### BERT-Base  batch size=64
+### BERT-Base  FP16
 
-#### FP16 & Without XLA
+#### batch size=64 & Without XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -403,7 +399,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 | 2        | 16      | 2653.74   | 14.48   |
 | 4        | 32      | 5189.07   | 28.32   |
 
-#### FP16 & With XLA
+#### batch size=64 & With XLA
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
