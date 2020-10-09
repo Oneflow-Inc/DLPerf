@@ -264,6 +264,28 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1999.38   | 6.91    |
 | 4        | 32      | 3406.36   | 11.78   |
 
+
+### batch size=128 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 296.92    | 1       |
+| 1        | 4       | 877.31    | 2.95    |
+| 1        | 8       | 1538.25   | 5.18    |
+| 2        | 16      | 2701.81   | 9.1     |
+| 4        | 32      | 4922.16   | 16.58   |
+
+
+### batch size=160 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 309.68    | 1       |
+| 1        | 4       | 915.7     | 2.96    |
+| 1        | 8       | 1666.54   | 5.38    |
+| 2        | 16      | 2969.85   | 9.59    |
+| 4        | 32      | 5452.35   | 17.61   |
+
 ## 完整日志
 
 - [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert/bert_fp32.zip)
