@@ -4,7 +4,7 @@
 
 本仓库复现了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)，目的在于速度测评，得到1机、2机、4机情况下的吞吐率及加速比，评判框架在分布式训练情况下的横向拓展能力。
 
-目前，测试覆盖了 FP32精度、FP16混合精度以及XLA，后续将持续维护增加更多方式的测评。
+目前，测试覆盖了 FP32、FP16混合精度以及XLA，后续将持续维护增加更多方式的测评。
 
 
 
@@ -168,6 +168,29 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 ```
 
 - 3.重启ssh服务`service ssh restart`
+
+## IB驱动安装（可选）
+
+如果服务器之间支持IB(**InfiniBand**)网络，则可以安装IB驱动，使得多机情况下各个节点间的通信速率明显提升，从而加速框架在多机环境下的训练，提升加速比。
+
+```shell
+apt-get update
+apt install dpatch libelf1 libmnl0 libltdl-dev lsof chrpath debhelper pciutils tk bison graphviz ethtool kmod gfortran swig flex tcl
+```
+
+从[NVIDIA官网](https://www.mellanox.com/products/InfiniBand-VPI-Software)下载适合操作系统及相应版本的IB驱动包，如果是nvidia-ngc容器，可以直接使用我们提高好的驱动包：下载[IB驱动 MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar 源码包](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar)并解压
+
+```
+wget http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar && tar -xvf MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar
+```
+
+进入源码包路径，安装
+
+```
+cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-space-only --without-fw-update --all --force 
+```
+
+完成后，可以通过`ibstat`命令检查驱动是否安装成功。
 
 # Training
 
@@ -356,9 +379,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 bsz = 128
+## ResNet50 V1.5 FP32
 
-### FP32 & Without XLA
+### batch size = 128 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -368,29 +391,27 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 5099.42   | 14.07   |
 | 4        | 32      | 9514.64   | 26.25   |
 
+## ResNet50 V1.5 FP16
 
-
-## ResNet50 V1.5 bsz = 224
-
-### FP16 & Without XLA
+### batch size = 224 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 945.18    | 1       |
 | 1        | 4       | 3546.02   | 3.75    |
 | 1        | 8       | 6903.42   | 7.3     |
-| 2        | 16      | 11256.53  | 11.91   |
-| 4        | 32      | 23752.18  | 25.13   |
+| 2        | 16      | 12021.09  | 12.72   |
+| 4        | 32      | 24734.22  | 26.17   |
 
-### FP16 & With XLA
+### batch size = 224 & with xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 1198.55   | 1       |
 | 1        | 4       | 4360.83   | 3.64    |
 | 1        | 8       | 8588.45   | 7.17    |
-| 2        | 16      | 12517.73  | 10.44   |
-| 4        | 32      | 23566.01  | 19.66   |
+| 2        | 16      | 14931.03  | 12.46   |
+| 4        | 32      | 29171.69  | 24.34   |
 
 [NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
@@ -410,7 +431,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 ## 完整日志
 
--  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
 -  [resnet50_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp32.zip) 
+-  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
 -  [resnet50_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16_xla.zip)
 
