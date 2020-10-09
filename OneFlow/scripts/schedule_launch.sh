@@ -8,7 +8,7 @@ REPEAT_TIMES=7
 declare -a num_nodes_list=(1 1 2 4)
 declare -a num_gpus_list=(1 8 8 8)
 len=${#num_nodes_list[@]}
-for bsz in 304 192 
+for bsz in 96 64 32 24 
 do
     for (( i=0; i<$len; i++ )) 
     do 
