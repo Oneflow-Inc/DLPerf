@@ -43,7 +43,7 @@ Legend:
 ## Test Descriptions
 
 - OneFlow版本: v0.2，对应commit: [64c20462f245b5cbef4230a62fa06edff85411b3](https://github.com/Oneflow-Inc/oneflow/commit/64c20462f245b5cbef4230a62fa06edff85411b3)
-- OneFlow Benchmark仓库: [dev_test_oneflow_0.2_perf分支](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/dev_test_oneflow_0.2_perf)
+- OneFlow Benchmark仓库: 当前最新master，对应commit：[638d8f42aa064486a4268a388f2bd1e9762c98b3](https://github.com/Oneflow-Inc/OneFlow-Benchmark/commit/638d8f42aa064486a4268a388f2bd1e9762c98b3)
 - Data Type: Float32
 - XLA: 未采用
 - batch size per device: 96/128/144
