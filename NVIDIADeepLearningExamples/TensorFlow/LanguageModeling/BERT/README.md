@@ -389,7 +389,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 ### BERT-Base  FP16
 
-#### batch size=64 & Without XLA
+#### batch size=64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -399,7 +399,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 | 2        | 16      | 2653.74   | 14.48   |
 | 4        | 32      | 5189.07   | 28.32   |
 
-#### batch size=64 & With XLA
+#### batch size=64 & with xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -409,7 +409,17 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 | 2        | 16      | 5050.86   | 11.95   |
 | 4        | 32      | 9409.2    | 22.27   |
 
+#### batch size=96 with xla
 
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 468.1     | 1       |
+| 1        | 4       | 1766.06   | 3.77    |
+| 1        | 8       | 3559.8    | 7.6     |
+| 2        | 16      | 5960.14   | 12.73   |
+| 4        | 32      | 11650.0   | 24.89   |
+
+注：batch size=96 without xla 情况下会OOM(out of memory)
 
 ### 完整日志
 
