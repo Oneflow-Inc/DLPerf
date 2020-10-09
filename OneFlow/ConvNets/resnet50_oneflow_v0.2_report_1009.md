@@ -1,6 +1,6 @@
 # OneFlow ResNet50-V1.5 Benchmark Test Report
 
-本报告总结了OneFlow v0.2版本下的ResNet50-V1.5 评测结果。
+本报告总结了OneFlow v0.2下的ResNet50-V1.5 评测结果。
 
 ## Test Environment
 
@@ -43,57 +43,35 @@ Legend:
 ## Test Descriptions
 
 - OneFlow版本: v0.2，对应commit: [64c20462f245b5cbef4230a62fa06edff85411b3](https://github.com/Oneflow-Inc/oneflow/commit/64c20462f245b5cbef4230a62fa06edff85411b3)
-- OneFlow Benchmark仓库: 当前最新master，对应commit：[638d8f42aa064486a4268a388f2bd1e9762c98b3](https://github.com/Oneflow-Inc/OneFlow-Benchmark/commit/638d8f42aa064486a4268a388f2bd1e9762c98b3)
-- Data Type: Float16
-- XLA: 未采用
-- batch size per device: 256
+- OneFlow Benchmark仓库: [cnn_oneflow_v0.2_compatible分支](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/cnn_oneflow_v0.2_compatible)
 - 测试共有四组，分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中位数作为最后结果。
-
-全部日志可以点击[resnet50_fp16_256_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/resnet50_fp16_256_logs.tar)获取。
 
 ## Finial Results
 
-本结果是`All Results`中提取出来的结果，从每组7次的数据中提取中位数作为最后结果。
+- ### FP16 no XLA
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 |-----------|------------------|-----------------------|------------|---------|
-| 1 | 1 | 256 | 1472.72 | 1.00 |
-| 1 | 8 | 256 | 10629.32 | 7.22 |
-| 2 | 8 | 256 | 17920.40 | 12.17 |
-| 4 | 8 | 256 | 33141.02 | 22.50 |
+| 1         | 1                | 256                   | 1472.72    | 1.00    |
+| 1         | 8                | 256                   | 10629.32   | 7.22    |
+| 2         | 8                | 256                   | 17920.40   | 12.17   |
+| 4         | 8                | 256                   | 33141.02   | 22.50   |
 
+全部日志可以点击[resnet50_fp16_256_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/resnet50_fp16_256_logs.tar)获取。
 
-## All Results
+- ### FP32 no XLA
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
+|-----------|------------------|-----------------------|------------|---------|
+| 1         | 1                | 144                   | 394.87     | 1.00    |
+| 2         | 8                | 144                   | 6254.94    | 15.84   |
+| 4         | 8                | 144                   | 12407.59   | 31.42   |
+| 1         | 1                | 128                   | 397.64     | 1.00    |
+| 1         | 8                | 128                   | 3130.34    | 7.87    |
+| 2         | 8                | 128                   | 6260.30    | 15.74   |
+| 4         | 8                | 128                   | 12411.97   | 31.21   |
+| 1         | 1                | 96                    | 394.62     | 1.00    |
+| 1         | 8                | 96                    | 3095.36    | 7.84    |
+| 2         | 8                | 96                    | 6141.07    |  15.56  |
+| 4         | 8                | 96                    | 12162.41   | 30.82   |
 
-表格展示了每次测试的全部结果，由`extract_cnn_result.py`脚本提取得到。
-
-| num_nodes | gpu_num_per_node | batch_size_per_device | throughput |
-|-----------|------------------|-----------------------|------------|
-| 1 | 1 | 256 | 1473.65 |
-| 1 | 1 | 256 | 1476.69 |
-| 1 | 1 | 256 | 1472.72 |
-| 1 | 1 | 256 | 1472.20 |
-| 1 | 1 | 256 | 1475.18 |
-| 1 | 1 | 256 | 1470.65 |
-| 1 | 1 | 256 | 1472.15 |
-| 1 | 8 | 256 | 10599.79 |
-| 1 | 8 | 256 | 10746.83 |
-| 1 | 8 | 256 | 10719.24 |
-| 1 | 8 | 256 | 10629.32 |
-| 1 | 8 | 256 | 10666.29 |
-| 1 | 8 | 256 | 10618.26 |
-| 1 | 8 | 256 | 10563.47 |
-| 2 | 8 | 256 | 18090.06 |
-| 2 | 8 | 256 | 18035.63 |
-| 2 | 8 | 256 | 17677.50 |
-| 2 | 8 | 256 | 17807.78 |
-| 2 | 8 | 256 | 17973.23 |
-| 2 | 8 | 256 | 17896.54 |
-| 2 | 8 | 256 | 17920.40 |
-| 4 | 8 | 256 | 31264.23 |
-| 4 | 8 | 256 | 33208.78 |
-| 4 | 8 | 256 | 33624.40 |
-| 4 | 8 | 256 | 33141.02 |
-| 4 | 8 | 256 | 30883.88 |
-| 4 | 8 | 256 | 33307.94 |
-| 4 | 8 | 256 | 32486.10 |
+全部日志可以点击[resnet50_fp32_96_128_144_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/resnet50_fp32_96_128_144_logs.tar)获取。
