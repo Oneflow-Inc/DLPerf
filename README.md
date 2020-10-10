@@ -25,7 +25,7 @@ More and more frameworks will be included in the future, such as MindSpore and M
 1. ResNet-50 v1.5
 2. BERT-Base
 
-There are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were committed by git and mentioned in the documents.
+There are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
 
 More DNN models will be tested in the future.
 
@@ -35,7 +35,7 @@ Each DNN model of a framework should be tested on a multi-node cluster with diff
 
 #### Multi-Node and Multi-Device
 
-We suggest to perform each test with 1-node-1-device, 1-node-8-devices, 2-nodes-16-devices, 4-nodes-32-devices. 
+We suggest to perform each test with 1-node-1-device, 1-node-8-device, 2-node-16-device, 4-node-32-device configuration.  
 
 #### Batch Size
 
@@ -103,7 +103,7 @@ This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1,
 
 | Framework                                                    | Source                                                       | FP32 throughput<br>(img/s)  bsz=128                          | FP32 speedup<br>bsz=128 | AMP throughput<br>(img/s) bsz=256                            | AMP speedup<br>bsz=256                          |
 | :----------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------ | ----------------------------------------------- |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/Classification/cnns) | [12411.97](./OneFlow)                                        | 31.21                   | 33141.02                                                     | 22.50                                           |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/Classification/cnns) | [12411.97](./OneFlow)                                        | 31.21                   | 33141.02                                                     | 22.50                                           |
 | [NGC TensorFlow 1.x](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags) | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5) | [9514.64](./NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | 26.25                   | <sup>[1]</sup>29171.69<sup>XLA</sup><br>24734.22<sup>W/O XLA</sup> | 24.34<sup>XLA</sup><br>26.17<sup>W/O XLA</sup>  |
 | [NGC PyTorch](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch/tags) | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5) | [10917.09](./NVIDIADeepLearningExamples/PyTorch/resnet50v1.5) | 29.72                   | 22551.16                                                     | 28.09                                           |
 | [NGC MXNet](https://ngc.nvidia.com/catalog/containers/nvidia:mxnet/tags) | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5) | [11233.92](./NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | 28.67                   | 30713.68                                                     | 22.03                                           |
@@ -123,11 +123,11 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 | Framework                                                    | Source                                                       | FP32 throughput<br>bsz=max                                   | FP32 throughput<br>bsz=32 | AMP throughput<br>bsz=max       | AMP throughput<br>bsz=64                                     |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------- | ------------------------------- | ------------------------------------------------------------ |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4664.10<br>bsz=96](./OneFlow)                               | 3689.80                   | 15724.70<br>bsz=160             | 9911.78                                                      |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/LanguageModeling/BERT) | [4664.10<br>bsz=96](./OneFlow)                               | 3689.80                   | 15724.70<br>bsz=160             | 9911.78                                                      |
 | [NGC TensorFlow 1.x](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags) | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT) | [3089.74<br>bsz=48](./NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | 2727.90                   | 11650.0<sup>XLA</sup><br>bsz=96 | <sup>[4]</sup>9409.2<sup>XLA</sup><br>5189.07<sup>W/O XLA</sup> |
 | [NGC PyTorch](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch/tags) | [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/LanguageModeling/BERT) | [3039.3<br>bsz=48](./NVIDIADeepLearningExamples/PyTorch/BERT) | 2885.81                   | 10349.12<br>bsz=96              | 9331.72                                                      |
 | [PaddlePaddle](https://github.com/PaddlePaddle/Paddle/tree/v1.8.3) | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | [3167.68<br>bsz=96](./PaddlePaddle/bert)                     | 2073.60                   | 5452.35<br>bsz=160              | 3406.36                                                      |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0)<sup>W/O clip</sup> | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/BERT) | [4799.64<br/>bsz=96](./OneFlow)                              | 4019.45                   | 17210.63<br>bsz=160             | 11195.72                                                     |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0)<sup>W/O clip</sup> | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/LanguageModeling/BERT) | [4799.64<br/>bsz=96](./OneFlow)                              | 4019.45                   | 17210.63<br>bsz=160             | 11195.72                                                     |
 | <sup>[5]</sup>[MXNet](https://github.com/apache/incubator-mxnet/tree/1.6.0)<sup>W/O clip</sup> | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | [4340.89<br>bsz=64](./MxNet/BERT)                            | 3671.45                   | 14822.31<br>bsz=128             | 11269.14                                                     |
 
 [4]: AMP throughput of TensorFlow 1.x is obtained **with** or **without** XLA.
