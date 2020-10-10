@@ -1,6 +1,6 @@
 # OneFlow ResNet50-V1.5 Benchmark Test Report
 
-本报告总结了OneFlow v0.2下的ResNet50-V1.5 评测结果。
+本报告总结了OneFlow v0.2.0 下的ResNet50-V1.5 评测结果。
 
 ## Test Environment
 
@@ -12,7 +12,7 @@
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
-- OneFlow: v0.1.9 
+- OneFlow: v0.2.0
 - OneFlow-Benchmark: master@8a78044
 - `nvidia-smi topo -m`
 
@@ -42,8 +42,8 @@ Legend:
 
 ## Test Descriptions
 
-- OneFlow版本: v0.2，对应commit: [64c20462f245b5cbef4230a62fa06edff85411b3](https://github.com/Oneflow-Inc/oneflow/commit/64c20462f245b5cbef4230a62fa06edff85411b3)
-- OneFlow Benchmark仓库: [cnn_oneflow_v0.2_compatible分支](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/cnn_oneflow_v0.2_compatible)
+- OneFlow版本: [v0.2.0](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0)
+- OneFlow Benchmark仓库版本: [v0.2.0](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0)
 - XLA: 未采用
 - 测试共有四组，分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中位数作为最后结果。
 

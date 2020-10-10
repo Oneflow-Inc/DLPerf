@@ -1,6 +1,6 @@
 # BERT base Benchmark Test Report
 
-本报告总结了OneFlow v0.2下BERT base 的评测结果。
+本报告总结了OneFlow v0.2.0 下BERT base 的评测结果。
 
 ## Test Environment
 
@@ -12,7 +12,7 @@
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
-- OneFlow: v0.1.9 
+- OneFlow: v0.2.0
 - OneFlow-Benchmark: master@8a78044
 - `nvidia-smi topo -m`
 
@@ -42,14 +42,18 @@ Legend:
 
 ## Test Descriptions
 
-- OneFlow版本: v0.2，对应commit: [64c20462f245b5cbef4230a62fa06edff85411b3](https://github.com/Oneflow-Inc/oneflow/commit/64c20462f245b5cbef4230a62fa06edff85411b3)
-- OneFlow Benchmark仓库: [cnn_oneflow_v0.2_compatible分支](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/cnn_oneflow_v0.2_compatible)
+- OneFlow版本: [v0.2.0](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0)
+- OneFlow Benchmark仓库版本: [v0.2.0](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0)
 - XLA: 未采用
 - 测试共有四组，分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中位数作为最后结果。
 
 
 
 ## Test Results
+
+测试结果在FP32和FP16前提下，又区分了`with clip`和`without clip`这两种情况。OneFlow中，此处的`with clip`是指`grad_clipping=flow.optimizer.grad_clipping.by_global_norm(1.0)`，而`without clip`是设置了`grad_clipping=None`，详情请[点击这里](https://github.com/Oneflow-Inc/OneFlow-Benchmark/blob/v0.2.0/LanguageModeling/BERT/util.py#L171)查阅相关代码.
+
+测试结果表明，在不使用clip的情况下，性能提升明显，如FP16 batch size为160，4机8卡情况下，with clip的throughput为15724.70，而without clip的throughput为17210。更多对比参见如下表格。
 
 ### FP16 with clip
 
@@ -129,7 +133,7 @@ Legend:
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 |-----------|------------------|-----------------------|------------|---------|
-| 1         | 1                | 32                    | 152.89    | 1.00 |
+| 1         | 1                | 32                    | 152.89     | 1.00 |
 | 1         | 8                | 32                    | 1105.55    | 7.23 |
 | 2         | 8                | 32                    | 2015.78    | 13.18 |
 | 4         | 8                | 32                    | 3689.80    | 24.13 |

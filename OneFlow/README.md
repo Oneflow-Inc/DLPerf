@@ -14,7 +14,7 @@
 
 ### ResNet50-V1.5 result on 4 nodes with 8x V100 16G GPUs each
 
-- ### OneFlow v0.2 F16
+- ### OneFlow v0.2.0  F16
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP16 <br>no XLA | speedup |
 | --------- | ---------------- | --------------------- | ------------------------------ | ------- |
@@ -23,7 +23,7 @@
 | 2         | 8                | 256                   | 17920.40                       | 12.17   |
 | 4         | 8                | 256                   | 33141.02                       | 22.50   | 
 
-- ### OneFlow v0.2 F32
+- ### OneFlow v0.2.0 F32
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no XLA | speedup |
 | --------- | ---------------- | --------------------- | ------------------------------ | ------- |
@@ -36,7 +36,7 @@
 
 ### BERT base result on 4 nodes with 8x V100 16G GPUs each
 
-- ### OneFlow v0.2 F16 with clip
+- ### OneFlow v0.2.0 F16 with clip
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP16 <br>no XLA | speedup |
 | --------- | ---------------- | --------------------- | ------------------------------ | ------- |
@@ -55,7 +55,7 @@
 
 <br>
 
-- ### OneFlow v0.2 F16 without clip
+- ### OneFlow v0.2.0 F16 without clip
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP16 <br>no XLA | speedup |
 | --------- | ---------------- | --------------------- | ------------------------------ | ------- |
@@ -70,7 +70,7 @@
 
 <br>
 
-- ### OneFlow v0.2 F32 with clip
+- ### OneFlow v0.2.0 F32 with clip
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput <br>FP32 <br>no XLA | speedup |
 | --------- | ---------------- | --------------------- | ------------------------------ | ------- |
@@ -87,7 +87,7 @@
 | 2         | 8                | 32                    | 2015.78                        | 13.18   |
 | 4         | 8                | 32                    | 3689.80                        | 24.13   |
 
-- ### OneFlow v0.2 F32 without clip
+- ### OneFlow v0.2.0 F32 without clip
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 | --------- | ---------------- | --------------------- | ---------- | ------- |
