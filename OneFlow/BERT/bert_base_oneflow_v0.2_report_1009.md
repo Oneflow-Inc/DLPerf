@@ -44,6 +44,7 @@ Legend:
 
 - OneFlow版本: v0.2，对应commit: [64c20462f245b5cbef4230a62fa06edff85411b3](https://github.com/Oneflow-Inc/oneflow/commit/64c20462f245b5cbef4230a62fa06edff85411b3)
 - OneFlow Benchmark仓库: [cnn_oneflow_v0.2_compatible分支](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/cnn_oneflow_v0.2_compatible)
+- XLA: 未采用
 - 测试共有四组，分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中位数作为最后结果。
 
 
@@ -70,7 +71,7 @@ Legend:
 | 2         | 8                | 128                   | 7673.42    | 13.03   |
 | 4         | 8                | 128                   | 14729.00   | 25.00   |
 
-### batch size = 64 
+- ### batch size = 64 
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 |-----------|------------------|-----------------------|------------|---------|
@@ -83,6 +84,15 @@ Legend:
 
 ### FP16 without clip
 
+- ### batch size = 160
+
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
+| --------- | ---------------- | --------------------- | ---------- | ------- |
+| 1        | 1                 | 160                   | 613.93     | 1.00    |
+| 1        | 8                 | 160                   | 4683.36    | 7.63    |
+| 2        | 8                 | 160                   | 8777.57    | 14.30   |
+| 4        | 8                 | 160                   | 17210.63   | 28.03   |
+
 - ### batch size = 64
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
@@ -92,7 +102,7 @@ Legend:
 | 2         | 8                | 64                    | 6669.93    | 12.07   |
 | 4         | 8                | 64                    | 11195.72   | 20.26   |
 
-全部日志可以点击[bert_base_fp16_b64_no_clip_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/bert_base_fp16_b64_no_clip_logs.tar)获取。
+全部日志可以点击[bert_base_fp16_b160_no_clip_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/bert_base_fp16_b160_no_clip_logs.tar)和[bert_base_fp16_b64_no_clip_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/bert_base_fp16_b64_no_clip_logs.tar)获取。
 
 ### FP32 with clip
 
@@ -124,4 +134,26 @@ Legend:
 | 2         | 8                | 32                    | 2015.78    | 13.18 |
 | 4         | 8                | 32                    | 3689.80    | 24.13 |
 
-全部日志可以点击[bert_base_fp32_b32_64_96_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/bert_base_fp32_b32_64_96_logs.tar)
+全部日志可以点击[bert_base_fp32_b32_64_96_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/bert_base_fp32_b32_64_96_logs.tar)获取。
+
+### FP32 with clip
+
+- ### batch size = 96
+
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
+| --------- | ---------------- | --------------------- | ---------- | ------- |
+| 1         | 1                | 96                    | 156.25     | 1.00    |
+| 1         | 8                | 96                    | 1234.65    | 7.90    |
+| 2         | 8                | 96                    | 2425.97    | 15.53   |
+| 4         | 8                | 96                    | 4799.64    | 30.72   |
+
+- ### batch size = 32
+
+| num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
+| --------- | ---------------- | --------------------- | ---------- | ------- |
+| 1         | 1                | 32                    | 153.94     | 1.00    |
+| 1         | 8                | 32                    | 1194.48    | 7.76    |
+| 2         | 8                | 32                    | 2181.51    | 14.17   |
+| 4         | 8                | 32                    | 4019.45    | 26.11   |
+
+全部日志可以点击[bert_base_fp32_b96_32_no_clip_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/bert_base_fp32_b96_32_no_clip_logs.tar)

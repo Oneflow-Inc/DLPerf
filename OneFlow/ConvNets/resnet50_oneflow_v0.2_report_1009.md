@@ -44,11 +44,12 @@ Legend:
 
 - OneFlow版本: v0.2，对应commit: [64c20462f245b5cbef4230a62fa06edff85411b3](https://github.com/Oneflow-Inc/oneflow/commit/64c20462f245b5cbef4230a62fa06edff85411b3)
 - OneFlow Benchmark仓库: [cnn_oneflow_v0.2_compatible分支](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/cnn_oneflow_v0.2_compatible)
+- XLA: 未采用
 - 测试共有四组，分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中位数作为最后结果。
 
 ## Finial Results
 
-- ### FP16 no XLA
+- ### FP16
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 |-----------|------------------|-----------------------|------------|---------|
@@ -59,7 +60,8 @@ Legend:
 
 全部日志可以点击[resnet50_fp16_256_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/resnet50_fp16_256_logs.tar)获取。
 
-- ### FP32 no XLA
+- ### FP32
+
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 |-----------|------------------|-----------------------|------------|---------|
 | 1         | 1                | 144                   | 394.87     | 1.00    |
