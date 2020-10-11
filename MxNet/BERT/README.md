@@ -381,5 +381,5 @@ Saving result to ./result/bz32_result.json
 
 2.而Gradient Clipping又分为两种实现方式：**clip by value**和**clip by global norm**。简单来说clip by value即对梯度矩阵进行就地剪裁，超过或小于设定的阈值，就会被替换；而clip by global norm需要先计算所有梯度的平方和：global_norm，再以global_norm为基准进行比较和截取。**所以实现clip by global norm会对速度带来一些影响。**
 
-3.在BERT的google[代码实现](https://github.com/google-research/bert)中采用的是clip by global norm的方式（见：[Line 74](https://github.com/google-research/bert/blob/master/optimization.py#L74)），在oneflow的bert实现中，也采用了和原论文一致的实现方式clip by global norm。评测时，我们对添加clip和未添加clip的情况分别做了测试，测试结果见[BERT base result on 4 nodes with 8x V100 16G GPUs each](https://github.com/Oneflow-Inc/DLPerf/tree/master/OneFlow#bert-base-result-on-4-nodes-with-8x-v100-16g-gpus-each)
+3.在BERT的google[代码实现](https://github.com/google-research/bert)中采用的是clip by global norm的方式（见：[Line 74](https://github.com/google-research/bert/blob/master/optimization.py#L74)），在oneflow的bert实现中，也采用了和原论文一致的实现方式clip by global norm，而在gluon-mxnet的bert实现中，是没有使用clip的。评测oneflow时，我们对添加clip和未添加clip的情况分别做了测试，测试结果见[BERT base result on 4 nodes with 8x V100 16G GPUs each](https://github.com/Oneflow-Inc/DLPerf/tree/master/OneFlow#bert-base-result-on-4-nodes-with-8x-v100-16g-gpus-each) 。而在gluon-mxnet的bert实现中，是没有使用clip的
 
