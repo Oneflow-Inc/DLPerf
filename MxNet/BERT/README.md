@@ -371,14 +371,15 @@ Saving result to ./result/bz32_result.json
 
 ### 说明
 
-在[BERT论文](https://arxiv.org/pdf/1810.04805)的google[代码实现](https://github.com/google-research/bert)中，用到了gradient clip，gradient clip通常又分为两种实现方式：
+在[BERT论文](https://arxiv.org/pdf/1810.04805)的google[代码实现](https://github.com/google-research/bert)中，用到了梯度剪裁(Gradient Clipping)，通常引入Gradient Clipping是为了处理gradient explosion或者gradients vanishing的问题，防止由于迭代过程中梯度更新过于迅速导致的loss divergence，简单来说，就是将权重更新限制在一个合适的范围内。
+
+1.Gradient Clipping通常分为以下几种实现方式：
 
 - **clip by value**
+- **clip by  norm**
 
 - **clip by global norm**
 
-1.通常引入Gradient Clipping是为了处理gradient explosion或者gradients vanishing的问题，防止由于迭代过程中梯度更新过于迅速导致的loss divergence。Gradient Clipping的作用简单来说，就是将权重更新限制在一个合适的范围内。
-
-2.而Gradient Clipping又分为两种实现方式：**clip by value**和**clip by global norm**。简单来说clip by value即对梯度矩阵进行就地剪裁，超过或小于设定的阈值，就会被替换；而clip by global norm需要先计算所有梯度的平方和：global_norm，再以global_norm为基准进行比较和截取。**所以实现clip by global norm会对速度带来一些影响。**
+2.简单来说clip by value即对梯度矩阵进行就地剪裁，超过或小于设定的阈值，就会被替换；clip by norm和clip by value类似，不过需要给梯度矩阵计算出L2-norm值后再和clip_norm比较和截取；而clip by global norm则需要先计算出全局梯度的global_norm，再以global_norm为基准进行比较和截取。**所以实现clip by global norm会对速度带来一些影响**(参考：[tensorflow-clip_by_global_norm](https://tensorflow.google.cn/api_docs/python/tf/clip_by_global_norm?hl=en))。
 
 3.在BERT的google[代码实现](https://github.com/google-research/bert)中采用的是clip by global norm的方式（见：[Line 74](https://github.com/google-research/bert/blob/master/optimization.py#L74)），在oneflow的bert实现中，也采用了和原论文一致的实现方式clip by global norm，评测oneflow时，我们对添加clip和未添加clip的情况分别做了测试，测试结果见[BERT base result on 4 nodes with 8x V100 16G GPUs each](https://github.com/Oneflow-Inc/DLPerf/tree/master/OneFlow#bert-base-result-on-4-nodes-with-8x-v100-16g-gpus-each) 。而**在gluon-mxnet的bert实现中，是没有使用clip的**。
