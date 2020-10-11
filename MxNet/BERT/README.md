@@ -288,7 +288,7 @@ Saving result to ./result/bz32_result.json
 
 ### BERT-base FP32
 
-#### batch size = 64 & without xla
+#### Batch size = 64 & W/O xla & W/O  clip
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -299,7 +299,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 2172.62   | 13.86   |
 | 4        | 32      | 4340.89   | 27.69   |
 
-#### batch size = 48 & without xla
+#### Batch size = 48 & W/O xla & W/O  clip
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -310,7 +310,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 2067.72   | 13.45   |
 | 4        | 32      | 4105.29   | 26.7    |
 
-#### batch size = 32 & without xla
+#### Batch size = 32 & W/O xla & W/O  clip
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -325,7 +325,7 @@ Saving result to ./result/bz32_result.json
 
 ### BERT-base FP16
 
-#### batch size = 64 & without xla
+#### Batch size = 64 & W/O xla & W/O  clip
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -336,7 +336,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 5723.26   | 12.08   |
 | 4        | 32      | 11269.14  | 23.79   |
 
-#### batch size = 96 & without xla
+#### Batch size = 96 & W/O xla & W/O  clip
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -347,7 +347,7 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 6684.57   | 12.94   |
 | 4        | 32      | 13376.76  | 25.9    |
 
-#### batch size = 128 & without xla
+#### Batch size = 128 & W/O xla & W/O  clip
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -358,8 +358,28 @@ Saving result to ./result/bz32_result.json
 | 2        | 16      | 7327.5    | 13.46   |
 | 4        | 32      | 14822.31  | 27.33   |
 
+> W/O xla，即without xla，表明测试过程未使用xla
+>
+> W/O clip，即without clip，表明测试过程未使用gradient clip
+
 详细 Log 信息可下载：
 
 - [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/bert_fp32.zip)
 - [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/bert/bert_fp16.zip)
+
+
+
+### 说明
+
+在[BERT论文](https://arxiv.org/pdf/1810.04805)的google[代码实现](https://github.com/google-research/bert)中，用到了gradient clip，gradient clip通常又分为两种实现方式：
+
+- **clip by value**
+
+- **clip by global norm**
+
+1.通常引入Gradient Clipping是为了处理gradient explosion或者gradients vanishing的问题，防止由于迭代过程中梯度更新过于迅速导致的loss divergence。Gradient Clipping的作用简单来说，就是将权重更新限制在一个合适的范围内。
+
+2.而Gradient Clipping又分为两种实现方式：**clip by value**和**clip by global norm**。简单来说clip by value即对梯度矩阵进行就地剪裁，超过或小于设定的阈值，就会被替换；而clip by global norm需要先计算所有梯度的平方和：global_norm，再以global_norm为基准进行比较和截取。**所以实现clip by global norm会对速度带来一些影响。**
+
+3.在BERT的google[代码实现](https://github.com/google-research/bert)中采用的是clip by global norm的方式（见：[Line 74](https://github.com/google-research/bert/blob/master/optimization.py#L74)），在oneflow的bert实现中，也采用了和原论文一致的实现方式clip by global norm。评测时，我们对添加clip和未添加clip的情况分别做了测试，测试结果见[BERT base result on 4 nodes with 8x V100 16G GPUs each](https://github.com/Oneflow-Inc/DLPerf/tree/master/OneFlow#bert-base-result-on-4-nodes-with-8x-v100-16g-gpus-each)
 
