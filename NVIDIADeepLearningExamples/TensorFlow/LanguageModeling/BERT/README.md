@@ -365,7 +365,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 ### BERT-Base  FP32
 
-#### batch size=48 & without xla
+#### batch size=32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -373,9 +373,9 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 | 1        | 4       | 397.71    | 3.71    |
 | 1        | 8       | 790.03    | 7.36    |
 | 2        | 16      | 1404.04   | 13.08   |
-| 4        | 32      | 3089.74   | 27.4    |
+| 4        | 32      | 2727.9    | 25.42   |
 
-#### batch size=32 & without xla
+#### batch size=48 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -383,7 +383,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 | 1        | 4       | 430.43    | 3.82    |
 | 1        | 8       | 855.45    | 7.59    |
 | 2        | 16      | 1576.88   | 13.98   |
-| 4        | 32      | 2727.9    | 25.42   |
+| 4        | 32      | 3089.74   | 27.4    |
 
 
 
