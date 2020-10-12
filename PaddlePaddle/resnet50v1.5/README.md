@@ -54,6 +54,35 @@ cd models/PaddleCV/image_classification
 python3 -m pip install paddlepaddle-gpu==1.8.3.post107 -i https://mirror.baidu.com/pypi/simple
 ```
 
+## DALI
+
+1. 本测试使用 conda 维护测试环境， 进入 paddle 的 conda 用例， 下载 DALI_extra 源码
+
+```
+conda activate paddle
+git clone https://github.com/NVIDIA/DALI_extra.git
+```
+
+2. 使用 conda 环境内的 python 安装 nightly DALI，保险起见，可加上 python 路径
+
+```
+/home/leinao/anaconda3/envs/paddle/bin/python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/nightly nvidia-dali-nightly-cuda100 
+```
+
+3. 设置 `export FLAGS_fraction_of_gpu_memory_to_use=0.8`
+
+```
+export FLAGS_fraction_of_gpu_memory_to_use=0.8
+```
+
+否则可能会报错
+
+```
+AssertionError: Please leave enough GPU memory for DALI workspace, e.g., by setting `export FLAGS_fraction_of_gpu_memory_to_use=0.8
+```
+
+而不大于 0.8 的值都可以运行。
+
 ## NCCL
 
 paddle的分布式训练底层依赖NCCL库，需要从[NVIDIA-NCCL官网下载](https://developer.nvidia.com/nccl/nccl-download)并安装和操作系统、CUDA版本适配的NCCL。
