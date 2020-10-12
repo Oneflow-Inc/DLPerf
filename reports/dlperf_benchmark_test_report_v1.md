@@ -124,7 +124,7 @@ The following images show throughput and speedup of 6 implementations of ResNet5
 | 2        | 16         | 2015.78               | 1404.04                                                      | 1499.40                                                      | 1116.02                              | 2181.51                                         | 1845.65                                          |
 | 4        | 32         | 3689.80               | 2727.90                                                      | 2885.81                                                      | 2073.60                              | 4019.45                                         | 3671.45                                          |
 
-[2]: The MXNet BERT script of the [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) repository does NOT support clip_by_ global_norm operation in Adam optimizer. **W/O clip_by_global_norm** operation, the throughput will be larger and the the fine-tuning accuracy may be在· lower. So we also tested OneFlow data W/O clip operation for comparison.
+[2]: The MXNet BERT script of the [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) repository does NOT support clip_by_ global_norm operation in Adam optimizer. **W/O clip_by_global_norm** operation, the throughput will be larger and the the fine-tuning accuracy may be lower. So we also tested OneFlow data W/O clip operation for comparison.
 
 The following images show throughput and speedup of 4 implementations  (without MXNet) of BERT base with data type float32 and  batch size per device = 32.
 
