@@ -1,23 +1,29 @@
 #!/bin/sh
 MODEL_DIR=../output
 rm -rf $MODEL_DIR
-gpus=${1:-"0,1"}
-bz_per_device=${2:-128}
+GPUS=${1:-"0"}
+BATCH_SIZE=${2:-128}
 TEST_NUM=${3:-1}
+DTYPE=${4:-"fp32"}
 
-a=`expr ${#gpus} + 1`
-NUM_GPU=`expr ${a} / 2`
-echo "Use gpus: $gpus"
-echo "Batch size : $bz_per_device"
+a=`expr ${#GPUS} + 1`
+num_gpu=`expr ${a} / 2`
+echo "Use gpus: $GPUS"
+echo "Batch size per device : $BATCH_SIZE"
 
 
-LOG_FOLDER=../tensorflow2/resnet50/1n${NUM_GPU}g
+LOG_FOLDER=../logs/tensorflow/resnet50/bz${BATCH_SIZE}/1n${num_gpu}g
 mkdir -p $LOG_FOLDER
-LOGFILE=${LOG_FOLDER}/rn50_b${bz_per_device}_fp32_$TEST_NUM.log
+LOGFILE=${LOG_FOLDER}/rn50_b${BATCH_SIZE}_${DTYPE}_$TEST_NUM.log
 
-# export PYTHONPATH=$PYTHONPATH:$BENCH_ROOT_DIR/tensorflow/models-2.3.0
+if  [ "$DTYPE" == "fp16" ] ; then
+  config_file=configs/examples/resnet/imagenet/gpu_fp16.yaml
+else
+  config_file=configs/examples/resnet/imagenet/gpu.yaml
+fi
+
 export PYTHONPATH=$PYTHONPATH:/home/leinao/tensorflow/models-2.3.0
-export CUDA_VISIBLE_DEVICES=${gpus}
+export CUDA_VISIBLE_DEVICES=${GPUS}
 DATA_DIR=/datasets/ImageNet/tfrecord
 
 python3 classifier_trainer.py \
@@ -26,7 +32,7 @@ python3 classifier_trainer.py \
   --dataset=imagenet \
   --model_dir=$MODEL_DIR \
   --data_dir=$DATA_DIR \
-  --config_file=configs/examples/resnet/imagenet/gpu.yaml \
-  --params_override=runtime.num_gpus=$NUM_GPU  2>&1 | tee ${LOGFILE}
+  --config_file=${config_file} \
+  --params_override=runtime.num_gpus=$num_gpu  2>&1 | tee ${LOGFILE}
 
 echo "Writting log to ${LOGFILE}"

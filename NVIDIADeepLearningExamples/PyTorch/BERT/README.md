@@ -2,32 +2,38 @@
 
 ## 概述 Overview
 
-本测试基于 [NVIDIA/DeepLearningExamples/PyTorch/LanguageModeling/BERT/](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4) 仓库中提供的 PyTorch 框架的 BERT 实现，在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:PyTorch/tags)中进行单机单卡、单机多卡的结果复现及速度评测，同时增加分布式实现，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [NVIDIA/DeepLearningExamples/PyTorch/LanguageModeling/BERT/](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4) 仓库中提供的 PyTorch 框架的 BERT 实现，在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:PyTorch/tags)中进行单机单卡、单机多卡、多机多卡的结果复现及速度评测，同时增加分布式实现，测试 1 机、2 机、4 机的吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，该测试覆盖 FP32 及混合精度，后续将持续维护，增加使用其他优化方式的测评。
 
 ## 内容目录 Table Of Contents
 
-* [概述 Overview](#---overview)
-* [内容目录 Table Of Contents](#-----table-of-contents)
-* [环境 Environment](#---environment)
-  + [系统](#--)
-    - [硬件](#--)
-    - [软件](#--)
-  + [NGC 容器](#ngc---)
-    * [Feature support matrix](#feature-support-matrix)
-* [快速开始 Quick Start](#-----quick-start)
-  + [1. 前期准备](#1-----)
-    - [数据集](#---)
-    - [镜像及容器](#-----)
-    - [SSH 免密](#ssh---)
-  + [2. 运行测试](#2-----)
-  + [3. 数据处理](#3-----)
-* [性能结果 Performance](#-----performance)
-  + [FP32 & W/O XLA](#fp32---w-o-xla)
-    - [BERT-Base batch_size = 32](#bert-base-batch-size---32)
-    - [BERT-Base batch_size = 48](#bert-base-batch-size---48)
-
+- [NVIDIA/DeepLearningExamples PyTorch BERT 测评](#nvidia-deeplearningexamples-pytorch-bert---)
+  * [概述 Overview](#---overview)
+  * [内容目录 Table Of Contents](#-----table-of-contents)
+  * [环境 Environment](#---environment)
+    + [系统](#--)
+      - [硬件](#--)
+      - [软件](#--)
+    + [NGC 容器](#ngc---)
+      * [Feature support matrix](#feature-support-matrix)
+  * [快速开始 Quick Start](#-----quick-start)
+    + [1. 前期准备](#1-----)
+      - [数据集](#---)
+      - [镜像及容器](#-----)
+      - [SSH 免密](#ssh---)
+      - [Adam 算法](#adam---)
+    + [2. 运行测试](#2-----)
+      - [单机测试](#----)
+      - [多机测试](#----)
+    + [3. 数据处理](#3-----)
+  * [性能结果 Performance](#-----performance)
+    + [FP32](#fp32)
+      - [BERT-Base batch_size = 32](#bert-base-batch-size---32)
+      - [BERT-Base batch_size = 48](#bert-base-batch-size---48)
+  * [FP16](#fp16)
+    - [BERT-Base batch_size = 64](#bert-base-batch-size---64)
+    - [BERT-Base batch_size = 96](#bert-base-batch-size---96)
 
 ## 环境 Environment
 
@@ -72,8 +78,9 @@
   | Feature                         | BERT PyTorch |
   | ------------------------------- | ------------ |
   | Multi-gpu training              | Yes          |
-  | Multi-node                      | No           |
-  | Automatic mixed precision (AMP) | No           |
+  | Multi-node                      | Yes          |
+  | Automatic mixed precision (AMP) | Yes          |
+  | NVIDIA NCCL                     | Yes          |
 
 
 
@@ -180,6 +187,23 @@ apt-get install openssh-server
 - 修改 sshd 中用于 docker 通信的端口号 `vim /etc/ssh/sshd_config`，修改 `Port` 为空闲端口号；
 - 重启 ssh 服务，`service ssh restart`。
 
+
+
+- #### Adam 算法
+
+为了保持算法一致性，脚本 /workspace/examples/bert/run_pretraining.py 中的 `FusedLAMB` 被替换为 `FusedAdam`，该脚本需做如下修改：
+
+```
+43 from apex.optimizers import `FusedLAMB, FusedAdam # add FusedAdam
+.....
+# modify FusedLAMB with FusedAdam
+322     optimizer = FusedAdam(optimizer_grouped_parameters,
+323                           lr=args.learning_rate,
+324                           bias_correction=False)
+```
+
+如此即可。
+
 ### 2. 运行测试
 
 本次测试集群中有 4 台节点：
@@ -191,7 +215,7 @@ apt-get install openssh-server
 
 每个节点有 8 张 V100 显卡， 每张显卡显存 16 G。
 
-- **单机测试**
+- #### 单机测试
 
 在容器内下载本仓库源码：
 
@@ -207,9 +231,35 @@ bash run_single_node.sh
 
 即可执行针对单机单卡、单机 2 卡、4 卡、 8 卡， batch_size 分别取 32、48 等情况的集成测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中，如单机单卡为 /1n1g，意为 1 node 1 gpu；单机 8卡 为 /1n8g，意为 1 node 8 gpus，以此类推。
 
+如需测试 `fp16`，直接修改脚本中的 `PREC` 为 `fp16` 即可。
+
+- #### 多机测试
+
+多机测试，一定要确保数据集存在各节点测试机器的相同路径下，各脚本的行为要一致，尤其是修改要保持同步。
+
+如需测试 `fp16`，直接修改脚本中的 `PREC` 为 `fp16` 即可。
+
+- **两机测试**
+
+以 NODE1 和 NODE2 为例，run_two_nodes.sh 脚本已填入 2 台机器对应的 IP 及端口号，NODE1 上的脚本 single_node_train.sh 中 `--node_rank` 默认为 0，还需自行将 NODE2 机器上相同路径下的脚本 108 行 `--node_rank` 改为 1，在 2 台机器上同时运行脚本，
+
+```
+bash run_two_node.sh
+```
+
+- **多机测试**
+
+以本集群为例，最多支持 4 机 32 卡，run_multi_nodes.sh 脚本已设置 NODE1 为 master node，设置好其 IP 及端口号，还需自行将 NODE3 机器上相同路径下的脚本 108 行 `--node_rank` 中的改为 2， NODE4 的 `--node_rank` 改为 3，在 4 台机器上同时运行脚本，
+
+```
+bash run_multi_nodes.sh
+```
+
+即可执行多节点 batch_size 分别取 32、48 等情况的集成测试，并将 log 信息保存在当前目录的对应分布式配置路径中。
+
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取 5 次），每次训练过程只取第 1 个 epoch 的前 120 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并以此数据计算加速比。
+测试进行了多组训练（本测试中取 5 次），每次训练过程只取第 1 个 epoch 的前 150 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并以此数据计算加速比。
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
@@ -220,42 +270,75 @@ python extract_pytorch_logs_time.py --log_dir /workspace/examples/bert/test_scri
 结果打印如下
 
 ```
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n2g/bert-base-adam-training_b48_fp32_2.log {2: 230.0}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n2g/bert-base-adam-training_b48_fp32_3.log {2: 230.0, 3: 230.45}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n2g/bert-base-adam-training_b48_fp32_4.log {2: 230.0, 3: 230.45, 4: 230.03}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n2g/bert-base-adam-training_b48_fp32_1.log {2: 230.0, 3: 230.45, 4: 230.03, 1: 230.19}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n2g/bert-base-adam-training_b48_fp32_5.log {2: 230.0, 3: 230.45, 4: 230.03, 1: 230.19, 5: 230.74}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n1g/bert-base-adam-training_b48_fp32_2.log {2: 122.79}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n1g/bert-base-adam-training_b48_fp32_3.log {2: 122.79, 3: 122.82}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n1g/bert-base-adam-training_b48_fp32_4.log {2: 122.79, 3: 122.82, 4: 122.96}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n1g/bert-base-adam-training_b48_fp32_1.log {2: 122.79, 3: 122.82, 4: 122.96, 1: 123.12}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n1g/bert-base-adam-training_b48_fp32_5.log {2: 122.79, 3: 122.82, 4: 122.96, 1: 123.12, 5: 122.91}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n8g/bert-base-adam-training_b48_fp32_2.log {2: 938.46}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n8g/bert-base-adam-training_b48_fp32_3.log {2: 938.46, 3: 938.06}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n8g/bert-base-adam-training_b48_fp32_4.log {2: 938.46, 3: 938.06, 4: 938.88}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n8g/bert-base-adam-training_b48_fp32_1.log {2: 938.46, 3: 938.06, 4: 938.88, 1: 936.75}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n8g/bert-base-adam-training_b48_fp32_5.log {2: 938.46, 3: 938.06, 4: 938.88, 1: 936.75, 5: 940.09}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n4g/bert-base-adam-training_b48_fp32_2.log {2: 469.75}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n4g/bert-base-adam-training_b48_fp32_3.log {2: 469.75, 3: 469.92}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n4g/bert-base-adam-training_b48_fp32_4.log {2: 469.75, 3: 469.92, 4: 469.32}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n4g/bert-base-adam-training_b48_fp32_1.log {2: 469.75, 3: 469.92, 4: 469.32, 1: 471.54}
-/workspace/examples/bert/test_scripts/ngc_bert_b48/pytorch/1n4g/bert-base-adam-training_b48_fp32_5.log {2: 469.75, 3: 469.92, 4: 469.32, 1: 471.54, 5: 469.6}
-{'bert-base-adam-training': {'1n1g': {'average_speed': 122.92,
-                                      'batch_size_per_device': 48,
-                                      'median_speed': 122.91,
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/4n8g/bert-base-adam-training_b96_fp16_5.log {5: 10273.14}
+end_time:  2020-09-24 02:12:08.999291
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/4n8g/bert-base-adam-training_b96_fp16_1.log {5: 10273.14, 1: 10552.87}
+end_time:  2020-09-24 02:15:18.098056
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/4n8g/bert-base-adam-training_b96_fp16_3.log {5: 10273.14, 1: 10552.87, 3: 10324.68}
+end_time:  2020-09-24 02:16:52.945844
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/4n8g/bert-base-adam-training_b96_fp16_4.log {5: 10273.14, 1: 10552.87, 3: 10324.68, 4: 10349.12}
+end_time:  2020-09-24 02:13:43.531300
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/4n8g/bert-base-adam-training_b96_fp16_2.log {5: 10273.14, 1: 10552.87, 3: 10324.68, 4: 10349.12, 2: 10414.77}
+end_time:  2020-09-24 03:20:44.972941
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n1g/bert-base-adam-training_b96_fp16_5.log {5: 463.85}
+end_time:  2020-09-24 03:15:44.213131
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n1g/bert-base-adam-training_b96_fp16_1.log {5: 463.85, 1: 462.35}
+end_time:  2020-09-24 03:18:14.318222
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n1g/bert-base-adam-training_b96_fp16_3.log {5: 463.85, 1: 462.35, 3: 466.94}
+end_time:  2020-09-24 03:19:29.565003
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n1g/bert-base-adam-training_b96_fp16_4.log {5: 463.85, 1: 462.35, 3: 466.94, 4: 462.14}
+end_time:  2020-09-24 03:16:58.796182
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n1g/bert-base-adam-training_b96_fp16_2.log {5: 463.85, 1: 462.35, 3: 466.94, 4: 462.14, 2: 462.35}
+end_time:  2020-09-24 02:26:50.557894
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/2n8g/bert-base-adam-training_b96_fp16_5.log {5: 5366.7}
+end_time:  2020-09-24 02:20:55.793547
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/2n8g/bert-base-adam-training_b96_fp16_1.log {5: 5366.7, 1: 5426.07}
+end_time:  2020-09-24 02:23:47.979051
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/2n8g/bert-base-adam-training_b96_fp16_3.log {5: 5366.7, 1: 5426.07, 3: 5448.97}
+end_time:  2020-09-24 02:25:18.862542
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/2n8g/bert-base-adam-training_b96_fp16_4.log {5: 5366.7, 1: 5426.07, 3: 5448.97, 4: 5439.94}
+end_time:  2020-09-24 02:22:21.485900
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/2n8g/bert-base-adam-training_b96_fp16_2.log {5: 5366.7, 1: 5426.07, 3: 5448.97, 4: 5439.94, 2: 5410.84}
+end_time:  2020-09-24 03:34:57.059096
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n8g/bert-base-adam-training_b96_fp16_5.log {5: 3339.15}
+end_time:  2020-09-24 03:29:01.089925
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n8g/bert-base-adam-training_b96_fp16_1.log {5: 3339.15, 1: 3260.58}
+end_time:  2020-09-24 03:31:53.242659
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n8g/bert-base-adam-training_b96_fp16_3.log {5: 3339.15, 1: 3260.58, 3: 3260.74}
+end_time:  2020-09-24 03:33:31.687091
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n8g/bert-base-adam-training_b96_fp16_4.log {5: 3339.15, 1: 3260.58, 3: 3260.74, 4: 3310.51}
+end_time:  2020-09-24 03:30:27.478401
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n8g/bert-base-adam-training_b96_fp16_2.log {5: 3339.15, 1: 3260.58, 3: 3260.74, 4: 3310.51, 2: 3287.12}
+end_time:  2020-09-24 03:27:35.906235
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n4g/bert-base-adam-training_b96_fp16_5.log {5: 1727.93}
+end_time:  2020-09-24 03:22:04.678285
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n4g/bert-base-adam-training_b96_fp16_1.log {5: 1727.93, 1: 1734.78}
+end_time:  2020-09-24 03:24:55.125125
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n4g/bert-base-adam-training_b96_fp16_3.log {5: 1727.93, 1: 1734.78, 3: 1731.19}
+end_time:  2020-09-24 03:26:14.931147
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n4g/bert-base-adam-training_b96_fp16_4.log {5: 1727.93, 1: 1734.78, 3: 1731.19, 4: 1726.71}
+end_time:  2020-09-24 03:23:23.394265
+/workspace/examples/bert/test_scripts/fp16_ngc_bert_b96/pytorch/1n4g/bert-base-adam-training_b96_fp16_2.log {5: 1727.93, 1: 1734.78, 3: 1731.19, 4: 1726.71, 2: 1723.52}
+{'bert-base-adam-training': {'1n1g': {'average_speed': 463.53,
+                                      'batch_size_per_device': 96,
+                                      'median_speed': 462.35,
                                       'speedup': 1.0},
-                             '1n2g': {'average_speed': 230.28,
-                                      'batch_size_per_device': 48,
-                                      'median_speed': 230.19,
-                                      'speedup': 1.87},
-                             '1n4g': {'average_speed': 470.03,
-                                      'batch_size_per_device': 48,
-                                      'median_speed': 469.75,
-                                      'speedup': 3.82},
-                             '1n8g': {'average_speed': 938.45,
-                                      'batch_size_per_device': 48,
-                                      'median_speed': 938.46,
-                                      'speedup': 7.64}}}
+                             '1n4g': {'average_speed': 1728.83,
+                                      'batch_size_per_device': 96,
+                                      'median_speed': 1727.93,
+                                      'speedup': 3.74},
+                             '1n8g': {'average_speed': 3291.62,
+                                      'batch_size_per_device': 96,
+                                      'median_speed': 3287.12,
+                                      'speedup': 7.11},
+                             '2n8g': {'average_speed': 5418.5,
+                                      'batch_size_per_device': 96,
+                                      'median_speed': 5426.07,
+                                      'speedup': 11.74},
+                             '4n8g': {'average_speed': 10382.92,
+                                      'batch_size_per_device': 96,
+                                      'median_speed': 10349.12,
+                                      'speedup': 22.38}}}
 Saving result to ./result/_result.json
 ```
 
@@ -263,27 +346,54 @@ Saving result to ./result/_result.json
 
 该小节提供针对 NVIDIA PyTorch 框架的 BERT 模型测试的性能结果和完整 log 日志。
 
-### FP32 & W/O XLA
+### FP32 
 
 - #### BERT-Base batch_size = 32
 
-| gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| ---------------- | --------------------- | ------------------ | ------- |
-| 1                | 32                    | 119.61             | 1.00    |
-| 2                | 32                    | 221.18             | 1.85    |
-| 4                | 32                    | 455.7              | 3.81    |
-| 8                | 32                    | 908.85             | 7.6     |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 32                    | 119.6              | 1.00    |
+| 1        | 4                | 32                    | 457.72             | 3.83    |
+| 1        | 8                | 32                    | 921.32             | 7.7     |
+| 2        | 8                | 32                    | 1499.4             | 12.54   |
+| 4        | 8                | 32                    | 2885.81            | 24.13   |
 
 - #### BERT-Base batch_size = 48
 
-| gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| ---------------- | --------------------- | ------------------ | ------- |
-| 1                | 48                    | 122.91             | 1.00    |
-| 2                | 48                    | 230.19             | 1.87    |
-| 4                | 48                    | 469.75             | 3.82    |
-| 8                | 48                    | 938.46             | 7.64    |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 48                    | 121.94             | 1.00    |
+| 1        | 4                | 48                    | 464.66             | 3.81    |
+| 1        | 8                | 48                    | 928.01             | 7.61    |
+| 2        | 8                | 48                    | 1584.32            | 12.99   |
+| 4        | 8                | 48                    | 3039.3             | 24.92   |
+
+## FP16 
+
+- #### BERT-Base batch_size = 64
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 64                    | 444.51             | 1.0     |
+| 1        | 4                | 64                    | 1671.66            | 3.76    |
+| 1        | 8                | 64                    | 3251.7             | 7.32    |
+| 2        | 8                | 64                    | 4936.92            | 11.11   |
+| 4        | 8                | 64                    | 9331.72            | 20.99   |
+
+
+
+- #### BERT-Base batch_size = 96
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 96                    | 462.35             | 1.0     |
+| 1        | 4                | 96                    | 1727.93            | 3.74    |
+| 1        | 8                | 96                    | 3287.12            | 7.11    |
+| 2        | 8                | 96                    | 5426.07            | 11.74   |
+| 4        | 8                | 96                    | 10349.12           | 22.38   |
+
+同时，可支持的 max batch size=96。
 
 NVIDIA的 PyTorch 官方测评结果详见 [BERT For PyTorch - Performance Results](https://github.com/NVIDIA/DeepLearningExamples/blob/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/LanguageModeling/BERT/README.md#results)
 
 详细 Log 信息可下载：[ngc_pytorch_bert.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Pytorch/ngc_pytorch_bert.tar)
-

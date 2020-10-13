@@ -2,37 +2,9 @@
 
 # Overview
 
-本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[BERT](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本次复现采用了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[BERT](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
-
-
-
-- [Overview](#overview)
-- [Environment](#environment)
-  * [系统](#--)
-  * [NGC容器](#ngc--)
-  * [Feature support matrix](#feature-support-matrix)
-- [Quick Start](#quick-start)
-  * [项目代码](#----)
-  * [NGC容器](#ngc---1)
-  * [数据集](#---)
-  * [SSH配置(可选)](#ssh------)
-- [Training](#training)
-  * [单机](#--)
-  * [2机16卡](#2-16-)
-  * [4机32卡](#4-32-)
-  * [Result](#result)
-    + [吞吐率及加速比](#-------)
-    + [计算规则](#----)
-      - [1.测速脚本](#1----)
-      - [2.均值速度和中值速度](#2---------)
-      - [3.加速比以中值速度计算](#3----------)
-    + [BERT-Base  batch size=48](#bert-base--batch-size-48)
-      - [FP32 & Without XLA](#fp32---without-xla)
-    + [BERT-Base  batch size=32](#bert-base--batch-size-32)
-      - [FP32 & Without XLA](#fp32---without-xla-1)
-    + [完整日志](#----)
+目前，该测试已覆盖 FP32、FP16混合精度以及XLA，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -62,8 +34,9 @@
 
 | Feature            | ResNet-50 v1.5 TensorFlow |
 | ------------------ | ------------------------- |
-| Horovod Multi-GPU  | Yes                       |
-| Horovod Multi-Node | Yes                       |
+| Horovod Multi-gpu | Yes                       |
+| Horovod Multi-node | Yes                       |
+| Automatic mixed precision (AMP) | Yes                       |
 
 # Quick Start
 
@@ -186,6 +159,29 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 
 - 3.重启ssh服务`service ssh restart`
 
+## IB驱动安装（可选）
+
+如果服务器之间支持IB(**InfiniBand**)网络，则可以安装IB驱动，使得多机情况下各个节点间的通信速率明显提升，从而加速框架在多机环境下的训练，提升加速比。
+
+```shell
+apt-get update
+apt install dpatch libelf1 libmnl0 libltdl-dev lsof chrpath debhelper pciutils tk bison graphviz ethtool kmod gfortran swig flex tcl
+```
+
+从[NVIDIA官网](https://www.mellanox.com/products/InfiniBand-VPI-Software)下载适合操作系统及相应版本的IB驱动包，如果是nvidia-ngc容器，可以直接使用我们提高好的驱动包：下载[IB驱动 MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar 源码包](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar)并解压
+
+```
+wget http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar && tar -xvf MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar
+```
+
+进入源码包路径，安装
+
+```
+cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-space-only --without-fw-update --all --force 
+```
+
+完成后，可以通过`ibstat`命令检查驱动是否安装成功。
+
 # Training
 
 集群中有4台节点：
@@ -205,10 +201,26 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 ```shell
 docker exec -it nvidia_bert_tf /bin/bash
 cd /workspace/bert
-bash SINGLE_NODE_BERT_FP32_1E.sh
+bash run_single_node.sh
 ```
 
-执行脚本，对单机1卡、2卡、4卡、8卡分别做6次测试。默认batch size为32，也可以通过参数指定batch size如：`bash SINGLE_NODE_BERT_FP32_1E.sh  48`
+执行脚本，对单机1卡、2卡、4卡、8卡分别做5次测试（默认测试fp32+batch size32）。也可以通过参数指定batch size，如：`bash run_single_node.sh  48`
+
+### 混合精度&XLA
+
+可以修改脚本中的变量，或直接指定运行参数，例如：
+
+- batch size=64 使用fp16混合精度：
+
+```shell
+bash   run_single_node.sh    64   fp16
+```
+
+- batch size=64 使用fp16混合精度 + XLA：
+
+```shell
+bash   run_single_node.sh    64   fp16     true
+```
 
 ## 2机16卡
 
@@ -216,13 +228,33 @@ bash SINGLE_NODE_BERT_FP32_1E.sh
 
 如2机：NODE1='10.11.0.2'   NODE2='10.11.0.3' 的训练，需在两台机器上分别准备好数据集后，NODE1节点进入容器/workspace/bert下，执行脚本:
 
-`bash TWO_NODE_BERT_FP32_1E.sh`即可运行2机16卡的训练，同样默认测试6次。
+`bash run_two_node.sh`即可运行2机16卡的训练，同样默认测试5次。
+
+### 混合精度&XLA
+
+可以修改脚本中的变量，或直接指定运行参数，例如：
+
+- batch size=64 使用fp16混合精度 + XLA：
+
+```shell
+bash   run_two_node.sh    64   fp16    true
+```
 
 ## 4机32卡
 
 流程同上，NODE1节点进入容器/workspace/bert目录下，执行脚本:
 
-`bash MULTI_NODE_BERT_FP32_1E.sh`即可运行4机32卡的训练，测试6次。
+`bash run_multi_node.sh`即可运行4机32卡的训练，测试5次。
+
+### 混合精度&XLA
+
+可以修改脚本中的变量，或直接指定运行参数，例如：
+
+- batch size=64 使用fp16混合精度 + XLA：
+
+```shell
+bash   run_multi_node.sh    64   fp16    true
+```
 
 ## Result
 
@@ -323,7 +355,7 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 - median_speed中值速度
 
-  每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
+  每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
 
 #### 3.加速比以中值速度计算
 
@@ -331,34 +363,67 @@ README展示的是extract_tensorflow_logs_time.py的计算结果。
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-### BERT-Base  batch size=48
+### BERT-Base  FP32
 
-#### FP32 & Without XLA
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 112.56    | 1.00    |
-| 1        | 2       | 217.51    | 1.93    |
-| 1        | 4       | 436.69    | 3.88    |
-| 1        | 8       | 867.72    | 7.71    |
-| 2        | 16      | 1376.44   | 12.23   |
-| 4        | 32      | 2478.59   | 22.02   |
-
-
-
-### BERT-Base  batch size=32
-
-#### FP32 & Without XLA
+#### batch size=32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 106.8     | 1.00    |
-| 1        | 2       | 202.97    | 1.90    |
-| 1        | 4       | 406.68    | 3.81    |
-| 1        | 8       | 806.56    | 7.55    |
-| 2        | 16      | 1090.2    | 10.21   |
-| 4        | 32      | 1923.68   | 18.01   |
+| 1        | 1       | 107.33    | 1       |
+| 1        | 4       | 397.71    | 3.71    |
+| 1        | 8       | 790.03    | 7.36    |
+| 2        | 16      | 1404.04   | 13.08   |
+| 4        | 32      | 2727.9    | 25.42   |
+
+#### batch size=48 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 112.76    | 1       |
+| 1        | 4       | 430.43    | 3.82    |
+| 1        | 8       | 855.45    | 7.59    |
+| 2        | 16      | 1576.88   | 13.98   |
+| 4        | 32      | 3089.74   | 27.4    |
+
+
+
+### BERT-Base  FP16
+
+#### batch size=64 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 183.25    | 1       |
+| 1        | 4       | 721.56    | 3.94    |
+| 1        | 8       | 1452.59   | 7.93    |
+| 2        | 16      | 2653.74   | 14.48   |
+| 4        | 32      | 5189.07   | 28.32   |
+
+#### batch size=64 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 422.53    | 1       |
+| 1        | 4       | 1552.11   | 3.67    |
+| 1        | 8       | 3112.73   | 7.37    |
+| 2        | 16      | 5050.86   | 11.95   |
+| 4        | 32      | 9409.2    | 22.27   |
+
+#### batch size=96 with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 468.1     | 1       |
+| 1        | 4       | 1766.06   | 3.77    |
+| 1        | 8       | 3559.8    | 7.6     |
+| 2        | 16      | 5960.14   | 12.73   |
+| 4        | 32      | 11650.0   | 24.89   |
+
+注：batch size=96 without xla 情况下会OOM(out of memory)
 
 ### 完整日志
 
-[log.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/logs.zip)
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp32.zip) 
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp16.zip) 
+- [bert_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp16_xla.zip) 
+
