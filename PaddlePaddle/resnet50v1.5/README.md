@@ -63,7 +63,7 @@ conda activate paddle
 git clone https://github.com/NVIDIA/DALI_extra.git
 ```
 
-2. 使用 conda 环境内的 python 安装 nightly DALI，保险起见，可加上 python 路径
+2. 使用 conda 环境内的 python 安装 nightly DALI
 
 ```
 /home/leinao/anaconda3/envs/paddle/bin/python -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/nightly nvidia-dali-nightly-cuda100 
@@ -81,7 +81,6 @@ export FLAGS_fraction_of_gpu_memory_to_use=0.8
 AssertionError: Please leave enough GPU memory for DALI workspace, e.g., by setting `export FLAGS_fraction_of_gpu_memory_to_use=0.8
 ```
 
-而不大于 0.8 的值都可以运行。
 
 ## NCCL
 
