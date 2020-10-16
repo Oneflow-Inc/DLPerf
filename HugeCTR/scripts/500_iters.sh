@@ -1,7 +1,7 @@
 bsz=512
 log_root=./log
 
-test_case=${log_root}/n1g1-500-iters-512
+test_case=${log_root}/n1g1-500iters-$1
 output_json_file=${test_case}.json
 mem_usage_file=${test_case}.mem
 hugectr_log_file=${test_case}.log
@@ -23,6 +23,6 @@ python3 gen_hugectr_conf_json.py \
 python3 gpu_memory_usage.py 1>$mem_usage_file 2>&1 </dev/null &
 
 # start hugectr
-./huge_ctr_mn --train $output_json_file >$hugectr_log_file 
+./huge_ctr --train $output_json_file >$hugectr_log_file 
 #./huge_ctr_mn --train $output_json_file >$hugectr_log_file 
 
