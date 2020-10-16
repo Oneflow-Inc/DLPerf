@@ -2,6 +2,7 @@ import os
 import glob
 import json
 import argparse
+from statistics import median
 
 
 parser = argparse.ArgumentParser(description="flags for HugeCTR benchmark")
@@ -130,15 +131,34 @@ if __name__ == "__main__":
     logs_list = sorted(logs_list)
     result_list = []
     for log_file in logs_list:
-        json_file = log_file[:-4] + 'json'
+        json_file = log_file[:-3] + 'json'
         info = parse_conf(json_file)
-        info['log_file'] = os.path.basename(log_file)[:-3]
+        info['log_file'] = os.path.basename(log_file)[:-6]
 
         if info['max_iter'] in [500, 300000]:
             extract_loss_auc_acc(info, log_file)
         else:
             mem_file = log_file[:-3] + 'mem'
             result_list.append(extract_latency(info, args, log_file, mem_file))
+    
+    chunk_list = {}
+    for result in result_list:
+        log_file = result['log_file']
+        if log_file not in chunk_list.keys():
+            chunk_list[log_file] = []
+        chunk_list[log_file].append(result)
+    
+    result_list = []
+    for log_name,chunk in chunk_list.items():
+        latency_list = []
+        for single_result in chunk:
+            latency_list.append(single_result['latency(ms)'])
+        tmp_chunk = chunk[0]
+        
+        tmp_chunk['gpu'] = tmp_chunk['log_file'][0:4]
+        tmp_chunk['log_file'] = tmp_chunk['log_file'][5:]
+        tmp_chunk['latency(ms)'] = median(latency_list)
+        result_list.append(tmp_chunk)
 
     with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
         titles = ['log_file', 'gpu', 'batchsize', 'max_iter', 'deep_vec_size', 'vocab_size', 'latency(ms)', 'device0_max_memory_usage(MB)']
