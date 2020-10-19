@@ -162,7 +162,8 @@ if __name__ == "__main__":
             tmp_chunk['latency(ms)'] = median(latency_list)
             result_list.append(tmp_chunk)
 
-    with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
+    report_file = args.benchmark_log_dir + '_latency_report.md'
+    with open(report_file, 'w') as f:
         titles = ['log_file', 'gpu', 'batchsize', 'max_iter', 'deep_vec_size', 'vocab_size', 'latency(ms)', 'device0_max_memory_usage(MB)']
         write_line(f, titles, '|', True)
         write_line(f, ['----' for _ in titles], '|', True)
