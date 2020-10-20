@@ -93,6 +93,8 @@ This section maintains the summary of the latest results. For more and more deta
 
 [DLPerf Benchmark Test Report v1.0](./reports/dlperf_benchmark_test_report_v1.md) on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. 
 
+[DLPerf 性能评测报告中文版 v1.0](./reports/dlperf_benchmark_test_report_v1_cn.md)
+
 ### ResNet50-V1.5 Training Performance images/sec
 
 Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. The specific training script that was run is documented in the corresponding model's README. The **bsz** means batch size per GPU.

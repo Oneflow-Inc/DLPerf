@@ -2,6 +2,8 @@
 
 This report summarizes the results of a series of tests published in Oct, 2020.  
 
+[中文报告](./dlperf_benchmark_test_report_v1_cn.md)
+
 ## Test Environment
 
 All tests were performed on 4 Nodes with 8x Tesla V100-SXM2-16GB GPUs, the following is the main hardware and software configuration for each:  
