@@ -140,7 +140,7 @@ Legend:
 
 全部日志可以点击[bert_base_fp32_b32_64_96_logs.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.2/DLPerf/bert_base_fp32_b32_64_96_logs.tar)获取。
 
-### FP32 with clip
+### FP32 without clip
 
 - ### batch size = 96
 
