@@ -516,7 +516,7 @@ sudo ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcudart.so.10.2 /usr/
 不过测试过程中我们发现，官方提供的python脚本运行多机时会报错，即使在修改代码后也只能支持`--all_reduce_alg='ring'`模式的多机训练(cpu多机)，而不能支持'nccl'模式的多gpu训练，故多机的测试暂不开展。
 详见：[https://github.com/Oneflow-Inc/DLPerf/tree/master/TensorFlow/bert#%E5%A4%9A%E6%9C%BA](https://github.com/Oneflow-Inc/DLPerf/tree/master/TensorFlow/bert#%E5%A4%9A%E6%9C%BA)
 
-#### 6.2.4 PaddlePaddle 踩坑经验总结
+#### 6.2.5 PaddlePaddle 踩坑经验总结
 
 **1）数据集制作**
 
@@ -538,7 +538,7 @@ paddle在利用imagenet训练分类网络时，需要对imagenet数据集做一�
 
 > 参考：[官方文档—模型训练](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83)
 
-#### 6.2.5 NGC相关框架踩坑总结（NVIDIA-MXNet，NVIDIA-TensorFlow1.x，NVIDIA-PyTorch）
+#### 6.2.6 NGC相关框架踩坑总结（NVIDIA-MXNet，NVIDIA-TensorFlow1.x，NVIDIA-PyTorch）
 
 **1） 多机配置ssh免密登录**
 
@@ -555,7 +555,7 @@ paddle在利用imagenet训练分类网络时，需要对imagenet数据集做一�
 
 容器内提供的代码可能和官方代码不完全同步，需要作一些修改才能正确运行，详见[NGC MXNet README—额外准备](https://github.com/Oneflow-Inc/DLPerf/tree/master/NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5#2-%E9%A2%9D%E5%A4%96%E5%87%86%E5%A4%87) 、[NGC_PyTorch README-多机训练](https://github.com/Oneflow-Inc/DLPerf/tree/d262d5f5dba4452b0216b4b62105d3cebb178877/NVIDIADeepLearningExamples/PyTorch/resnet50v1.5#%E5%A4%9A%E6%9C%BA%E6%B5%8B%E8%AF%95)。
 
-#### 6.2.6 MXNet BERT (gluon-nlp仓库)踩坑总结
+#### 6.2.7 MXNet BERT (gluon-nlp仓库)踩坑总结
 
 **1）horovod安装**
 
