@@ -148,7 +148,7 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 参与本次评测的框架、版本、模型库、以及额外特性如表4-1所示：
 
-<center>表 4-1 参与ResNet50-v1.5 性能评测的各个框架介绍</center>
+<p align="center">表 4-1 参与ResNet50-v1.5 性能评测的各个框架介绍</p>
 
 | Framework                                                    | Version         | Docker From                             | DNN Model Sources                                            | Features                 |
 | ------------------------------------------------------------ | --------------- | --------------------------------------- | ------------------------------------------------------------ | ------------------------ |
@@ -172,7 +172,7 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 ### 4.2  FP32 batch size = 128各框架吞吐率 (images/sec)
 
-<center>表 4-2 ResNet50-v1.5 FP32 batch size = 128 各个框架吞吐率对比</center>
+<p align="center">表 4-2 ResNet50-v1.5 FP32 batch size = 128 各个框架吞吐率对比</p>
 
 | node num | device num | [OneFlow](../OneFlow) | [NGC<br>TensorFlow 1.x](../NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | [NGC<br>PyTorch]() | [NGC<br>MXNet](../NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | [PyTorch](../PyTorch/resnet50v1.5) | [PaddlePaddle](../PaddlePaddle/resnet50v1.5) | [TensorFlow 2.x](../TensorFlow/resnet50v1.5) |
 | -------- | ---------- | --------------------- | ------------------------------------------------------------ | ------------------ | ------------------------------------------------------------ | ---------------------------------- | -------------------------------------------- | -------------------------------------------- |
@@ -185,15 +185,15 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 ![r50_fp32_bz128_throughput.png](imgs/r50_fp32_bz128_throughput.png)
 
-<center>图 4-1 7个框架实现在ResNet50-v1.5模型上（FP32 batch size = 128）的吞吐率对比</center>
+<p align="center">图 4-1 7个框架实现在ResNet50-v1.5模型上（FP32 batch size = 128）的吞吐率对比</p>
 
 ![r50_fp32_bz128_speedup.png](imgs/r50_fp32_bz128_speedup.png)
 
-<center>图 4-2 7个框架实现在ResNet50-v1.5模型上（FP32 batch size = 128）的加速比对比</center>
+<p align="center">图 4-2 7个框架实现在ResNet50-v1.5模型上（FP32 batch size = 128）的加速比对比</p>
 
 ### 4.3  AMP batch size = 256各框架吞吐率 (images/sec)
 
-<center>表 4-3 ResNet50-v1.5 AMP batch size = 256 各个框架吞吐率对比</center>
+<p align="center">表 4-3 ResNet50-v1.5 AMP batch size = 256 各个框架吞吐率对比</p>
 
 | node num | device num | [OneFlow](../OneFlow) | [NGC<br>TensorFlow 1.x<br>W/O XLA<br>bsz=224](../NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | [NGC<br>TensorFlow 1.x<br>with XLA<br>bsz=224](../NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5) | [NGC<br>PyTorch]() | [NGC<br>MXNet](../NVIDIADeepLearningExamples/MxNet/Classification/RN50v1.5) | [PaddlePaddle<br>W/O DALI<br>bsz=224](../PaddlePaddle/resnet50v1.5) | [TensorFlow 2.x](../TensorFlow/resnet50v1.5) | [PaddlePaddle<br>with DALI<br>reference](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)<sup>[1]</sup> |
 | -------- | ---------- | --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------ |
@@ -210,17 +210,17 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 ![r50_amp_bz256_throughput.png](imgs/r50_amp_bz256_throughput.png)
 
-<center>图 4-3 8个框架实现在ResNet50-v1.5模型上（AMP batch size = 256）的吞吐率对比</center>
+<p align="center">图 4-3 8个框架实现在ResNet50-v1.5模型上（AMP batch size = 256）的吞吐率对比</p>
 
 ![r50_amp_bz256_speedup.png](imgs/r50_amp_bz256_speedup.png)
 
-<center>图 4-4 8个框架实现在ResNet50-v1.5模型上（AMP batch size = 256）的加速比对比</center>
+<p align="center">图 4-4 8个框架实现在ResNet50-v1.5模型上（AMP batch size = 256）的加速比对比</p>
 
 ## 5.  BERT-base pretrain性能测试
 
 ### 5.1 参与评测的各个框架和模型库介绍
 
-<center>表 5-1 参与 BERT-base pretrain训练任务 性能评测的各个框架介绍</center>
+<p align="center">表 5-1 参与 BERT-base pretrain训练任务 性能评测的各个框架介绍</p>
 
 | Framework                                                    | Version         | Docker From                             | DNN Model Sources                                            | Features |
 | ------------------------------------------------------------ | --------------- | --------------------------------------- | ------------------------------------------------------------ | -------- |
@@ -236,7 +236,7 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 ### 5.2  FP32 batch size = 32各框架吞吐率 (sentences/sec)
 
-<center>表 5-2 BERT-base FP32 batch size = 32 各个框架吞吐率对比</center>
+<p align="center">表 5-2 BERT-base FP32 batch size = 32 各个框架吞吐率对比</p>
 
 | node num | device num | [OneFlow](../OneFlow) | [NGC<br>TensorFlow 1.x](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [NGC<br>PyTorch](../NVIDIADeepLearningExamples/PyTorch/BERT) | [PaddlePaddle](../PaddlePaddle/bert) | <sup>[2]</sup>[OneFlow<br>W/O clip](../OneFlow) | <sup>[2]</sup>[MXNet<br>W/O clip](../MxNet/BERT) |
 | -------- | ---------- | --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ | ----------------------------------------------- | ------------------------------------------------ |
@@ -251,15 +251,15 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 ![bert_base_fp32_bz32_throughput.png](imgs/bert_base_fp32_bz32_throughput.png)
 
-<center>图 5-1 4个框架实现在BERT-base模型上（FP32 batch size = 32）的吞吐率对比</center>
+<p align="center">图 5-1 4个框架实现在BERT-base模型上（FP32 batch size = 32）的吞吐率对比</p>
 
 ![bert_base_fp32_bz32_speedup.png](imgs/bert_base_fp32_bz32_speedup.png)
 
-<center>图 5-2 4个框架实现在BERT-base模型上（FP32 batch size = 32）的加速比对比</center>
+<p align="center">图 5-2 4个框架实现在BERT-base模型上（FP32 batch size = 32）的加速比对比</p>
 
 ### 5.3  FP32 batch size = max 各框架吞吐率 (sentences/sec)
 
-<center>表 5-3 BERT-base FP32 batch size = max 各个框架吞吐率对比</center>
+<p align="center">表 5-3 BERT-base FP32 batch size = max 各个框架吞吐率对比</p>
 
 | node num | device num | [OneFlow<br>bsz=96](../OneFlow) | [NGC<br>TensorFlow 1.x<br>bsz=48](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [NGC<br>PyTorch<br>bsz=48](../NVIDIADeepLearningExamples/PyTorch/BERT) | [PaddlePaddle<br>bsz=96](../PaddlePaddle/bert) | [OneFlow<br>W/O clip<br>bsz=96](../OneFlow) | [MXNet<br>W/O clip<br>bsz=64](../MxNet/BERT) |
 | -------- | ---------- | ------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------- | -------------------------------------------- |
@@ -270,15 +270,15 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 ![bert_base_fp32_bz_max_throughput.png](imgs/bert_base_fp32_bz_max_throughput.png)
 
-<center>图 5-3 4个框架实现在BERT-base模型上（FP32 batch size = max）的吞吐率对比</center>
+<p align="center">图 5-3 4个框架实现在BERT-base模型上（FP32 batch size = max）的吞吐率对比</p>
 
 ![bert_base_fp32_bz_max_speedup.png](imgs/bert_base_fp32_bz_max_speedup.png)
 
-<center>图 5-4 4个框架实现在BERT-base模型上（FP32 batch size = max）的加速比对比</center>
+<p align="center">图 5-4 4个框架实现在BERT-base模型上（FP32 batch size = max）的加速比对比</p>
 
 ### 5.4  AMP batch size = 64 各框架吞吐率 (sentences/sec)
 
-<center>表 5-4 BERT-base AMP batch size = 64 各个框架吞吐率对比</center>
+<p align="center">表 5-4 BERT-base AMP batch size = 64 各个框架吞吐率对比</p>
 
 | node num | device num | [OneFlow](../OneFlow) | [NGC<br>TensorFlow 1.x<br>W/O XLA](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [NGC<br>TensorFlow 1.x<br>with XLA](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [NGC<br>PyTorch](../NVIDIADeepLearningExamples/PyTorch/BERT) | [PaddlePaddle](../PaddlePaddle/bert) | [OneFlow<br>W/O clip](../OneFlow) | [MXNet<br>W/O clip](../MxNet/BERT) |
 | -------- | ---------- | --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ | --------------------------------- | ---------------------------------- |
@@ -290,15 +290,15 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 ![bert_base_amp_bz64_throughput.png](imgs/bert_base_amp_bz64_throughput.png)
 
 
-<center>图 5-5 5个框架实现在BERT-base模型上（AMP batch size = 64）的吞吐率对比</center>
+<p align="center">图 5-5 5个框架实现在BERT-base模型上（AMP batch size = 64）的吞吐率对比</p>
 
 ![bert_base_amp_bz64_speedup.png](imgs/bert_base_amp_bz64_speedup.png)
 
-<center>图 5-6 5个框架实现在BERT-base模型上（AMP batch size = 64）的加速比对比</center>
+<p align="center">图 5-6 5个框架实现在BERT-base模型上（AMP batch size = 64）的加速比对比</p>
 
 ### 5.5  AMP batch size = max 各框架吞吐率 (sentences/sec)
 
-<center>表 5-5 BERT-base AMP batch size = max 各个框架吞吐率对比</center>
+<p align="center">表 5-5 BERT-base AMP batch size = max 各个框架吞吐率对比</p>
 
 | node num | device num | [OneFlow<br>bsz=160](../OneFlow) | [NGC<br>TensorFlow 1.x<br>W/O XLA<br>bsz=64](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [NGC<br>TensorFlow 1.x<br>with XLA<br>bsz=96](../NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT) | [NGC<br>PyTorch<br>bsz=96](../NVIDIADeepLearningExamples/PyTorch/BERT) | [PaddlePaddle<br>bsz=160](../PaddlePaddle/bert) | [OneFlow<br>W/O clip<br>bsz=160](../OneFlow) | [MXNet<br>W/O clip<br>bsz=128](../MxNet/BERT) |
 | -------- | ---------- | -------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------------------- | -------------------------------------------- | --------------------------------------------- |
@@ -309,11 +309,11 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 ![bert_base_amp_bz_max_throughput.png](imgs/bert_base_amp_bz_max_throughput.png)
 
-<center>图 5-7 5个框架实现在BERT-base模型上（AMP batch size = max）的吞吐率对比</center>
+<p align="center">图 5-7 5个框架实现在BERT-base模型上（AMP batch size = max）的吞吐率对比</p>
 
 ![bert_base_amp_bz_max_speedup.png](imgs/bert_base_amp_bz_max_speedup.png)
 
-<center>图 5-8 5个框架实现在BERT-base模型上（AMP batch size = max）的加速比对比</center>
+<p align="center">图 5-8 5个框架实现在BERT-base模型上（AMP batch size = max）的加速比对比</p>
 
 ## 6.  性能评测经验分享
 
