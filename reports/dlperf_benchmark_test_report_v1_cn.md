@@ -429,15 +429,15 @@ HOROVOD_GPU_OPERATIONS=NCCL python -m pip install --no-cache-dir horovod
 有时，nccl已经正常安装，且节点间可以正常ssh免密登录，且都能互相ping通，不过还是遭遇多机训练长时间卡住的问题，可能是虚拟网卡的问题，**当存在虚拟网卡时，如果不指定nccl变量，则多机通信时可能会走虚拟网卡，而导致多机不通的问题。**
 如下图：
 
-![NCCL_debug_0.jpg](imgs\NCCL_debug_0.jpg)
+![NCCL_debug_0.jpg](imgs/NCCL_debug_0.jpg)
 
 `NCCL WARN Connect to fe80::a480:7fff:fecf:1ed9%13<45166> failed : Network is unreachable`表明多机遇到了网络不能连通的问题。具体地，是经过网卡：fe80::a480:7fff:fecf...通信时不能连通。
 
 > 我们排查时，通过在发送端ping一个较大的数据包（如ping -s 10240 10.11.0.4），接收端通过bwm-ng命令查看每个网卡的流量波动情况（找出ping相应ip时，各个网卡的流量情况），发现可以正常连通，且流量走的是enp类型的网卡。
 
 通过ifconfig查看当前节点中的所有网卡类型：
-![NCCL_debug_1.jpg](imgs\NCCL_debug_1.jpg)
-![NCCL_debug_2.jpg](imgs\NCCL_debug_2.jpg)
+![NCCL_debug_1.jpg](imgs/NCCL_debug_1.jpg)
+![NCCL_debug_2.jpg](imgs/NCCL_debug_2.jpg)
 可以发现有很多enp开头的网卡，也有很多veth开头的虚拟网卡，而nccl日志输出中的：fe80::a480:7fff:fecf:1ed9是veth虚拟网卡。
 
 通过查看[nccl官网文档](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html?highlight=nccl_socket_ifname#nccl-socket-ifname)发现，我们可以通过指定nccl变量来设定nccl通信使用的网卡类型：
