@@ -309,9 +309,10 @@ README展示的是extract_paddle_logs.py的计算结果。
 
 注：
 
-- FP16+DALI模式下，跑batch_size=256会OOM（OUT OF MEMORY），故采用了较小的batch size
+- 本次评测最大batch size达不到Paddle官方的256，因为Paddle官方使用的是32GB显存的Tesla V100，而我们是16GB，故使用batch_size=256会OOM（OUT OF MEMORY）
 
-- 尽管采用了DALI+IB网络，多机的加速比任然较低，和官方数据存在较大差距，可能是由于官方使用了FleetX API，后期我们将尝试用较新的FleetX重新测试。官方数据：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+- 本次测评得到多机加速比较低，可能是由于Paddle官方提供的脚本和配置并不是最优的，由于其没有提供原始测评时的容器镜像，故我们也无法做到对齐，测评得到的数据和Paddle官方存在较大差距。官方数据：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+
 
 
 
