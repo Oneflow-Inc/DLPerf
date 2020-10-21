@@ -56,14 +56,17 @@ cd models/PaddleCV/image_classification
 python3 -m pip install paddlepaddle-gpu==1.8.3.post107 -i https://mirror.baidu.com/pypi/simple
 ```
 
+
 ### DALI
 
 1.本测试使用 conda 环境， 进入 paddle 的 conda 用例， 下载 DALI_extra 源码
+
 
 ```
 conda activate paddle
 git clone https://github.com/NVIDIA/DALI_extra.git
 ```
+
 
 2.使用 conda 环境内的 python 安装 nightly DALI
 
@@ -321,3 +324,4 @@ README展示的是extract_paddle_logs.py的计算结果。
 - [resnet50-fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/resnet50/resnet50_fp32.zip)
 - [resnet50-fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/resnet50/resnet50_fp16.zip)
 - [resnet50-fp16-dali.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/resnet50/resnet50-fp16-dali.zip)
+
