@@ -1,6 +1,6 @@
 
 log_root=./log
-for bsz in 16384 32768 65536 131072 262144 524288 1048576 
+for bsz in 16384 32768 65536 131072 262144 524288 
 do
     echo "4 node 32 device test, total batch size is:${bsz}"
     test_case=${log_root}/n4g8-bsz${bsz}-$1
@@ -17,7 +17,9 @@ do
       --gpu_num_per_node 8 \
       --max_iter 1100 \
       --display 100 \
-      --deep_slot_type Distributed
+      --deep_vec_size 32 \
+      --deep_slot_type Localized
+
     
     # watch device 0 memory usage
     python3 gpu_memory_usage.py 1>$mem_usage_file 2>&1 </dev/null &

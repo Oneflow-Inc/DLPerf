@@ -5,17 +5,19 @@ log_root=./log
 bsz=16384
 plan_generator=/hugectr/tools/plan_generation_no_mpi/plan_generator_no_mpi.py
 
-#declare -a num_nodes_list=(4 2 1 1 1 1)
-#declare -a num_gpus_list=(8 8 8 4 2 1)
-declare -a num_nodes_list=(4 ) 
-declare -a num_gpus_list=(8 )
+declare -a num_nodes_list=(4 2 1 1 1 1)
+declare -a num_gpus_list=(8 8 8 4 2 1)
+#declare -a num_nodes_list=(1 ) 
+#declare -a num_gpus_list=(1 )
 len=${#num_nodes_list[@]}
 
 for (( i=0; i<$len; i++ ))
 do
     num_nodes=${num_nodes_list[$i]}
     num_gpus_per_node=${num_gpus_list[$i]}
-    gpu_num=$(( ${bsz} * ${num_gpus_per_node} ))
+    gpu_num=$(( ${num_nodes} * ${num_gpus_per_node} ))
+
+    total_batch_size=$(( ${bsz} / ${gpu_num} ))
 
     echo "${num_nodes} nodes ${gpu_num} devices test, total batch size is:${bsz}"
     test_case=${log_root}/n${num_nodes}g${num_gpus_per_node}-fix_total_bsz-${bsz}-${suffix}
@@ -27,11 +29,12 @@ do
     python3 gen_hugectr_conf_json.py \
       --template_json wdl_7x1024.json \
       --output_json $output_json_file \
-      --total_batch_size $bsz \
+      --total_batch_size $total_batch_size \
       --num_nodes $num_nodes \
       --gpu_num_per_node ${num_gpus_per_node} \
       --max_iter 1100 \
       --display 100 \
+      --deep_vec_size 32 \
       --deep_slot_type Localized
     
     #if [ "$gpu_num" -gt 1 ]

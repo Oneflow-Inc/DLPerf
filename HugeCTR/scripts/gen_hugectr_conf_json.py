@@ -70,6 +70,8 @@ for layer in conf["layers"]:
             layer['plan_file'] = args.plan_file
         layer['sparse_embedding_hparam']['max_vocabulary_size_per_gpu'] = args.deep_vocab_size
         layer['sparse_embedding_hparam']['embedding_vec_size'] = args.deep_vec_size
+    elif layer['name'] == 'reshape1':
+        layer['leading_dim'] = args.deep_vec_size * 26 
 
 with open(args.output_json, "w") as file:
     json.dump(conf, file, ensure_ascii=True, indent=2, sort_keys=True)
