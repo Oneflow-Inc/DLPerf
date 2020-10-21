@@ -12,13 +12,17 @@ DLPerf/HugeCTR $ tree
 ├── README.md
 ├── reports
 ├── scripts
+│   ├── run_all.sh # run all tests at once.
 │   ├── 300k_iters.sh # 300k iterations test, display loss and auc every 1000 iterations.
 │   ├── 500_iters.sh # 500 iterations test, display loss and auc every iteration.
-│   ├── bsz_x2_run.sh # increasing batch size test
-│   ├── fix_bsz_per_device_run.sh # test with different number of devices and fixing batch size per device
-│   ├── fix_total_bsz_run.sh # test with different number of devices and fixing total batch size 
-│   ├── vocab_x2_1node_run.sh # increasing vocab size test
-│   ├── multi_node_run.sh # multi nodes test, TODO
+│   ├── bsz_x2_1_device_run.sh # Batch Size Double Test on 1 device.
+│   ├── bsz_x2_1_node_run.sh # Batch Size Double Test on 1 node.
+│   ├── bsz_x2_mul_nodes_run.sh # Batch Size Double Test on multi-nodes
+│   ├── fix_bsz_per_device_mul_nodes_run.sh # test with different number of devices and fixing batch size per device
+│   ├── fix_total_bsz_mul_nodes_run.sh # test with different number of devices and fixing total batch size
+│   ├── vocab_x2_1_device_run.sh # Vocabulary Size Double Test on 1 device.
+│   ├── vocab_x2_1_node_run.s # Vocabulary Size Double Test on 1 node.
+│   ├── vocab_x2_mul_nodes_run.sh # Vocabulary Size Double Test on multi-nodes.
 │   ├── gpu_memory_usage.py # log maximum GPU device memory usage during testing
 │   ├── gen_hugectr_conf_json.py # generate HugeCTR conf json file for testing
 │   ├── wdl_2x1024.json # template file for HugeCTR conf json generator, 2x1024 units FCs 
@@ -46,11 +50,11 @@ This test will keep batch size per device as a constant value(default is 16384),
 Latency and GPU device memory usage should be recorded in this test.
 
 ### Batch Size Double Test
-This test uses one GPU device, the first case's batch size is 512, the batch size of the subsequent case is doubled, and so on.
+This test uses one GPU device, the first case's batch size is 512, the batch size of the subsequent case is doubled, and so on. This test can be performed on single device, single node and multi-nodes.
 
 Latency and GPU device memory usage should be recorded in this test.
 
 ### Vocabulary Size Double Test
-This test uses devices as much as possible, the first case's vocabulary size is 3,200,000, the vocab size of the subsequent case is doubled, and so on.
+This test uses devices as much as possible, the first case's vocabulary size is 3,200,000, the vocab size of the subsequent case is doubled, and so on. This test can be performed on single device, single node and multi-nodes.
 
 Latency and GPU device memory usage should be recorded in this test.
