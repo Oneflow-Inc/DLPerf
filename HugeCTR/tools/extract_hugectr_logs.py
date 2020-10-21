@@ -41,15 +41,15 @@ def parse_conf(conf_file):
     with open(conf_file, "r") as f:
         conf = json.load(f)
     info = {}
-    info['gpu'] = conf["solver"]["gpu"] 
-    info['batchsize'] = conf["solver"]["batchsize"] 
-    info['max_iter'] = conf["solver"]["max_iter"] 
+    info['gpu'] = conf["solver"]["gpu"]
+    info['batchsize'] = conf["solver"]["batchsize"]
+    info['max_iter'] = conf["solver"]["max_iter"]
 
     for layer in conf["layers"]:
         if layer['name'] == 'sparse_embedding2':#wide_data
-            wide_vocab_size = layer['sparse_embedding_hparam']['max_vocabulary_size_per_gpu'] 
+            wide_vocab_size = layer['sparse_embedding_hparam']['max_vocabulary_size_per_gpu']
         elif layer['name'] == 'sparse_embedding1':#deep_data
-            deep_vocab_size = layer['sparse_embedding_hparam']['max_vocabulary_size_per_gpu'] 
+            deep_vocab_size = layer['sparse_embedding_hparam']['max_vocabulary_size_per_gpu']
             info['deep_vec_size'] = layer['sparse_embedding_hparam']['embedding_vec_size']
     assert wide_vocab_size == deep_vocab_size
     info['vocab_size'] = wide_vocab_size
@@ -71,15 +71,15 @@ def extract_loss_auc_acc(info, log_file):
                 continue
             if ss[1] == 'Iter:':
                 # [03d12h24m43s][HUGECTR][INFO]: Iter: 1 Time(1 iters): 0.009971s Loss: 0.624022 lr:0.001000
-                # it = {'Iter': ss[2], 'loss': ss[7]}            
-                it = [ss[2], ss[7]]            
+                # it = {'Iter': ss[2], 'loss': ss[7]}
+                it = [ss[2], ss[7]]
             elif ss[2] == 'AUC:':
                 # [03d12h24m43s][HUGECTR][INFO]: Evaluation, AUC: 0.484451
                 # it['auc'] = ss[3].strip()
                 it.append(ss[3].strip())
             elif ss[1] == 'eval_accuracy,':
                 # [7485.21, eval_accuracy, 0.484451, 0.002, 1, ]
-                # it['acc'] = ss[2][:-1]            
+                # it['acc'] = ss[2][:-1]
                 it.append(ss[2][:-1])
                 metrics.append(it)
         info['metrics'] = metrics
@@ -89,7 +89,7 @@ def extract_loss_auc_acc(info, log_file):
         write_line(f, ['Iter', 'loss', 'auc', 'acc'])
         for it in info['metrics']:
             write_line(f, it)
-        
+
 
 def extract_latency(info, args, log_file, mem_file):
     print('extract latency from ', log_file)
@@ -116,7 +116,7 @@ def extract_latency(info, args, log_file, mem_file):
                 continue
             if ss[0] == 'max':
                 info['device0_max_memory_usage(MB)'] = int(float(ss[-1].strip()) / 1024 /1024)
-    return info       
+    return info
 
 def value_format(value):
     if isinstance(value, float):
@@ -140,27 +140,30 @@ if __name__ == "__main__":
         else:
             mem_file = log_file[:-3] + 'mem'
             result_list.append(extract_latency(info, args, log_file, mem_file))
-    
+
     chunk_list = {}
     for result in result_list:
         log_file = result['log_file']
         if log_file not in chunk_list.keys():
             chunk_list[log_file] = []
         chunk_list[log_file].append(result)
-    
+
     result_list = []
     for log_name,chunk in chunk_list.items():
         latency_list = []
         for single_result in chunk:
-            latency_list.append(single_result['latency(ms)'])
+            if 'latency(ms)' in single_result:
+                latency_list.append(single_result['latency(ms)'])
         tmp_chunk = chunk[0]
-        
+
         tmp_chunk['gpu'] = tmp_chunk['log_file'][0:4]
         tmp_chunk['log_file'] = tmp_chunk['log_file'][5:]
-        tmp_chunk['latency(ms)'] = median(latency_list)
-        result_list.append(tmp_chunk)
+        if latency_list:
+            tmp_chunk['latency(ms)'] = median(latency_list)
+            result_list.append(tmp_chunk)
 
-    with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
+    report_file = args.benchmark_log_dir + '_latency_report.md'
+    with open(report_file, 'w') as f:
         titles = ['log_file', 'gpu', 'batchsize', 'max_iter', 'deep_vec_size', 'vocab_size', 'latency(ms)', 'device0_max_memory_usage(MB)']
         write_line(f, titles, '|', True)
         write_line(f, ['----' for _ in titles], '|', True)
@@ -170,4 +173,4 @@ if __name__ == "__main__":
                 continue
             cells = [value_format(result[title]) for title in titles]
             write_line(f, cells, '|', True)
-    
+
