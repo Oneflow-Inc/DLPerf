@@ -1,6 +1,6 @@
 
-bash 300k_iters.sh $repeat_id
-bash 500_iters.sh $repeat_id
+bash 300k_iters.sh 
+bash 500_iters.sh 
 for repeat_id in 1 2 3 4 5
 do
     bash fix_bsz_per_device_1_node_run.sh $repeat_id

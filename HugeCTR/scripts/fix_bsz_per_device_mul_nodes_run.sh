@@ -20,8 +20,8 @@ do
     num_gpus_per_node=${num_gpus_list[$i]}
     gpu_num=$(( ${num_nodes} * ${num_gpus_per_node} ))
 
-    total_bsz=$(( ${bsz} * ${gpu_num} ))
-    echo "${num_nodes} nodes ${gpu_num} devices test, total batch size is:${total_bsz}"
+    total_batch_size=$(( ${bsz} * ${gpu_num} ))
+    echo "${num_nodes} nodes ${gpu_num} devices test, total batch size is:${total_batch_size}"
     test_case=${log_root}/n${num_nodes}g${num_gpus_per_node}-fix_bsz_per_device-${bsz}-${suffix}
     output_json_file=${test_case}.json
     mem_usage_file=${test_case}.mem
@@ -31,11 +31,12 @@ do
     python3 gen_hugectr_conf_json.py \
       --template_json wdl_7x1024.json \
       --output_json $output_json_file \
-      --total_batch_size $total_bsz \
+      --total_batch_size $total_batch_size \
       --num_nodes $num_nodes \
       --gpu_num_per_node ${num_gpus_per_node} \
       --max_iter 1100 \
       --display 100 \
+      --deep_vec_size 32 \
       --deep_slot_type Localized
     
     #if [ "$gpu_num" -gt 1 ]

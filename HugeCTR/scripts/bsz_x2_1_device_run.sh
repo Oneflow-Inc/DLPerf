@@ -1,9 +1,9 @@
 
 log_root=./log
-for bsz in 16384 32768 65536 131072 262144 524288 1048576
+for bsz in 512 1024 2048 4096 8192 16384 32768 65536 131072
 do
-    echo "1 node 8 devices test, total batch size is:${bsz}"
-    test_case=${log_root}/n1g8-bsz${bsz}-$1
+    echo "1 node 1 device test, total batch size is:${bsz}"
+    test_case=${log_root}/n1g1-bsz${bsz}-$1
     output_json_file=${test_case}.json
     mem_usage_file=${test_case}.mem
     hugectr_log_file=${test_case}.log
@@ -14,7 +14,7 @@ do
       --output_json $output_json_file \
       --total_batch_size $bsz \
       --num_nodes 1 \
-      --gpu_num_per_node 8 \
+      --gpu_num_per_node 1 \
       --max_iter 1100 \
       --display 100 \
       --deep_slot_type Distributed
