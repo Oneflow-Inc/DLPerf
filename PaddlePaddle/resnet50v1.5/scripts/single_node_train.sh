@@ -16,10 +16,7 @@ mkdir -p $LOG_FOLDER
 LOGFILE=${LOG_FOLDER}/r50_b${BATCH_SIZE}_${DTYPE}_${TEST_NUM}.log
 
 
-export CUDA_VISIBLE_DEVICES=${gpus}
-export FLAGS_fraction_of_gpu_memory_to_use=0.98
-export DALI_EXTRA_PATH=/home/leinao/paddle/DALI_extra
-DATA_DIR=/datasets/ImageNet/imagenet_1k/
+DATA_DIR=/datasets/ImageNet/Paddle
 
 MULTI_PROCESS="-m paddle.distributed.launch"
 if  [ $GPU_COUNT -le 2 ] ; then
@@ -43,10 +40,23 @@ else
   FP16_PARAMS=" "
 fi
 
+
+USE_DALI=false
+if ${USE_DALI}; then
+    export FLAGS_fraction_of_gpu_memory_to_use=0.8
+    export DALI_EXTRA_PATH=/home/leinao/paddle/DALI_extra
+    THREAD=10
+else
+    export FLAGS_fraction_of_gpu_memory_to_use=0.98
+fi
+echo "FLAGS_fraction_of_gpu_memory_to_use=$FLAGS_fraction_of_gpu_memory_to_use"
+
+
 echo "Use gpus: $gpus, Batch size per device : $BATCH_SIZE, Total Batch size : $total_bz"
 echo "Learning rate: $LR"
 # echo "Use fp16 : $use_fp16"
 
+export CUDA_VISIBLE_DEVICES=${gpus}
 python3   $MULTI_PROCESS \
         train.py  ${FP16_PARAMS} \
        --data_format=${DATA_FORMAT} \
@@ -58,8 +68,8 @@ python3   $MULTI_PROCESS \
         --batch_size=${total_bz} \
 		    --print_step=1 \
 	      --save_step=10000 \
-        --reader_thread=$THREAD \
-        --lr_strategy=piecewise_decay \
+        --reader_thread=${THREAD}   \
+        --lr_strategy=cosine_decay \
         --lr=0.001 \
         --momentum_rate=0.875 \
         --image_shape 3 $IMAGE_SIZE $IMAGE_SIZE \
@@ -69,5 +79,6 @@ python3   $MULTI_PROCESS \
      		--warm_up_epochs=1 \
         --use_mixup=False \
         --use_label_smoothing=True \
+        --use_dali=$USE_DALI \
         --label_smoothing_epsilon=0.1  2>&1 | tee ${LOGFILE}
 echo "Writting log to ${LOGFILE}"

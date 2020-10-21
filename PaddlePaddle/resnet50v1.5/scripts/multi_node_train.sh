@@ -20,16 +20,7 @@ mkdir -p $LOG_FOLDER
 LOGFILE=${LOG_FOLDER}/r50_b${BATCH_SIZE}_${DTYPE}_${TEST_NUM}.log
 
 
-export CUDA_VISIBLE_DEVICES=${gpus}
-export FLAGS_fraction_of_gpu_memory_to_use=0.98
-DATA_DIR=/datasets/ImageNet/imagenet_1k/
-
-
-if  [ $node_num -le 2 ] ; then
-  THREAD=8
-else
-  THREAD=8
-fi
+DATA_DIR=/datasets/ImageNet/Paddle
 
 
 # bash run.sh train ResNet50_fp16
@@ -44,12 +35,25 @@ else
   FP16_PARAMS=" "
 fi
 
+
+USE_DALI=false
+if ${USE_DALI}; then
+    export FLAGS_fraction_of_gpu_memory_to_use=0.8
+    export DALI_EXTRA_PATH=/home/leinao/paddle/DALI_extra
+    THREAD=10
+else
+    export FLAGS_fraction_of_gpu_memory_to_use=0.98
+    THREAD=8
+fi
+echo "FLAGS_fraction_of_gpu_memory_to_use=$FLAGS_fraction_of_gpu_memory_to_use"
+
+
 echo "Nodes : $nodes"
 echo "Use gpus: $gpus, Batch size per device : $BATCH_SIZE, Total Batch size : $total_bz"
 echo "Learning rate: $LR"
-echo "Use fp16 : $use_fp16"
 
 
+export CUDA_VISIBLE_DEVICES=${gpus}
 python3 -m paddle.distributed.launch --cluster_node_ips=${nodes} \
 --node_ip=$CURRENT_NODE \
 train.py \
