@@ -2,28 +2,30 @@
 
 echo "Container nvidia build = " $NVIDIA_BUILD_ID
 train_batch_size=${1:-48}
-num_nodes=1
-num_gpus=${2:-1}
-train_steps=${3:-120}
-test_times=${4:-1}
-learning_rate=${5:-"6e-3"}
+num_nodes=${2:-1}
+master_node=${3:-127.0.0.1}
+master_port=${4:-29500}
+num_gpus=${5:-1}
+train_steps=${6:-120}
+precision=${7:-"fp32"}
+test_times=${8:-1}
+learning_rate=${9:-"6e-3"}
 DATASET=workspace/examples/bert/data/hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en # change this for other datasets
-CODEDIR=${6:-"/workspace/examples/bert"}
-LOGDIR=./ngc/pytorch/${num_nodes}n${num_gpus}g
+CODEDIR=${10:-"/workspace/examples/bert"}
+LOGDIR=./${precision}_ngc_bert_b${train_batch_size}/pytorch/${num_nodes}n${num_gpus}g
 CHECKPOINTS_DIR=${CODEDIR}/results/checkpoints
-job_name=${7:-"bert_base_adam_training"}
-precision=${8:-"fp32"}
-seed=${9:-42}
-accumulate_gradients=${10:-"false"}
-allreduce_post_accumulation=${11:-"false"}
-gradient_accumulation_steps=${12:-1}
-allreduce_post_accumulation_fp16=${13:-"false"}
-DATA_DIR_PHASE=${14:-$BERT_PREP_WORKING_DIR/${DATASET}/}
-resume_training=${15:-"false"}
-create_logfile=${16:-"true"}
-warmup_proportion=${17:-"1"}
-save_checkpoint_steps=${18:-1000}
-init_checkpoint=${19:-"None"}
+job_name=${11:-"bert-base-adam-training"}
+seed=${12:-42}
+accumulate_gradients=${13:-"false"}
+allreduce_post_accumulation=${14:-"false"}
+gradient_accumulation_steps=${15:-1}
+allreduce_post_accumulation_fp16=${16:-"false"}
+DATA_DIR_PHASE=${17:-$BERT_PREP_WORKING_DIR/${DATASET}/}
+resume_training=${18:-"false"}
+create_logfile=${19:-"true"}
+warmup_proportion=${20:-"1"}
+save_checkpoint_steps=${21:-1000}
+init_checkpoint=${22:-"None"}
 BERT_CONFIG=${CODEDIR}/bert_config.json
 mkdir -p $LOGDIR
 mkdir -p $CHECKPOINTS_DIR
@@ -103,7 +105,7 @@ CMD+=" $INIT_CHECKPOINT"
 CMD+=" --do_train"
 CMD+=" --json-summary ${CODEDIR}/dllogger.json "
 
-CMD="python3 -m torch.distributed.launch --nproc_per_node=$num_gpus $CMD"
+CMD="python3 -m torch.distributed.launch --nproc_per_node=$num_gpus --nnodes $num_nodes --node_rank=0  --master_addr=$master_node  --master_port=$master_port $CMD"
 if [ "$create_logfile" = "true" ] ; then
   export GBS=$(expr $train_batch_size \* $num_gpus)
   printf -v TAG "pytorch_bert_pretraining_phase_%s_gbs%d" "$precision" $GBS
