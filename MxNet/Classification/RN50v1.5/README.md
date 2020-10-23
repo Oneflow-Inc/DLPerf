@@ -1,8 +1,8 @@
-# MXNet R 测评
+# MXNet ResNet50  测评
 
 ## 概述 Overview
 
-本测试基于 [gluon-cv](https://github.com/dmlc/gluon-cv) 仓库中提供的 MXNet框架的 [BERT-base](https://github.com/dmlc/gluon-cv/blob/f9a8a284b8/scripts/classification/imagenet/README.md) 实现，进行了1机1卡、1机8卡、2机16卡、4机32卡的结果复现及速度评测，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [gluon-cv](https://github.com/dmlc/gluon-cv) 仓库中提供的 MXNet框架的 [ResNet50](https://github.com/dmlc/gluon-cv/blob/f9a8a284b8/scripts/classification/imagenet/README.md) 实现，进行了1机1卡、1机8卡、2机16卡、4机32卡的结果复现及速度评测，得到吞吐率及加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试覆盖了FP32 精度、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
