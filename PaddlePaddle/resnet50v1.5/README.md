@@ -56,27 +56,14 @@ cd models/PaddleCV/image_classification
 python3 -m pip install paddlepaddle-gpu==1.8.3.post107 -i https://mirror.baidu.com/pypi/simple
 ```
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c50b666bbe558d1d39daa45da1c780494f673caf
 ### DALI
 
 1.本测试使用 conda 环境， 进入 paddle 的 conda 用例， 下载 DALI_extra 源码
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c50b666bbe558d1d39daa45da1c780494f673caf
 ```
-conda activate paddle
-git clone https://github.com/NVIDIA/DALI_extra.git
+python3 -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/nightly nvidia-dali-nightly-cuda100 
 ```
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c50b666bbe558d1d39daa45da1c780494f673caf
 2.使用 conda 环境内的 python 安装 nightly DALI
 
 ```
