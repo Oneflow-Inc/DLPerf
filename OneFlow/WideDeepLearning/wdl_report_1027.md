@@ -12,8 +12,8 @@
 - Memory 384G
 - Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 440.33.01
-- OneFlow: v0.1.9 
-- OneFlow-Benchmark: master@8a78044
+- OneFlow: v0.2.0-83-gb16a8d42f 
+- OneFlow-Benchmark: update_wdl@42c5515
 - `nvidia-smi topo -m`
 
 ```
