@@ -41,7 +41,7 @@ mpirun --allow-run-as-root -oversubscribe -np ${gpu_num} -H ${node_ip}  \
      -mca plm_rsh_args "-p 22  -q -o StrictHostKeyChecking=no" \
      -mca btl_tcp_if_include ib0   python3 train_horovod.py \
     --mode='hybrid'  \
-    --model='resnet50_v1'  \
+    --model='resnet50_v1b'  \
     --use-rec \
     --rec-train=$DATA_DIR/train.rec  \
     --rec-val=$DATA_DIR/val.rec  \
