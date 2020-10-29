@@ -25,11 +25,11 @@
 
 ## Feature support matrix
 
-| Feature                       | ResNet-50 v1.5 Paddle |
-| ----------------------------- | --------------------- |
-| Multi-node,multi-gpu training | Yes                   |
-| NVIDIA NCCL                   | Yes                   |
-| Mixed precision               | Yes                   |
+| Feature                       | Bert Base Pytorch |
+| ----------------------------- | ----------------- |
+| Multi-node,multi-gpu training | Yes               |
+| NVIDIA NCCL                   | Yes               |
+| Mixed precision               | Yes               |
 
 # Quick Start
 
@@ -131,7 +131,7 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 本次训练使用Wikipedia数据集，并根据NVIDIA官方提供的脚本制作转换为.hdf5格式，详见：[NVIDIA-quick-start-guide](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/LanguageModeling/BERT#quick-start-guide)。
 ### 词表文件
 
-由于直接运行训练，程序会自动从s3.amazonaws.com下载词表文件(vocab.txt)，但速度很慢，故我们可以手动下载词表文件并放入新建文件夹`bing_bert/data`下，（直接运行训练，程序会自动从亚马逊amazonaws自动所有文件，但速度很慢）词表文件下载链接见：[tokenization.py](https://github.com/microsoft/DeepSpeedExamples/blob/ba63ad0fa861d28b3b33bc2c20f702647403e258/bing_bert/pytorch_pretrained_bert/tokenization.py)。下载完成并将词表文件存入`bing_bert/data`后，注释掉[tokenization.py Line:30]([tokenization.py](https://github.com/microsoft/DeepSpeedExamples/blob/ba63ad0fa861d28b3b33bc2c20f702647403e258/bing_bert/pytorch_pretrained_bert/tokenization.py#L30)) 的`PRETRAINED_VOCAB_ARCHIVE_MAP{}`，修改如下：
+由于直接运行训练，程序会自动从s3.amazonaws.com下载词表文件(vocab.txt)，但速度很慢，故我们可以手动下载词表文件并放入新建文件夹`bing_bert/data`下。词表文件下载链接见：[tokenization.py](https://github.com/microsoft/DeepSpeedExamples/blob/ba63ad0fa861d28b3b33bc2c20f702647403e258/bing_bert/pytorch_pretrained_bert/tokenization.py)。下载完成并将词表文件存入`bing_bert/data`后，注释掉[tokenization.py Line:30]([tokenization.py](https://github.com/microsoft/DeepSpeedExamples/blob/ba63ad0fa861d28b3b33bc2c20f702647403e258/bing_bert/pytorch_pretrained_bert/tokenization.py#L30)) 的`PRETRAINED_VOCAB_ARCHIVE_MAP{}`，修改如下：
 
 ```python3
 CACHE_DIR = "/your/path/to/DeepSpeed/DeepSpeedExamples/bing_bert/data/"
@@ -339,16 +339,16 @@ Saving result to ./result/bz32_result.json
 
 ### 1.测速脚本
 
-- extract_paddle_logs.py
-- extract_paddle_logs_time.py
+- extract_deepspeed_logs.py
+- extract_deepspeed_logs_time.py
 
 两个脚本略有不同，得到的结果稍有误差：
 
-extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
+extract_deepspeed_logs.py根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
-extract_paddle_logs_time.py则根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
+extract_deepspeed_logs_time.py则根据log中打印出的时间，排除前20iter取后100个iter的实际运行时间计算速度。
 
-README展示的是extract_paddle_logs.py的计算结果。
+README展示的是extract_deepspeed_logs.py的计算结果。
 
 ### 2.均值速度和中值速度
 
