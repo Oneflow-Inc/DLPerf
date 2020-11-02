@@ -14,7 +14,7 @@ This report summarized HugeCTR test on 4 nodes with 8 x Tesla V100 on Oct 2020.
 All batch size double tests were performed with 2 x 1024 Hidden Fully-connected Units.
 ### 1 node 1 device
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g1 | 512 | 16 | 2,322,444 | 2.74 | 1,879 | 
 | n1g1 | 1,024 | 16 | 2,322,444 | 3.318 | 1,883 | 
 | n1g1 | 2,048 | 16 | 2,322,444 | 4.581 | 1,937 | 
@@ -27,7 +27,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 
 ### 1 node 8 devices
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g8 | 512 | 16 | 2,322,444 | 3.335 | 2,229 | 
 | n1g8 | 1,024 | 16 | 2,322,444 | 4.828 | 2,237 | 
 | n1g8 | 2,048 | 16 | 2,322,444 | 5.038 | 2,253 | 
@@ -42,7 +42,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 
 ### 4 nodes 32 devices
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n4g8 | 16,384 | 32 | 2,322,444 | 14.536 | 2,633 | 
 | n4g8 | 32,768 | 32 | 2,322,444 | 21.28 | 2,901 | 
 | n4g8 | 65,536 | 32 | 2,322,444 | 38.613 | 3,449 | 
@@ -55,7 +55,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 
 ### 1 node 1 device
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g1 | 16,384 | 16 | 3,200,000 | 65.664 | 4,427 | 
 | n1g1 | 16,384 | 16 | 6,400,000 | 67.913 | 5,177 | 
 | n1g1 | 16,384 | 16 | 12,800,000 | 72.729 | 6,727 | 
@@ -64,7 +64,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 
 ### 1 node 8 devices
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g8 | 16,384 | 16 | 3,200,000 | 16.671 | 3,021 | 
 | n1g8 | 16,384 | 16 | 6,400,000 | 19.036 | 3,797 | 
 | n1g8 | 16,384 | 16 | 12,800,000 | 23.707 | 5,347 | 
@@ -73,7 +73,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 
 ### 4 node 32 devices
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n4g8 | 16,384 | 32 | 3,200,000 | 21.843 | 3,217 | 
 | n4g8 | 16,384 | 32 | 6,400,000 | 26.375 | 4,579 | 
 | n4g8 | 16,384 | 32 | 12,800,000 | 36.214 | 7,299 | 
@@ -83,7 +83,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 All fix batch size per device tests were performed with 7 x 1024 Hidden Fully-connected Units.
 
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g1 | 16,384 | 32 | 2,322,444 | 70.181 | 4,845 | 
 | n1g2 | 32,768 | 32 | 2,322,444 | 75.446 | 5,139 | 
 | n1g4 | 65,536 | 32 | 2,322,444 | 75.492 | 5,765 | 
@@ -95,7 +95,7 @@ All fix batch size per device tests were performed with 7 x 1024 Hidden Fully-co
 All fix total batch size tests were performed with 7 x 1024 Hidden Fully-connected Units.
 
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
-| -------- | -------- | -------- | -------- | -------- | -------- | -------- | 
+| -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g1 | 16,384 | 32 | 2,322,444 | 70.216 | 4,845 | 
 | n1g2 | 16,384 | 32 | 2,322,444 | 40.928 | 3,769 | 
 | n1g4 | 16,384 | 32 | 2,322,444 | 23.903 | 3,351 | 
