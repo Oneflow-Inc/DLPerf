@@ -22,6 +22,7 @@
       - [数据集](#---)
       - [镜像及容器](#-----)
       - [SSH 免密](#ssh---)
+      - [安装 IB 驱动](#--IB--)
       - [Adam 算法](#adam---)
     + [2. 运行测试](#2-----)
       - [单机测试](#----)
@@ -189,7 +190,7 @@ apt-get install openssh-server
 
 
 
-- ## 安装 IB 驱动 ##
+- #### 安装 IB 驱动
 
 测试机器上的容器环境内未查找到 IB 驱动，会导致测试时 NCCL 库只能使用 Socket 通信，无法达到最佳测试效果，因此需要额外安装，具体可参考[安装 IB 驱动](https://github.com/Oneflow-Inc/DLPerf/tree/master/NVIDIADeepLearningExamples/PyTorch/resnet50v1.5#%E5%AE%89%E8%A3%85-ib-%E9%A9%B1%E5%8A%A8)。
 
