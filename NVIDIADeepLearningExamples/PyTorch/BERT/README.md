@@ -165,7 +165,6 @@ docker pull nvcr.io/nvidia/pytorch:20.03-py3
 # 启动容器
 docker run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 --name pt_bert  --net host \
---cap-add=NET_ADMIN --device=/dev/infiniband:/dev/infiniband \
 -v ./data:/data/ \
 -d pytorch:20.03-py3 
 ```
