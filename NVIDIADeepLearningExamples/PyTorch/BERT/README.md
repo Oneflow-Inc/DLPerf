@@ -22,6 +22,7 @@
       - [数据集](#---)
       - [镜像及容器](#-----)
       - [SSH 免密](#ssh---)
+      - [安装 IB 驱动](#--IB--)
       - [Adam 算法](#adam---)
     + [2. 运行测试](#2-----)
       - [单机测试](#----)
@@ -164,7 +165,6 @@ docker pull nvcr.io/nvidia/pytorch:20.03-py3
 # 启动容器
 docker run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 --name pt_bert  --net host \
---cap-add=IPC_LOCK --device=/dev/infiniband \
 -v ./data:/data/ \
 -d pytorch:20.03-py3 
 ```
@@ -188,6 +188,10 @@ apt-get install openssh-server
 - 重启 ssh 服务，`service ssh restart`。
 
 
+
+- #### 安装 IB 驱动
+
+测试机器上的容器环境内未查找到 IB 驱动，会导致测试时 NCCL 库只能使用 Socket 通信，无法达到最佳测试效果，因此需要额外安装，具体可参考[安装 IB 驱动](https://github.com/Oneflow-Inc/DLPerf/tree/87ee725ae54e0071d5b7f9a8609c7df59c5c4d51/NVIDIADeepLearningExamples/PyTorch/resnet50v1.5#%E5%AE%89%E8%A3%85-ib-%E9%A9%B1%E5%8A%A8)。
 
 - #### Adam 算法
 
@@ -229,15 +233,26 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 bash run_single_node.sh
 ```
 
-即可执行针对单机单卡、单机 2 卡、4 卡、 8 卡， batch_size 分别取 32、48 等情况的集成测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中，如单机单卡为 /1n1g，意为 1 node 1 gpu；单机 8卡 为 /1n8g，意为 1 node 8 gpus，以此类推。
+即可执行针对单机单卡、单机 2 卡、4 卡、 8 卡， batch_size 分别取 32、48 等情况的集成测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中，如单机单卡为 /1n1g，意为 1 node 1 gpu；单机 8卡为 /1n8g，意为 1 node 8 gpus，以此类推。
 
-如需测试 `fp16`，直接修改脚本中的 `PREC` 为 `fp16` 即可。
+如需测试 `amp`，修改脚本中的 `PREC` 为 `amp` 即可。
+
+若想测试 `fp16`，直接使用 `--fp16` 选项，会提示
+
+```
+Warning:  FP16_Optimizer is deprecated and dangerous, and will be deleted soon.  
+If it still works, you're probably getting lucky.  
+For mixed precision, use the documented API https://nvidia.github.io/apex/amp.html, 
+with opt_level=O1.
+```
+
+因此建议使用 `amp` 参数或者在验证过正确性情况下修改源码中的 `opt_level` 。
 
 - #### 多机测试
 
 多机测试，一定要确保数据集存在各节点测试机器的相同路径下，各脚本的行为要一致，尤其是修改要保持同步。
 
-如需测试 `fp16`，直接修改脚本中的 `PREC` 为 `fp16` 即可。
+如需测试 `amp`，直接修改脚本中的 `PREC` 为 `amp` 即可。
 
 - **两机测试**
 
@@ -259,7 +274,7 @@ bash run_multi_nodes.sh
 
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取 5 次），每次训练过程只取第 1 个 epoch 的前 150 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并以此数据计算加速比。
+测试进行了多组训练（本测试中取 5 次），每次训练过程只取第 1 个 epoch 的前 150 iter，计算训练速度时取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并以此数据计算加速比。
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
