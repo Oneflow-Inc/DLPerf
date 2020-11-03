@@ -103,7 +103,6 @@ docker pull nvcr.io/nvidia/pytorch:20.03-py3
 # 启动容器
 docker run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 --name pt_bert  --net host \
---cap-add=IPC_LOCK --device=/dev/infiniband \
 -v ./data:/data/ \
 -d pytorch:20.03-py3 
 ```
@@ -241,13 +240,13 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 bash scripts/run_single_node.sh
 ```
 
-针对单机单卡、2卡、4卡、8卡， batch_size 取 128 等情况进行测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中。
+针对单机单卡、2 卡、4 卡、8 卡， batch_size 取 128 等情况进行测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中。
 
 - #### 多机测试
 
 多机测试，一定要确保数据集存在各节点测试机器的相同路径下，各脚本的行为要一致，尤其是修改要保持同步。
 
-典型地，多机测试时，需要在 /workspace/rn50/main.py 中 310 行的 `torch.cuda.set_device(args.gpu)` 下对方增加 `args.gpu = torch.cuda.device_count()`，即
+典型地，多机测试时，需要在 /workspace/rn50/main.py 中 310 行的 `torch.cuda.set_device(args.gpu)` 下方增加 `args.gpu = torch.cuda.device_count()`，即
 
 ```
 308     if args.distributed:
@@ -348,7 +347,7 @@ DLL 2020-09-15 14:29:18.553769 - Epoch: 0 Iteration: 12  train.loss : 6.67351  t
 
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 150 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
+测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 150 iter，计算训练速度时取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
