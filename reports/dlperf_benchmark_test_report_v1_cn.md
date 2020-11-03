@@ -182,11 +182,11 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 | 2        | 16         | 6260.30               | 5758.49                                                      | 5099.42                                                      | 5716.79                                                      | 4855.34                                  | 4849.68                                      | 5115.40                            | 4895.27                                      |
 | 4        | 32         | 12411.97              | 11331.93                                                     | 9514.64                                                      | 10917.09                                                     | 9579.74                                  | 9418.44                                      | 10021.29                           | 9348.17                                      |
 
-![r50_fp32_bz128_throughput.png](imgs/r50_fp32_bz128_throughput.png)
+![r50_fp32_bz128_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_fp32_bz128_throughput.png)
 
 <p align="center">图 4-1 7个框架实现在ResNet50-v1.5模型上（FP32 batch size = 128）的吞吐率对比</p>
 
-![r50_fp32_bz128_speedup.png](imgs/r50_fp32_bz128_speedup.png)
+![r50_fp32_bz128_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_fp32_bz128_speedup.png)
 
 <p align="center">图 4-2 7个框架实现在ResNet50-v1.5模型上（FP32 batch size = 128）的加速比对比</p>
 
@@ -205,13 +205,13 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 - 其中NGC TensorFlow 1.x 的batch size = 224，因为batch size = 256会遇到OOM（out of memory）, PaddlePaddle w/DALI 一列的batch size = 196，因为DALI会占用一些GPU显存导致batch size = 224 也会OOM。
 
-- [1] **PaddlePaddle w/DALI**一列展示了PaddlePaddle在使用[DALI-paddle](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#dali预处理)插件后的吞吐率表现。 我们测试发现PaddlePaddle多机性能表现很差，由于PaddlePaddle官方提供的4机32卡的吞吐率：[28594 imgs/s](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#混合精度训练)是在V100 **32G**的显卡上测试的，且PaddlePaddle官方测试使用的是内部镜像，未公开，所以我们的测试结果暂时无法复现其官方数据。如果有人可以帮助我们提升PaddlePaddle的测试结果，请通过issue联系我们。 
+- [1] **PaddlePaddle w/DALI**一列展示了PaddlePaddle在使用[DALI-paddle](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#dali预处理)插件后的吞吐率表现。 我们测试发现PaddlePaddle多机性能表现很差，由于PaddlePaddle官方提供的4机32卡的吞吐率：[28594 img/s](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#混合精度训练)是在V100 **32G**的显卡上测试的，且PaddlePaddle官方测试使用的是内部镜像，未公开，所以我们的测试结果暂时无法复现其官方数据。如果有人可以帮助我们提升PaddlePaddle的测试结果，请通过issue联系我们。 
 
-![r50_amp_bz256_throughput.png](imgs/r50_amp_bz256_throughput.png)
+![r50_amp_bz256_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_amp_bz256_throughput.png)
 
 <p align="center">图 4-3 8个框架实现在ResNet50-v1.5模型上（AMP batch size = 256）的吞吐率对比</p>
 
-![r50_amp_bz256_speedup.png](imgs/r50_amp_bz256_speedup.png)
+![r50_amp_bz256_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_amp_bz256_speedup.png)
 
 <p align="center">图 4-4 8个框架实现在ResNet50-v1.5模型上（AMP batch size = 256）的加速比对比</p>
 
@@ -248,11 +248,11 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 
 - [2] 由于MXNet的BERT脚本仓库：[gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert)并没有在其Optimizer中支持**clip_by_ global_norm**操作，而该操作会对最终的性能表现以及收敛的最终精度有影响（W/O clip 相比于 clip，多卡情况下性能会有5%到10%的提升），至于其他框架均默认支持了clip操作。所以我们不把MXNet的性能测试数据放在最终的图表展示中。详情见：[MXNet BERT W/O clip 说明](https://github.com/Oneflow-Inc/DLPerf/tree/master/MxNet/BERT#说明)。为了更清楚的对比性能，我们也测试了OneFlow W/O clip的数据，作为对比参考。
 
-![bert_base_fp32_bz32_throughput.png](imgs/bert_base_fp32_bz32_throughput.png)
+![bert_base_fp32_bz32_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz32_throughput.png)
 
 <p align="center">图 5-1 4个框架实现在BERT-base模型上（FP32 batch size = 32）的吞吐率对比</p>
 
-![bert_base_fp32_bz32_speedup.png](imgs/bert_base_fp32_bz32_speedup.png)
+![bert_base_fp32_bz32_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz32_speedup.png)
 
 <p align="center">图 5-2 4个框架实现在BERT-base模型上（FP32 batch size = 32）的加速比对比</p>
 
@@ -267,11 +267,11 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 | 2        | 16         | 2352.92                         | 1576.88                                                      | 1584.32                                                      | 1631.36                                        | 2425.97                                     | 2172.62                                      |
 | 4        | 32         | 4664.10                         | 3089.74                                                      | 3039.30                                                      | 3167.68                                        | 4799.64                                     | 4340.89                                      |
 
-![bert_base_fp32_bz_max_throughput.png](imgs/bert_base_fp32_bz_max_throughput.png)
+![bert_base_fp32_bz_max_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz_max_throughput.png)
 
 <p align="center">图 5-3 4个框架实现在BERT-base模型上（FP32 batch size = max）的吞吐率对比</p>
 
-![bert_base_fp32_bz_max_speedup.png](imgs/bert_base_fp32_bz_max_speedup.png)
+![bert_base_fp32_bz_max_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz_max_speedup.png)
 
 <p align="center">图 5-4 4个框架实现在BERT-base模型上（FP32 batch size = max）的加速比对比</p>
 
@@ -286,12 +286,12 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 | 2        | 16         | 5745.56               | 2653.74                                                      | 5050.86                                                      | 4936.92                                                      | 1999.38                              | 6669.93                           | 5723.26                            |
 | 4        | 32         | 9911.78               | 5189.07                                                      | 9409.20                                                      | 9331.72                                                      | 3406.36                              | 11195.72                          | 11269.14                           |
 
-![bert_base_amp_bz64_throughput.png](imgs/bert_base_amp_bz64_throughput.png)
+![bert_base_amp_bz64_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz64_throughput.png)
 
 
 <p align="center">图 5-5 5个框架实现在BERT-base模型上（AMP batch size = 64）的吞吐率对比</p>
 
-![bert_base_amp_bz64_speedup.png](imgs/bert_base_amp_bz64_speedup.png)
+![bert_base_amp_bz64_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz64_speedup.png)
 
 <p align="center">图 5-6 5个框架实现在BERT-base模型上（AMP batch size = 64）的加速比对比</p>
 
@@ -306,11 +306,11 @@ AMP(Automatic Mixed Precision) 自动混合精度，在GPU上可以加速训练�
 | 2        | 16         | 8075.16                          | 2653.74                                                      | 5960.14                                                      | 5426.07                                                      | 2969.85                                         | 8777.57                                      | 7327.50                                       |
 | 4        | 32         | 15724.70                         | 5189.07                                                      | 11650.0                                                      | 10349.12                                                     | 5452.35                                         | 17210.63                                     | 14822.31                                      |
 
-![bert_base_amp_bz_max_throughput.png](imgs/bert_base_amp_bz_max_throughput.png)
+![bert_base_amp_bz_max_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz_max_throughput.png)
 
 <p align="center">图 5-7 5个框架实现在BERT-base模型上（AMP batch size = max）的吞吐率对比</p>
 
-![bert_base_amp_bz_max_speedup.png](imgs/bert_base_amp_bz_max_speedup.png)
+![bert_base_amp_bz_max_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz_max_speedup.png)
 
 <p align="center">图 5-8 5个框架实现在BERT-base模型上（AMP batch size = max）的加速比对比</p>
 
@@ -428,15 +428,15 @@ HOROVOD_GPU_OPERATIONS=NCCL python -m pip install --no-cache-dir horovod
 有时，nccl已经正常安装，且节点间可以正常ssh免密登录，且都能互相ping通，不过还是遭遇多机训练长时间卡住的问题，可能是虚拟网卡的问题，**当存在虚拟网卡时，如果不指定nccl变量，则多机通信时可能会走虚拟网卡，而导致多机不通的问题。**
 如下图：
 
-![NCCL_debug_0.jpg](imgs/NCCL_debug_0.jpg)
+![NCCL_debug_0.jpg](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/NCCL_debug_0.jpg)
 
 `NCCL WARN Connect to fe80::a480:7fff:fecf:1ed9%13<45166> failed : Network is unreachable`表明多机遇到了网络不能连通的问题。具体地，是经过网卡：fe80::a480:7fff:fecf...通信时不能连通。
 
 > 我们排查时，通过在发送端ping一个较大的数据包（如ping -s 10240 10.11.0.4），接收端通过bwm-ng命令查看每个网卡的流量波动情况（找出ping相应ip时，各个网卡的流量情况），发现可以正常连通，且流量走的是enp类型的网卡。
 
 通过ifconfig查看当前节点中的所有网卡类型：
-![NCCL_debug_1.jpg](imgs/NCCL_debug_1.jpg)
-![NCCL_debug_2.jpg](imgs/NCCL_debug_2.jpg)
+![NCCL_debug_1.jpg](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/NCCL_debug_1.jpg)
+![NCCL_debug_2.jpg](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/NCCL_debug_2.jpg)
 可以发现有很多enp开头的网卡，也有很多veth开头的虚拟网卡，而nccl日志输出中的：fe80::a480:7fff:fecf:1ed9是veth虚拟网卡。
 
 通过查看[nccl官网文档](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html?highlight=nccl_socket_ifname#nccl-socket-ifname)发现，我们可以通过指定nccl变量来设定nccl通信使用的网卡类型：

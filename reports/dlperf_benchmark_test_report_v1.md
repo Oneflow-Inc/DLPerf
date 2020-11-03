@@ -93,9 +93,9 @@ P.S.  In features:
 
 The following images show throughput and speedup of 8 implementations of ResNet50 V1.5.
 
-![r50_fp32_bz128_throughput.png](imgs/r50_fp32_bz128_throughput.png)
+![r50_fp32_bz128_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_fp32_bz128_throughput.png)
 
-![r50_fp32_bz128_speedup.png](imgs/r50_fp32_bz128_speedup.png)
+![r50_fp32_bz128_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_fp32_bz128_speedup.png)
 
 #### AMP, batch size = 256
 
@@ -108,9 +108,9 @@ The following images show throughput and speedup of 8 implementations of ResNet5
 
 [1]: The throughput 11617.57 img/s is obtained with **bsz = 196** and **with** [**DALI-paddle plug-in**](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#dali预处理) because using DALI will occupy more GPU device memory, so bsz = 224 or 256 both encounters OOM. The official data [28594 img/s](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#混合精度训练) provided by PaddlePaddle is tested on **V100 32G** and the PaddlePaddle docker image with DALI not released, so we cannot replicate this result. If anyone can help us improve PaddlePaddle test results, please contact us by issue.
 
-![r50_amp_bz256_throughput.png](imgs/r50_amp_bz256_throughput.png)
+![r50_amp_bz256_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_amp_bz256_throughput.png)
 
-![r50_amp_bz256_speedup.png](imgs/r50_amp_bz256_speedup.png)
+![r50_amp_bz256_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/r50_amp_bz256_speedup.png)
 
 
 
@@ -129,9 +129,9 @@ The following images show throughput and speedup of 8 implementations of ResNet5
 
 The following images show throughput and speedup of 4 implementations  (without MXNet) of BERT base with data type float32 and  batch size per device = 32.
 
-![bert_base_fp32_bz32_throughput.png](imgs/bert_base_fp32_bz32_throughput.png)
+![bert_base_fp32_bz32_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz32_throughput.png)
 
-![bert_base_fp32_bz32_speedup.png](imgs/bert_base_fp32_bz32_speedup.png)
+![bert_base_fp32_bz32_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz32_speedup.png)
 
 #### FP32, batch size = max  
 
@@ -144,9 +144,9 @@ The following images show throughput and speedup of 4 implementations  (without 
 
 The following images show throughput and speedup of 4 implementations of BERT base with data type float32 and batch size per device = max.
 
-![bert_base_fp32_bz_max_throughput.png](imgs/bert_base_fp32_bz_max_throughput.png)
+![bert_base_fp32_bz_max_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz_max_throughput.png)
 
-![bert_base_fp32_bz_max_speedup.png](imgs/bert_base_fp32_bz_max_speedup.png)
+![bert_base_fp32_bz_max_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_fp32_bz_max_speedup.png)
 
 
 
@@ -161,9 +161,9 @@ The following images show throughput and speedup of 4 implementations of BERT ba
 
 The following images show throughput and speedup of 4 implementations   (with TensorFlow 1.x XLA and without MXNet) of BERT base with auto mixed precision and batch size per device = 64.
 
-![bert_base_amp_bz64_throughput.png](imgs/bert_base_amp_bz64_throughput.png)
+![bert_base_amp_bz64_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz64_throughput.png)
 
-![bert_base_amp_bz64_speedup.png](imgs/bert_base_amp_bz64_speedup.png)
+![bert_base_amp_bz64_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz64_speedup.png)
 
 #### AMP, batch size = max  
 
@@ -176,7 +176,7 @@ The following images show throughput and speedup of 4 implementations   (with Te
 
 The following images show throughput and speedup of 4 implementations of BERT base with auto mixed precision and batch size per device = max.
 
-![bert_base_amp_bz_max_throughput.png](imgs/bert_base_amp_bz_max_throughput.png)
+![bert_base_amp_bz_max_throughput.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz_max_throughput.png)
 
-![bert_base_amp_bz_max_speedup.png](imgs/bert_base_amp_bz_max_speedup.png)
+![bert_base_amp_bz_max_speedup.png](https://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/bert_base_amp_bz_max_speedup.png)
 
