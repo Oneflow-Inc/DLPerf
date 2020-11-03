@@ -182,6 +182,10 @@ cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-sp
 
 完成后，可以通过`ibstat`命令检查驱动是否安装成功。
 
+
+
+更详细的IB驱动安装，请参考：[mellanox官方文档](https://community.mellanox.com/s/article/howto-install-mlnx-ofed-driver)
+
 # Training
 
 集群中有4台节点：
