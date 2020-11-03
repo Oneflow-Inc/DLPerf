@@ -94,7 +94,6 @@ docker build . -t nvidia_rn50_tf:20.03-resnet
 # 启动容器
 docker  run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 --name tf_resnet  --net host \
---cap-add=IPC_LOCK --device=/dev/infiniband \
 -v /datasets/ImageNet/tfrecord:/data/tfrecords \
 -d nvidia_rn50_tf:20.03-resnet
 ```
