@@ -95,7 +95,6 @@ nvidia-docker run  -it \
     --ulimit memlock=-1 --privileged \
     --name tf_bert \
     --ulimit stack=67108864 \
-    --device=/dev/infiniband \
     -e NVIDIA_VISIBLE_DEVICES=$NV_VISIBLE_DEVICES \
     -v $PWD:/workspace/bert \
     -v /home/leinao/DLPerf/dataset/wiki/tfrecord:/workspace/bert/data/tfrecord \

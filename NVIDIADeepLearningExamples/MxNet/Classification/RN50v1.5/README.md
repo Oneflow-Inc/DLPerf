@@ -86,13 +86,12 @@
   # 启动容器
   docker run -it \
   --shm-size=16g --ulimit memlock=-1 --privileged --net=host \
-  --cap-add=IPC_LOCK --device=/dev/infiniband \
   --name mxnet_dlperf \
   -v /home/leinao/DLPerf/dataset/mxnet:/data/imagenet/train-val-recordio-passthrough \
   -v /home/leinao/DLPerf/:/DLPerf/ \
   nvidia_rn50_mx:20.03
   ```
-
+  
 - #### SSH 免密
 
   单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证MXNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
