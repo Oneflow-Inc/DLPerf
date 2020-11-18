@@ -64,7 +64,7 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 
 ## 数据集
 
-本次训练使用了ImageNet2012的一个子集：train-00000-of-01024,train-00001-of-01024...train-0000511-of-01024共640512张图片，数据集格式为TFRecord，具体制作方法参考TensorFlow官网。
+本次训练使用了ImageNet2012的一个子集：train-00000-of-01024,train-00001-of-01024...train-0000511-of-01024共640512张图片，数据集格式为TFRecord。具体制作方法可参考Tensorflow官方提供的脚本：[download_and_preprocess_imagenet.sh](https://github.com/tensorflow/models/blob/cee4aff18b08daf15114351cef826eb1ee7c8519/inception/inception/data/download_and_preprocess_imagenet.sh)
 
 
 
