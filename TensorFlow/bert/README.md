@@ -53,7 +53,7 @@ sudo apt update
 sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 ```
 ## 数据集
-BERT-Pretraining数据集的制作过程参考tensorflow官方readme文档：[pre-training](https://github.com/tensorflow/models/tree/r2.3.0/official/nlp/bert#pre-training ) ，制作时使用了官方提供的代码：[create_pretraining_data.py](https://github.com/tensorflow/models/blob/r2.3.0/official/nlp/data/create_pretraining_data.py)
+BERT-Pretraining数据集采用Wikipedia制作，具体制作过程参考tensorflow官方ReadMe文档：[pre-training](https://github.com/tensorflow/models/tree/r2.3.0/official/nlp/bert#pre-training ) ，制作时使用了官方提供的代码：[create_pretraining_data.py](https://github.com/tensorflow/models/blob/r2.3.0/official/nlp/data/create_pretraining_data.py)
 
 设置create_pretraining_data.py中的相应参数，其中LINE 34、LINE 38、LINE 41为必填参数：
 
