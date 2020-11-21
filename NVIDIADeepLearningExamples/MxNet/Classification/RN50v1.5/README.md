@@ -302,7 +302,7 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 ### ResNet50 v1.5 FP16
 
-#### batch_size = 128 & without xla
+#### batch_size = 256 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
