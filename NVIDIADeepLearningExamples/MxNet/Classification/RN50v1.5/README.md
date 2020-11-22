@@ -310,11 +310,11 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 | 1        | 4       | 4811.72   | 3.75    |
 | 1        | 8       | 9241.68   | 7.21    |
 | 2        | 16      | 13348.68  | 10.41   |
-| 4        | 32      |           |         |
+| 4        | 32      | 27558.28  | 21.50   |
 
 #### batch_size = 256 &  without amp & without xla
 
-注：without amp即去掉runner.sh第42行的--amp参数
+without amp即去掉runner.sh第42行的--amp参数，去掉后即将不会开启动态loss scaling
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
