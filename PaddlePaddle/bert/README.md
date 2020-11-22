@@ -264,6 +264,17 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1999.38   | 6.91    |
 | 4        | 32      | 3406.36   | 11.78   |
 
+### batch size=64 & without xla & without dynamic_loss_scaling
+
+without dynamic_loss_scaling即在测试中设置脚本(single_node_train.sh、multi_node_train.sh)参数：--use_dynamic_loss_scaling=false；开启动态loss scaling通常是为了解决fp16混合精度训练下的数据溢出问题，有助于模型收敛到正常精度，不过会略微影响训练速度。可以看见，关闭动态loss scaling后，单机单卡下训练速度由289.23samples/s提升至295.84samples/s，提升近2.29%
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 295.84    | 1       |
+| 1        | 4       | 845.84    | 2.86    |
+| 1        | 8       | 1471.45   | 4.97    |
+| 2        | 16      | 2285.75   | 7.73    |
+| 4        | 32      | 3801.84   | 12.85   |
 
 ### batch size=128 & without xla
 

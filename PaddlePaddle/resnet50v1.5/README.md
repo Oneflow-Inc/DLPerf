@@ -300,11 +300,9 @@ README展示的是extract_paddle_logs.py的计算结果。
 | 2        | 16      | 6358.43   | 6.15    |
 | 4        | 32      | 10633.22  | 10.2    |
 
-### batch size = 224 &  without xla & without
+### batch size = 224 &  without xla & without dynamic_loss_scaling
 
- --use_dynamic_loss_scaling=false
-
-即在测试中设置脚本(single_node_train.sh、multi_node_train.sh)参数：use_dynamic_loss_scaling为false；开启动态loss scaling通常是为了解决fp16混合精度训练下的数据溢出问题，有助于模型收敛到正常精度，不过会略微影响训练速度。
+without dynamic_loss_scaling即在测试中设置脚本(single_node_train.sh、multi_node_train.sh)参数：--use_dynamic_loss_scaling=false；开启动态loss scaling通常是为了解决fp16混合精度训练下的数据溢出问题，有助于模型收敛到正常精度，不过会略微影响训练速度。
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
