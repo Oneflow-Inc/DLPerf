@@ -1,4 +1,4 @@
-# 【DLPerf】PaddlePaddle - ResNet50V1.5测评
+【DLPerf】PaddlePaddle - ResNet50V1.5测评
 
 # Overview
 
@@ -300,6 +300,21 @@ README展示的是extract_paddle_logs.py的计算结果。
 | 2        | 16      | 6358.43   | 6.15    |
 | 4        | 32      | 10633.22  | 10.2    |
 
+### batch size = 224 &  without xla & without
+
+ --use_dynamic_loss_scaling=false
+
+即在测试中设置脚本(single_node_train.sh、multi_node_train.sh)参数：use_dynamic_loss_scaling为false；开启动态loss scaling通常是为了解决fp16混合精度训练下的数据溢出问题，有助于模型收敛到正常精度，不过会略微影响训练速度。
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1001.23   | 1       |
+| 1        | 4       | 2499.34   | 2.5     |
+| 1        | 8       | 2563.44   | 2.56    |
+| 2        | 16      | 5165.41   | 5.16    |
+| 4        | 32      | 9573.03   | 9.56    |
+
+
 ### batch size = 196 & with dali & without xla
 
 | node_num | gpu_num | samples/s | speedup |
@@ -313,7 +328,6 @@ README展示的是extract_paddle_logs.py的计算结果。
 注：
 
 - 本次评测最大batch size达不到Paddle官方的256，因为Paddle官方使用的是32GB显存的Tesla V100，而我们是16GB，故使用batch_size=256会OOM（OUT OF MEMORY）
-
 - 本次测评得到多机加速比较低，可能是由于Paddle官方提供的脚本和配置并不是最优的，由于其没有提供原始测评时的容器镜像，故我们也无法做到对齐，测评得到的数据和Paddle官方存在较大差距。官方数据：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
 
 
