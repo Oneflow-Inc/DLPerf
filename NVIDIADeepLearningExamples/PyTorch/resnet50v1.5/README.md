@@ -484,17 +484,11 @@ Saving result to ./result/_result.json
 
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-
 | 1        | 1                | 128                   | 367.29             | 1.00    |
-
 | 1        | 4                | 128                   | 1449.48            | 3.95    |
-
 | 1        | 8                | 128                   | 2887.65            | 7.86    |
-
 | 2        | 8                | 128                   | 5716.79            | 15.56   |
-
 | 4        | 8                | 128                   | 10917.09           | 29.72   |
 
 
@@ -508,17 +502,11 @@ Saving result to ./result/_result.json
 
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-
 | 1        | 1                | 256                   | 802.9              | 1.00    |
-
 | 1        | 4                | 256                   | 3137.44            | 3.91    |
-
 | 1        | 8                | 256                   | 6154.66            | 7.67    |
-
 | 2        | 8                | 256                   | 11991.94           | 14.94   |
-
 | 4        | 8                | 256                   | 22551.16           | 28.09   |
 
 同时，可支持的 max batch size=256。
@@ -526,13 +514,9 @@ Saving result to ./result/_result.json
 ### AMP & `static loss scale`
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-
 | 1        | 1                | 256                   | 827.86              | 1.00    |
-
 | 1        | 4                | 256                   | 3253.68            | 3.93   |
-
 | 1        | 8                | 256                   |6446.74          | 7.79    |
 
 
