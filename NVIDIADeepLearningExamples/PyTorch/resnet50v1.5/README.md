@@ -97,19 +97,12 @@
 
   #### Feature support matrix
 
-
   | Feature                                                      | ResNet50 v1.5 PyTorch |
-
   | ------------------------------------------------------------ | --------------------- |
-
   | Multi-gpu training                                           | Yes                   |
-
   | Multi-node training                                          | Yes                   |
-
   | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                   |
-
   | Automatic mixed precision (AMP)                              | Yes                   |
-
 
 
 
