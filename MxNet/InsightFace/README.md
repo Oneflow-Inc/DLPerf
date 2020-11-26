@@ -77,7 +77,7 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
   vim config.py # edit dataset path etc..
   ```
 
-- 修改config.py[第23行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/sample_config.py#L23)，设置config.max_steps = 120以使得程序训练120iter自动退出
+  修改config.py[第116行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/sample_config.py#L116)，设置为自己的数据集路径；修改config.py[第23行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/sample_config.py#L23)，设置config.max_steps = 120以使得程序训练120iter自动退出
 
 
 ### 3. 运行测试
@@ -89,7 +89,7 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
 
-每个节点有 8 张 V100 显卡， 每张显卡显存 16 G。目前，由于官方尚未提供多机训练的代码，我们的测试仅在一台节点上进行。
+每个节点有 8 张 V100 显卡， 每张显卡显存 16 GB，目前，由于官方尚未提供多机训练的代码，我们的测试仅在一台节点上进行。
 
 #### 测试
 
@@ -177,7 +177,7 @@ Saving result to ./result/bz64_result.json
 
 #### 5.1 测速脚本
 
-- extract_mxnet_logs.py 根据官方在log中打印的速度，在120个iter中，排除前100iter，取后100个iter的速度做平均；
+- extract_mxnet_logs.py 根据官方在log中打印的速度，在120个iter中，排除前20iter，取后100个iter的速度做平均；
 
 #### 5.2 均值速度和中值速度
 
