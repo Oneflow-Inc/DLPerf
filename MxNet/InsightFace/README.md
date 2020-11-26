@@ -248,7 +248,17 @@ Saving result to ./result/bz64_result.json
 | 1        | 4       | 1017.78 | 1.04 |
 | 1        | 8       | 1038.6 | 1.07  |
 
-详细 Log 信息可下载：
+注：
+
+- 当训练网络使用mobilefacenet时，多gpu相比单gpu并没有明显加速，是因为巨大的全连接层带来的IO瓶颈。
+
+- 我们后续打算对[partial_fc](https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc)项目进行测试，其使用了openmpi和horovod，速度更快且支持分布式多机多卡下的训练。
+
+
+
+### 日志下载
+
+详细 Log 信息可点击下载：
 
 - [arcface_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/arcface_fp32.zip)
 
