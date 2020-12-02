@@ -3,6 +3,7 @@ This folder contains OneFlow BERT Benchmark test reports.
 
 ## Changelog
 Note: latest on the top
+
 ## Data
 
 - Pretrain datasets
@@ -40,7 +41,9 @@ Contains the complete dataset. Please click [here](https://oneflow-public.oss-cn
     ```
 More information can be found [here](https://github.com/Oneflow-Inc/OneFlow-Benchmark/blob/master/LanguageModeling/BERT/README.md).You can also see [here](https://github.com/Oneflow-Inc/oneflow-documentation/blob/master/cn/docs/extended_topics/how_to_make_ofdataset.md) how to make the OneFlow dataset.
 
-### OneFlow v0.2
+### OneFlow v0.3.1
+- BERT base FP16 with dynamic loss scale test [bert_base_oneflow_v0.3.1_report_1202.md](bert_base_oneflow_v0.3.1_report_1202.md)
+### OneFlow v0.2.0
 - BERT base without XLA test [bert_base_oneflow_v0.2_report_1009.md](bert_base_oneflow_v0.2_report_1009.md)
 ### Aug 22nd 2020
 - BERT base fp32 without XLA test [report](bert_base_fp32_report_0822.md)
