@@ -12,35 +12,34 @@
 
 ## 内容目录 Table Of Content
 
+>* [概述 Overview](#---overview)
+>* [内容目录 Table Of Content](#-----table-of-content)
+>* [环境 Environment](#---environment)
+>  + [系统](#--)
+>    - [硬件](#--)
+>    - [软件](#--)
+>  + [NGC 容器](#ngc---)
+>    - [Feature support matrix](#feature-support-matrix)
+>* [快速开始 Quick Start](#-----quick-start)
+>  + [1. 前期准备](#1-----)
+>    - [数据集](#---)
+>    - [镜像及容器](#-----)
+>    - [安装 IB 驱动](#---ib---)
+>  + [2. 运行测试](#2-----)
+>    - [单机测试](#----)
+>    - [多机测试](#----)
+>      * [两机测试](#----)
+>      * [多机测试](#-----1)
+>  + [3. 数据处理](#3-----)
+>* [性能结果 Performance](#-----performance)
+>  + [FP32 & W/O XLA](#fp32---w-o-xla)
+>  + [ResNet50 v1.5 batch_size = 128](#resnet50-v15-batch-size---128)
+>  + [AMP & W/O XLA](#amp---w-o-xla)
+>  + [ResNet50 v1.5 batch_size = 256](#resnet50-v15-batch-size---256)
+>  + [FP16 & W/O XLA](#fp16---w-o-xla)
+>  + [ResNet50 v1.5 batch_size = 128](#resnet50-v15-batch-size---128-1)
 
-- [NVIDIA/DeepLearningExamples PyTorch ResNet50 v1.5 测评](#nvidia-deeplearningexamples-pytorch-resnet50-v15---)
->>>>>>> 092bfb45c1e38bc8e0d1f42076b6e35760152598
-  * [概述 Overview](#---overview)
-  * [内容目录 Table Of Content](#-----table-of-content)
-  * [环境 Environment](#---environment)
-    + [系统](#--)
-      - [硬件](#--)
-      - [软件](#--)
-    + [NGC 容器](#ngc---)
-      - [Feature support matrix](#feature-support-matrix)
-  * [快速开始 Quick Start](#-----quick-start)
-    + [1. 前期准备](#1-----)
-      - [数据集](#---)
-      - [镜像及容器](#-----)
-      - [安装 IB 驱动](#---ib---)
-    + [2. 运行测试](#2-----)
-      - [单机测试](#----)
-      - [多机测试](#----)
-        * [两机测试](#----)
-        * [多机测试](#-----1)
-    + [3. 数据处理](#3-----)
-  * [性能结果 Performance](#-----performance)
-    + [FP32 & W/O XLA](#fp32---w-o-xla)
-    + [ResNet50 v1.5 batch_size = 128](#resnet50-v15-batch-size---128)
-    + [AMP & W/O XLA](#amp---w-o-xla)
-    + [ResNet50 v1.5 batch_size = 256](#resnet50-v15-batch-size---256)
-    + [FP16 & W/O XLA](#fp16---w-o-xla)
-    + [ResNet50 v1.5 batch_size = 128](#resnet50-v15-batch-size---128-1)
+
 
 ## 环境 Environment
 
@@ -99,12 +98,12 @@
 
   #### Feature support matrix
 
-  | Feature                                                      | ResNet50 v1.5 PyTorch |
-  | ------------------------------------------------------------ | --------------------- |
-  | Multi-gpu training                                           | Yes                   |
-  | Multi-node training                                          | Yes                   |
-  | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                   |
-  | Automatic mixed precision (AMP)                              | Yes                   |
+| Feature                                                      | ResNet50 v1.5 PyTorch |
+| ------------------------------------------------------------ | --------------------- |
+| Multi-gpu training                                           | Yes                   |
+| Multi-node training                                          | Yes                   |
+| [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                   |
+| Automatic mixed precision (AMP)                              | Yes                   |
 
 
 
@@ -603,7 +602,8 @@ Saving result to ./result/_result.json
 
 - ### ResNet50 v1.5 batch_size = 128
 
-<<<<<<< HEAD
+without IB
+
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 128                   | 366.98             | 1.00    |
@@ -612,36 +612,7 @@ Saving result to ./result/_result.json
 | 2        | 8                | 128                   | 5489.18            | 14.96   |
 | 4        | 8                | 128                   | 10617.46           | 28.93   |
 
-
-
-### AMP & W/O XLA
-
-- ### ResNet50 v1.5 batch_size = 256
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 256                   | 803.96             | 1.00    |
-| 1        | 4                | 256                   | 3127.18            | 3.89    |
-| 1        | 8                | 256                   | 5522.86            | 6.87    |
-| 2        | 8                | 256                   | 10517.95           | 13.08   |
-| 4        | 8                | 256                   | 18824.17           | 23.41   |
-
-同时，可支持的 max batch size=256。
-
-
-
-### FP16 & W/O XLA
-
-- ### ResNet50 v1.5 batch_size = 128
-
-| ode_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| ------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1       | 1                | 256                   | 738.88             | 1.00    |
-| 1       | 4                | 256                   | 2902.68            | 3.93    |
-| 1       | 8                | 256                   | 5485.5             | 7.42    |
-| 2       | 8                | 256                   | 10008.53           | 13.55   |
-| 4       | 8                | 256                   | 19258.12           | 26.06   |
-=======
+with IB
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
@@ -655,11 +626,21 @@ Saving result to ./result/_result.json
 
 ### AMP & `dynamic loss scale`
 
- 由于使用 AMP 时，可以选择 `dynamic loss scale` 或者 `static loss scale`，但是不同实现会带来些微（0.8%~4.7%）的性能差异，所以附上两份数据。
-
+由于使用 AMP 时，可以选择 `dynamic loss scale` 或者 `static loss scale`，但是不同实现会带来些微（0.8%~4.7%）的性能差异，所以附上两份数据。
 
 - ### ResNet50 v1.5 batch_size = 256
 
+without IB
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 256                   | 803.96             | 1.00    |
+| 1        | 4                | 256                   | 3127.18            | 3.89    |
+| 1        | 8                | 256                   | 5522.86            | 6.87    |
+| 2        | 8                | 256                   | 10517.95           | 13.08   |
+| 4        | 8                | 256                   | 18824.17           | 23.41   |
+
+with IB
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
@@ -673,15 +654,35 @@ Saving result to ./result/_result.json
 
 ### AMP & `static loss scale`
 
+with IB
+
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 256                   | 827.86              | 1.00    |
-| 1        | 4                | 256                   | 3253.68            | 3.93   |
-| 1        | 8                | 256                   |6446.74          | 7.79    |
-
-
+| 1        | 1                | 256                   | 827.86             | 1.00    |
+| 1        | 4                | 256                   | 3253.68            | 3.93    |
+| 1        | 8                | 256                   | 6446.74            | 7.79    |
 
 同时，可支持的 max batch size=256。
+
+
+
+### FP16 
+
+- ### ResNet50 v1.5 batch_size = 128
+
+without IB
+
+| ode_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| ------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1       | 1                | 256                   | 738.88             | 1.00    |
+| 1       | 4                | 256                   | 2902.68            | 3.93    |
+| 1       | 8                | 256                   | 5485.5             | 7.42    |
+| 2       | 8                | 256                   | 10008.53           | 13.55   |
+| 4       | 8                | 256                   | 19258.12           | 26.06   |
+
+同时，可支持的 max batch size=256。
+
+
 
 
 NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 Results](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5#results)。
@@ -691,4 +692,3 @@ Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.
 
 
 详细 Log 信息可下载：[ngc_pytorch_resnet50_v1.5.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Pytorch/ngc_pytorch_resnet50_v1.5.tar)。
-
