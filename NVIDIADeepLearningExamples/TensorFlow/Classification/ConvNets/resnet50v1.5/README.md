@@ -2,9 +2,9 @@
 
 # Overview
 
-本仓库复现了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中Tensorflow版[ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)，目的在于速度测评，得到1机、2机、4机情况下的吞吐率及加速比，评判框架在分布式训练情况下的横向拓展能力。
+本仓库复现了[NVIDIA官方仓库](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590)中TensorFlow版[ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5)，目的在于速度测评，得到1机、2机、4机情况下的吞吐率及加速比，评判框架在分布式训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
+目前，测试覆盖了 FP32、FP16混合精度以及XLA，后续将持续维护增加更多方式的测评。
 
 
 
@@ -36,7 +36,7 @@
 | ------------------------------------------------------------ | ------------------------- |
 | [Horovod Multi-gpu](https://github.com/horovod/horovod)      | Yes                       |
 | [Horovod Multi-node](https://github.com/horovod/horovod)     | Yes                       |
-| Automatic mixed precision (AMP)                              | No                        |
+| Automatic mixed precision (AMP)                              | Yes                       |
 | [NVIDIA DALI](https://docs.nvidia.com/deeplearning/dali/release-notes/index.html) | Yes                       |
 
 # Quick Start
@@ -53,10 +53,10 @@ git clone https://github.com/NVIDIA/DeepLearningExamples
 cd DeepLearningExamples && git checkout fed7ba99cde958fda12c9e81d12b3d7e738e0590
 ```
 
-1.将本页面scripts路径下脚本：`single_node_train.sh`、`multi_node_train.sh`放入
- `/DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training`下；
+将本页面scripts文件夹下的脚本放入：
+ `/DeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/training`目录下。
 
-2.将scripts中的脚本：`SINGLE_NODE_RN50_FP32_1E.sh`、`TWO_NODE_RN50_FP32_1E.sh`和`MULTI_NODE_RN50_FP32_1E.sh`放入`resnet50v1.5/training/FP32`路径下
+
 
 
 ## NGC容器
@@ -94,7 +94,6 @@ docker build . -t nvidia_rn50_tf:20.03-resnet
 # 启动容器
 docker  run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 --name tf_resnet  --net host \
---cap-add=IPC_LOCK --device=/dev/infiniband \
 -v /datasets/ImageNet/tfrecord:/data/tfrecords \
 -d nvidia_rn50_tf:20.03-resnet
 ```
@@ -104,7 +103,9 @@ docker  run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 
 **TFRecord**
 
-采用ImageNet制作的`tfrecord`格式：train-00000-of-01024,train-00001-of-01024....数据集。参考：NVIDIA官方的[快速入门指南](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#quick-start-guide)
+采用ImageNet2012制作的`tfrecord`格式：train-00000-of-01024,train-00001-of-01024....数据集。
+
+具体制作方法可参考：NVIDIA官方的[快速入门指南](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#quick-start-guide)以及Tensorflow官方提供的脚本：[download_and_preprocess_imagenet.sh](https://github.com/tensorflow/models/blob/cee4aff18b08daf15114351cef826eb1ee7c8519/inception/inception/data/download_and_preprocess_imagenet.sh)
 
 **dali-index**
 
@@ -169,6 +170,33 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 
 - 3.重启ssh服务`service ssh restart`
 
+## IB驱动安装（可选）
+
+如果服务器之间支持IB(**InfiniBand**)网络，则可以安装IB驱动，使得多机情况下各个节点间的通信速率明显提升，从而加速框架在多机环境下的训练，提升加速比。
+
+```shell
+apt-get update
+apt install dpatch libelf1 libmnl0 libltdl-dev lsof chrpath debhelper pciutils tk bison graphviz ethtool kmod gfortran swig flex tcl
+```
+
+从[NVIDIA官网](https://www.mellanox.com/products/InfiniBand-VPI-Software)下载适合操作系统及相应版本的IB驱动包，如果是nvidia-ngc容器，可以直接使用我们提高好的驱动包：下载[IB驱动 MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar 源码包](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar)并解压
+
+```
+wget http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar && tar -xvf MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar
+```
+
+进入源码包路径，安装
+
+```
+cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-space-only --without-fw-update --all --force 
+```
+
+完成后，可以通过`ibstat`命令检查驱动是否安装成功。
+
+
+
+更详细的IB驱动安装，请参考：[mellanox官方文档](https://community.mellanox.com/s/article/howto-install-mlnx-ofed-driver)
+
 # Training
 
 集群中有4台节点：
@@ -188,25 +216,77 @@ AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
 ```shell
 docker exec -it tf_resnet /bin/bash
 cd /workspace/rn50v15
-bash ./resnet50v1.5/training/FP32/SINGLE_NODE_RN50_FP32_1E.sh
+bash resnet50v1.5/training/run_single_node.sh
 ```
 
-执行脚本，即可运行单机1卡、4卡、8卡的训练，分别测试6次。
+执行脚本，即可运行单机1卡、4卡、8卡的训练，分别测试5次。默认测试FP32、batch size=128的情况。
+
+### 混合精度
+
+可以通过参数指定进行FP16混合精度的训练，如以下命令将进行bath size=224的FP16混合精度训练：
+
+`bash resnet50v1.5/training/run_single_node.sh 224 amp`
+
+
 
 ## 2机16卡
 
-容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/FP32/TWO_NODE_RN50_FP32_1E.sh`
+容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/run_two_node.sh`
 
-即可运行2机16卡的训练，同样默认测试6次。
+即可运行2机16卡的训练，同样默认测试5次。
+
+### 混合精度
+
+可以通过参数指定进行FP16混合精度的训练，如以下命令将进行bath size=224的2机FP16混合精度训练：
+
+`bash resnet50v1.5/training/run_two_node.sh 224  amp`
+
+
 
 ## 4机32卡
 
-容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/FP32/MULTI_NODE_RN50_FP32_1E.sh`
+容器/workspace/rn50v15下执行：`bash resnet50v1.5/training/run_multi_node.sh`
 
-即可运行4机32卡的训练，默认测试6次。
+即可运行4机32卡的训练，默认测试5次。
+
+## 混合精度&XLA
+
+### FP6混合精度
+
+可以通过参数指定进行FP16混合精度的训练，如以下命令将进行bath size=224的FP6混合精度训练
+
+- 单机混合精度训练：
+
+  - `bash resnet50v1.5/training/run_single_node.sh 224 amp`
+
+- 2机混合精度训练：
+
+  - `bash resnet50v1.5/training/run_two_node.sh 224  amp`
+
+- 4机混合精度训练：
+
+  - `bash resnet50v1.5/training/run_multi_node.sh 224  amp`
+
+  
+
+### 启用XLA
+
+所有训练默认使用dali，所以以上脚本中都加有参数USE_DALI=1：
+
+```shel
+USE_DALI=1  bash ${WORKSPACE}/resnet50v1.5/training/single_node_train.sh ${WORKSPACE}   ${DATA_DIR}    1   $NUM_STEP   $BATCH_SIZE   $DTYPE   $i
+```
+
+同样，需要启用XLA只需要加上USE_XLA=1即可：
+
+```she
+USE_DALI=1 USE_XLA=1 bash ${WORKSPACE}/resnet50v1.5/training/single_node_train.sh ....
+```
 
 
-# Result
+
+
+# Results
 
 ## 吞吐率及加速比
 
@@ -294,7 +374,7 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 - median_speed中值速度
 
-  每个batch size进行6次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
+  每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度。
 
 #### 3.加速比以中值速度计算
 
@@ -304,9 +384,9 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 
 
-## ResNet50 V1.5 bsz = 128
+## ResNet50 V1.5 FP32
 
-### FP32 & Without XLA
+### batch size = 128 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -316,17 +396,47 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 | 2        | 16      | 5099.42   | 14.07   |
 | 4        | 32      | 9514.64   | 26.25   |
 
+## ResNet50 V1.5 FP16
 
-
-附：[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/709456cdd7a0f2ae03fe42846ec6a24dceee536e/TensorFlow/Classification/RN50v1.5#nvidia-dgx-1-8x-v100-16g-1)
+### batch size = 224 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 364.9     | 1.00    |
-| 1        | 4       | 1419.4    | 3.88    |
-| 1        | 8       | 2778.5    | 7.61    |
+| 1        | 1       | 945.18    | 1       |
+| 1        | 4       | 3546.02   | 3.75    |
+| 1        | 8       | 6903.42   | 7.3     |
+| 2        | 16      | 12021.09  | 12.72   |
+| 4        | 32      | 24734.22  | 26.17   |
+
+### batch size = 224 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1198.55   | 1       |
+| 1        | 4       | 4360.83   | 3.64    |
+| 1        | 8       | 8588.45   | 7.17    |
+| 2        | 16      | 14931.03  | 12.46   |
+| 4        | 32      | 29171.69  | 24.34   |
+
+[NVIDIA DGX-1 (8x V100 16G)官方测试结果](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
+
+
+
+注意：
+
+1.官方测速[采用的脚本](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#benchmarking) 是纯为了跑速度的，很多参数并没有和训练时的参数对齐（label_smoothing设为0、use_cosine_lr=False、use_static_loss_scaling=False等）而[官方amp的训练脚本](https://github.com/NVIDIA/DeepLearningExamples/blob/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5/training/GENERIC.sh)中这些参数都是有的。我们测速的原则是真实反应各框架，在真实训练过程中的速度，所以加上了这些参数。
+
+2.本次测速时最大能跑到的batch size为224，跑官方宣称的256时会OOM(out of memory)，故理论上batch size=224的数据相比256会差一些；
+
+3.速度差异的原因还有可能是机器环境不同，数据集制作方式不同，后期考虑用更统一和规范的数据集进行测试。
+
+
+
+
 
 ## 完整日志
 
-[logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/logs.zip)
+-  [resnet50_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp32.zip) 
+-  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
+-  [resnet50_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16_xla.zip)
 

@@ -4,36 +4,7 @@
 
 本次复现采用了[PaddlePaddle官方仓库](https://github.com/PaddlePaddle/models/tree/release/1.8)中的[BERT](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT)，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖 FP32 精度，后续将持续维护，增加混合精度训练，XLA 等多种方式的测评。
-
-
-
-- [Overview](#overview)
-- [Environment](#environment)
-  * [系统](#--)
-  * [框架](#--)
-- [Quick Start](#quick-start)
-  * [项目代码](#----)
-  * [框架安装](#----)
-  * [NCCL](#nccl)
-  * [数据集](#---)
-- [Training](#training)
-  * [单机](#--)
-  * [2机16卡](#2-16-)
-  * [4机32卡](#4-32-)
-- [Result](#result)
-  * [吞吐率及加速比](#-------)
-    + [计算规则](#----)
-      - [1.测速脚本](#1----)
-      - [2.均值速度和中值速度](#2---------)
-      - [3.加速比以中值速度计算](#3----------)
-  * [BERT-Base  batch size=32](#bert-base--batch-size-32)
-    + [FP32 & Without XLA](#fp32---without-xla)
-  * [BERT-Base  batch size=64](#bert-base--batch-size-64)
-    + [FP32 & Without XLA](#fp32---without-xla-1)
-  * [BERT-Base  batch size=96](#bert-base--batch-size-96)
-    + [FP32 & Without XLA](#fp32---without-xla-2)
-  * [完整日志](#----)
+目前，该测试覆盖了FP32、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -117,7 +88,7 @@ bash make_pretrain_data.sh
 bash run_single_node.sh
 ```
 
-对单机1卡、2卡、4卡、8卡分别做6组测试。单机多机脚本默认的batch size为32，可以通过参数指定，如指定batch size为64，`bash run_single_node.sh 64`，或96，`bash run_single_node.sh 96`。
+对单机1卡、2卡、4卡、8卡分别做5次测试。单机多机脚本默认的batch size为32，可以通过参数指定，如指定batch size为64，`bash run_single_node.sh 64`，或96，`bash run_single_node.sh 96`。
 
 ## 2机16卡
 
@@ -130,7 +101,7 @@ bash run_single_node.sh
 bash run_two_node.sh
 ```
 
-NODE2节点`models/PaddleNLP/pretrain_language_models/BERT/`目录下，修改run_two_node.sh脚本中的`CURRENT_NODE=$NODE2`，再执行`bash run_two_node.sh `，即可运行2机16卡的训练，同样默认测试6次。
+NODE2节点`models/PaddleNLP/pretrain_language_models/BERT/`目录下，修改run_two_node.sh脚本中的`CURRENT_NODE=$NODE2`，再执行`bash run_two_node.sh `，即可运行2机16卡的训练，同样默认测试5次。
 
 ## 4机32卡
 
@@ -140,7 +111,13 @@ NODE2节点`models/PaddleNLP/pretrain_language_models/BERT/`目录下，修改ru
 bash run_multi_node.sh
 ```
 
-以运行4机32卡的训练，默认测试6组。
+以运行4机32卡的训练，默认测试5次。
+
+## 混合精度
+
+运行FP16混合精度测试很简单，只需修改脚本参数或者运行时指定，例如通过如下命令：
+
+`bash run_multi_node.sh   64   fp16`，即可运行batch size=64，FP16混合精度的测试
 
 # Result
 
@@ -240,9 +217,9 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-## BERT-Base  batch size=32
+## BERT-Base  FP32
 
-### FP32 & Without XLA
+### batch size=32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -253,9 +230,7 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1116.02   | 8.41    |
 | 4        | 32      | 2073.6    | 15.63   |
 
-## BERT-Base  batch size=64
-
-### FP32 & Without XLA
+### batch size=64 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -266,9 +241,7 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1426.52   | 10.39   |
 | 4        | 32      | 2736.78   | 19.94   |
 
-## BERT-Base  batch size=96
-
-### FP32 & Without XLA
+### batch size=96 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -279,6 +252,53 @@ extract_paddle_logs.py根据官方在log中打印的速度，在120个iter中，
 | 2        | 16      | 1631.36   | 11.91   |
 | 4        | 32      | 3167.68   | 23.13   |
 
+## BERT-Base  FP16
+
+### batch size=64 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 289.23    | 1       |
+| 1        | 4       | 784.52    | 2.71    |
+| 1        | 8       | 1298.96   | 4.49    |
+| 2        | 16      | 1999.38   | 6.91    |
+| 4        | 32      | 3406.36   | 11.78   |
+
+### batch size=64 & without xla & without dynamic_loss_scaling
+
+without dynamic_loss_scaling即在测试中设置脚本(single_node_train.sh、multi_node_train.sh)参数：--use_dynamic_loss_scaling=false；开启动态loss scaling通常是为了解决fp16混合精度训练下的数据溢出问题，有助于模型收敛到正常精度，不过会略微影响训练速度。可以看见，关闭动态loss scaling后，单机单卡下训练速度由289.23samples/s提升至295.84samples/s，提升近2.29%
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 295.84    | 1       |
+| 1        | 4       | 845.84    | 2.86    |
+| 1        | 8       | 1471.45   | 4.97    |
+| 2        | 16      | 2285.75   | 7.73    |
+| 4        | 32      | 3801.84   | 12.85   |
+
+### batch size=128 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 296.92    | 1       |
+| 1        | 4       | 877.31    | 2.95    |
+| 1        | 8       | 1538.25   | 5.18    |
+| 2        | 16      | 2701.81   | 9.1     |
+| 4        | 32      | 4922.16   | 16.58   |
+
+
+### batch size=160 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 309.68    | 1       |
+| 1        | 4       | 915.7     | 2.96    |
+| 1        | 8       | 1666.54   | 5.38    |
+| 2        | 16      | 2969.85   | 9.59    |
+| 4        | 32      | 5452.35   | 17.61   |
+
 ## 完整日志
 
-[bert.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert.zip)
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert/bert_fp32.zip)
+
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/bert/bert_fp16.zip)
