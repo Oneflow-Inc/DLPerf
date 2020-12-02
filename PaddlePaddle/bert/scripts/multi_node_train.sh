@@ -50,8 +50,12 @@ fi
 
 if  [ "$DTYPE" == "fp16" ] ; then
   use_fp16=True
+  use_dynamic_loss_scaling=True
+  init_loss_scaling=128.0
 else
   use_fp16=False
+  use_dynamic_loss_scaling=False
+  init_loss_scaling=128.0
 fi
 
 
@@ -75,6 +79,8 @@ python -u ./train.py --is_distributed true \
         --skip_steps 1 \
         --validation_steps 1000 \
         --use_fp16 ${use_fp16} \
+        --use_dynamic_loss_scaling ${use_dynamic_loss_scaling} \
+        --init_loss_scaling ${init_loss_scaling}  \
         --verbose true \
         --checkpoints $OUTPUT_DIR/paddle/runtime_output/checkpoints 2>&1 | tee $LOGFILE
 

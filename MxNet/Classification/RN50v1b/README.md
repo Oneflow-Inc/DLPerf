@@ -50,8 +50,8 @@
 ## 快速开始 Quick Start
 
 ### 1. 前期准备
-
-  
+- #### 数据集
+数据集制作方式参考[NVIDIA官方提供的MXNet数据集制作方法](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5#getting-the-data)
 - #### SSH 免密
 
   单机测试下无需配置，但测试2机、4机等多机情况下，则需要配置节点间的ssh免密登录，保证MXNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。

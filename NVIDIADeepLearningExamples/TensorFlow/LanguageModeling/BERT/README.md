@@ -104,7 +104,9 @@ nvidia-docker run  -it \
 
 ## 数据集
 
-数据集准备详见：[nvidia官方仓库说明](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT#default-configuration)
+数据集采用[Wikipedia](https://dumps.wikimedia.org/)，参考：[NVIDIA官方仓库说明](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT#default-configuration) ；
+
+数据集下载及制作脚本见：[data_download.sh](https://github.com/NVIDIA/DeepLearningExamples/blob/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT/scripts/data_download.sh)
 
 ## SSH配置(可选)
 

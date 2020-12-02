@@ -385,7 +385,11 @@ Saving result to ./result/_result.json
 
 ## FP16 
 
-- #### BERT-Base batch_size = 64
+由于使用 FP16 时，可以选择 `dynamic loss scale` 或者 `static loss scale`，但是不同实现会带来些微（-0.62%~-42.79%）的性能差异，所以附上两份数据。
+
+- #### BERT-Base batch_size = 64 
+
+`dynamic loss scale`
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
@@ -395,9 +399,19 @@ Saving result to ./result/_result.json
 | 2        | 8                | 64                    | 4936.92            | 11.11   |
 | 4        | 8                | 64                    | 9331.72            | 20.99   |
 
+`static loss scale`
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 64                    | 426.53             | 1.0     |
+| 1        | 4                | 64                    | 1567.68            | 3.68    |
+| 1        | 8                | 64                    | 3130.63            | 7.34    |
+
 
 
 - #### BERT-Base batch_size = 96
+
+`dynamic loss scale`
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
@@ -407,7 +421,17 @@ Saving result to ./result/_result.json
 | 2        | 8                | 96                    | 5426.07            | 11.74   |
 | 4        | 8                | 96                    | 10349.12           | 22.38   |
 
+`static loss scale`
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 96                    | 465.23             | 1.0     |
+| 1        | 4                | 96                    | 1705.8             | 3.67    |
+| 1        | 8                | 96                    | 3378.99            | 7.26    |
+
 同时，可支持的 max batch size=96。
+
+
 
 NVIDIA的 PyTorch 官方测评结果详见 [BERT For PyTorch - Performance Results](https://github.com/NVIDIA/DeepLearningExamples/blob/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/LanguageModeling/BERT/README.md#results)
 

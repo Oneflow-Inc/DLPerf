@@ -103,7 +103,9 @@ docker  run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 
 **TFRecord**
 
-采用ImageNet制作的`tfrecord`格式：train-00000-of-01024,train-00001-of-01024....数据集。参考：NVIDIA官方的[快速入门指南](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#quick-start-guide)
+采用ImageNet2012制作的`tfrecord`格式：train-00000-of-01024,train-00001-of-01024....数据集。
+
+具体制作方法可参考：NVIDIA官方的[快速入门指南](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/Classification/ConvNets/resnet50v1.5#quick-start-guide)以及Tensorflow官方提供的脚本：[download_and_preprocess_imagenet.sh](https://github.com/tensorflow/models/blob/cee4aff18b08daf15114351cef826eb1ee7c8519/inception/inception/data/download_and_preprocess_imagenet.sh)
 
 **dali-index**
 
