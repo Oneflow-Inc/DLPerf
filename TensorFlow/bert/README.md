@@ -30,11 +30,12 @@
 
 下载官方源码：
 ```shell
-git clone https://github.com/tensorflow/models.git && checkout r2.3.0
-cd models/official/nlp/bert
+git clone https://github.com/tensorflow/models.git
+cd models/ && git checkout r2.3.0
+cd official/nlp/bert
 ```
 
-将本页面scripts文件夹中的脚本放入/models/official/nlp/bert目录下。
+将本页面scripts文件夹中的脚本放入models/official/nlp/bert目录下。
 
 
 
