@@ -440,6 +440,8 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 ## ResNet50 V1.5 FP16（真实数据 vs 合成数据）
 
+开启合成数据只需注释掉脚本里的--data_dir参数即可（如single_node_train.sh [第36行](https://github.com/Oneflow-Inc/DLPerf/blob/add_framwork_deepspeed/NVIDIADeepLearningExamples/TensorFlow/Classification/ConvNets/resnet50v1.5/scripts/single_node_train.sh#L36)）
+
 ### real data & batch size = 224 & withxla
 
 | node_num | gpu_num | samples/s | speedup |
