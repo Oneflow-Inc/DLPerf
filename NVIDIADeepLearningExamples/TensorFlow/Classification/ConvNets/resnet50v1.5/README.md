@@ -430,13 +430,44 @@ README展示的是extract_tensorflow_logs.py的计算结果。
 
 3.速度差异的原因还有可能是机器环境不同，数据集制作方式不同，后期考虑用更统一和规范的数据集进行测试。
 
-
-
-
-
-## 完整日志
+#### 日志
 
 -  [resnet50_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp32.zip) 
 -  [resnet50_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16.zip) 
 -  [resnet50_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16_xla.zip)
 
+-  https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/resnet50_fp16_xla.zip)
+
+## ResNet50 V1.5 FP16（真实数据 vs 合成数据）
+
+### real data & batch size = 224 & withxla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1233.2    | 1       |
+| 1        | 4       | 4560.29   | 3.7     |
+| 1        | 8       | 7886.64   | 6.4     |
+
+### real data & batch size = 224 & withxla & with dali
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1202.23   | 1       |
+| 1        | 4       | 4398.78   | 3.66    |
+| 1        | 8       | 8578.02   | 7.14    |
+
+### synthetic data & batch size = 224 & withxla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1236.9    | 1       |
+| 1        | 4       | 4610.43   | 3.73    |
+| 1        | 8       | 9265.83   | 7.49    |
+
+#### 日志
+
+- [logs-1210-dali-xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/logs-1210-dali-xla.zip)
+
+- [logs-1210-synthetic-xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/logs-1210-synthetic-xla.zip)
+
+- [logs-1210-xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/resnet50/logs-1210-xla.zip)
