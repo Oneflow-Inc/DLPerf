@@ -37,6 +37,28 @@ cd official/nlp/bert
 
 将本页面scripts文件夹中的脚本放入models/official/nlp/bert目录下。
 
+修改[run_pretraining.py](https://github.com/tensorflow/models/blob/r2.3.0/official/nlp/bert/run_pretraining.py)以支持多机测试，将以下部分：
+
+```shell
+# LINE 186
+  strategy = distribution_utils.get_distribution_strategy(
+      distribution_strategy=FLAGS.distribution_strategy,
+      num_gpus=FLAGS.num_gpus,
+      tpu_address=FLAGS.tpu)
+```
+替换为：
+```shell
+# LINE 186
+  distribution_utils.configure_cluster(
+      FLAGS.worker_hosts,
+      FLAGS.task_index)
+
+  strategy = distribution_utils.get_distribution_strategy(
+      distribution_strategy=FLAGS.distribution_strategy,
+      all_reduce_alg=FLAGS.all_reduce_alg,
+      num_gpus=FLAGS.num_gpus,
+      tpu_address=FLAGS.tpu)
+```
 
 
 ## 框架安装
