@@ -68,7 +68,17 @@ cd LanguageModeling/gpt-2
 
 ### 2. 数据集准备
 
-数据集使用Wikipedia数据集，并使用[DeepSpeed官方ReadMe](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM#data-sets)中推荐的方式进行了处理。
+数据集使用Wikipedia数据集，并使用[wikiextractor](https://github.com/attardi/wikiextractor)将原始文件解析成txt格式的文本文件。
+
+#### **下载wiki数据集**
+
+```
+wget https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2
+```
+#### 数据集解析
+```python
+python -m wikiextractor.WikiExtractor /your_path_to/enwiki-latest-pages-articles.xml.bz2  --json --no_templates -o /datasets/wiki/enwiki --processes 48
+```
 
 ### 3.测试
 
