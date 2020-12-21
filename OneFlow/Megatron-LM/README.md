@@ -128,7 +128,7 @@ hidden_size=768
 运行以下脚本将对单机单卡～8卡进行测试
 
 ```shell
-# 单机1卡
+# 单机1卡（注：off表示关闭Optimizer-Placement Optimization优化；4表示测试batch size=4）
 bash src/train_gpt2.sh off  0  4
 # 单机4卡
 bash src/train_gpt2.sh off  0,1,2,3  4
