@@ -32,9 +32,9 @@
 
 ## Feature support matrix
 
-| Feature            | ResNet-50 v1.5 TensorFlow |
+| Feature            | BERT-Base TensorFlow      |
 | ------------------ | ------------------------- |
-| Horovod Multi-gpu | Yes                       |
+| Horovod Multi-gpu  | Yes                       |
 | Horovod Multi-node | Yes                       |
 | Automatic mixed precision (AMP) | Yes                       |
 

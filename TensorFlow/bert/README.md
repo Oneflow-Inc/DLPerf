@@ -30,18 +30,28 @@
 
 下载官方源码：
 ```shell
-git clone https://github.com/tensorflow/models.git && checkout r2.3.0
-cd models/official/nlp/bert
+git clone https://github.com/tensorflow/models.git
+cd models/ && git checkout r2.3.0
+cd official/nlp/bert
 ```
 
-将本页面scripts文件夹中的脚本放入/models/official/nlp/bert目录下。
+将本页面scripts文件夹中的脚本放入models/official/nlp/bert目录下。
 
+修改[run_pretraining.py](https://github.com/tensorflow/models/blob/r2.3.0/official/nlp/bert/run_pretraining.py)以支持 xla，将以下部分：
+
+```shell
+# LINE 186
+  from official.utils.misc import keras_utils
+  keras_utils.set_session_config(enable_xla=FLAGS.enable_xla)
+```
+添加到186行。
 
 
 ## 框架安装
 ```shell
 python -m pip install tensorflow==2.3.0 -i https://mirror.baidu.com/pypi/simple
 ```
+若出现依赖包未安装错误，可使用pip安装对应包（参考models/official/requirements.txt，其中gin即gin-config）
 ## NCCL
 TensorFlow的分布式训练底层依赖NCCL库，需要从[NVIDIA-NCCL官网下载](https://developer.nvidia.com/nccl/nccl-download)并安装和操作系统、CUDA版本适配的NCCL。
 
@@ -143,11 +153,6 @@ bash run_single_node.sh 64   fp16
 
 
 # Result
-## 完整日志
-- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp32.zip)
-
-- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp16.zip)
-
 ## 加速比
 
 执行以下脚本计算各个情况下的加速比：
@@ -227,6 +232,15 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 402.02    | 3.56    |
 | 1        | 8       | 805.43    | 7.13    |
 
+### batch size = 64 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 138.21    | 1       |
+| 1        | 2       | 254.91    | 1.84    |
+| 1        | 4       | 505.63    | 3.66    |
+| 1        | 8       | 959.02    | 6.94    |
+
 ### batch size=48 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
@@ -235,6 +249,15 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 194.29    | 1.78    |
 | 1        | 4       | 384.59    | 3.53    |
 | 1        | 8       | 752.21    | 6.9     |
+
+### batch size=48 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 131.27    | 1       |
+| 1        | 2       | 236.58    | 1.8     |
+| 1        | 4       | 468.83    | 3.57    |
+| 1        | 8       | 877.55    | 6.69    |
 
 ### batch size=32 & without xla
 
@@ -245,9 +268,18 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 347.83    | 3.36    |
 | 1        | 8       | 675.82    | 6.52    |
 
+### batch size=32 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 125.37    | 1       |
+| 1        | 2       | 216.46    | 1.73    |
+| 1        | 4       | 421.79    | 3.36    |
+| 1        | 8       | 775.93    | 6.19    |
 
 
-## BERT-Base  FP16
+
+## BERT-Base FP16
 
 ### batch size=64 & without xla
 
@@ -258,6 +290,14 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 746.9     | 3.27    |
 | 1        | 8       | 1402.41   | 6.13    |
 
+### batch size=64 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 414.78    | 1       |
+| 1        | 2       | 748.66    | 1.8     |
+| 1        | 4       | 1311.35   | 3.16    |
+| 1        | 8       | 2241.6    | 5.4     |
 
 ### batch size=96 & without xla
 
@@ -268,11 +308,22 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 4       | 868.12    | 3.36    |
 | 1        | 8       | 1669.07   | 6.46    |
 
+### batch size=96 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 466.34    | 1       |
+| 1        | 2       | 851.97    | 1.83    |
+| 1        | 4       | 1557.31   | 3.34    |
+| 1        | 8       | 2773.8    | 5.95    |
+
 
 
 
 ## 完整日志
 
-- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp32.zip) 
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp32.zip)
+- [bert_fp32_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp32_xla.zip)
 - [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp16.zip)
+- [bert_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/Tensorflow/bert/bert_fp16_xla.zip)
 
