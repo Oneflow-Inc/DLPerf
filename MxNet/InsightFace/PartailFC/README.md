@@ -151,42 +151,42 @@ python extract_mxnet_logs.py --log_dir=./logs-20201216-sample-ratio-1.0/mxnet/pa
 结果打印如下
 
 ```shell
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_1.log {1: 1576.98}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_5.log {1: 1576.98, 5: 1579.04}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_3.log {1: 1576.98, 5: 1579.04, 3: 1663.42}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_2.log {1: 1576.98, 5: 1579.04, 3: 1663.42, 2: 1579.22}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_4.log {1: 1576.98, 5: 1579.04, 3: 1663.42, 2: 1579.22, 4: 1638.62}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_1.log {1: 860.72}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_5.log {1: 860.72, 5: 787.24}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_3.log {1: 860.72, 5: 787.24, 3: 843.18}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_2.log {1: 860.72, 5: 787.24, 3: 843.18, 2: 799.7}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_4.log {1: 860.72, 5: 787.24, 3: 843.18, 2: 799.7, 4: 817.3}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_1.log {1: 224.76}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_5.log {1: 224.76, 5: 224.38}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_3.log {1: 224.76, 5: 224.38, 3: 226.74}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_2.log {1: 224.76, 5: 224.38, 3: 226.74, 2: 224.54}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_4.log {1: 224.76, 5: 224.38, 3: 226.74, 2: 224.54, 4: 225.5}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_1.log {1: 435.12}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_5.log {1: 435.12, 5: 435.06}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_3.log {1: 435.12, 5: 435.06, 3: 435.62}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_2.log {1: 435.12, 5: 435.06, 3: 435.62, 2: 435.1}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_4.log {1: 435.12, 5: 435.06, 3: 435.62, 2: 435.1, 4: 435.32}
-{'r100': {'1n1g': {'average_speed': 225.18,
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_1.log {1: 1588.16}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_5.log {1: 1588.16, 5: 1577.91}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_3.log {1: 1588.16, 5: 1577.91, 3: 1569.79}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_2.log {1: 1588.16, 5: 1577.91, 3: 1569.79, 2: 1575.83}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_4.log {1: 1588.16, 5: 1577.91, 3: 1569.79, 2: 1575.83, 4: 1582.3}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_1.log {1: 812.26}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_5.log {1: 812.26, 5: 795.89}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_3.log {1: 812.26, 5: 795.89, 3: 789.8}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_2.log {1: 812.26, 5: 795.89, 3: 789.8, 2: 789.86}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_4.log {1: 812.26, 5: 795.89, 3: 789.8, 2: 789.86, 4: 778.28}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_1.log {1: 223.25}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_5.log {1: 223.25, 5: 223.13}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_3.log {1: 223.25, 5: 223.13, 3: 224.73}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_2.log {1: 223.25, 5: 223.13, 3: 224.73, 2: 223.19}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_4.log {1: 223.25, 5: 223.13, 3: 224.73, 2: 223.19, 4: 224.08}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_1.log {1: 405.87}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_5.log {1: 405.87, 5: 400.29}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_3.log {1: 405.87, 5: 400.29, 3: 423.79}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_2.log {1: 405.87, 5: 400.29, 3: 423.79, 2: 401.89}
+./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_4.log {1: 405.87, 5: 400.29, 3: 423.79, 2: 401.89, 4: 397.0}
+{'r100': {'1n1g': {'average_speed': 223.68,
                    'batch_size_per_device': 64,
-                   'median_speed': 224.76,
+                   'median_speed': 223.25,
                    'speedup': 1.0},
-          '1n2g': {'average_speed': 435.24,
+          '1n2g': {'average_speed': 405.77,
                    'batch_size_per_device': 64,
-                   'median_speed': 435.12,
-                   'speedup': 1.94},
-          '1n4g': {'average_speed': 821.63,
+                   'median_speed': 401.89,
+                   'speedup': 1.8},
+          '1n4g': {'average_speed': 793.22,
                    'batch_size_per_device': 64,
-                   'median_speed': 817.3,
-                   'speedup': 3.64},
-          '1n8g': {'average_speed': 1607.46,
+                   'median_speed': 789.86,
+                   'speedup': 3.54},
+          '1n8g': {'average_speed': 1578.8,
                    'batch_size_per_device': 64,
-                   'median_speed': 1579.22,
-                   'speedup': 7.03}}}
+                   'median_speed': 1577.91,
+                   'speedup': 7.07}}}
 Saving result to ./result/bz64_result.json
 ```
 
@@ -228,37 +228,39 @@ Saving result to ./result/bz64_result.json
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 224.76    | 1.0     |
-| 1        | 2       | 435.12    | 1.94    |
-| 1        | 4       | 817.3     | 3.64    |
-| 1        | 8       | 1579.22   | 7.03    |
+| 1        | 1       | 223.25    | 1.0     |
+| 1        | 2       | 401.89    | 1.80    |
+| 1        | 4       | 789.86    | 3.54    |
+| 1        | 8       | 1577.91   | 7.07    |
+
 
 #### Batch size = 104 & sample ratio = 1.0
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 211.8     | 1       |
-| 1        | 2       | 404.62    | 1.91    |
-| 1        | 4       | 716.24    | 3.38    |
-| 1        | 8       | 1084.2    | 5.12    |
+| 1        | 1       | 211.76    | 1       |
+| 1        | 2       | 402.63    | 1.90    |
+| 1        | 4       | 707.64    | 3.34    |
+| 1        | 8       | 1075.47   | 5.08    |
 
 #### batch size = 64 & sample ratio = 0.1
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 224.46    | 1       |
-| 1        | 2       | 434.52    | 1.94    |
-| 1        | 4       | 859.88    | 3.83    |
-| 1        | 8       | 1610.56   | 7.18    |
+| 1        | 1       | 223.11    | 1       |
+| 1        | 2       | 410.03    | 1.84    |
+| 1        | 4       | 799.19    | 3.58    |
+| 1        | 8       | 1586.09   | 7.11    |
+
 
 #### Batch size = 104 &  sample ratio = 0.1
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 233.52    | 1       |
-| 1        | 2       | 455.84    | 1.95    |
-| 1        | 4       | 892.58    | 3.82    |
-| 1        | 8       | 1664.84   | 7.13    |
+| 1        | 1       | 232.56    | 1       |
+| 1        | 2       | 436.06    | 1.88    |
+| 1        | 4       | 852.4     | 3.67    |
+| 1        | 8       | 1644.42   | 7.07    |
 
 
 
