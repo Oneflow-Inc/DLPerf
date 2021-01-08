@@ -65,7 +65,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                 speed = round(float(s[0].strip()), 1)
                 speeds.append(speed)
 
-    avg_speed = round(np.mean(speeds[args.warmup_batches//20:args.train_batches//20]), 2)
+    avg_speed = round(np.mean(speeds[args.warmup_batches-1:]), 2)
     tmp_dict['average_speed'] = avg_speed
 
     result_dict[model][run_case]['average_speed'] = tmp_dict['average_speed']
