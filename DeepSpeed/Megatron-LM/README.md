@@ -221,7 +221,7 @@ vs005 slots=8
 
 - BATCH_SIZE为单卡batch_size，默认为4
 - NUM_GPUS_PER_WORKER 每台机器使用的gpu数，默认为8
-- ZERO_STAGE zero优化阶段，默认为0，可选0,1,2（3框架暂不支持）
+- ZERO_STAGE zero优化阶段，默认为0，可选0,1,2（3目前DeepSpeed框架暂不支持）
 - CHECKPOINT_ACTIVATIONS  是否开启亚线性activation优化，默认为off关闭
 - NUM_WORKERS 分布式训练集群中，机器节点数（单机情况下设为1；4机情况下设为4，根据情况设置）
 - MP_SIZE 模型并行度，可以在1～NUM_GPUS_PER_WORKER数字中设置（默认1为不开启模型并行）
