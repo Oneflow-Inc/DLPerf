@@ -32,7 +32,7 @@
   
 - #### 框架
   
-  - **torch 1.6.0 ** 
+  - **pytorch 1.6.0 ** 
   - **deepspeed 0.3.0+7d4d742**  
 
 
@@ -110,7 +110,7 @@ import json
 import nltk
 import os
 
-# nltk.download('punkt')
+nltk.download('punkt')
 
 line_seperator = "\n"
 def write_to_json(input_file, output_file):
@@ -158,7 +158,7 @@ for i in range(0, len(dirlist)):
 处理好的json格式完整数据集，需要划分为训练集、测试集、验证集等。
 
 ```shell
-# cd DeepSpeed/DeepSpeedExamples/Megatron-LM
+cd DeepSpeed/DeepSpeedExamples/Megatron-LM
 python3 scripts/split_json.py --input_files /datasets/wiki/gpt2/json/*/*.json --output_dir /datasets/wiki/gpt2/
 ```
 
@@ -179,7 +179,6 @@ class wikipedia(json_dataset):
 
     command line usage: `--train-data wikipedia`
     """
-    # PATH = 'data/wikipedia/wikidump_lines.json'
     PATH = '/datasets/wiki/gpt2/train.json'
     assert_str = "make sure to set PATH for wikipedia data_utils/corpora.py"
     def __init__(self, **kwargs):
