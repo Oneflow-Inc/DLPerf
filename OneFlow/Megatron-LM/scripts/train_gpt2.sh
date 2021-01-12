@@ -34,10 +34,9 @@ mem_file=$test_case.mem
 log_file=$test_case.log
 output_dir=${PREFIX}_output_${non_distributed_optimizer}_distributed_split_${num_node}n${gpu_num_per_node}g_bz${batch_size_per_device}
 mkdir -p $output_dir
-#python3 tools/gpu_memory_usage.py $gpu_num_per_node 1>$mem_file 2>&1 </dev/null &
-#gdb --arg \
-# --n_vocab=50257
-#  /usr/local/cuda-10.2/bin/nsys  profile
+
+# nsys is a nvidia analysis tool
+# /usr/local/cuda-10.2/bin/nsys  profile
 python3 src/train.py \
     --log_dir=${output_dir} \
     --non_distributed_optimizer=${non_distributed_optimizer}  \
