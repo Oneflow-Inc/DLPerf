@@ -2,7 +2,7 @@
 
 ## 概述 Overview
 
-本测试为OSDI论文提供了多组真实测试数据，测试基于OneFlow-Benchmark仓库中的[Megatron-LM](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/gpt2_big_fc_osdi_test_1207)实现，框架依赖此分支的[oneflow](https://github.com/Oneflow-Inc/oneflow/tree/dev_optimizer_placement_optimization_nc_th)，您也可以直接pip安装我们编译好的[whl包](https://staging.oneflow.info/branch/dev_optimizer_placement_optimization_nc_th)。
+本测试为OSDI论文提供了多组真实测试数据，我们用 OneFlow 实现了微软 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 相似的工作，即 [DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77) 仓库中的 [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM)实现。本次评测是基于OneFlow-Benchmark仓库中的[Megatron-LM](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/gpt2_big_fc_osdi_test_1207)实现，框架依赖此分支的[oneflow](https://github.com/Oneflow-Inc/oneflow/tree/dev_optimizer_placement_optimization_nc_th)，您也可以直接pip安装我们编译好的[whl包](https://staging.oneflow.info/branch/dev_optimizer_placement_optimization_nc_th)。
 
 基于以上版本，我们对gpt-2网络在单机单卡～4机32卡情况下进行了多组测试。
 
