@@ -72,13 +72,13 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
                     epoch_time = re.findall(time_pt, line)[0]
                     cost_time += float(epoch_time)
 
-                if cur_step >= args.train_batches:
-                    iter_num = args.train_batches-args.warmup_batches
-                    iter_num *= node_num * card_num
-                    cost_time /= 1000
-                    avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
+                if cur_step > args.train_batches:
                     break
 
+    iter_num = args.train_batches-args.warmup_batches
+    iter_num *= node_num * card_num
+    cost_time /= 1000
+    avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
 
     # compute avg throughoutput
     tmp_dict['average_speed'] = avg_speed
