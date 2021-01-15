@@ -78,6 +78,10 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     iter_num = args.train_batches-args.warmup_batches
     iter_num *= node_num * card_num
     cost_time /= 1000
+
+    if cost_time <= 1e-5:
+        print("cost time is 0")
+        return
     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
 
     # compute avg throughoutput

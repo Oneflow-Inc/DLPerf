@@ -54,13 +54,24 @@ cd model_zoo/official/nlp/bert/
 
 2.将本页面scripts路径下的其余脚本：`run_standalone_pretrain_for_gpu.sh`、`run_distributed_pretrain_for_gpu.sh`放入model_zoo/official/nlp/bert/scripts/下；
 
-3.修改代码脚本，将 run_pretrain.py 133 行
+3.修改代码脚本，将 run_pretrain.py 97 行：
+```shell
+# line 97
+    cfg.bert_network == 'base' and (cfg.batch_size == 32 or cfg.batch_size == 64) and \
+```
+替换为：
+```shell
+# line 97
+    cfg.bert_network == 'base' and (cfg.batch_size == 32 or cfg.batch_size == 64 or cfg.batch_size == 96) and \
+```
+以测试fp16混合精度。
+
+将 133 行：
 ```shell
 # line 133
     args_opt = parser.parse_args()
 ```
-
-删掉，替换为以下代码
+替换为：
 
 ```shell
     # line 133
@@ -80,6 +91,7 @@ cd model_zoo/official/nlp/bert/
     logger.warning("\nargs_opt: {}".format(args_opt))
     logger.warning("\ncfg: {}".format(cfg))
 ```
+增加输入参数。
 
 ## 容器
 
