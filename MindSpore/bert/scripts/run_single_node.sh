@@ -1,3 +1,5 @@
+#!/bin/bash
+
 BATCH_SIZE=${1:-32}
 DTYPE=${2:-'fp32'}
 NUM_TESTING=${3:-5}
