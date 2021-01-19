@@ -38,6 +38,7 @@ mpirun --allow-run-as-root \
   --output-filename log_output \
   --merge-stderr-to-stdout \
   -n $TOTAL_GPU_NUM -H $NODE_IP \
+  -x NCCL_DEBUG=INFO \
   -mca plm_rsh_args "-p ${PORT}" \
   python run_pretrain.py        \
     --device_target="GPU"      \

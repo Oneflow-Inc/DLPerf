@@ -80,7 +80,7 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     cost_time /= 1000
 
     if cost_time <= 1e-5:
-        print("cost time is 0")
+        print(log_file, "cost time is 0")
         return
     avg_speed = round(float(total_batch_size) / (cost_time / iter_num), 2)
 

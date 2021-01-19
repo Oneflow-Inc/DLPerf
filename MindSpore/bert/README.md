@@ -54,18 +54,7 @@ cd model_zoo/official/nlp/bert/
 
 2.将本页面scripts路径下的其余脚本：`run_standalone_pretrain_for_gpu.sh`、`run_distributed_pretrain_for_gpu.sh`放入model_zoo/official/nlp/bert/scripts/下；
 
-3.修改代码脚本，将 run_pretrain.py 97 行：
-```shell
-# line 97
-    cfg.bert_network == 'base' and (cfg.batch_size == 32 or cfg.batch_size == 64) and \
-```
-替换为：
-```shell
-# line 97
-    cfg.bert_network == 'base' and (cfg.batch_size == 32 or cfg.batch_size == 64 or cfg.batch_size == 96) and \
-```
-以测试fp16混合精度。
-
+3.修改代码脚本
 将 133 行：
 ```shell
 # line 133
@@ -92,6 +81,19 @@ cd model_zoo/official/nlp/bert/
     logger.warning("\ncfg: {}".format(cfg))
 ```
 增加输入参数。
+
+将 run_pretrain.py 173 行：
+```shell
+# line 173
+    is_auto_enable_graph_kernel = _auto_enable_graph_kernel(args_opt.device_target, args_opt.enable_graph_kernel)
+```
+替换为：
+```shell
+# line 173
+    is_auto_enable_graph_kernel = True
+    logger.warning("is_auto_enable_graph_kernel: {}".format(is_auto_enable_graph_kernel))
+```
+以打开图算融合和fp16混合精度。
 
 ## 容器
 
@@ -162,6 +164,12 @@ docker run -it \
 单机情况下无需配置ssh服务，需要测试2机、4机等情况下时，则需要安装docker容器间的ssh服务，配置ssh免密登录，保证分布式horovod/mpi脚本运行时可以在多机间互联。
 
 配置过程详见文档[SSH配置](https://github.com/Oneflow-Inc/DLPerf/tree/master/NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT#ssh%E9%85%8D%E7%BD%AE%E5%8F%AF%E9%80%89)。
+
+## IB驱动安装（可选）
+
+如果服务器之间支持IB(**InfiniBand**)网络，则可以安装IB驱动，使得多机情况下各个节点间的通信速率明显提升，从而加速框架在多机环境下的训练，提升加速比。
+
+配置过程详见文档[IB驱动安装](https://github.com/Oneflow-Inc/DLPerf/tree/dev_mindspore/NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT#ib%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85%E5%8F%AF%E9%80%89)。
 
 # Training
 
