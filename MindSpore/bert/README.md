@@ -144,6 +144,8 @@ docker run -it \
     --runtime=nvidia \
     --privileged=true \
     --net=host \
+    --cap-add=IPC_LOCK \
+    --device=/dev/infiniband \
     --name mindspore_bert \
     -v /dev/shm:/dev/shm \
     -v $PWD:/workspace/bert \
