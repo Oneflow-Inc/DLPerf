@@ -19,7 +19,6 @@
 - cuDNN：7.6.5
 
 ## 容器
-@TODO: env
 
 - Ubuntu18.04
 - Python 3.7
@@ -28,7 +27,7 @@
 
 ## Feature support matrix
 
-| Feature            | BERT-Base TensorFlow      |
+| Feature            | BERT-Base MindSpore       |
 | ------------------ | ------------------------- |
 | Mpi Multi-gpu      | Yes                       |
 | Mpi Multi-node     | Yes                       |
@@ -238,6 +237,60 @@ python extract_mindspore_logs_time.py --log_dir=logs/mindspore/bert/bz32
 输出：
 
 ```shell
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_1.log {1: 3442.54}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_5.log {1: 3442.54, 5: 3445.38}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_4.log {1: 3442.54, 5: 3445.38, 4: 3448.81}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_3.log {1: 3442.54, 5: 3445.38, 4: 3448.81, 3: 3447.86}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_2.log {1: 3442.54, 5: 3445.38, 4: 3448.81, 3: 3447.86, 2: 3442.89}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_1.log {1: 263.22}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_5.log {1: 263.22, 5: 263.2}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_4.log {1: 263.22, 5: 263.2, 4: 263.18}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_3.log {1: 263.22, 5: 263.2, 4: 263.18, 3: 263.07}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_2.log {1: 263.22, 5: 263.2, 4: 263.18, 3: 263.07, 2: 262.73}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_1.log {1: 149.81}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_5.log {1: 149.81, 5: 150.05}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_4.log {1: 149.81, 5: 150.05, 4: 149.96}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_3.log {1: 149.81, 5: 150.05, 4: 149.96, 3: 149.98}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_2.log {1: 149.81, 5: 150.05, 4: 149.96, 3: 149.98, 2: 150.07}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_1.log {1: 1786.13}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_5.log {1: 1786.13, 5: 1783.48}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_4.log {1: 1786.13, 5: 1783.48, 4: 1785.3}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_3.log {1: 1786.13, 5: 1783.48, 4: 1785.3, 3: 1786.3}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_2.log {1: 1786.13, 5: 1783.48, 4: 1785.3, 3: 1786.3, 2: 1784.31}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_1.log {1: 553.65}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_5.log {1: 553.65, 5: 552.45}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_4.log {1: 553.65, 5: 552.45, 4: 553.3}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_3.log {1: 553.65, 5: 552.45, 4: 553.3, 3: 552.54}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_2.log {1: 553.65, 5: 552.45, 4: 553.3, 3: 552.54, 2: 553.06}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_1.log {1: 1123.97}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_5.log {1: 1123.97, 5: 1124.46}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_4.log {1: 1123.97, 5: 1124.46, 4: 1125.41}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_3.log {1: 1123.97, 5: 1124.46, 4: 1125.41, 3: 1124.85}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_2.log {1: 1123.97, 5: 1124.46, 4: 1125.41, 3: 1124.85, 2: 1124.2}
+{'bert': {'1n1g': {'average_speed': 149.97,
+                   'batch_size_per_device': 32,
+                   'median_speed': 149.98,
+                   'speedup': 1.0},
+          '1n2g': {'average_speed': 263.08,
+                   'batch_size_per_device': 32,
+                   'median_speed': 263.18,
+                   'speedup': 1.75},
+          '1n4g': {'average_speed': 553.0,
+                   'batch_size_per_device': 32,
+                   'median_speed': 553.06,
+                   'speedup': 3.69},
+          '1n8g': {'average_speed': 1124.58,
+                   'batch_size_per_device': 32,
+                   'median_speed': 1124.46,
+                   'speedup': 7.5},
+          '2n8g': {'average_speed': 1785.1,
+                   'batch_size_per_device': 32,
+                   'median_speed': 1785.3,
+                   'speedup': 11.9},
+          '4n8g': {'average_speed': 3445.5,
+                   'batch_size_per_device': 32,
+                   'median_speed': 3445.38,
+                   'speedup': 22.97}}}
 Saving result to ./result/bz32_result.json
 ```
 
@@ -264,29 +317,37 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 单机单卡情况下速度为200(samples/s)，单机2卡速度为400，单机4卡速度为700，则加速比分别为：1.0、2.0、3.5
 
-@TODO: result
 ### BERT-Base  FP32
 
 #### batch size=32
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 107.33    | 1       |
-| 1        | 4       | 397.71    | 3.71    |
-| 1        | 8       | 790.03    | 7.36    |
-| 2        | 16      | 1404.04   | 13.08   |
-| 4        | 32      | 2727.9    | 25.42   |
+| 1        | 1       | 149.98    | 1       |
+| 1        | 4       | 553.06    | 3.69    |
+| 1        | 8       | 1124.46   | 7.5     |
+| 2        | 16      | 1785.3    | 11.9    |
+| 4        | 32      | 3445.38   | 22.97   |
 
-#### batch size=48
+#### batch size=64
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 112.76    | 1       |
-| 1        | 4       | 430.43    | 3.82    |
-| 1        | 8       | 855.45    | 7.59    |
-| 2        | 16      | 1576.88   | 13.98   |
-| 4        | 32      | 3089.74   | 27.4    |
+| 1        | 1       | 157.13    | 1       |
+| 1        | 4       | 587.36    | 3.74    |
+| 1        | 8       | 1183.68   | 7.53    |
+| 2        | 16      | 2092.23   | 13.32   |
+| 4        | 32      | 4102.04   | 26.11   |
 
+#### batch size=96
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 157.95    | 1       |
+| 1        | 4       | 598.74    | 3.79    |
+| 1        | 8       | 1204.86   | 7.63    |
+| 2        | 16      | 2213.37   | 14.01   |
+| 4        | 32      | 4364.62   | 27.63    |
 
 
 ### BERT-Base  FP16
@@ -295,24 +356,33 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 183.25    | 1       |
-| 1        | 4       | 721.56    | 3.94    |
-| 1        | 8       | 1452.59   | 7.93    |
-| 2        | 16      | 2653.74   | 14.48   |
-| 4        | 32      | 5189.07   | 28.32   |
+| 1        | 1       | 506.35    | 1       |
+| 1        | 4       | 1826.17   | 3.61    |
+| 1        | 8       | 3743.59   | 7.39    |
+| 2        | 16      | 5248.66   | 10.37   |
+| 4        | 32      | 9985.87   | 19.72   |
 
 #### batch size=96
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 468.1     | 1       |
-| 1        | 4       | 1766.06   | 3.77    |
-| 1        | 8       | 3559.8    | 7.6     |
-| 2        | 16      | 5960.14   | 12.73   |
-| 4        | 32      | 11650.0   | 24.89   |
+| 1        | 1       | 508.39    | 1       |
+| 1        | 4       | 1847.05   | 3.63    |
+| 1        | 8       | 3762.17   | 7.4     |
+| 2        | 16      | 5893.18   | 11.59   |
+| 4        | 32      | 11347.61  | 22.32   |
+
+#### batch size=160
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 510.81    | 1       |
+| 1        | 4       | 1905.81   | 3.73    |
+| 1        | 8       | 3854.43   | 7.55    |
+| 2        | 16      | 6582.89   | 12.89   |
+| 4        | 32      | 12855.72  | 25.17   |
 
 ### 完整日志
 
-- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp32.zip) 
-- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp16.zip) 
-- [bert_fp16_xla.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Tensorflow/bert/bert_fp16_xla.zip) 
+- [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp32.zip) 
+- [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp16.zip) 
