@@ -54,7 +54,7 @@ cd model_zoo/official/nlp/bert/
 2.将本页面scripts路径下的其余脚本：`run_standalone_pretrain_for_gpu.sh`、`run_distributed_pretrain_for_gpu.sh`放入model_zoo/official/nlp/bert/scripts/下；
 
 3.修改代码脚本
-将 133 行：
+将 model_zoo/official/nlp/bert/run_pretrain.py 173 行：
 ```shell
 # line 133
     args_opt = parser.parse_args()
@@ -81,7 +81,7 @@ cd model_zoo/official/nlp/bert/
 ```
 增加输入参数。
 
-将 run_pretrain.py 173 行：
+将 model_zoo/official/nlp/bert/run_pretrain.py 173 行：
 ```shell
 # line 173
     is_auto_enable_graph_kernel = _auto_enable_graph_kernel(args_opt.device_target, args_opt.enable_graph_kernel)
