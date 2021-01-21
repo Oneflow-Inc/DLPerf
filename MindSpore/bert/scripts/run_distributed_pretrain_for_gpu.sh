@@ -4,8 +4,9 @@ DEVICE_ID=${1:-0}
 BATCH_SIZE=${2:-32}
 DTYPE=${3:-'fp32'}
 NUM_STEP=${4:-120}
-TEST_NUM=${5:-1}
-NODE_NUM=${6:-1}
+ENABLE_GRAPH_KERNEL=${5:-'false'}
+TEST_NUM=${6:-1}
+NODE_NUM=${7:-1}
 
 a=`expr ${#DEVICE_ID} + 1`
 GPUS_PER_NODE=`expr ${a} / 2`
@@ -50,6 +51,7 @@ mpirun --allow-run-as-root \
     --data_sink_steps=10        \
     --train_steps=120 \
     --data_dir="/workspace/bert/data/wiki" \
+    --enable_graph_kernel=$ENABLE_GRAPH_KERNEL \
     --batch_size=$BATCH_SIZE \
     --dtype=$DTYPE \
     --schema_dir="" 2>&1 | tee $LOGFILE

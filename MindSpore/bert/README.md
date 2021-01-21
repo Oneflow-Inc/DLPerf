@@ -4,8 +4,7 @@
 
 本次复现采用了[MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/r1.1)中的[BERT](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/nlp/bert)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试已覆盖 FP32、FP16混合精度，后续将持续维护，增加更多方式的测评。
-
+目前，该测试已覆盖 FP32、FP16混合精度以及图算融合（Graph Kernel Fusion，类似 XLA 的图优化/算子融合技术，在本文档后续简称 GKF），后续将持续维护，增加更多方式的测评。
 
 
 # Environment
@@ -81,18 +80,17 @@ cd model_zoo/official/nlp/bert/
 ```
 增加输入参数。
 
-将 model_zoo/official/nlp/bert/run_pretrain.py 173 行：
+将 model_zoo/official/nlp/bert/run_pretrain.py 97 行：
 ```shell
-# line 173
-    is_auto_enable_graph_kernel = _auto_enable_graph_kernel(args_opt.device_target, args_opt.enable_graph_kernel)
+# line 97
+    cfg.bert_network == 'base' and (cfg.batch_size == 32 or cfg.batch_size == 64) and \
 ```
 替换为：
 ```shell
-# line 173
-    is_auto_enable_graph_kernel = True
-    logger.warning("is_auto_enable_graph_kernel: {}".format(is_auto_enable_graph_kernel))
+# line 97
+    cfg.bert_network == 'base' and \
 ```
-以打开图算融合和fp16混合精度。
+避免 batch size 对其他参数的影响。
 
 ## 容器
 
@@ -172,6 +170,7 @@ docker run -it \
 
 配置过程详见文档[IB驱动安装](https://github.com/Oneflow-Inc/DLPerf/tree/dev_mindspore/NVIDIADeepLearningExamples/TensorFlow/LanguageModeling/BERT#ib%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85%E5%8F%AF%E9%80%89)。
 
+
 # Training
 
 集群中有4台节点：
@@ -233,7 +232,7 @@ bash   run_multi_node.sh 64 fp16 5 2
 执行以下命令，即可计算各种测试配置下的吞吐率及加速比：
 
 ```shell
-python extract_mindspore_logs_time.py --log_dir=logs/mindspore/bert/bz32
+python extract_mindspore_logs_time.py --log_dir=logs_fp32/mindspore/bert/bz32
 ```
 
 输出：
@@ -321,7 +320,7 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 ### BERT-Base  FP32
 
-#### batch size=32
+#### batch size=32 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -331,7 +330,7 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | 2        | 16      | 1785.3    | 11.9    |
 | 4        | 32      | 3445.38   | 22.97   |
 
-#### batch size=64
+#### batch size=64 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -341,7 +340,7 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | 2        | 16      | 2092.23   | 13.32   |
 | 4        | 32      | 4102.04   | 26.11   |
 
-#### batch size=96
+#### batch size=96 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -351,10 +350,11 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | 2        | 16      | 2213.37   | 14.01   |
 | 4        | 32      | 4364.62   | 27.63    |
 
+注：batch size=96 without Graph Kernel Fusion 情况下会OOM(out of memory)
 
 ### BERT-Base  FP16
 
-#### batch size=64
+#### batch size=64 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -364,7 +364,7 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | 2        | 16      | 5248.66   | 10.37   |
 | 4        | 32      | 9985.87   | 19.72   |
 
-#### batch size=96
+#### batch size=96 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -374,7 +374,7 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | 2        | 16      | 5893.18   | 11.59   |
 | 4        | 32      | 11347.61  | 22.32   |
 
-#### batch size=160
+#### batch size=160 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -384,7 +384,11 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | 2        | 16      | 6582.89   | 12.89   |
 | 4        | 32      | 12855.72  | 25.17   |
 
+注：batch size>=96, without Graph Kernel Fusion 情况下会OOM(out of memory)。
+
 ### 完整日志
 
 - [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp32.zip) 
 - [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp16.zip) 
+- [bert_fp32_gkf.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp32_gkf.zip) 
+- [bert_fp16_gkf.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp16_gkf.zip) 
