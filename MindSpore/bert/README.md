@@ -156,7 +156,7 @@ docker run -it \
 
 ## 数据集
 
-数据集采用TFRecord格式的[Wikipedia](https://dumps.wikimedia.org/)，参考：[MindSpore官方仓库说明](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/nlp/bert#dataset) ；
+数据集采用TFRecord格式的[Wikipedia](https://dumps.wikimedia.org/)，制作方式请参考：[MindSpore官方仓库说明](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/nlp/bert#dataset) ；
 
 数据集具体制作步骤及脚本见：[TensorFlow 2.x-BERT测评](https://github.com/Oneflow-Inc/DLPerf/tree/master/TensorFlow/bert#%E6%95%B0%E6%8D%AE%E9%9B%86)
 
