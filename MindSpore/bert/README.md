@@ -80,17 +80,15 @@ cd model_zoo/official/nlp/bert/
 ```
 增加输入参数。
 
-将 model_zoo/official/nlp/bert/run_pretrain.py 97 行：
+将 model_zoo/official/nlp/bert/run_pretrain.py 178 行至 181 行：
 ```shell
-# line 97
-    cfg.bert_network == 'base' and (cfg.batch_size == 32 or cfg.batch_size == 64) and \
+    # line 178
+    if args_opt.device_target == 'GPU' and bert_net_cfg.compute_type != mstype.float32 and \
+    not is_auto_enable_graph_kernel:
+    logger.warning('Gpu only support fp32 temporarily, run with fp32.')
+    bert_net_cfg.compute_type = mstype.float32
 ```
-替换为：
-```shell
-# line 97
-    cfg.bert_network == 'base' and \
-```
-避免 batch size 对其他参数的影响。
+删除，避免 data type 被其他参数影响。
 
 ## 容器
 
@@ -238,61 +236,61 @@ python extract_mindspore_logs_time.py --log_dir=logs_fp32/mindspore/bert/bz32
 输出：
 
 ```shell
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_1.log {1: 3442.54}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_5.log {1: 3442.54, 5: 3445.38}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_4.log {1: 3442.54, 5: 3445.38, 4: 3448.81}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_3.log {1: 3442.54, 5: 3445.38, 4: 3448.81, 3: 3447.86}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_2.log {1: 3442.54, 5: 3445.38, 4: 3448.81, 3: 3447.86, 2: 3442.89}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_1.log {1: 263.22}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_5.log {1: 263.22, 5: 263.2}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_4.log {1: 263.22, 5: 263.2, 4: 263.18}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_3.log {1: 263.22, 5: 263.2, 4: 263.18, 3: 263.07}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_2.log {1: 263.22, 5: 263.2, 4: 263.18, 3: 263.07, 2: 262.73}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_1.log {1: 149.81}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_5.log {1: 149.81, 5: 150.05}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_4.log {1: 149.81, 5: 150.05, 4: 149.96}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_3.log {1: 149.81, 5: 150.05, 4: 149.96, 3: 149.98}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_2.log {1: 149.81, 5: 150.05, 4: 149.96, 3: 149.98, 2: 150.07}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_1.log {1: 1786.13}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_5.log {1: 1786.13, 5: 1783.48}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_4.log {1: 1786.13, 5: 1783.48, 4: 1785.3}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_3.log {1: 1786.13, 5: 1783.48, 4: 1785.3, 3: 1786.3}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_2.log {1: 1786.13, 5: 1783.48, 4: 1785.3, 3: 1786.3, 2: 1784.31}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_1.log {1: 553.65}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_5.log {1: 553.65, 5: 552.45}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_4.log {1: 553.65, 5: 552.45, 4: 553.3}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_3.log {1: 553.65, 5: 552.45, 4: 553.3, 3: 552.54}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_2.log {1: 553.65, 5: 552.45, 4: 553.3, 3: 552.54, 2: 553.06}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_1.log {1: 1123.97}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_5.log {1: 1123.97, 5: 1124.46}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_4.log {1: 1123.97, 5: 1124.46, 4: 1125.41}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_3.log {1: 1123.97, 5: 1124.46, 4: 1125.41, 3: 1124.85}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_2.log {1: 1123.97, 5: 1124.46, 4: 1125.41, 3: 1124.85, 2: 1124.2}
-{'bert': {'1n1g': {'average_speed': 149.97,
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_1.log {1: 2376.39}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_5.log {1: 2376.39, 5: 2382.1}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_4.log {1: 2376.39, 5: 2382.1, 4: 2379.52}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_3.log {1: 2376.39, 5: 2382.1, 4: 2379.52, 3: 2387.77}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_2.log {1: 2376.39, 5: 2382.1, 4: 2379.52, 3: 2387.77, 2: 2382.25}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_1.log {1: 171.11}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_5.log {1: 171.11, 5: 171.33}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_4.log {1: 171.11, 5: 171.33, 4: 171.12}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_3.log {1: 171.11, 5: 171.33, 4: 171.12, 3: 171.29}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_2.log {1: 171.11, 5: 171.33, 4: 171.12, 3: 171.29, 2: 171.08}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_1.log {1: 113.17}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_5.log {1: 113.17, 5: 113.16}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_4.log {1: 113.17, 5: 113.16, 4: 113.17}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_3.log {1: 113.17, 5: 113.16, 4: 113.17, 3: 113.17}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_2.log {1: 113.17, 5: 113.16, 4: 113.17, 3: 113.17, 2: 113.13}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_1.log {1: 1221.36}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_5.log {1: 1221.36, 5: 1220.07}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_4.log {1: 1221.36, 5: 1220.07, 4: 1213.6}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_3.log {1: 1221.36, 5: 1220.07, 4: 1213.6, 3: 1221.21}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_2.log {1: 1221.36, 5: 1220.07, 4: 1213.6, 3: 1221.21, 2: 1214.8}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_1.log {1: 349.18}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_5.log {1: 349.18, 5: 349.39}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_4.log {1: 349.18, 5: 349.39, 4: 348.76}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_3.log {1: 349.18, 5: 349.39, 4: 348.76, 3: 348.9}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_2.log {1: 349.18, 5: 349.39, 4: 348.76, 3: 348.9, 2: 348.9}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_1.log {1: 703.44}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_5.log {1: 703.44, 5: 703.99}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_4.log {1: 703.44, 5: 703.99, 4: 702.4}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_3.log {1: 703.44, 5: 703.99, 4: 702.4, 3: 708.24}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_2.log {1: 703.44, 5: 703.99, 4: 702.4, 3: 708.24, 2: 707.89}
+{'bert': {'1n1g': {'average_speed': 113.16,
                    'batch_size_per_device': 32,
-                   'median_speed': 149.98,
+                   'median_speed': 113.17,
                    'speedup': 1.0},
-          '1n2g': {'average_speed': 263.08,
+          '1n2g': {'average_speed': 171.19,
                    'batch_size_per_device': 32,
-                   'median_speed': 263.18,
-                   'speedup': 1.75},
-          '1n4g': {'average_speed': 553.0,
+                   'median_speed': 171.12,
+                   'speedup': 1.51},
+          '1n4g': {'average_speed': 349.03,
                    'batch_size_per_device': 32,
-                   'median_speed': 553.06,
-                   'speedup': 3.69},
-          '1n8g': {'average_speed': 1124.58,
+                   'median_speed': 348.9,
+                   'speedup': 3.08},
+          '1n8g': {'average_speed': 705.19,
                    'batch_size_per_device': 32,
-                   'median_speed': 1124.46,
-                   'speedup': 7.5},
-          '2n8g': {'average_speed': 1785.1,
+                   'median_speed': 703.99,
+                   'speedup': 6.22},
+          '2n8g': {'average_speed': 1218.21,
                    'batch_size_per_device': 32,
-                   'median_speed': 1785.3,
-                   'speedup': 11.9},
-          '4n8g': {'average_speed': 3445.5,
+                   'median_speed': 1220.07,
+                   'speedup': 10.78},
+          '4n8g': {'average_speed': 2381.61,
                    'batch_size_per_device': 32,
-                   'median_speed': 3445.38,
-                   'speedup': 22.97}}}
-Saving result to ./result/bz32_result.json
+                   'median_speed': 2382.1,
+                   'speedup': 21.05}}}
+Saving result to ./result/_result.json
 ```
 
 
@@ -320,21 +318,67 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 ### BERT-Base  FP32
 
+#### batch size=32 & without Graph Kernel Fusion
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 113.17    | 1       |
+| 1        | 2       | 171.12    | 1.51    |
+| 1        | 4       | 348.9     | 3.08    |
+| 1        | 8       | 703.99    | 6.22    |
+| 2        | 16      | 1220.07   | 10.78   |
+| 4        | 32      | 2382.1    | 21.05   |
+
 #### batch size=32 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 149.98    | 1       |
+| 1        | 2       | 263.18    | 1.75    |
 | 1        | 4       | 553.06    | 3.69    |
 | 1        | 8       | 1124.46   | 7.5     |
 | 2        | 16      | 1785.3    | 11.9    |
 | 4        | 32      | 3445.38   | 22.97   |
+
+#### batch size=48 & without Graph Kernel Fusion
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 118.78    | 1       |
+| 1        | 2       | 194.08    | 1.63    |
+| 1        | 4       | 390.59    | 3.29    |
+| 1        | 8       | 791.14    | 6.66    |
+| 2        | 16      | 1415.69   | 11.92   |
+| 4        | 32      | 2786.19   | 23.46   |
+
+#### batch size=48 & with Graph Kernel Fusion
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 157.27    | 1       |
+| 1        | 2       | 285.88    | 1.82    |
+| 1        | 4       | 576.93    | 3.67    |
+| 1        | 8       | 1168.05   | 7.43    |
+| 2        | 16      | 1994.8    | 12.68   |
+| 4        | 32      | 3890.85   | 24.74   |
+
+#### batch size=64 & without Graph Kernel Fusion
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 119.36    | 1       |
+| 1        | 2       | 204.05    | 1.71    |
+| 1        | 4       | 410.41    | 3.44    |
+| 1        | 8       | 829.83    | 6.95    |
+| 2        | 16      | 1517.57   | 12.71   |
+| 4        | 32      | 2990.8    | 25.06   |
 
 #### batch size=64 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 157.13    | 1       |
+| 1        | 2       | 292.4     | 1.86    |
 | 1        | 4       | 587.36    | 3.74    |
 | 1        | 8       | 1183.68   | 7.53    |
 | 2        | 16      | 2092.23   | 13.32   |
@@ -345,20 +389,33 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 157.95    | 1       |
+| 1        | 2       | 300.73    | 1.90    |
 | 1        | 4       | 598.74    | 3.79    |
 | 1        | 8       | 1204.86   | 7.63    |
 | 2        | 16      | 2213.37   | 14.01   |
-| 4        | 32      | 4364.62   | 27.63    |
+| 4        | 32      | 4364.62   | 27.63   |
 
 注：batch size=96 without Graph Kernel Fusion 情况下会OOM(out of memory)
 
 ### BERT-Base  FP16
+
+#### batch size=64 & without Graph Kernel Fusion
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 239.42    | 1       |
+| 1        | 2       | 361.5     | 1.51    |
+| 1        | 4       | 742.64    | 3.10    |
+| 1        | 8       | 1492.7    | 6.23    |
+| 2        | 16      | 2564.36   | 10.71   |
+| 4        | 32      | 5000.16   | 20.88   |
 
 #### batch size=64 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 506.35    | 1       |
+| 1        | 2       | 841.09    | 1.66    |
 | 1        | 4       | 1826.17   | 3.61    |
 | 1        | 8       | 3743.59   | 7.39    |
 | 2        | 16      | 5248.66   | 10.37   |
@@ -369,6 +426,7 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 508.39    | 1       |
+| 1        | 2       | 890.49    | 1.75    |
 | 1        | 4       | 1847.05   | 3.63    |
 | 1        | 8       | 3762.17   | 7.4     |
 | 2        | 16      | 5893.18   | 11.59   |
@@ -379,6 +437,7 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 510.81    | 1       |
+| 1        | 2       | 939.66    | 1.84    |
 | 1        | 4       | 1905.81   | 3.73    |
 | 1        | 8       | 3854.43   | 7.55    |
 | 2        | 16      | 6582.89   | 12.89   |
