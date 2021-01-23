@@ -61,7 +61,7 @@ The following is a summary of the **Vocab Size X 2 Tests**, please refer to [One
 | 25600000        | 56.841                             | 82.853                             | 6,913                  | 9825                   |
 | 51200000        | 56.805                             | 104.458                            | 11,891                 | 16027                  |
 
-![img](C:\mygithub\DLPerf\reports\imgs\wdl_vecx2_1n1g_latency.png)
+![](C:\mygithub\DLPerf\reports\imgs\wdl_vecx2_1n1g_latency.png)
 
 ![](C:\mygithub\DLPerf\reports\imgs\wdl_vecx2_1n1g_mem.png)
 
@@ -78,6 +78,10 @@ The following is a summary of the **Vocab Size X 2 Tests**, please refer to [One
 | 204800000 | 13.785 | out of memory | 6,435  | out of memory |
 | 409600000 | 13.845 | out of memory | 11,423 | out of memory |
 
+![](C:\mygithub\DLPerf\reports\imgs\wdl_vecx2_1n8g_latency.png)
+
+![](C:\mygithub\DLPerf\reports\imgs\wdl_vecx2_1n8g_mem.png)
+
 ### 4 node 8 gpu, batch_size = 16384, deep_embedding_vec_size = 32, hidden_units_num = 7
 
 | deep_vocab_size | OneFlow Latency per Iteration / ms | HugeCTR Latency per Iteration / ms | OneFlow Mem Usage / MB | HugeCTR Mem Usage / MB |
@@ -91,3 +95,7 @@ The following is a summary of the **Vocab Size X 2 Tests**, please refer to [One
 | 204800000 | 22.403 | out of memory | 3,499  | out of memory |
 | 409600000 | 22.433 | out of memory | 5,915  | out of memory |
 | 819200000 | 22.407 | out of memory | 10,745 | out of memory |
+
+![](C:\mygithub\DLPerf\reports\imgs\wdl_vecx2_4n8g_latency.png)
+
+![](C:\mygithub\DLPerf\reports\imgs\wdl_vecx2_4n8g_mem.png)
