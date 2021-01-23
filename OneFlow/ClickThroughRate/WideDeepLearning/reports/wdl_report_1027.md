@@ -4,7 +4,7 @@
 
 ## Test Environment
 
-所有的测试都是在4台配置8张V100-SXM2-16GB GPU的服务器中进行，主要硬软件配置如下：
+所有的测试都是在4台配置8张 V100-SXM2-16GB GPU 的服务器中进行，主要软硬件配置如下：
 
 - Tesla V100-SXM2-16GB x 8
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
