@@ -66,6 +66,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected Units.
 
 ### 1 node 1 device
+
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
 | -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g1 | 16,384 | 16 | 3,200,000 | 65.664 | 4,427 | 
@@ -74,11 +75,10 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 | n1g1 | 16,384 | 16 | 25,600,000 | 82.853 | 9,825 | 
 | n1g1 | 16,384 | 16 | 51,200,000 | 104.458 | 16,027 | 
 
-<center class="half">
-<img src="./imgs/hugectr-n1g1-vocx2_latency.png"  width="50%" align="left"><img src="./imgs/hugectr-n1g1-vocx2_mem.png"  width="50%" align="left">
-</center>
+<center class="half"><img src="./imgs/hugectr-n1g1-vocx2_latency.png"  width="50%" align="left" /><img src="./imgs/hugectr-n1g1-vocx2_mem.png"  width="50%" align="left"/></center>
 
 ### 1 node 8 devices
+
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) | 
 | -------- | -------- | -------- | -------- | -------- | -------- | 
 | n1g8 | 16,384 | 16 | 3,200,000 | 16.671 | 3,021 | 
