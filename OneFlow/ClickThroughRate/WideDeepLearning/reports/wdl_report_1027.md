@@ -148,6 +148,8 @@ Legend:
 |n2g8|262144|2322444|32|7|135.789|2,449|
 |n4g8|524288|2322444|32|7|182.648|2,605|
 
+![latency](./imgs/oneflow-fixed_bsz_per_gpu_latency.png)![memory usage](./imgs/oneflow-fixed_bsz_per_gpu_mem.png)
+
 ## fix total batch size tests
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
 |----|----|----|----|----|----|----|
@@ -157,4 +159,6 @@ Legend:
 |n1g8|16384|2322444|32|7|14.281|1,591|
 |n2g8|16384|2322444|32|7|20.544|1,157|
 |n4g8|16384|2322444|32|7|22.420|1,105|
+
+![latency](./imgs/oneflow-fixed_total_bsz_latency.png)![memory usage](./imgs/oneflow-fixed_total_bsz_mem.png)
 
