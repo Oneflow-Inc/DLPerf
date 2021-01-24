@@ -1,10 +1,8 @@
 # OneFlow-WDL Bencmark Test Report
 
-本报告总结了2020-10-24和25日进行的OneFlow-WDL吞吐率评测。
+This report summarized OneFlow test on 4 nodes with 8 x Tesla V100 on Oct 2020.
 
 ## Test Environment
-
-所有的测试都是在4台配置8张 V100-SXM2-16GB GPU 的服务器中进行，主要软硬件配置如下：
 
 - Tesla V100-SXM2-16GB x 8
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
@@ -41,9 +39,9 @@ Legend:
 ```
 
 ## Test Descriptions
-每组测试3次，选取这3次数据中的中位数作为最后结果。
+Each group was tested three times, and the median of data was selected as the final result.
 
-全部日志可以点击[1025 logs](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/oneflow_wdl_1025_logs.tgz)获取。
+All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/oneflow_wdl_1025_logs.tgz).
 
 ## batch size X 2 tests
 ### 1 node 1 device  
@@ -138,7 +136,7 @@ Legend:
 
 ![latency](./imgs/oneflow-n4g8-vocx2_latency.png)![memory usage](./imgs/oneflow-n4g8-vocx2_mem.png)
 
-## fix batch size per device tests
+## fixed batch size per device tests
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
 |----|----|----|----|----|----|----|
 |n1g1|16384|2322444|32|7|60.802|2,777|
@@ -150,7 +148,7 @@ Legend:
 
 ![latency](./imgs/oneflow-fixed_bsz_per_gpu_latency.png)![memory usage](./imgs/oneflow-fixed_bsz_per_gpu_mem.png)
 
-## fix total batch size tests
+## fixed total batch size tests
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
 |----|----|----|----|----|----|----|
 |n1g1|16384|2322444|32|7|60.674|2,839|
