@@ -49,12 +49,46 @@ Legend:
 |[HugeCTR](https://github.com/NVIDIA/HugeCTR)| 2.2 ||[samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl)|
 
 ## Test Options
+
+### Vocab Size X2 Tests
+Keep doubling vocab size until out of memory.
+
 - Devices Config: 1 node 1 device, 1 node 8 devices, 4 nodes 32 devices
-- DataType: Float32, AMP (Automatic Mixed Precision)
-- XLA for TensorFlow with AMP
+- Batch Size: 16384
+- deep_embedding_vec_size: 32 on 4 nodes 32 devices, 16 on other test cases
+- hidden unit: 7
+
+### Batch Size X2 Tests
+
+Keep doubling batch size until out of memory.
+
+- Devices Config: 1 node 1 device, 1 node 8 devices, 4 nodes 32 devices
+- Deep Vocab Size: 2322444
+- deep_embedding_vec_size: 32 on 4 nodes 32 devices, 16 on other test cases
+- hidden unit: 7
+
+### Fixed Batch Size in Total Tests
+
+Test under the situation of different number of nodes and devices with fixed batch size in total.
+
+- Devices Config: 1 node 1 device, 1 node 8 devices, 2 nodes 16 devices, 4 nodes 32 devices
+- Batch Size: 16384
+- Vocab Size: 2322444
+- deep_embedding_vec_size: 32
+- hidden unit: 7
+
+### Fixed Batch Size per GPU Device Tests
+
+Test under the situation of different number of nodes and devices with fixed batch size per GPU device.
+
+- Devices Config: 1 node 1 device, 1 node 8 devices, 2 nodes 16 devices, 4 nodes 32 devices
+- Batch Size per GPU device: 16384
+- Vocab Size: 2322444
+- deep_embedding_vec_size: 32
+- hidden unit: 7
 
 ## Test Results
-The following is a summary of the **Vocab Size X 2 Tests**. Besides that, there are other types testing results, including **Batch Size X 2 Tests**, **Fixed Batch size Tests**. Please refer to [OneFlow/ClickThroughRate/WideDeepLearning/reports](../OneFlow/ClickThroughRate/WideDeepLearning/reports) and [HugeCTR/reports](../HugeCTR/reports) for more details.
+The following is a summary of the **Vocab Size X2 Tests**. Other types testing results, including **Batch Size X2 Tests**, **Fixed Batch Size Tests**. Please refer to [OneFlow/ClickThroughRate/WideDeepLearning/reports](../OneFlow/ClickThroughRate/WideDeepLearning/reports) and [HugeCTR/reports](../HugeCTR/reports) for more details.
 
 **Vocab Size X 2 Tests** are carried out in the conditions **1 node 1 GPU**, **1 node 8 GPU** and **4 node 32 GPUs** respectively. The **Latency per Iteration** and **Memory Usage** of OneFlow and HugeCTR have been recorded. 
 
