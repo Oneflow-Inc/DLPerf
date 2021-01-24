@@ -61,9 +61,7 @@ Legend:
 |n1g1|262144|2322444|16|2|224.603|6,393|
 |n1g1|524288|2322444|16|2|455.137|11,569|
 
-<center class="half">
-<img src="./imgs/oneflow-n1g1-bszx2_latency.png"  width="50%" align="left"><img src="./imgs/oneflow-n1g1-bszx2_mem.png"  width="50%" align="left">
-</center>
+![latency](./imgs/oneflow-n1g1-bszx2_latency.png)![memory usage](./imgs/oneflow-n1g1-bszx2_mem.png)
 
 ### 1 node 8 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -82,9 +80,7 @@ Legend:
 |n1g8|1048576|2322444|16|2|197.899|5,117|
 |n1g8|2097152|2322444|16|2|395.698|10,007|
 
-<center class="half">
-<img src="./imgs/oneflow-n1g8-bszx2_latency.png"  width="50%" align="left"><img src="./imgs/oneflow-n1g8-bszx2_mem.png"  width="50%" align="left">
-</center>
+![latency](./imgs/oneflow-n1g8-bszx2_latency.png)![memory usage](./imgs/oneflow-n1g8-bszx2_mem.png)
 
 ### 4 nodes 32 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -99,9 +95,7 @@ Legend:
 |n4g8|2097152|2322444|32|2|485.079|5,617|
 |n4g8|4194304|2322444|32|2|955.242|10,291|
 
-<center class="half">
-<img src="./imgs/oneflow-n4g8-bszx2_latency.png"  width="50%" align="left"><img src="./imgs/oneflow-n4g8-bszx2_mem.png"  width="50%" align="left">
-</center>
+![latency](./imgs/oneflow-n4g8-bszx2_latency.png)![memory usage](./imgs/oneflow-n4g8-bszx2_mem.png)
 
 ## vocab size X 2 tests
 ### 1 node 1 device  
@@ -113,9 +107,7 @@ Legend:
 |n1g1|16384|25600000|16|7|56.841|6,913|
 |n1g1|16384|51200000|16|7|56.805|11,891|
 
-<center class="half">
-<img src="./imgs/oneflow-n1g1-vocx2_latency.png"  width="50%" align="left"><img src="./imgs/oneflow-n1g1-vocx2_mem.png"  width="50%" align="left">
-</center>
+![latency](./imgs/oneflow-n1g1-vocx2_latency.png)![memory usage](./imgs/oneflow-n1g1-vocx2_mem.png)
 
 ### 1 node 8 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -129,9 +121,7 @@ Legend:
 |n1g8|16384|204800000|16|7|13.785|6,435|
 |n1g8|16384|409600000|16|7|13.845|11,423|
 
-<center class="half">
-<img src="./imgs/oneflow-n1g8-vocx2_latency.png"  width="50%" align="left"><img src="./imgs/oneflow-n1g8-vocx2_mem.png"  width="50%" align="left">
-</center>
+![latency](./imgs/oneflow-n1g8-vocx2_latency.png)![memory usage](./imgs/oneflow-n1g8-vocx2_mem.png)
 
 ### 4 nodes 32 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -146,9 +136,7 @@ Legend:
 |n4g8|16384|409600000|32|7|22.433|5,915|
 |n4g8|16384|819200000|32|7|22.407|10,745|
 
-<center class="half">
-<img src="./imgs/oneflow-n4g8-vocx2_latency.png"  width="50%" align="left"><img src="./imgs/oneflow-n4g8-vocx2_mem.png"  width="50%" align="left">
-</center>
+![latency](./imgs/oneflow-n4g8-vocx2_latency.png)![memory usage](./imgs/oneflow-n4g8-vocx2_mem.png)
 
 ## fix batch size per device tests
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
