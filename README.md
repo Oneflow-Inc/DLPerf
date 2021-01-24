@@ -16,7 +16,7 @@ DLPerf measures how fast deep learning frameworks can train DNN models, so both 
 4. MXNet
 5. PaddlePaddle
 
-More and more frameworks will be included in the future, such as MindSpore and MegEngine.
+More frameworks will be included in the future, such as MindSpore and MegEngine.
 
 ### Evaluated Deep Neural Network models
 
