@@ -305,11 +305,7 @@ Legend:
   NV#  = Connection traversing a bonded set of # NVLinks
 ```
 
-
-
-#### 符号说明
-
-- xn_xg_xdp_xmp_xbs表示x node, x gpu, x data parallel, x model parallel, x batch size per gpu
+#### 测试结果
 
 | date     | test_num | test_desc    | xn_xg_xdp_xmp_xbs | gpu_mem(mB)   | gpu_util(%) | throuthput(sample/sec) |
 | -------- | -------- | ------------ | ----------------- | ------------- | ----------- | ---------------------- |
@@ -325,6 +321,10 @@ Legend:
 | -------- | --------- | ---------------- | ----------------- | ------------------ | ----------- | ---------------------- |
 | 20201209 | test-18-1 | zero-stage-0     | 4n_8g_dp_4bs      | 15336              | 95          | 533                    |
 |          | test-18-2 | zero-stage-1     | 4n_8g_dp_4bs      | 13975(-1361,↓8.9%) | 92          | 506(↓5.3%)             |
+
+注：xn_xg_xdp_xmp_xbs表示x node, x gpu, x data parallel, x model parallel, x batch size per gpu
+
+
 
 ### 日志下载
 
