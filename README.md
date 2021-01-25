@@ -8,26 +8,29 @@ DLPerf measures how fast deep learning frameworks can train DNN models, so both 
 
 ### Evaluated Deep Learning Frameworks
 
-6 deep learning frameworks are evaluated in this repository, they are:
+Multiple deep learning frameworks are evaluated in this repository, they are:
 
 1. OneFlow
+
 2. TensorFlow 1.x and 2.x
+
 3. PyTorch
+
 4. MXNet
+
 5. PaddlePaddle
-6. MindSpore
+
 
 More and more frameworks will be included in the future, such as  MegEngine.
 
 ### Evaluated Deep Neural Network models
 
-There are two main types of models tested in this repository, generally includes : 
+There are two main type of model cases tested in this repository, generally includes : 
 
-- Common model 
+- Common cases
 
-- Special model
+- Special cases
 
-  
 
 The first type is classical deep neural network models that used to evaluate the performance of each framework,such as:
 
@@ -96,7 +99,7 @@ To get a continuous and stable output, first several training steps are ignored.
 - `MxNet/`: holds the reproducible scripts and test reports for DNN models from [gluon-nlp](https://github.com/dmlc/gluon-nlp)  and [gluon-cv](https://github.com/dmlc/gluon-cv);
 - `reports`: holds rounds of DNN's benchmark test reports.
 
-## Summary of Latest Test Results(common models)
+## Summary of Latest Test Results(common cases)
 
 This section maintains a summary of the results of the common models.For more and more details, please find in [reports](./reports) folder.
 
@@ -148,6 +151,6 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 [5]: The MXNet BERT script of the [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) repository does **NOT** support clip_by_ global_norm operation in Adam optimizer. **W/O clip_by_global_norm** operation, the throughput will be larger and the the fine-tuning accuracy may be lower. So we also tested OneFlow data W/O clip operation for comparison.
 
-## Summary of Latest Test Results(special models)
+## Other Test Results(special cases)
 
-This section maintains a summary of the results of the special models.
+This section maintains the results of the special case models.
