@@ -8,24 +8,35 @@ DLPerf measures how fast deep learning frameworks can train DNN models, so both 
 
 ### Evaluated Deep Learning Frameworks
 
-5 deep learning frameworks are evaluated in this repository, they are:
+6 deep learning frameworks are evaluated in this repository, they are:
 
 1. OneFlow
 2. TensorFlow 1.x and 2.x
 3. PyTorch
 4. MXNet
 5. PaddlePaddle
+6. MindSpore
 
-More and more frameworks will be included in the future, such as MindSpore and MegEngine.
+More and more frameworks will be included in the future, such as  MegEngine.
 
 ### Evaluated Deep Neural Network models
 
-2 classical deep neural network models are tested in this repository, they are:
+There are two main types of models tested in this repository, generally includes : 
 
-1. ResNet-50 v1.5
-2. BERT-Base
+- Common model 
 
-There are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
+- Special model
+
+  
+
+The first type is classical deep neural network models that used to evaluate the performance of each framework,such as:
+
+1. **ResNet-50 v1.5**
+2. **BERT-Base**
+
+The secode type is that some models use special technologies or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed、[HugeCTR](https://github.com/NVIDIA/HugeCTR)（Designed for CTR estimation training） based on tensorflow modified by NVIDIA.
+
+In general, there are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
 
 More DNN models will be tested in the future.
 
@@ -85,9 +96,9 @@ To get a continuous and stable output, first several training steps are ignored.
 - `MxNet/`: holds the reproducible scripts and test reports for DNN models from [gluon-nlp](https://github.com/dmlc/gluon-nlp)  and [gluon-cv](https://github.com/dmlc/gluon-cv);
 - `reports`: holds rounds of DNN's benchmark test reports.
 
-## Summary of Latest Test Results
+## Summary of Latest Test Results(common models)
 
-This section maintains the summary of the latest results. For more and more details, please find in [reports](./reports) folder.
+This section maintains a summary of the results of the common models.For more and more details, please find in [reports](./reports) folder.
 
 ### Latest Test Report
 
@@ -137,5 +148,6 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 [5]: The MXNet BERT script of the [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) repository does **NOT** support clip_by_ global_norm operation in Adam optimizer. **W/O clip_by_global_norm** operation, the throughput will be larger and the the fine-tuning accuracy may be lower. So we also tested OneFlow data W/O clip operation for comparison.
 
+## Summary of Latest Test Results(special models)
 
-
+This section maintains a summary of the results of the special models.
