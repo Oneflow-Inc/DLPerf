@@ -162,13 +162,9 @@ node_ips="10.11.0.2,10.11.0.3,10.11.0.4,10.11.0.5"
 
 ## 测试结果 Performance
 
-#### 符号说明
-
-- xn_xg_xdp_xmp_xbs表示x node, x gpu, x data parallel, x model parallel, x batch size per gpu
-
 **单机8卡**
 
-| test_num | test_desc | xn_xg_xdp_xmp_xbs | gpu_mem(mB)  | gpu_util(%)        | throuthput(sample/sec) |            |
+| date     | test_desc | xn_xg_xdp_xmp_xbs | gpu_mem(mB)  | gpu_util(%)        | throuthput(sample/sec) |            |
 | -------- | --------- | ----------------- | ------------ | ------------------ | ---------------------- | ---------- |
 | 20201208 | test-10-1 | off_optimization  | 1n_8g_dp_1bs | 5603               | 73                     | 104        |
 |          | test-10-2 | on_optimization   | 1n_8g_dp_1bs | 3849(-1754,↓31.3%) | 43                     | 89(↓14.4%) |
@@ -188,6 +184,10 @@ node_ips="10.11.0.2,10.11.0.3,10.11.0.4,10.11.0.5"
 | -------- | --------- | ---------------- | ----------------- | ------------------ | ----------- | ---------------------- |
 | 20201209 | test-19-1 | off_optimization | 4n_8g_dp_4bs      | 11089              | 95          | 717                    |
 |          | test-19-2 | on_optimization  | 4n_8g_dp_4bs      | 9082(-2727,↓23.1%) | 92          | 742(↑3.4%)             |
+
+符号说明：xn_xg_xdp_xmp_xbs表示x node, x gpu, x data parallel, x model parallel, x batch size per gpu
+
+
 
 ### 日志下载
 
