@@ -2,9 +2,11 @@
 
 ## 概述 Overview
 
-本次测评为OSDI论文提供了多组真实测试数据，测评背景：DeepSpeed通过减少显存占用以支持更大模型，这里主要关注的是Optimizer state的拆分；测评目标：主要验证的是stage 1的显存缩减。
+本次测评为OSDI论文提供了多组真实测试数据。测评基于微软[DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77) 仓库中的[Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM)实现，框架依赖[DeepSpeed](https://github.com/microsoft/DeepSpeed/tree/7d4d742bf03f8e1707130391e0b39bd6d93a702a) 以及pytorch，基于以上环境，对gpt-2 small、gpt-2 medium在单机单卡～4机32卡情况下进行了多组测试。
 
-测评基于微软[DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77) 仓库中的[Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM)实现，框架依赖[DeepSpeed](https://github.com/microsoft/DeepSpeed/tree/7d4d742bf03f8e1707130391e0b39bd6d93a702a) 以及pytorch，基于以上环境，对gpt-2 small、gpt-2 medium在单机单卡～4机32卡情况下进行了多组测试。
+测评背景：DeepSpeed是一个深度学习优化库，使分布式训练简单、高效和有效，DeepSpeed实现了[论文](https://arxiv.org/abs/1910.02054)中提出的ZeRo内存优化技术，减少了显存占用以支持更大模型，这里主要关注的是Optimizer state的拆分。
+
+测评目标：主要验证的是stage 1的显存缩减。
 
 ## 环境 Environment
 
