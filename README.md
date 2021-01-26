@@ -20,7 +20,7 @@ More frameworks will be included in the future, such as  MindSpore, MegEngine, e
 
 ### Evaluated Deep Neural Network models
 
-There are two main type of model cases tested in this repository, generally includes : 
+There are two main types of model cases tested in this repository, generally includes : 
 
 - Common cases
 
@@ -32,7 +32,7 @@ The first type is classical deep neural network models that used to evaluate the
 1. **ResNet-50 v1.5**
 2. **BERT-Base**
 
-The secode type is that some models use special technologies or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed、[HugeCTR](https://github.com/NVIDIA/HugeCTR)（Designed for CTR estimation training and implemented by NVIDIA).
+The secode type is that some models use special techniques or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed,[HugeCTR](https://github.com/NVIDIA/HugeCTR)（Designed for CTR estimation training and implemented by NVIDIA).
 
 In general, there are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
 
@@ -96,7 +96,7 @@ To get a continuous and stable output, first several training steps are ignored.
 
 ## Summary of Latest Test Results(common cases)
 
-This section maintains a summary of the results of the common models.For more and more details, please find in [reports](./reports) folder.
+This section maintains a summary of the results of the common models.For more details, please refer to [reports](./reports) folder.
 
 ### Latest Test Report
 
