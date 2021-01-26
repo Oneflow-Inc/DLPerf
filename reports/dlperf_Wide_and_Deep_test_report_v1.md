@@ -88,7 +88,7 @@ Test under the situation of different number of nodes and devices with fixed bat
 - hidden unit: 7
 
 ## Test Results
-The following is a summary of the **Vocab Size X2 Tests**. Other types testing results, including **Batch Size X2 Tests**, **Fixed Batch Size Tests**. Please refer to [OneFlow/ClickThroughRate/WideDeepLearning/reports](../OneFlow/ClickThroughRate/WideDeepLearning/reports) and [HugeCTR/reports](../HugeCTR/reports) for more details.
+The following is a summary of the **Vocab Size X2 Tests**. Other types testing results, including **Batch Size X2 Tests**, **Fixed Batch Size Tests**. Please refer to [OneFlow/ClickThroughRate/WideDeepLearning/reports](../OneFlow/ClickThroughRate/WideDeepLearning) and [HugeCTR/reports](../HugeCTR) for more details.
 
 **Vocab Size X 2 Tests** are carried out in the conditions **1 node 1 GPU**, **1 node 8 GPU** and **4 node 32 GPUs** respectively. The **Latency per Iteration** and **Memory Usage** of OneFlow and HugeCTR have been recorded. 
 
