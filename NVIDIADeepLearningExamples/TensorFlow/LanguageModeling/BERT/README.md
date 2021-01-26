@@ -32,9 +32,9 @@
 
 ## Feature support matrix
 
-| Feature            | ResNet-50 v1.5 TensorFlow |
+| Feature            | BERT-Base TensorFlow      |
 | ------------------ | ------------------------- |
-| Horovod Multi-gpu | Yes                       |
+| Horovod Multi-gpu  | Yes                       |
 | Horovod Multi-node | Yes                       |
 | Automatic mixed precision (AMP) | Yes                       |
 
@@ -95,7 +95,6 @@ nvidia-docker run  -it \
     --ulimit memlock=-1 --privileged \
     --name tf_bert \
     --ulimit stack=67108864 \
-    --device=/dev/infiniband \
     -e NVIDIA_VISIBLE_DEVICES=$NV_VISIBLE_DEVICES \
     -v $PWD:/workspace/bert \
     -v /home/leinao/DLPerf/dataset/wiki/tfrecord:/workspace/bert/data/tfrecord \
@@ -105,7 +104,9 @@ nvidia-docker run  -it \
 
 ## 数据集
 
-数据集准备详见：[nvidia官方仓库说明](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT#default-configuration)
+数据集采用[Wikipedia](https://dumps.wikimedia.org/)，参考：[NVIDIA官方仓库说明](https://github.com/NVIDIA/DeepLearningExamples/tree/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT#default-configuration) ；
+
+数据集下载及制作脚本见：[data_download.sh](https://github.com/NVIDIA/DeepLearningExamples/blob/fed7ba99cde958fda12c9e81d12b3d7e738e0590/TensorFlow/LanguageModeling/BERT/scripts/data_download.sh)
 
 ## SSH配置(可选)
 
@@ -181,6 +182,10 @@ cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-sp
 ```
 
 完成后，可以通过`ibstat`命令检查驱动是否安装成功。
+
+
+
+更详细的IB驱动安装，请参考：[mellanox官方文档](https://community.mellanox.com/s/article/howto-install-mlnx-ofed-driver)
 
 # Training
 

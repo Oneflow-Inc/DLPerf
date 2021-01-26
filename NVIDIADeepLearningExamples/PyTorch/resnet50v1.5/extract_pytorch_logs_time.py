@@ -13,11 +13,11 @@ pp = pprint.PrettyPrinter(indent=1)
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser(description="flags for cnn benchmark tests data process")
-parser.add_argument("--log_dir", type=str, default="/workspace/rn50/scripts/ngc/pytorch", required=True)
-parser.add_argument("--output_dir", type=str, default="./result", required=False)
-parser.add_argument('--warmup_batches', type=int, default=20)
-parser.add_argument('--train_batches', type=int, default=120)
-parser.add_argument('--batch_size_per_device', type=int, default=128)
+parser.add_argument("-ld", "--log_dir", type=str, default="/workspace/rn50/scripts/ngc/pytorch", required=True)
+parser.add_argument("-od", "--output_dir", type=str, default="./result", required=False)
+parser.add_argument("-wb", "--warmup_batches", type=int, default=20)
+parser.add_argument("-tb", "--train_batches", type=int, default=120)
+parser.add_argument("-bz", "--batch_size_per_devic", type=int, default=128)
 
 args = parser.parse_args()
 

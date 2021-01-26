@@ -1,24 +1,23 @@
 # OneFlow Benchmark Test Scripts
 
-本文介绍如何使用脚本批量测试ResNet50 V1.5和BERT base：
+本文介绍如何使用脚本批量测试ResNet50 V1.5：
 
 1. `rn50_train.sh`，可以本地单机训练resnet 50，也可以通过ssh发送到远端节点运行；
-2. `bert_base_train.sh`，可以本地单机进行BERT base预训练，也可以通过ssh发送到远端节点运行；
-3. `launch_all.sh`，发送脚本到指定的机器节点并运行；
-4. `cp_logs.sh`，拷贝日志到指定目录；
-5. `schedule_launch.sh`，批量顺序执行多组`launch_all.sh`；
-6. `extract_bert_result.py`，从BERT预训练日志中提取结果，并打印成markdown表格。
-7. `extract_cnn_result.py`，从cnn训练日志中提取结果，并打印成markdown表格。
+2. `launch_all.sh`，发送脚本到指定的机器节点并运行；
+3. `cp_logs.sh`，拷贝日志到指定目录；
+4. `schedule_launch.sh`，批量顺序执行多组`launch_all.sh`；
+5. `extract_cnn_result.py`，从cnn训练日志中提取结果，并打印成markdown表格。
+6. `reports`，[测试报告](OneFlow/Classification/ConvNets/resnet50v1.5/reports)目录
 
 通常这几个文件只需要修改很少的配置就能正常运行，下面对各个脚本进行详细介绍。
 
-## 本地训练启动脚本：`rn50_train.sh`和`bert_base_train.sh`
+## 本地训练启动脚本：`rn50_train.sh`
 
-这两个脚本用于本地运行OneFlow的训练，可以独立使用，调用前需要手动修改基本配置，调用时需要传入3个参数。
+这个脚本用于本地运行OneFlow的训练，可以独立使用，调用前需要手动修改基本配置，调用时需要传入3个参数。
 
 ### 手工配置选项
 
-手工配置选项以ResNet50为例，有三处需要修改的地方：
+有三处需要修改的地方：
 
 ```
 BENCH_ROOT=cnns
@@ -26,7 +25,7 @@ DATA_ROOT=/path/to/imagenet_ofrecord
 DATA_PART_NUM=32
 ```
 
-1. `BENCH_ROOT`: 模型脚本所在的目录，对应OneFlow-Benchmark项目中的`Classification/cnns`目录或`LanguageModeling/BERT`；
+1. `BENCH_ROOT`: 模型脚本所在的目录，对应OneFlow-Benchmark项目中的`Classification/cnns`目录
 2. `DATA_ROOT`: 测试所用数据集路径
 3. `DATA_PART_NUM`: 测试所用数据集文件数量
 
@@ -79,10 +78,10 @@ BSZ=$5
 ./launch_all.sh rn50_train.sh cnns 1 8 128
 ```
 
-发送相关脚本到4机，每机都使用8卡（共4机32卡）训练BERT base:
+发送相关脚本到4机，每机都使用8卡（共4机32卡）训练ResNet50:
 
 ```
-./launch_all.sh bert_base_pretrain.sh BERT 4 8 96
+./launch_all.sh rn50_train.sh cnns 4 8 128
 ```
 
 ## `cp_logs.sh`
@@ -110,12 +109,12 @@ REPEAT_ID=$4
 
 `schedule_launch.sh`脚本会根据实验次数，循环测试不同batch size，4组节点和GPU设备数量，每组实验重复7次。实验结束后，`logs/oneflow`路径下会保存实验日志。
 
-## `extract_bert_result.py` `extract_cnn_result.py`
+## `extract_cnn_result.py`
 
-由于ResNet50和BERT base的日志格式有所不同，所以有两个提取脚本，以bert为例，运行方式如下：
+运行方式如下：
 
 ```
-python3 extract_bert_result.py
+python3 extract_cnn_result.py
 ```
 
 结果为markdown格式，方便直接引用，输出如下:

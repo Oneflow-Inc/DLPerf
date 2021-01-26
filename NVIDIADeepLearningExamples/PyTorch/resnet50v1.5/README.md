@@ -1,12 +1,17 @@
 # NVIDIA/DeepLearningExamples PyTorch ResNet50 v1.5 测评
 
+
 ## 概述 Overview
+
 
 本测试基于 [NVIDIA/DeepLearningExamples/Classification/ConvNets/](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets) 仓库中提供的 PyTorch 框架的 [ResNet50 v1.5](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5) 实现，在 NVIDIA 官方提供的 [20.03 NGC 镜像及其衍生容器](https://ngc.nvidia.com/catalog/containers/nvidia:pytorch/tags)中进行单机单卡、单机多卡、多机多卡的结果复现及速度评测，评判框架在分布式训练情况下的横向拓展能力。
 
+
 目前，该测试覆盖 FP32 及混合精度，后续将持续维护，增加使用其他优化方式的测评。
 
+
 ## 内容目录 Table Of Content
+
 
 - [NVIDIA/DeepLearningExamples PyTorch ResNet50 v1.5 测评](#nvidia-deeplearningexamples-pytorch-resnet50-v15---)
   * [概述 Overview](#---overview)
@@ -37,41 +42,58 @@
 
 ## 环境 Environment
 
+
 ### 系统
+
 
 - #### 硬件
 
+
   - GPU：Tesla V100-SXM2-16GB x 8
+
 
 - #### 软件
 
+
   - 驱动：NVIDIA 440.33.01
+
 
   - 系统：[ Ubuntu 16.04](http://releases.ubuntu.com/16.04/)
 
   - CUDA：10.2
 
+
   - cuDNN：7.6.5
 
+
 ### NGC 容器
+
 
 - 系统：[ Ubuntu 18.04](http://releases.ubuntu.com/18.04/)
 
 - CUDA 10.2.89
 
+
 - cuDNN 7.6.5
+
 
 - NCCL：2.5.6
 
+
 - PyTorch：1.5.0a0+8f84ded
+
 
 - OpenMPI 3.1.4
 
+
 - DALI 0.19.0
+
 
 - Python：3.6.9
 
+
   更多容器细节请参考 [NVIDIA Container Support Matrix](https://docs.nvidia.com/deeplearning/dgx/support-matrix/index.html)。
+
 
   #### Feature support matrix
 
@@ -86,15 +108,21 @@
 
 ## 快速开始 Quick Start
 
+
 ### 1. 前期准备
+
 
 - #### 数据集
 
+
 根据 [Convolutional Networks for Image Classification in PyTorch](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets) 准备 ImageNet 数据集，只需下载、解压 train、validation 数据集到对应路径即可，使用原始图片进行训练。
+
 
 - #### 镜像及容器
 
+
 拉取 NGC 20.03 的镜像、搭建容器，进入容器环境。
+
 
 ```
 # 下载镜像
@@ -103,20 +131,22 @@ docker pull nvcr.io/nvidia/pytorch:20.03-py3
 # 启动容器
 docker run -it --shm-size=16g --ulimit memlock=-1 --privileged  \
 --name pt_bert  --net host \
---cap-add=IPC_LOCK --device=/dev/infiniband \
 -v ./data:/data/ \
 -d pytorch:20.03-py3 
 ```
 
 - #### 安装 IB 驱动
 
+
 测试机器上的容器环境内未查找到 IB 驱动，会导致测试时 NCCL 库只能使用 Socket 通信，无法达到最佳测试效果，因此需要额外安装，首先安装依赖
+
 
 ```
 apt install dpatch libelf1 libmnl0 libltdl-dev lsof chrpath debhelper pciutils tk bison graphviz ethtool kmod gfortran swig flex tcl
 ```
 
 更换为阿里云源
+
 
 ```
 cp /etc/apt/sources.list /etc/apt/sources.list.bak
@@ -125,6 +155,7 @@ vim /etc/apt/sources.list
 ```
 
 将下列源址复制进 /etc/apt/sources.list 中
+
 
 ```
 deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
@@ -154,11 +185,13 @@ deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted univer
 
 更新源
 
+
 ```
 apt-get update
 ```
 
 下载[软件 MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar 源码包](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar)并解压
+
 
 ```
 wget http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar && tar -xvf MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64.tar
@@ -166,11 +199,13 @@ wget http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/MLNX_OFED_LINUX-4.
 
 进入源码包路径，安装
 
+
 ```
 cd MLNX_OFED_LINUX-4.9-0.1.7.0-ubuntu18.04-x86_64 && ./mlnxofedinstall --user-space-only --without-fw-update --all --force 
 ```
 
 安装时出现
+
 
 ```
 ......
@@ -185,11 +220,13 @@ See /tmp/MLNX_OFED_LINUX.24525.logs/neohost-backend.debinstall.log
 
 可以忽略。完成后，检查驱动是否安装成功
 
+
 ```
 ibstat
 ```
 
 打印
+
 
 ```
 root@VS002:/workspace/rn50# ibstat
@@ -216,20 +253,30 @@ CA 'mlx5_0'
 
 
 
+
 ### 2. 运行测试
+
 
 本次测试集群中有 4 台节点：
 
+
 - NODE1=10.11.0.2
+
 - NODE2=10.11.0.3
+
 - NODE3=10.11.0.4
+
 - NODE4=10.11.0.5
+
 
 每个节点有 8 张 V100 显卡， 每张显卡显存 16 G。
 
+
 - #### 单机测试
 
+
 在节点 1 的容器内下载本仓库源码：
+
 
 ````
 git clone https://github.com/Oneflow-Inc/DLPerf.git
@@ -237,17 +284,22 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 
 将本仓库 /DLPerf/NVIDIADeepLearningExamples/PyTorch/resnet50v1.5/scripts 路径源码放至 /workspace/rn50 下，执行脚本
 
+
 ```
 bash scripts/run_single_node.sh
 ```
 
-针对单机单卡、2卡、4卡、8卡， batch_size 取 128 等情况进行测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中。
+针对单机单卡、2 卡、4 卡、8 卡， batch_size 取 128 等情况进行测试，并将 log 信息保存在当前目录的 /ngc/pytorch/ 对应分布式配置路径中。
+
 
 - #### 多机测试
 
+
 多机测试，一定要确保数据集存在各节点测试机器的相同路径下，各脚本的行为要一致，尤其是修改要保持同步。
 
-典型地，多机测试时，需要在 /workspace/rn50/main.py 中 310 行的 `torch.cuda.set_device(args.gpu)` 下对方增加 `args.gpu = torch.cuda.device_count()`，即
+
+典型地，多机测试时，需要在 /workspace/rn50/main.py 中 310 行的 `torch.cuda.set_device(args.gpu)` 下方增加 `args.gpu = torch.cuda.device_count()`，即
+
 
 ```
 308     if args.distributed:
@@ -260,11 +312,15 @@ bash scripts/run_single_node.sh
 
 4 台机器都需要增加。
 
+
 另外，需要测试混合精度（AMP）时，应该修改 `PREC` 的精度选项（`amp`）。
+
 
 - ##### 两机测试
 
+
 以 NODE1 和 NODE2 为例，run_two_nodes.sh 脚本已填入 2 台机器对应的 IP 及端口号，NODE1 上的脚本 single_node_train.sh 中 `--node_rank` 默认为 0，还需自行将 NODE2 机器上相同路径下的脚本 37 行 `--node_rank` 改为 1，在 2 台机器上同时运行脚本，打印 log 如下：
+
 
 ```
 + '[' -z ngc/pytorch/2n8g/r50_b128_fp32_5.log ']'
@@ -306,7 +362,9 @@ DLL 2020-09-15 14:29:18.553769 - Epoch: 0 Iteration: 12  train.loss : 6.67351  t
 
 - ##### 多机测试
 
+
 以本集群为例，最多支持 4 机 32 卡，run_multi_nodes.sh 脚本已设置 NODE1 为 master node，设置好其 IP 及端口号，还需自行将 NODE3 机器上相同路径下的脚本 37 行 `--node_rank` 中的改为 2， NODE4 的 `--node_rank` 改为 3，在 4 台机器上同时运行脚本，打印 log 如下：
+
 
 ```
 + '[' -z ngc/pytorch/4n8g/r50_b128_fp32_5.log ']'
@@ -348,15 +406,19 @@ DLL 2020-09-15 14:29:18.553769 - Epoch: 0 Iteration: 12  train.loss : 6.67351  t
 
 ### 3. 数据处理
 
-测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 150 iter，计算训练速度时只取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
+
+测试进行了多组训练（本测试中取 5 次），每次训练过程取第 1 个 epoch 的前 150 iter，计算训练速度时取后 100 iter 的数据，以降低抖动。最后将 5 次训练的结果取中位数得到最终速度，并最终以此数据计算加速比。
+
 
 运行 /DLPerf/NVIDIADeepLearningExamples/PyTorch/BERT/extract_pytorch_logs_time.py，即可得到针对不同配置测试结果 log 数据处理的结果： 
+
 
 ```
 python extract_pytorch_logs_time.py --log_dir /workspace/rn50/scripts/j5_amp_ngc/pytorch/ --warmup_batches 20 --train_batches 120 --batch_size_per_device 256
 ```
 
 结果打印如下
+
 
 ```
 /workspace/rn50/scripts/j5_amp_ngc/pytorch/4n8g/r50_b256_amp_3.log {3: 22978.13}
@@ -411,11 +473,15 @@ Saving result to ./result/_result.json
 
 ## 性能结果 Performance
 
+
 该小节提供针对 NVIDIA PyTorch 框架的 ResNet50 v1.5 模型使用 IB（Infinite Band）网络单多机测试的性能结果和完整 log 日志。
+
 
 ### FP32 
 
+
 - ### ResNet50 v1.5 batch_size = 128
+
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
@@ -427,9 +493,13 @@ Saving result to ./result/_result.json
 
 
 
-### AMP 
+### AMP & `dynamic loss scale`
+
+ 由于使用 AMP 时，可以选择 `dynamic loss scale` 或者 `static loss scale`，但是不同实现会带来些微（0.8%~4.7%）的性能差异，所以附上两份数据。
+
 
 - ### ResNet50 v1.5 batch_size = 256
+
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
@@ -441,10 +511,26 @@ Saving result to ./result/_result.json
 
 同时，可支持的 max batch size=256。
 
+### AMP & `static loss scale`
+
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| -------- | ---------------- | --------------------- | ------------------ | ------- |
+| 1        | 1                | 256                   | 827.86              | 1.00    |
+| 1        | 4                | 256                   | 3253.68            | 3.93   |
+| 1        | 8                | 256                   |6446.74          | 7.79    |
+
+
+
+同时，可支持的 max batch size=256。
+
+
 
 
 NVIDIA的 PyTorch 官方测评结果详见 [ResNet50 v1.5 For PyTorch 的 Results](https://github.com/NVIDIA/DeepLearningExamples/tree/5cc03caa153faab7a2c3b1b5b5d63663f06ce1b4/PyTorch/Classification/ConvNets/resnet50v1.5#results)。
 
+
 Ray 的 PyTorch 官方测评结果详见 [Distributed PyTorch](https://docs.ray.io/en/master/raysgd/raysgd_pytorch.html#benchmarks)。
 
+
 详细 Log 信息可下载：[ngc_pytorch_resnet50_v1.5.tar](http://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/NVIDIA/Pytorch/ngc_pytorch_resnet50_v1.5.tar)。
+

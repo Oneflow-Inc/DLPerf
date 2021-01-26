@@ -1,4 +1,4 @@
-# 【DLPerf】PaddlePaddle - ResNet50V1.5测评
+【DLPerf】PaddlePaddle - ResNet50V1.5测评
 
 # Overview
 
@@ -48,10 +48,30 @@ cd models/PaddleCV/image_classification
 
 将本页面scripts文件夹中的脚本全部放入：`models/PaddleCV/image_classification/`路径下。
 
-## 框架安装
+## 依赖安装
+
+### 框架
 
 ```shell
 python3 -m pip install paddlepaddle-gpu==1.8.3.post107 -i https://mirror.baidu.com/pypi/simple
+```
+
+
+### DALI
+
+1.本测试使用 conda 环境， 进入 paddle 的 conda 用例， 下载 DALI_extra 源码
+
+
+```
+conda activate paddle
+git clone https://github.com/NVIDIA/DALI_extra.git
+```
+
+
+2.使用 conda 环境内的 python 安装 nightly DALI
+
+```
+python3 -m pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/nightly nvidia-dali-nightly-cuda100 
 ```
 
 ## NCCL
@@ -67,7 +87,7 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 
 ## 数据集
 
-本次训练使用了ImageNet2012的一个子集(共651468张图片)，数据集制作以及格式参照[paddle官方说明](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87)。
+本次训练使用了ImageNet2012的一个子集(共651468张图片)，数据集制作以及格式参照[paddle官方制作说明](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#数据准备)
 
 
 # Training
@@ -92,7 +112,7 @@ bash run_single_node.sh
 
 对单机1卡、4卡、8卡分别做5组测试，默认测试fp32精度，batch_size=128。
 
-### 混合精度
+### 混合精度&DALI
 
 可以通过参数指定fp16及batch_size：
 
@@ -101,6 +121,8 @@ bash run_single_node.sh 128 fp16
 ```
 
 也可以自行指定精度以及batch_size：`bash run_single_node.sh 64 fp16`,`bash run_single_node.sh 32 fp32`
+
+默认不开DALI，如果需要用DALI，可在脚本single_node_train.sh中将设置变量：`USE_DALI=true`
 
 
 
@@ -116,7 +138,7 @@ bash run_two_node.sh
 
 NODE2节点`models/PaddleCV/image_classification/`目录下，修改run_two_node.sh脚本中的`CURRENT_NODE=$NODE2`，再执行`bash run_two_node.sh`，即可运行2机16卡的训练（同样默认测试5组，测试fp32精度，batch_size=128）。
 
-### 混合精度
+### 混合精度&DALI
 
 可以通过参数指定fp16及batch_size：
 
@@ -124,7 +146,7 @@ NODE2节点`models/PaddleCV/image_classification/`目录下，修改run_two_node
 bash run_two_node.sh 256  fp16
 ```
 
-
+默认不开DALI，如果需要用DALI，可在脚本multi_node_train.sh中将设置变量：`USE_DALI=true`
 
 ## 4机32卡
 
@@ -136,7 +158,7 @@ bash run_multi_node.sh
 
 以运行4机32卡的训练，默认测试5组（fp32精度，batch_size=128）。
 
-### 混合精度
+### 混合精度&DALI
 
 可以通过参数指定fp16及batch_size：
 
@@ -144,7 +166,7 @@ bash run_multi_node.sh
 bash run_multi_node.sh 256 fp16
 ```
 
-
+默认不开DALI，如果需要用DALI，可在脚本multi_node_train.sh中将设置变量：`USE_DALI=true`
 
 # Result
 
@@ -278,12 +300,40 @@ README展示的是extract_paddle_logs.py的计算结果。
 | 2        | 16      | 6358.43   | 6.15    |
 | 4        | 32      | 10633.22  | 10.2    |
 
-- 注：本测试使用了表现较优的reader_thread参数(单机1卡和8卡设为8；4卡设为12；多机均设为8)，但由于未成功安装dali及paddle-dali插件，故多卡/多机的加速比仍然较差，附加dali后的数据可参考：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+### batch size = 224 &  without xla & without dynamic_loss_scaling
+
+without dynamic_loss_scaling即在测试中设置脚本(single_node_train.sh、multi_node_train.sh)参数：--use_dynamic_loss_scaling=false；开启动态loss scaling通常是为了解决fp16混合精度训练下的数据溢出问题，有助于模型收敛到正常精度，不过会略微影响训练速度。
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1001.23   | 1       |
+| 1        | 4       | 2499.34   | 2.5     |
+| 1        | 8       | 2563.44   | 2.56    |
+| 2        | 16      | 5165.41   | 5.16    |
+| 4        | 32      | 9573.03   | 9.56    |
+
+
+### batch size = 196 & with dali & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 887.17    | 1       |
+| 1        | 4       | 3598.0    | 4.06    |
+| 1        | 8       | 6862.17   | 7.73    |
+| 2        | 16      | 6018.46   | 6.78    |
+| 4        | 32      | 11617.57  | 13.1    |
+
+注：
+
+- 本次评测最大batch size达不到Paddle官方的256，因为Paddle官方使用的是32GB显存的Tesla V100，而我们是16GB，故使用batch_size=256会OOM（OUT OF MEMORY）
+- 本次测评得到多机加速比较低，可能是由于Paddle官方提供的脚本和配置并不是最优的，由于其没有提供原始测评时的容器镜像，故我们也无法做到对齐，测评得到的数据和Paddle官方存在较大差距。官方数据：[Paddle官方fp16+dali测试结果](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification#%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83)
+
 
 
 
 ## 完整日志
 
 - [resnet50-fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/resnet50/resnet50_fp32.zip)
-
 - [resnet50-fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/resnet50/resnet50_fp16.zip)
+- [resnet50-fp16-dali.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/PaddlePaddle/resnet50/resnet50-fp16-dali.zip)
+

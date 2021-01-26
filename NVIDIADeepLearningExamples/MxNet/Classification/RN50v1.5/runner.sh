@@ -39,7 +39,7 @@ echo ${node_ip}
 CMD=""
 case $PRECISION in
     "float32") CMD+="--dtype float32 --input-layout NHWC --fuse-bn-relu 0 --fuse-bn-add-relu 0 ";;
-    "float16") CMD+="--dtype float16 --fuse-bn-relu 1 --fuse-bn-add-relu 1 \
+    "float16") CMD+="--dtype float16 --amp --fuse-bn-relu 1 --fuse-bn-add-relu 1 \
                   --input-layout NCHW --conv-layout NHWC --batchnorm-layout NHWC \
                   --pooling-layout NHWC ";;
 esac

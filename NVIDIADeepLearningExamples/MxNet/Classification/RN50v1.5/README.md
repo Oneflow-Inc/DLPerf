@@ -86,13 +86,12 @@
   # 启动容器
   docker run -it \
   --shm-size=16g --ulimit memlock=-1 --privileged --net=host \
-  --cap-add=IPC_LOCK --device=/dev/infiniband \
   --name mxnet_dlperf \
   -v /home/leinao/DLPerf/dataset/mxnet:/data/imagenet/train-val-recordio-passthrough \
   -v /home/leinao/DLPerf/:/DLPerf/ \
   nvidia_rn50_mx:20.03
   ```
-
+  
 - #### SSH 免密
 
   单机测试下无需配置，但测试 2 机、4 机等多机情况下，则需要配置 docker 容器间的 ssh 免密登录，保证MXNet 的 mpi 分布式脚本运行时可以在单机上与其他节点互联。
@@ -303,7 +302,19 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 
 ### ResNet50 v1.5 FP16
 
-#### batch_size = 128 & without xla
+#### batch_size = 256 & with amp & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 1281.83   | 1       |
+| 1        | 4       | 4811.72   | 3.75    |
+| 1        | 8       | 9241.68   | 7.21    |
+| 2        | 16      | 13348.68  | 10.41   |
+| 4        | 32      | 27558.28  | 21.50   |
+
+#### batch_size = 256 &  without amp & without xla
+
+without amp即去掉runner.sh第42行的--amp参数，去掉后即将不会开启动态loss scaling
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
@@ -312,6 +323,8 @@ extract_mxnet_logs_time.py根据batch size和120个iter中，排除前20iter，�
 | 1        | 8       | 9621.31   | 6.9     |
 | 2        | 16      | 16219.03  | 11.64   |
 | 4        | 32      | 30713.68  | 22.03   |
+
+
 
 NVIDIA的 MXNet 官方测评结果详见 [ResNet50 v1.5 For MXNet results](https://github.com/NVIDIA/DeepLearningExamples/tree/e470c2150abf4179f873cabad23945bbc920cc5f/MxNet/Classification/RN50v1.5#training-performance-nvidia-dgx-1-8x-v100-16g)
 
