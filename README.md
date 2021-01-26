@@ -11,17 +11,12 @@ DLPerf measures how fast deep learning frameworks can train DNN models, so both 
 Multiple deep learning frameworks are evaluated in this repository, they are:
 
 1. OneFlow
-
 2. TensorFlow 1.x and 2.x
-
 3. PyTorch
-
 4. MXNet
-
 5. PaddlePaddle
 
-
-More and more frameworks will be included in the future, such as  MegEngine.
+More frameworks will be included in the future, such as  MindSpore, MegEngine, etc.
 
 ### Evaluated Deep Neural Network models
 
@@ -37,7 +32,7 @@ The first type is classical deep neural network models that used to evaluate the
 1. **ResNet-50 v1.5**
 2. **BERT-Base**
 
-The secode type is that some models use special technologies or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed、[HugeCTR](https://github.com/NVIDIA/HugeCTR)（Designed for CTR estimation training） based on tensorflow modified by NVIDIA.
+The secode type is that some models use special technologies or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed、[HugeCTR](https://github.com/NVIDIA/HugeCTR)（Designed for CTR estimation training and implemented by NVIDIA).
 
 In general, there are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
 
