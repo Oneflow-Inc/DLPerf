@@ -4,7 +4,7 @@
 
 本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出单机～多机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试覆盖了FP32 精度下的单机1~8卡，后续将持续维护，增加更多方式的测评。
+目前，该测试覆盖了FP32、FP16混合精度下的单机1~8卡，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -124,8 +124,6 @@ bash run_test.sh
 
 针对1机1~8卡， 进行测试，并将 log 信息保存在logs目录下。
 
-
-
 **默认测试的网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
 
 ```shell
@@ -133,6 +131,8 @@ bash run_test.sh
 bash run_test.sh r100  96  0.5
 # 测试resnet50，batch size=64，sample_ratio=1.0
 bash run_test.sh r50   64  1.0
+# 测试resnet100，batch size=64，sample_ratio=0.1 fp16混合精度
+bash run_test.sh r100   64  0.1 fp16
 ```
 
 
@@ -262,13 +262,39 @@ Saving result to ./result/bz64_result.json
 | 1        | 4       | 852.4     | 3.67    |
 | 1        | 8       | 1644.42   | 7.07    |
 
+### resnet100  FP16
 
+#### batch size = 128 & sample ratio = 1.0
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 468.54    | 1       |
+| 1        | 2       | 865.76    | 1.85    |
+| 1        | 4       | 1698.29   | 3.62    |
+| 1        | 8       | 3416.74   | 7.29    |
+
+#### batch size = 128 & sample ratio = 0.1
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 478.19    | 1       |
+| 1        | 2       | 903.03    | 1.89    |
+| 1        | 4       | 1701.81   | 3.56    |
+| 1        | 8       | 3347.15   | 7.0     |
+
+#### batch size = 208 & sample ratio = 0.1
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 481.08    | 1       |
+| 1        | 2       | 824.91    | 1.71    |
+| 1        | 4       | 1335.54   | 2.78    |
+| 1        | 8       | 1990.15   | 4.14    |
 
 
 ### 日志下载
 
 详细 Log 信息可点击下载：
 
-- [arcface_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/logs.zip)
-
-
+- [partial_fc_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32.zip)
+- [partial_fc_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp16.zip)
