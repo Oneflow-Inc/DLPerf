@@ -31,9 +31,9 @@ else
 fi
 
 if [ "$DTYPE" = "fp16" ] ; then
-    sed -i "s/\(config.fp16  = \)\S*/config.fp16  = True/" default.py
+    sed -i "s/\(config.fp16 = \)\S*/config.fp16 = True/" default.py
 else
-    sed -i "s/\(config.fp16  = \)\S*/config.fp16  = False/" default.py
+    sed -i "s/\(config.fp16 = \)\S*/config.fp16 = False/" default.py
 fi
 sed -i "s/\(config.batch_size = \)\S*/config.batch_size = ${BZ_PER_DEVICE}/" default.py
 sed -i "s/\(config.max_update = \)\S*/config.max_update = ${ITER_NUM}/" default.py
@@ -46,8 +46,6 @@ mkdir -p $log_folder
 log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 
 # use `which python` to get the absolute path of your python interpreter
-#
-
 # dataset: emore webface glint360k_8GPU ; loss : arcface; cosface
 dataset=emore
 loss=arcface
@@ -59,3 +57,4 @@ ${FOLDER}/train_memory.py \
     --dataset ${dataset}  \
     --loss ${loss} \
     --network ${MODEL}  2>&1 | tee ${log_file}
+
