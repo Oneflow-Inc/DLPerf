@@ -114,7 +114,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 | n1g1 | 65,536 | 16 | 2,322,444 | 67.841 | 5,467 |
 | n1g1 | 131,072 | 16 | 2,322,444 | 135.111 | 9,101 |
 
-![latency](./imgs/1node_1device_batchsize_double.png)
+![latency](./imgs/hugectr_1node_1device_batchsize_double.png)
 
 #### 1 node 8 devices
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
@@ -131,7 +131,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 | n1g8 | 262,144 | 16 | 2,322,444 | 68.737 | 6,221 |
 | n1g8 | 524,288 | 16 | 2,322,444 | 118.361 | 10,219 |
 
-![latency](./imgs/1node_8device_batchsize_double.png)
+![latency](./imgs/hugectr_1node_8device_batchsize_double.png)
 
 #### 4 nodes 32 devices
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
@@ -143,7 +143,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 | n4g8 | 262,144 | 32 | 2,322,444 | 138.886 | 6,711 |
 | n4g8 | 524,288 | 32 | 2,322,444 | 270.68 | 11,055 |
 
-![latency](./imgs/4node_32device_batchsize_double.png)
+![latency](./imgs/hugectr_4node_32device_batchsize_double.png)
 
 ### vocab size X 2 tests
 All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected Units.
@@ -158,7 +158,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 | n1g1 | 16,384 | 16 | 25,600,000 | 82.853 | 9,825 |
 | n1g1 | 16,384 | 16 | 51,200,000 | 104.458 | 16,027 |
 
-![latency](./imgs/1node_1device_vocabsize_double.png)
+![latency](./imgs/hugectr_1node_1device_vocabsize_double.png)
 
 #### 1 node 8 devices
 
@@ -170,7 +170,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 | n1g8 | 16,384 | 16 | 25,600,000 | 34.618 | 8,447 |
 | n1g8 | 16,384 | 16 | 51,200,000 | 57.106 | 14,649 |
 
-![latency](./imgs/1node_8device_vocabsize_double.png)
+![latency](./imgs/hugectr_1node_8device_vocabsize_double.png)
 
 #### 4 node 32 devices
 | gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
@@ -180,7 +180,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 | n4g8 | 16,384 | 32 | 12,800,000 | 36.214 | 7,299 |
 | n4g8 | 16,384 | 32 | 25,600,000 | 57.718 | 12,745 |
 
-![latency](./imgs/4node_32device_vocabsize_double.png)
+![latency](./imgs/hugectr_4node_32device_vocabsize_double.png)
 
 ### fixed batch size per device tests
 All fix batch size per device tests were performed with 7 x 1024 Hidden Fully-connected Units.
@@ -194,7 +194,7 @@ All fix batch size per device tests were performed with 7 x 1024 Hidden Fully-co
 | n2g8 | 262,144 | 32 | 2,322,444 | 155.461 | 8,527 |
 | n4g8 | 524,288 | 32 | 2,322,444 | 270.68 | 12,417 |
 
-![latency](./imgs/fixed_batchsize_per_device.png)
+![latency](./imgs/hugectr_fixed_batchsize_per_device.png)
 
 ### fixed total batch size tests
 All fixed total batch size tests were performed with 7 x 1024 Hidden Fully-connected Units.
@@ -208,5 +208,5 @@ All fixed total batch size tests were performed with 7 x 1024 Hidden Fully-conne
 | n2g8 | 16,384 | 32 | 2,322,444 | 22.34 | 2,817 |
 | n4g8 | 16,384 | 32 | 2,322,444 | 21.093 | 2,751 |
 
-![latency](./imgs/fixed_total_batchsize.png)
+![latency](./imgs/hugectr_fixed_total_batchsize.png)
 

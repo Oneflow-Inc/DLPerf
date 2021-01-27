@@ -111,7 +111,7 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n1g1|262144|2322444|16|2|224.603|6,393|
 |n1g1|524288|2322444|16|2|455.137|11,569|
 
-![latency](./imgs/1node1Device_latency_memory.png)
+![latency](./imgs/of_1node1Device_latency_memory.png)
 
 #### 1 node 8 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -130,7 +130,7 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n1g8|1048576|2322444|16|2|197.899|5,117|
 |n1g8|2097152|2322444|16|2|395.698|10,007|
 
-![latency](./imgs/1node8Device_latency_memory.png)
+![latency](./imgs/of_1node8Device_latency_memory.png)
 
 #### 4 nodes 32 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -145,7 +145,7 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n4g8|2097152|2322444|32|2|485.079|5,617|
 |n4g8|4194304|2322444|32|2|955.242|10,291|
 
-![latency](./imgs/4node32Device_latency_memory.png)
+![latency](./imgs/of_4node32Device_latency_memory.png)
 
 ### vocab size X 2 tests
 #### 1 node 1 device  
@@ -157,7 +157,7 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n1g1|16384|25600000|16|7|56.841|6,913|
 |n1g1|16384|51200000|16|7|56.805|11,891|
 
-![latency](./imgs/1node1Device_vocabsize_latency_memory.png)
+![latency](./imgs/of_1node1Device_vocabsize_latency_memory.png)
 
 #### 1 node 8 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -171,7 +171,7 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n1g8|16384|204800000|16|7|13.785|6,435|
 |n1g8|16384|409600000|16|7|13.845|11,423|
 
-![latency](./imgs/1node8Device_vocabsize_latency_memory.png)
+![latency](./imgs/of_1node8Device_vocabsize_latency_memory.png)
 
 #### 4 nodes 32 devices
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -186,7 +186,7 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n4g8|16384|409600000|32|7|22.433|5,915|
 |n4g8|16384|819200000|32|7|22.407|10,745|
 
-![latency](./imgs/4node32Device_vocabsize_latency_memory.png)
+![latency](./imgs/of_4node32Device_vocabsize_latency_memory.png)
 
 ### fixed batch size per device tests
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -198,7 +198,7 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n2g8|262144|2322444|32|7|135.789|2,449|
 |n4g8|524288|2322444|32|7|182.648|2,605|
 
-![latency](./imgs/fixed_batchsize_per_device.png)
+![latency](./imgs/of_fixed_batchsize_per_device.png)
 
 ### fixed total batch size tests
 |gpu|batch_size|deep_vocab_size|deep_embedding_vec_size|hidden_units_num|latency(ms)|memory_usage(MB)|
@@ -210,4 +210,4 @@ All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyun
 |n2g8|16384|2322444|32|7|20.544|1,157|
 |n4g8|16384|2322444|32|7|22.420|1,105|
 
-![latency](./imgs/fixed_total_batchsize.png)
+![latency](./imgs/of_fixed_total_batchsize.png)
