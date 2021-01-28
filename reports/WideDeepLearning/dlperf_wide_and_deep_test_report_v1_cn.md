@@ -7,7 +7,7 @@ Wide & Deep 是点击率预估领域非常重要的模型，被广泛应用于�
 
 ## 测试环境
 
-所有的测试均在4台配置了8张Tesla V100-SXM2-16GB GPU显卡上进行，每台机器具体的硬件和软件配置描述如下：
+所有的测试均在4台配置了8张 Tesla V100-SXM2-16GB GPU 的显卡上进行，每台机器具体的软硬件配置描述如下：
 
 - Tesla V100-SXM2-16GB x 8
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
@@ -65,16 +65,16 @@ Legend:
 
 ### Batch Size 倍增测试
 
-持续倍增Batch Size直到显存不足.
+持续倍增 Batch Size 直到显存不足.
 
 - 设备配置: 单机单卡, 单机8卡, 四机32卡
 - Deep部分词汇量: 2322444
 - deep_embedding_vec_size（低维稠密向量维度）: 四机32卡取32, 其它情况取16
 - hidden unit（隐层单元数）: 7
 
-### 固定总Batch Size测试
+### 固定总 Batch Size 测试
 
-在总Batch Size固定的情况下测试节点数和设备数不同的情况.
+在总 Batch Size 固定的情况下测试节点数和设备数不同的情况.
 
 - 设备配置: 单机单卡, 单机8卡, 四机32卡
 - Batch Size: 16384
@@ -82,9 +82,9 @@ Legend:
 - deep_embedding_vec_size（低维稠密向量维度）: 四机32卡取32, 其它情况取16
 - hidden unit（隐层单元数）: 7
 
-### 固定单卡Batch Size测试
+### 固定单卡 Batch Size 测试
 
-在单卡Batch Size固定的情况下测试节点数和设备数不同的情况.
+在单卡 Batch Size 固定的情况下测试节点数和设备数不同的情况.
 
 - 设备配置: 单机单卡, 单机8卡, 四机32卡
 - 每个GPU设备的Batch Size: 16384
@@ -94,18 +94,18 @@ Legend:
 
 ## 测试结果
 
-以下是**Vocab Size(词表大小)倍增测试**的总结。其它类型的测试结果，包含**Batch Size倍增测试**，**固定总Batch Size测试**。请参考[OneFlow/ClickThroughRate/WideDeepLearning/reports](../OneFlow/ClickThroughRate/WideDeepLearning)和[HugeCTR/reports](../HugeCTR)获取更多细节。
+以下是 **Vocab Size (词表大小)倍增测试**的总结。其它类型的测试结果，包含 **Batch Size 倍增测试**，**固定总 Batch Size 测试**。请参考 [OneFlow/ClickThroughRate/WideDeepLearning/reports](../OneFlow/ClickThroughRate/WideDeepLearning) 和 [HugeCTR/reports](../HugeCTR) 获取更多细节。
 
 
-**词汇量倍增测试**分别在**单机单卡**, **单机8卡**, **四机32卡**条件下进行测试。OneFlow和HugeCTR的**Latency per Iteration**和**Memory Usage**被记录下来。
+**词汇量倍增测试**分别在**单机单卡**, **单机8卡**, **四机32卡**条件下进行测试。OneFlow 和 HugeCTR 的**Latency per Iteration** 和 **Memory Usage** 被记录下来。
 
-简要来说，**Latency per Iteration**越小意味着性能更好，**Memory Usage**越小意味着显存管理能力越强。
+简要来说，**Latency per Iteration** 越小意味着性能更好，**Memory Usage** 越小意味着显存管理能力越强。
 
-我们将看到，当词表大小(vocab size)加倍递增时，OneFlow的**Latency per Iteration**指标基本不发生改变这意味着几乎没有性能损失。
+我们将看到，当词表大小(`vocab_size`)加倍递增时，OneFlow 的 **Latency per Iteration** 指标基本不发生改变这意味着几乎没有性能损失。
 
-我们还将看到在所有的测试样例中，OneFlow的 **Memory Usage**都比HugeCTR小。
+我们还将看到在所有的测试样例中，OneFlow的 **Memory Usage** 都比 HugeCTR 小。
 
-### 单机单卡, batch_size = 16384, deep_embedding_vec_size（低维稠密向量维度） = 16, hidden_units_num（隐层单元数） = 7
+### 单机单卡, batch_size = 16384, deep_embedding_vec_size = 16, hidden_units_num = 7
 
 | deep_vocab_size | OneFlow Latency per Iteration / ms | HugeCTR Latency per Iteration / ms | OneFlow Mem Usage / MB | HugeCTR Mem Usage / MB | Mem Usage Ratio |
 | --------------- | ---------------------------------- | ---------------------------------- | ---------------------- | ---------------------- |-----|
@@ -119,7 +119,7 @@ Legend:
 
 ![](./imgs/wdl_vecx2_1n1g_mem.png)
 
-### 单机8卡, batch_size = 16384, deep_embedding_vec_size（低维稠密向量维度） = 16, hidden_units_num（隐层单元数） = 7
+### 单机8卡, batch_size = 16384, deep_embedding_vec_size = 16, hidden_units_num = 7
 
 | deep_vocab_size | OneFlow Latency per Iteration / ms | HugeCTR Latency per Iteration / ms | OneFlow Mem Usage / MB | HugeCTR Mem Usage / MB | Mem Usage Ratio |
 | --------------- | ---------------------------------- | ---------------------------------- | ---------------------- | ---------------------- |-----|
@@ -136,7 +136,7 @@ Legend:
 
 ![](./imgs/wdl_vecx2_1n8g_mem.png)
 
-### 4 node 32 GPUs, batch_size = 16384, deep_embedding_vec_size（低维稠密向量维度） = 32, hidden_units_num（隐层单元数） = 7
+### 4 node 32 GPUs, batch_size = 16384, deep_embedding_vec_size = 32, hidden_units_num = 7
 
 | deep_vocab_size | OneFlow Latency per Iteration / ms | HugeCTR Latency per Iteration / ms | OneFlow Mem Usage / MB | HugeCTR Mem Usage / MB | Mem Usage Ratio |
 | --------------- | ---------------------------------- | ---------------------------------- | ---------------------- | ---------------------- |-----|
