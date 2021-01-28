@@ -159,5 +159,7 @@ Legend:
 以上这一系列的测试表明：
 
 1. 随着 `vocab_size` 的增大，hugeCTR 的速度逐步变慢 latency 明显升高，而 OneFlow 则始终保持稳定；
+
 2. 在所有 `vocab_size` 组的测试中，OneFlow 的 GPU 显存占用明显低于 hugeCTR，意味着 OneFlow 对显存的利用和管理能力更强；
+
 3. 相同条件下 OneFlow 支持更大规模的 `batch_size` 和 `vocab_size` 。

@@ -1,5 +1,10 @@
 # DLPerf Wide & Deep Test Report V1.0
 
+## Introduction
+Wide & Deep is a very important model of the CTR(Click Through Rate) field, which is widely used in recommendation system. The model of Wide & Deep is very large, meanwhile, has to deal with huge data throughput. Therefore, Wide & Deep has high requirements for deep learning framework. For a long time, the Wide & Deep model implemented by [HugeCTR](https://github.com/NVIDIA/HugeCTR) has the best performace.
+
+
+A series of tests are designed in this report aims to compare the performance and limit of the frameworks through multiple factors with the same hardware conditions. The factors include: vocabulary size, batch size, number of GPUS, etc. The test measurements are latency per iteration and memory usage. In short, smaller latency means better performance and smaller memory usage means better memory management capability which means the model can support a larger `vocab_size` and `batch_size` under the same hardware conditions.
 
 ## Test Environment
 
@@ -146,3 +151,13 @@ We will also see that the **Memory Usage** of OneFlow is less than HugeCTR in al
 ![](./imgs/wdl_vecx2_4n8g_latency.png)
 
 ![](./imgs/wdl_vecx2_4n8g_mem.png)
+
+## Test Conclusion
+
+The test cases above shows that:
+
+1. With the increasing of `vocab_size`, hugeCTR slows down with obvious higher latency, while the performace of OneFlow keeps stable;
+
+2. In all the above tests, OneFlow has a lower memory usage of GPU than hugeCTR which means OneFlow has a better ability on memory managing.
+
+3. OneFlow support lager `vocab_size` and `batch_size` at the same hardware conditions.
