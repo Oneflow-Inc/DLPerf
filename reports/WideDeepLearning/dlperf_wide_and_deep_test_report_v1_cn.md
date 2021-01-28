@@ -1,5 +1,9 @@
 # Wide & Deep 在深度学习框架上的性能测试报告V1.0
 
+## 简介
+Wide & Deep 是点击率预估领域非常重要的模型，被广泛应用于推荐系统。Wide & Deep 的模型非常大，并且伴随巨大的数据吞吐量，因此对深度学习框架要求很高。在很长一段时间内，在 [HugeCTR](https://github.com/NVIDIA/HugeCTR) 框架下实现的 Wide & Deep 模型性能最优。
+
+本报告中设计了一系列对比测试，旨在相同硬件条件下通过多个维度对比框架的表现和性能边界。其中，测试的维度包含词表数(`vocab_size`)、`batch_size`、GPU 数量等；框架表现的评测指标为每个迭代(iter)的耗时(latency)、GPU 显存占用大小。简单来说，latency 越小意味着性能更好，GPU 显存占用越小意味着框架对显存利用率更高、管理能力越强，且同样硬件条件下能支持更大词表数和 `batch_size` 的模型训练。
 
 ## 测试环境
 
@@ -46,7 +50,7 @@ Legend:
 | 框架 | 版本 | Docker 来源 |模型来源|
 | --------- | ------- | ----------- | ----------- |
 |[OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0)|0.2.0|             |[OneFolow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/ClickThroughRate/WideDeepLearning)|
-|[HugeCTR](https://github.com/NVIDIA/HugeCTR)| 2.2 ||[samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl)|
+|[HugeCTR](https://github.com/NVIDIA/HugeCTR)| 2.2 |nvidia/cuda:11.0-cudnn8-devel-ubuntu18.04|[samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl)|
 
 ## Test Options
 
@@ -149,3 +153,11 @@ Legend:
 ![](./imgs/wdl_vecx2_4n8g_latency.png)
 
 ![](./imgs/wdl_vecx2_4n8g_mem.png)
+
+## 测试结论
+
+以上这一系列的测试表明：
+
+1. 随着 `vocab_size` 的增大，hugeCTR 的速度逐步变慢 latency 明显升高，而 OneFlow 则始终保持稳定；
+2. 在所有 `vocab_size` 组的测试中，OneFlow 的 GPU 显存占用明显低于 hugeCTR，意味着 OneFlow 对显存的利用和管理能力更强；
+3. 相同条件下 OneFlow 支持更大规模的 `batch_size` 和 `vocab_size` 。
