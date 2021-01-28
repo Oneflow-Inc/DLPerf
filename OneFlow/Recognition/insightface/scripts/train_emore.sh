@@ -1,0 +1,68 @@
+export ONEFLOW_DEBUG_MODE=""
+
+workspace=${1:-""}
+network=${2:-"r100"}
+dataset=${3:-"emore"}
+loss=${4:-"arcface"}
+num_nodes=${5:-1}
+batch_size_per_device=${6:-64}
+train_unit=${7:-"batch"}
+train_iter=${8:-15} 
+gpu_num_per_node=${9:-8}
+precision=${10:-fp32}
+model_parallel=${11:-0}
+partial_fc=${12:-1}
+test_times=${13:-1}
+
+MODEL_SAVE_DIR=${precision}_b${batch_size_per_device}_oneflow_model_parallel_${model_parallel}_partial_fc_${partial_fc}/$network/${num_nodes}n${gpu_num_per_node}g
+LOG_DIR=$MODEL_SAVE_DIR
+
+if [ $gpu_num_per_node -gt 1 ]; then
+    data_part_num=16
+else
+    data_part_num=1
+fi
+
+PREC=""
+if [ "$precision" = "fp16" ] ; then
+   PREC=" --use_fp16=True"
+elif [ "$precision" = "fp32" ] ; then
+   PREC=" --use_fp16=False"
+else
+   echo "Unknown <precision> argument"
+   exit -2
+fi
+
+LOG_FILE=${LOG_DIR}/${network}_b${batch_size_per_device}_${precision}_$test_times.log
+
+rm -r $MODEL_SAVE_DIR
+mkdir -p $MODEL_SAVE_DIR
+
+#time=$(date "+%Y-%m-%d %H:%M:%S")
+#echo $time
+
+CMD="$workspace/insightface_train.py"
+CMD+=" --network=${network}"
+CMD+=" --dataset=${dataset}"
+CMD+=" --loss=${loss}"
+CMD+=" --train_batch_size=$(expr $num_nodes '*' $gpu_num_per_node '*' $batch_size_per_device)"
+CMD+=" --train_unit=${train_unit}"
+CMD+=" --train_iter=${train_iter}"
+CMD+=" --device_num_per_node=${gpu_num_per_node}"
+CMD+=" --model_parallel=${model_parallel}"
+CMD+=" --partial_fc=${partial_fc}"
+CMD+=" --log_dir=${LOG_DIR}"
+CMD+=" $PREC"
+
+CMD="python3 $CMD "
+set -x
+if [ -z "$LOG_FILE" ] ; then
+   $CMD
+else
+   (
+     $CMD
+   ) |& tee $LOG_FILE
+
+fi
+set +x
+echo "Writing log to ${LOG_FILE}"
