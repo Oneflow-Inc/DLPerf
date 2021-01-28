@@ -97,7 +97,7 @@ Legend:
 
 简要来说，**Latency per Iteration**越小意味着性能更好，**Memory Usage**越小意味着显存管理能力越强。
 
-我们将看到当我们不断倍增vocab Size(词表大小)时，OneFlow的**Latency per Iteration**指标基本不发生改变这意味着几乎没有性能损失。
+我们将看到，当词表大小(vocab size)加倍递增时，OneFlow的**Latency per Iteration**指标基本不发生改变这意味着几乎没有性能损失。
 
 我们还将看到在所有的测试样例中，OneFlow的 **Memory Usage**都比HugeCTR小。
 
