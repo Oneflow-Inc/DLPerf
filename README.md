@@ -149,3 +149,16 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 ## Other Test Results(special cases)
 
 This section maintains the results of the special case models.
+
+### Latest Test Report
+
+on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. 
+
+- [WideDeepLeaning Benchmark Test Report V1.0](./reports/WideDeepLeaning/dlperf_wide_and_deep_test_report_v1.md)
+
+- [WideDeepLeaning 性能评测报告中文版 V1.0](./reports/WideDeepLeaning/dlperf_wide_and_deep_test_report_v1_cn.md)
+
+| Framework                                                    | Version | Source                                                       |
+| ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | 0.2.0   | [OneFolow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/ClickThroughRate/WideDeepLearning) |
+| [HugeCTR](https://github.com/NVIDIA/HugeCTR)                 | 2.2     | [samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl) |
