@@ -94,7 +94,7 @@ Legend:
 
 ## 测试结果
 
-以下是 **Vocab Size (词表大小)倍增测试**的总结。其它类型的测试结果，包含 **Batch Size 倍增测试**，**固定总 Batch Size 测试**。请参考 [OneFlow/ClickThroughRate/WideDeepLearning/reports](../OneFlow/ClickThroughRate/WideDeepLearning) 和 [HugeCTR/reports](../HugeCTR) 获取更多细节。
+以下是 **Vocab Size (词表大小)倍增测试**的总结。其它类型的测试结果，包含 **Batch Size 倍增测试**，**固定总 Batch Size 测试**。请参考 [OneFlow/ClickThroughRate/WideDeepLearning/](../../OneFlow/ClickThroughRate/WideDeepLearning) 和 [HugeCTR/](../../HugeCTR) 获取更多细节。
 
 
 **词汇量倍增测试**分别在**单机单卡**, **单机8卡**, **四机32卡**条件下进行测试。OneFlow 和 HugeCTR 的**Latency per Iteration** 和 **Memory Usage** 被记录下来。
