@@ -7,14 +7,39 @@
 本测试基于 OneFlow [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/master) 提供与 [deepinsight](https://github.com/deepinsight)/**[insightface](https://github.com/deepinsight/InsightFace)** 仓库中 MXNet 等价实现的 InsightFace 网络，进行单机单卡、单机多卡的速度评测，评判框架在分布式训练情况下的横向拓展能力。
 
 
-目前，该测试覆盖 FP32 及混合精度，后续将持续维护，增加使用其他优化方式的测评。
+目前，该测试覆盖 FP32 精度，后续将持续维护，增加使用其他优化方式的测评。
 
 
 ## 内容目录 Table Of Content
 
 
 
-
+- [OneFlow InsightFace 测评](#oneflow-insightface-测评)
+  - [概述 Overview](#概述-overview)
+  - [内容目录 Table Of Content](#内容目录-table-of-content)
+  - [环境 Environment](#环境-environment)
+    - [系统](#系统)
+      - [Feature support matrix](#feature-support-matrix)
+  - [快速开始 Quick Start](#快速开始-quick-start)
+    - [1. 前期准备](#1-前期准备)
+    - [2. 运行测试](#2-运行测试)
+      - [](#)
+    - [3. 数据处理](#3-数据处理)
+  - [性能结果 Performance](#性能结果-performance)
+    - [Face Emore & R100 & FP32](#face-emore--r100--fp32)
+      - [Data Parallelism](#data-parallelism)
+      - [Model Parallelism](#model-parallelism)
+      - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01)
+    - [](#-1)
+    - [Glint360k & R100 & FP32](#glint360k--r100--fp32)
+      - [Data Parallelism](#data-parallelism-1)
+      - [Model Parallelism](#model-parallelism-1)
+      - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01-1)
+    - [](#-2)
+    - [Face Emore & Y1 & FP32](#face-emore--y1--fp32)
+      - [Data Parallelism](#data-parallelism-2)
+      - [Model Parallelism](#model-parallelism-2)
+    - [](#-3)
 
 
 ## 环境 Environment
@@ -125,9 +150,60 @@ OneFlow 提供了加载 OFRecord 数据集的接口，使得我们只要指定�
 
 准备 Face Emore 和 Glint360k 的 OFReocord 数据集，可以选择根据 [加载与准备 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_make_ofdataset.html) 文档中 Python 脚本生成所有数据的完整 OFRecord + Spark Shuffle + Spark Partition 的方式，也可以选择只使用 Python脚本生成多块 OFRecord 的方式，用以进行 InsightFace 的测试。
 
-1. Python 脚本 + Spark Shuffle + Spark Partition
+1. Python 脚本直接生成
 
-运行 tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/blob/master/tools/dataset_convert/mx_recordio_2_ofrecord.py) 生成所有数据的完整 OFRecord（`part-0`），部署 Spark 环境后，输入 Spark 命令
+运行 tools/dataset_convert/mx_recordio_2_ofrecord_shuffled_npart.py
+
+```
+python tools/dataset_convert/mx_recordio_2_ofrecord_shuffled_npart.py  --data_dir /data/face_test/dataset/faces_emore  --output_filepath ofrecord/train --num_part 16
+```
+
+屏幕打印
+
+```
+Converting images: 5790000 of 5822653
+Converting images: 5800000 of 5822653
+Converting images: 5810000 of 5822653
+Converting images: 5820000 of 5822653
+```
+
+完成后，即可直接生成对应 `num_part` 数量的 OFRecord。以生成 16 个 part 为例：
+
+```
+$ tree ofrecord/test/
+ofrecord/test/
+|-- _SUCCESS
+|-- part-00000
+|-- part-00001
+|-- part-00002
+|-- part-00003
+|-- part-00004
+|-- part-00005
+|-- part-00006
+|-- part-00007
+|-- part-00008
+|-- part-00009
+|-- part-00010
+|-- part-00011
+|-- part-00012
+|-- part-00013
+|-- part-00014
+`-- part-00015
+
+0 directories, 17 files
+```
+
+
+
+2. Python 脚本 + Spark Shuffle + Spark Partition
+
+运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/blob/master/tools/dataset_convert/mx_recordio_2_ofrecord.py) 生成所有数据的完整 OFRecord（`part-0`）
+
+```
+python tools/dataset_convert/mx_recordio_2_ofrecord.py --data_dir /data/face_test/dataset/faces_emore  --output_filepath ofrecord/train 
+```
+
+安装部署 Spark 环境后，输入 Spark 命令
 
 ```scala
 //Spark 启动命令：
@@ -137,30 +213,6 @@ import org.oneflow.Spark.functions._
 Spark.read.chunk("data_path").shuffle().repartition(96).write.chunk("new_data_path")
 sc.formatFilenameAsOneflowStyle("new_data_path")
 ```
-
-
-
-2. Python 脚本直接生成
-
-运行 tools/dataset_convert/mx_recordio_2_ofrecord_shuffled_npart.py，屏幕打印
-
-```
-Converting images: 5790000 of 5822653
-Converting images: 5800000 of 5822653
-Converting images: 5810000 of 5822653
-Converting images: 5820000 of 5822653
-```
-
-完成后，即可直接生成对应 `num_part` 数量的 OFRecord。以生成一个 part 为例：
-
-```
-$ tree ofrecord/train
-ofrecord/train
--- part-00000
-0 directories, 1 file
-```
-
-
 
 - #### 网络对齐
 
@@ -287,9 +339,9 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 64                    | 244.01             | 1.00    |
-| 1        | 4                | 64                    | 923.03             | 3.78    |
-| 1        | 8                | 64                    | 1832.02            | 7.51    |
+| 1        | 1                | 64                    | 245.0              | 1.00    |
+| 1        | 4                | 64                    | 923.23             | 3.77    |
+| 1        | 8                | 64                    | 1836.8             | 7.5     |
 
 **batch_size = max**
 
@@ -307,7 +359,7 @@ Saving result to ./result/_result.json
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 245.29             | 1.00    |
 | 1        | 4                | 64                    | 938.83             | 3.83    |
-| 1        | 8                | 64                    | 1851.63            | 7.55    |
+| 1        | 8                | 64                    | 1854.15            | 7.55    |
 
 **batch_size = max**
 
@@ -325,7 +377,7 @@ Saving result to ./result/_result.json
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 247.97             | 1.00    |
 | 1        | 4                | 64                    | 946.54             | 3.82    |
-| 1        | 8                | 64                    | 1854.25            | 7.48    |
+| 1        | 8                | 64                    | 1864.31            | 7.48    |
 
 **batch_size=max**
 
@@ -335,62 +387,7 @@ Saving result to ./result/_result.json
 | 1        | 4                | 128                   | 983.23             | 3.82    |
 | 1        | 8                | 128                   | 1953.46            | 7.58    |
 
-### Face Emore & R100 & AMP 
-
-#### Data Parallelism
-
-**batch_size = 12x**
-
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 120                   |                    | 1.00    |
-| 1        | 4                | 128                   |                    |         |
-| 1        | 8                | 128                   |                    |         |
-
-**batch_size = max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 160                   | 462.28             | 1.00    |
-| 1        | 4                | 160                   | 1755.68            | 3.8     |
-| 1        | 8                | 160                   | 3492.97?           | 7.56    |
-
-#### Model Parallelism
-
-**batch_size = 128**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 427.87             | 1.00    |
-| 1        | 4                | 128                   | 1656.26            | 3.87    |
-| 1        | 8                | 128                   | 3296.66            | 7.7     |
-
-**batch_size = max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 160?                  |                    | 1.00    |
-| 1        | 4                |                       |                    |         |
-| 1        | 8                |                       |                    |         |
-
-#### Partial FC, sample_ratio=0.1
-
-**batch_size=128**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 454.47             | 1.00    |
-| 1        | 4                | 128                   | 1754.15            | 3.86    |
-| 1        | 8                | 128                   | 3470.19            | 7.64    |
-
-**batch_size=max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                |                       |                    | 1.00    |
-| 1        | 4                |                       |                    | 3.95    |
-| 1        | 8                |                       |                    |         |
+### 
 
 ### Glint360k & R100 & FP32 
 
@@ -401,17 +398,17 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 64                    |                    | 1.00    |
-| 1        | 4                | 64                    |                    |         |
-| 1        | 8                | 64                    |                    |         |
+| 1        | 1                | 64                    | 230.22             | 1.00    |
+| 1        | 4                | 64                    | 847.71             | 3.68    |
+| 1        | 8                | 64                    | 1688.62            | 7.33    |
 
 **batch_size = max**
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 115                   |                    | 1.00    |
-| 1        | 4                | 115                   |                    |         |
-| 1        | 8                | 115                   |                    |         |
+| 1        | 1                | 85                    | 229.94             | 1.00    |
+| 1        | 4                | 85                    | 856.61             | 3.73    |
+| 1        | 8                | 85                    | 1707.03            | 7.42    |
 
 #### Model Parallelism
 
@@ -419,17 +416,17 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 64                    |                    | 1.00    |
-| 1        | 4                | 64                    |                    |         |
-| 1        | 8                | 64                    |                    |         |
+| 1        | 1                | 64                    | 230.33             | 1.00    |
+| 1        | 4                | 64                    | 912.24             | 3.96    |
+| 1        | 8                | 64                    | 1808.27            | 7.85    |
 
 **batch_size = max**
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                |                       |                    | 1.00    |
-| 1        | 4                |                       |                    |         |
-| 1        | 8                |                       |                    |         |
+| 1        | 1                | 100                   | 231.86             | 1.00    |
+| 1        | 4                | 100                   | 925.85             | 3.99    |
+| 1        | 8                | 100                   | 1844.66            | 7.96    |
 
 #### Partial FC, sample_ratio=0.1
 
@@ -445,66 +442,11 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 115                   | 248.01             | 1.00    |
-| 1        | 4                | 115                   | 973.63             | 3.93    |
-| 1        | 8                | 115                   | 1933.88            | 7.8     |
+| 1        | 1                | 115                   | 250.89             | 1.00    |
+| 1        | 4                | 115                   | 969.75             | 3.87    |
+| 1        | 8                | 115                   | 1927.74            | 7.68    |
 
-### Glint360k & R100 & AMP
-
-#### Data Parallelism
-
-**batch_size = 64**
-
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   |                    | 1.00    |
-| 1        | 4                | 128                   |                    |         |
-| 1        | 8                | 128                   |                    |         |
-
-**batch_size = max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 115                   |                    | 1.00    |
-| 1        | 4                | 115                   |                    |         |
-| 1        | 8                | 115                   |                    |         |
-
-#### Model Parallelism
-
-**batch_size = 64**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 64                    | 367.29             | 1.00    |
-| 1        | 4                | 64                    | 1449.48            | 3.95    |
-| 1        | 8                | 64                    | 2887.65            | 7.86    |
-
-**batch_size = max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 367.29             | 1.00    |
-| 1        | 4                | 128                   | 1449.48            | 3.95    |
-| 1        | 8                | 128                   | 2887.65            | 7.86    |
-
-#### Partial FC, sample_ratio=0.1
-
-**batch_size=128**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 367.29             | 1.00    |
-| 1        | 4                | 128                   | 1449.48            | 3.95    |
-| 1        | 8                | 128                   | 2887.65            | 7.86    |
-
-**batch_size=max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                |                       |                    | 1.00    |
-| 1        | 4                |                       |                    |         |
-| 1        | 8                |                       |                    |         |
+### 
 
 ### Face Emore & Y1 & FP32
 
@@ -523,9 +465,9 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                |                       |                    | 1.00    |
-| 1        | 4                |                       |                    |         |
-| 1        | 8                |                       |                    |         |
+| 1        | 1                | 350                   | 1969.66            | 1.00    |
+| 1        | 4                | 350                   | 7511.53            | 3.81    |
+| 1        | 8                | 350                   | 14756.03           | 7.49    |
 
 #### Model Parallelism
 
@@ -533,65 +475,23 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 256                   |                    | 1.00    |
-| 1        | 4                | 256                   |                    |         |
-| 1        | 8                | 256                   |                    |         |
+| 1        | 1                | 256                   | 1963.62            | 1.00    |
+| 1        | 4                | 256                   | 7264.54            | 3.7     |
+| 1        | 8                | 256                   | 14049.75           | 7.16    |
 
 **batch_size = max**
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 400                   | 1969.65            | 1.00    |
-| 1        |                  | 400                   | 7363.77            | 3.74    |
+| 1        | 4                | 400                   | 7363.77            | 3.74    |
 | 1        | 8                | 400                   | 14436.38           | 7.33    |
 
-### Face Emore & Y1 & AMP
+### 
 
-#### Data Parallelism
-
-**batch_size = **500
-
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 512                   |                    | 1.00    |
-| 1        | 4                | 512                   |                    |         |
-| 1        | 8                | 512                   |                    |         |
-
-**batch_size = max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                |                       |                    | 1.00    |
-| 1        | 4                |                       |                    |         |
-| 1        | 8                |                       |                    |         |
-
-#### Model Parallelism
-
-**batch_size = 512**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 512                   |                    | 1.00    |
-| 1        | 4                | 512                   |                    |         |
-| 1        | 8                | 512                   |                    |         |
-
-**batch_size = max**
-
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
-| -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                |                       |                    | 1.00    |
-| 1        | 4                |                       |                    |         |
-| 1        | 8                |                       |                    |         |
-
-
-
-
-
-目前 InsightFace 的相关代码及结果已经 PR 至 [deepinsight](https://github.com/deepinsight) 仓库
+目前 InsightFace 的相关代码及结果已经 PR 至 [insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/[**oneflow_face**]([insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/**oneflow_face**/)
 
 [deepinsight](https://github.com/deepinsight)/**[insightface](https://github.com/deepinsight/InsightFace)** 官方测评结果详见 [Benchmark](https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc#benchmark)。
 
 详细 Log 信息可下载：[-]()。
-
 
