@@ -2,7 +2,7 @@
 
 # Overview
 
-本次复现采用了[MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/r1.1)中的[ResNet](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/cv/resnet)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本次复现采用了[MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c)中的[ResNet](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c/model_zoo/official/cv/resnet)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试已覆盖 FP32、FP16混合精度，后续将持续维护，增加更多方式的测评。
 
@@ -24,6 +24,10 @@
 - CUDA 10.1.243
 - OpenMPI 4.0.3
 
+## 框架
+
+- **MindSpore 1.1.0**
+
 ## Feature support matrix
 
 | Feature            | ResNet50v1.5 MindSpore    |
@@ -36,15 +40,15 @@
 
 ## 项目代码
 
-- [MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/r1.1)
-  - [ResNet项目主页](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/cv/resnet)
+- [MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c)
+  - [ResNet项目主页](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c/model_zoo/official/cv/resnet)
 
 下载官方源码：
 
 ```shell
 git clone https://gitee.com/mindspore/mindspore.git
 cd mindspore/
-git checkout r1.1
+git checkout e13c045ced043de5998f5f77acc0ebe7da4eed5c
 cd model_zoo/official/cv/resnet/
 ```
 
@@ -142,7 +146,7 @@ cd model_zoo/official/cv/resnet/
 ## 容器
 
 本次测评采用的是MindSpore官方提供的Docker镜像，您可以
-参考[MindSpore官方文档](https://gitee.com/mindspore/mindspore/tree/r1.1/#docker%E9%95%9C%E5%83%8F)GPU部分
+参考[MindSpore官方文档](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c/#docker%E9%95%9C%E5%83%8F)GPU部分
 **获取项目镜像**
 
 对于`GPU`后端，请确保`nvidia-container-toolkit`已经提前安装，以下是`Ubuntu`用户安装指南：
@@ -201,7 +205,7 @@ docker run -it \
 
 ## 数据集
 
-数据集直接采用 JPEG 图像，请参考：[MindSpore官方仓库说明](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/cv/resnet#%E6%95%B0%E6%8D%AE%E9%9B%86) ImageNet2012 部分；
+数据集直接采用 JPEG 图像，请参考：[MindSpore官方仓库说明](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c/model_zoo/official/cv/resnet#%E6%95%B0%E6%8D%AE%E9%9B%86) ImageNet2012 部分；
 
 ## SSH配置(可选)
 
