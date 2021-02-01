@@ -166,7 +166,11 @@ on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each.
 
 #### Training Performance
 
-We take GPU memory usage and latency(the time consumption of each iter) as the standard of performance evaluation
+We take GPU memory usage and latency(the time consumption of each iter) as the standard of performance evaluation.
+
+Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. In addition, the main parameters are as follows:
+
+**batch_size = 16384, deep_embedding_vec_size = 32, hidden_units_num = 7**
 
 | deep_vocab_size | OneFlow Latency per Iteration / ms | HugeCTR Latency per Iteration / ms | OneFlow Mem Usage / MB | HugeCTR Mem Usage / MB | Mem Usage Ratio |
 | --------------- | ---------------------------------- | ---------------------------------- | ---------------------- | ---------------------- | --------------- |
