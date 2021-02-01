@@ -54,7 +54,7 @@ cd model_zoo/official/cv/resnet/
 
 3.修改代码脚本，将本页面`train.py`放入model_zoo/official/cv/resnet/路径下；
 
-或者按如下说明手动修改：
+或者按如下说明手动修改官方原有`train.py`：
 
 将 model_zoo/official/cv/resnet/train.py 46 行：
 ```shell
