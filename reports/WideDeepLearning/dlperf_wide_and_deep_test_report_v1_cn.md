@@ -115,9 +115,7 @@ Legend:
 | 25600000        | 56.841                             | 82.853                             | 6,913                  | 9825                   | 70% |
 | 51200000        | 56.805                             | 104.458                            | 11,891                 | 16027                  | 74% |
 
-![](./imgs/wdl_vecx2_1n1g_latency.png)
-
-![](./imgs/wdl_vecx2_1n1g_mem.png)
+![](./imgs/wdl_vecx2_1n1g_mem_latency.png)
 
 ### 单机8卡, batch_size = 16384, deep_embedding_vec_size = 16, hidden_units_num = 7
 
@@ -132,9 +130,7 @@ Legend:
 | 204800000 | 13.785 | out of memory | 6,435  | out of memory | - |
 | 409600000 | 13.845 | out of memory | 11,423 | out of memory | - |
 
-![](./imgs/wdl_vecx2_1n8g_latency.png)
-
-![](./imgs/wdl_vecx2_1n8g_mem.png)
+![](./imgs/wdl_vecx2_1n8g_mem_latency.png)
 
 ### 4 node 32 GPUs, batch_size = 16384, deep_embedding_vec_size = 32, hidden_units_num = 7
 
@@ -150,9 +146,7 @@ Legend:
 | 409600000 | 22.433 | out of memory | 5,915  | out of memory | - |
 | 819200000 | 22.407 | out of memory | 10,745 | out of memory | - |
 
-![](./imgs/wdl_vecx2_4n8g_latency.png)
-
-![](./imgs/wdl_vecx2_4n8g_mem.png)
+![](./imgs/wdl_vecx2_4n8g_mem_latency.png)
 
 ## 测试结论
 
