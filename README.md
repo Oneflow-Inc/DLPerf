@@ -154,9 +154,9 @@ This section maintains the results of the special case models.
 
 on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. 
 
-- [WideDeepLeaning Benchmark Test Report V1.0](./reports/WideDeepLeaning/dlperf_wide_and_deep_test_report_v1.md)
+- [WideDeepLearning Benchmark Test Report V1.0](./reports/WideDeepLearning/dlperf_wide_and_deep_test_report_v1.md)
 
-- [WideDeepLeaning 性能评测报告中文版 V1.0](./reports/WideDeepLeaning/dlperf_wide_and_deep_test_report_v1_cn.md)
+- [WideDeepLearning 性能评测报告中文版 V1.0](./reports/WideDeepLearning/dlperf_wide_and_deep_test_report_v1_cn.md)
 
 | Framework                                                    | Version | Source                                                       |
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
