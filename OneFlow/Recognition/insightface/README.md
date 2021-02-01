@@ -23,23 +23,22 @@
   - [快速开始 Quick Start](#快速开始-quick-start)
     - [1. 前期准备](#1-前期准备)
     - [2. 运行测试](#2-运行测试)
-      - [](#)
     - [3. 数据处理](#3-数据处理)
   - [性能结果 Performance](#性能结果-performance)
     - [Face Emore & R100 & FP32](#face-emore--r100--fp32)
       - [Data Parallelism](#data-parallelism)
       - [Model Parallelism](#model-parallelism)
       - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01)
-    - [](#-1)
+    - [](#)
     - [Glint360k & R100 & FP32](#glint360k--r100--fp32)
       - [Data Parallelism](#data-parallelism-1)
       - [Model Parallelism](#model-parallelism-1)
       - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01-1)
-    - [](#-2)
+    - [](#-1)
     - [Face Emore & Y1 & FP32](#face-emore--y1--fp32)
       - [Data Parallelism](#data-parallelism-2)
       - [Model Parallelism](#model-parallelism-2)
-    - [](#-3)
+    - [Max num_classses](#max-num_classses)
 
 
 ## 环境 Environment
@@ -270,7 +269,15 @@ bash scripts/run_single_node.sh
 
 即可针对单机单卡、2 卡、4 卡、8 卡，不同 batch_size 和其他配置等情况进行测试，并将 log 信息保存在当前目录的对应测评配置路径中。
 
-#### 
+- #### 寻找最大 `num_classes`
+
+寻找 OneFlow InsightFace 可支持的最大 `num_classes`，测试时需要使用合成数据 `use_synthetic_data=True`，并修改 train_emore.sh 的 `num_classes`。
+
+以使用 ResNet100 和 Face Emore 作为 Backbone 和数据集，测试合成数据单机 8 卡，`batch_size_per_device=64`，`model_parallel=True`，`partial_fc=True`， `num_classes=1500000` 训练 150 个 batch 为例，运行
+```
+bash train_emore.sh ${workspace_path} r100 emore arcface 1 64 batch 150 8 fp16 1 1 1 150000 True
+```
+可以正常运行打印 log，即说明可支持当前 `num_classes`，可尝试更大 `num_classes`。
 
 ### 3. 数据处理
 
@@ -487,7 +494,13 @@ Saving result to ./result/_result.json
 | 1        | 4                | 400                   | 7363.77            | 3.74    |
 | 1        | 8                | 400                   | 14436.38           | 7.33    |
 
-### 
+### Max num_classses
+
+| node_num | gpu_num_per_node | batch_size_per_device | FP16 | Model Parallel | Partial FC | num_classes |
+| -------- | ---------------- | --------------------- | ---- | -------------- | ---------- | ----------- |
+| 1        | 1                | 64                    | True | True           | True       | 2000000     |
+| 1        | 8                | 64                    | True | True           | True       | 13500000    |
+ 
 
 目前 InsightFace 的相关代码及结果已经 PR 至 [insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/[**oneflow_face**]([insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/**oneflow_face**/)
 
