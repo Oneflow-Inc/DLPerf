@@ -23,7 +23,7 @@ python run_pretrain.py  \
     --enable_lossscale="false" \
     --enable_data_sink="true" \
     --data_sink_steps=10 \
-    --train_steps=120 \
+    --train_steps=$NUM_STEP \
     --data_dir="/workspace/bert/data/wiki" \
     --enable_graph_kernel=$ENABLE_GRAPH_KERNEL \
     --batch_size=$BATCH_SIZE \
