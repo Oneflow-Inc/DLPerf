@@ -15,7 +15,7 @@ export PORT=10000
 i=1
 while [ $i -le $NUM_TESTING ]
 do
-  bash $SHELL_FOLDER/scripts/run_distribute_train_gpu.sh  0,1,2,3,4,5,6,7  ${BATCH_SIZE}  ${DTYPE}  120  $i  ${NODE_NUM}
+  bash $SHELL_FOLDER/scripts/run_distribute_train_gpu.sh  0,1,2,3,4,5,6,7  ${BATCH_SIZE}  ${DTYPE}  200  $i  ${NODE_NUM}
   echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   let i++
   sleep 20

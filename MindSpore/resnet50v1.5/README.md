@@ -105,7 +105,7 @@ cd model_zoo/official/cv/resnet/
 替换为：
 ```shell
     from mindspore.train.loss_scale_manager import DynamicLossScaleManager
-    loss_scale = DynamicLossScaleManager(2,1,10)
+    loss_scale = DynamicLossScaleManager()
     model = Model(net, loss_fn=loss, optimizer=opt, loss_scale_manager=loss_scale, metrics={'acc'},
                 amp_level=amp_level, keep_batchnorm_fp32=False)
 ```
@@ -277,13 +277,67 @@ bash   run_multi_node.sh 256 fp16 5 2
 执行以下命令，即可计算各种测试配置下的吞吐率及加速比：
 
 ```shell
-python extract_mindspore_logs_time.py --log_dir=logs_fp32/mindspore/resnet50/bz128
+python extract_mindspore_logs_time.py --log_dir=logs_fp32/mindspore/resnet50/bz128 --warmup_batches=100 --train_batches=200
 ```
 
 输出：
 
 ```shell
-Saving result to ./result/_result.json
+logs_fp32/mindspore/resnet50/bz128/1n2g/rn50_b128_fp32_4.log {4: 710.96}
+logs_fp32/mindspore/resnet50/bz128/1n2g/rn50_b128_fp32_2.log {4: 710.96, 2: 710.68}
+logs_fp32/mindspore/resnet50/bz128/1n2g/rn50_b128_fp32_3.log {4: 710.96, 2: 710.68, 3: 709.28}
+logs_fp32/mindspore/resnet50/bz128/1n2g/rn50_b128_fp32_1.log {4: 710.96, 2: 710.68, 3: 709.28, 1: 710.7}
+logs_fp32/mindspore/resnet50/bz128/1n2g/rn50_b128_fp32_5.log {4: 710.96, 2: 710.68, 3: 709.28, 1: 710.7, 5: 709.78}
+logs_fp32/mindspore/resnet50/bz128/2n8g/rn50_b128_fp32_4.log {4: 5483.22}
+logs_fp32/mindspore/resnet50/bz128/2n8g/rn50_b128_fp32_2.log {4: 5483.22, 2: 5480.69}
+logs_fp32/mindspore/resnet50/bz128/2n8g/rn50_b128_fp32_3.log {4: 5483.22, 2: 5480.69, 3: 5484.01}
+logs_fp32/mindspore/resnet50/bz128/2n8g/rn50_b128_fp32_1.log {4: 5483.22, 2: 5480.69, 3: 5484.01, 1: 5499.46}
+logs_fp32/mindspore/resnet50/bz128/2n8g/rn50_b128_fp32_5.log {4: 5483.22, 2: 5480.69, 3: 5484.01, 1: 5499.46, 5: 5474.62}
+logs_fp32/mindspore/resnet50/bz128/1n1g/rn50_b128_fp32_4.log {4: 369.81}
+logs_fp32/mindspore/resnet50/bz128/1n1g/rn50_b128_fp32_2.log {4: 369.81, 2: 371.31}
+logs_fp32/mindspore/resnet50/bz128/1n1g/rn50_b128_fp32_3.log {4: 369.81, 2: 371.31, 3: 369.02}
+logs_fp32/mindspore/resnet50/bz128/1n1g/rn50_b128_fp32_1.log {4: 369.81, 2: 371.31, 3: 369.02, 1: 371.01}
+logs_fp32/mindspore/resnet50/bz128/1n1g/rn50_b128_fp32_5.log {4: 369.81, 2: 371.31, 3: 369.02, 1: 371.01, 5: 369.0}
+logs_fp32/mindspore/resnet50/bz128/4n8g/rn50_b128_fp32_4.log {4: 10724.0}
+logs_fp32/mindspore/resnet50/bz128/4n8g/rn50_b128_fp32_2.log {4: 10724.0, 2: 10716.94}
+logs_fp32/mindspore/resnet50/bz128/4n8g/rn50_b128_fp32_3.log {4: 10724.0, 2: 10716.94, 3: 10731.78}
+logs_fp32/mindspore/resnet50/bz128/4n8g/rn50_b128_fp32_1.log {4: 10724.0, 2: 10716.94, 3: 10731.78, 1: 10758.88}
+logs_fp32/mindspore/resnet50/bz128/4n8g/rn50_b128_fp32_5.log {4: 10724.0, 2: 10716.94, 3: 10731.78, 1: 10758.88, 5: 10757.37}
+logs_fp32/mindspore/resnet50/bz128/1n4g/rn50_b128_fp32_4.log {4: 1418.66}
+logs_fp32/mindspore/resnet50/bz128/1n4g/rn50_b128_fp32_2.log {4: 1418.66, 2: 1419.13}
+logs_fp32/mindspore/resnet50/bz128/1n4g/rn50_b128_fp32_3.log {4: 1418.66, 2: 1419.13, 3: 1419.97}
+logs_fp32/mindspore/resnet50/bz128/1n4g/rn50_b128_fp32_1.log {4: 1418.66, 2: 1419.13, 3: 1419.97, 1: 1418.08}
+logs_fp32/mindspore/resnet50/bz128/1n4g/rn50_b128_fp32_5.log {4: 1418.66, 2: 1419.13, 3: 1419.97, 1: 1418.08, 5: 1417.93}
+logs_fp32/mindspore/resnet50/bz128/1n8g/rn50_b128_fp32_4.log {4: 2788.99}
+logs_fp32/mindspore/resnet50/bz128/1n8g/rn50_b128_fp32_2.log {4: 2788.99, 2: 2762.27}
+logs_fp32/mindspore/resnet50/bz128/1n8g/rn50_b128_fp32_3.log {4: 2788.99, 2: 2762.27, 3: 2778.1}
+logs_fp32/mindspore/resnet50/bz128/1n8g/rn50_b128_fp32_1.log {4: 2788.99, 2: 2762.27, 3: 2778.1, 1: 2768.28}
+logs_fp32/mindspore/resnet50/bz128/1n8g/rn50_b128_fp32_5.log {4: 2788.99, 2: 2762.27, 3: 2778.1, 1: 2768.28, 5: 2773.82}
+{'rn50': {'1n1g': {'average_speed': 370.03,
+                   'batch_size_per_device': 128,
+                   'median_speed': 369.81,
+                   'speedup': 1.0},
+          '1n2g': {'average_speed': 710.28,
+                   'batch_size_per_device': 128,
+                   'median_speed': 710.68,
+                   'speedup': 1.92},
+          '1n4g': {'average_speed': 1418.75,
+                   'batch_size_per_device': 128,
+                   'median_speed': 1418.66,
+                   'speedup': 3.84},
+          '1n8g': {'average_speed': 2774.29,
+                   'batch_size_per_device': 128,
+                   'median_speed': 2773.82,
+                   'speedup': 7.5},
+          '2n8g': {'average_speed': 5484.4,
+                   'batch_size_per_device': 128,
+                   'median_speed': 5483.22,
+                   'speedup': 14.83},
+          '4n8g': {'average_speed': 10737.79,
+                   'batch_size_per_device': 128,
+                   'median_speed': 10731.78,
+                   'speedup': 29.02}}}
+Saving result to ./result/bz128_result.json
 ```
 
 
@@ -293,7 +347,7 @@ Saving result to ./result/_result.json
 
 - extract_mindspore_logs_time.py
 
-extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter取后100个iter来计算速度。
+extract_mindspore_logs_time.py根据log中打印出的耗时，排除前100个iter取后100个iter来计算速度。
 
 #### 2.均值速度和中值速度
 
@@ -315,12 +369,12 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       |    |    |
-| 1        | 2       |    |    |
-| 1        | 4       |    |    |
-| 1        | 8       |    |    |
-| 2        | 16      |    |    |
-| 4        | 32      |    |    |
+| 1        | 1       | 369.81    | 1       |
+| 1        | 2       | 710.68    | 1.92    |
+| 1        | 4       | 1418.66   | 3.84    |
+| 1        | 8       | 2773.82   | 7.50    |
+| 2        | 16      | 5483.22   | 14.83   |
+| 4        | 32      | 10731.78  | 29.02   |
 
 ### ResNet50v1.5  FP16
 
@@ -328,12 +382,12 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       |    |    |
-| 1        | 2       |    |    |
-| 1        | 4       |    |    |
-| 1        | 8       |    |    |
-| 2        | 16      |    |    |
-| 4        | 32      |    |    |
+| 1        | 1       | 1116      | 1       |
+| 1        | 2       | 2061.08   | 1.85    |
+| 1        | 4       | 4067.95   | 3.65    |
+| 1        | 8       | 6867.34   | 6.15    |
+| 2        | 16      | 12057.38  | 10.80   |
+| 4        | 32      | 24183.95  | 21.67   |
 
 ### 完整日志
 
