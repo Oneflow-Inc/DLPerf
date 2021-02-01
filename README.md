@@ -32,7 +32,12 @@ The first type is classical deep neural network models that used to evaluate the
 1. **ResNet-50 v1.5**
 2. **BERT-Base**
 
-The secode type is that some models use special techniques or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed, [HugeCTR](https://github.com/NVIDIA/HugeCTR)(Designed for CTR estimation training and implemented by NVIDIA).
+The secode type is that some models use special techniques or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed, [Wide and Deep Learning(W&D)](https://arxiv.org/abs/1606.07792)based on [HugeCTR](https://github.com/NVIDIA/HugeCTR)( Designed for CTR estimation training and implemented by NVIDIA).
+
+| Model                                                        | Framework                                                    | Source                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [Wide and Deep Learning (W&D)](https://arxiv.org/abs/1606.07792) | [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | [OneFolow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/ClickThroughRate/WideDeepLearning) |
+| [Wide and Deep Learning (W&D)](https://arxiv.org/abs/1606.07792) | [HugeCTR](https://github.com/NVIDIA/HugeCTR)                 | [samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl) |
 
 In general, there are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
 
@@ -152,7 +157,7 @@ This section maintains the results of the special case models such as WideDeepLe
 
 ### Latest Test Report
 
-#### WideDeepLearning
+#### Wide and Deep Learning
 
 on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. 
 
