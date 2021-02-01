@@ -148,17 +148,34 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 ## Other Test Results(special cases)
 
-This section maintains the results of the special case models.
+This section maintains the results of the special case models such as WideDeepLearning, GPT-2, etc.
 
 ### Latest Test Report
+
+#### WideDeepLearning
 
 on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. 
 
 - [WideDeepLearning Benchmark Test Report V1.0](./reports/WideDeepLearning/dlperf_wide_and_deep_test_report_v1.md)
-
 - [WideDeepLearning 性能评测报告中文版 V1.0](./reports/WideDeepLearning/dlperf_wide_and_deep_test_report_v1_cn.md)
 
 | Framework                                                    | Version | Source                                                       |
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
 | [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | 0.2.0   | [OneFolow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/ClickThroughRate/WideDeepLearning) |
 | [HugeCTR](https://github.com/NVIDIA/HugeCTR)                 | 2.2     | [samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl) |
+
+#### Training Performance
+
+We take GPU memory usage and latency(the time consumption of each iter) as the standard of performance evaluation
+
+| deep_vocab_size | OneFlow Latency per Iteration / ms | HugeCTR Latency per Iteration / ms | OneFlow Mem Usage / MB | HugeCTR Mem Usage / MB | Mem Usage Ratio |
+| --------------- | ---------------------------------- | ---------------------------------- | ---------------------- | ---------------------- | --------------- |
+| 3200000         | 22.414                             | 21.843                             | 1,115                  | 3217                   | 35%             |
+| 6400000         | 22.314                             | 26.375                             | 1,153                  | 4579                   | 25%             |
+| 12800000        | 22.352                             | 36.214                             | 1,227                  | 7299                   | 17%             |
+| 25600000        | 22.399                             | 57.718                             | 1,379                  | 12745                  | 11%             |
+| 51200000        | 22.31                              | out of memory                      | 1,685                  | out of memory          | -               |
+| 102400000       | 22.444                             | out of memory                      | 2,293                  | out of memory          | -               |
+| 204800000       | 22.403                             | out of memory                      | 3,499                  | out of memory          | -               |
+| 409600000       | 22.433                             | out of memory                      | 5,915                  | out of memory          | -               |
+| 819200000       | 22.407                             | out of memory                      | 10,745                 | out of memory          | -               |
