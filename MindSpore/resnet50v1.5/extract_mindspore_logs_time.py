@@ -12,7 +12,7 @@ import numpy as np
 pp = pprint.PrettyPrinter(indent=1)
 
 parser = argparse.ArgumentParser(description="flags for benchmark")
-parser.add_argument("--log_dir", type=str, default="./logs/mindspore/bert/bz32", required=True)
+parser.add_argument("--log_dir", type=str, default="./logs/mindspore/resnet50/bz32", required=True)
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=20)
 parser.add_argument('--train_batches', type=int, default=120)
@@ -57,15 +57,18 @@ def extract_info_from_file(log_file, result_dict, speed_dict):
     avg_speed = 0
     # extract info from file content
     time_pt = re.compile(r"(?<=epoch\stime:\s)\d+.\d{3}", re.S)
+    epoch_pt = re.compile(r"(?<=epoch:\s)\d+", re.S)
     step_pt = re.compile(r"(?<=step:\s)\d+", re.S)
 
+    cur_epoch = 0
     cur_step = 0
     cost_time = 0
     with open(log_file) as f:
         lines = f.readlines()
         for line in lines:
             if "epoch:" in line and "step:" in line:
-                cur_step = float(re.findall(step_pt, line)[0])
+                cur_epoch = int(re.findall(epoch_pt, line)[0])
+                cur_step = int(re.findall(step_pt, line)[0]) * cur_epoch
                 if cur_step > args.train_batches:
                     break
             if "epoch time:" in line:
