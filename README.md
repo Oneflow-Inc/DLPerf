@@ -178,8 +178,10 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 | 6400000         | 22.314                             | 26.375                             | 1,153                  | 4579                   | 25%             |
 | 12800000        | 22.352                             | 36.214                             | 1,227                  | 7299                   | 17%             |
 | 25600000        | 22.399                             | 57.718                             | 1,379                  | 12745                  | 11%             |
-| 51200000        | 22.31                              | out of memory                      | 1,685                  | out of memory          | -               |
-| 102400000       | 22.444                             | out of memory                      | 2,293                  | out of memory          | -               |
-| 204800000       | 22.403                             | out of memory                      | 3,499                  | out of memory          | -               |
-| 409600000       | 22.433                             | out of memory                      | 5,915                  | out of memory          | -               |
-| 819200000       | 22.407                             | out of memory                      | 10,745                 | out of memory          | -               |
+| 51200000        | 22.31                              | OOM                                | 1,685                  | OOM                    | -               |
+| 102400000       | 22.444                             | OOM                                | 2,293                  | OOM                    | -               |
+| 204800000       | 22.403                             | OOM                                | 3,499                  | OOM                    | -               |
+| 409600000       | 22.433                             | OOM                                | 5,915                  | OOM                    | -               |
+| 819200000       | 22.407                             | OOM                                | 10,745                 | OOM                    | -               |
+
+- notes:OOM is the abbreviation of out of memory, which means an error is reported due to insufficient GPU memory
