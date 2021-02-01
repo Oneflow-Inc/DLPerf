@@ -3,8 +3,9 @@
 ## Introduction
 Wide & Deep is a very important model of the CTR(Click Through Rate) field, which is widely used in recommendation system. The model of Wide & Deep is very large, meanwhile, has to deal with huge data throughput. Therefore, Wide & Deep has high requirements for deep learning framework. For a long time, the Wide & Deep model implemented by [HugeCTR](https://github.com/NVIDIA/HugeCTR) has the best performace.
 
+A series of tests are designed in this report aims to compare the performance and limit of the frameworks through multiple factors with the same hardware conditions. The factors include: vocabulary size, batch size, number of GPUS, etc. The test measurements are latency per iteration and memory usage. 
 
-A series of tests are designed in this report aims to compare the performance and limit of the frameworks through multiple factors with the same hardware conditions. The factors include: vocabulary size, batch size, number of GPUS, etc. The test measurements are latency per iteration and memory usage. In short, smaller latency means better performance and smaller memory usage means better memory management capability which means the model can support a larger `vocab_size` and `batch_size` under the same hardware conditions.
+In short, smaller latency means better performance and smaller memory usage means better memory management capability which means the model can support a larger `vocab_size` and `batch_size` under the same hardware conditions.
 
 ## Test Environment
 
