@@ -22,6 +22,35 @@ This folder holds OneFlow WideDeepLearning Benchmark Test scripts, tools and rep
     └── vocab_x2.sh # Vocabulary Size Double Test
 ```
 
+### Run Scripts
+We can run tests below as follows:
+
+1. Build docker image: 
+
+```shell
+cd docker && bash build.sh
+```
+
+**Note**: The last line in `docker/ubuntu.dockerfile` is a command to install the 0.2.0 OneFlow in docker, however, you can install whatever version you want by changing it, for example, install the latest stable release version of OneFlow:
+
+```shell
+RUN python3 -m pip install --find-links https://release.oneflow.info oneflow_cu102 --user
+```
+
+2. Config the `launch.sh` file in docker folder:
+
+```text
+ONEFLOW_BENCHMARK_ROOT=/path/to/OneFlow-Benchmark:/OneFlow-Benchmark
+DLPERF_WDL_SCRIPTS_ROOT=/path/to/DLPerf/OneFlow/ClickThroughRate/WideDeepLearning/scripts
+DATASET_ROOT=/path/to/datasets:/data
+```
+
+3. Run the `train_all_in_docker.sh` script:
+
+```shell
+cd scripts && bash train_all_in_docker.sh
+```
+
 ## Benchmark Test Cases
 This report summarized OneFlow test on 4 nodes with 8 x Tesla V100 on Oct 2020.
 
