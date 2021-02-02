@@ -93,6 +93,8 @@ Latency and GPU device memory usage should be recorded in this test.
 ## Test Results
 Each group was tested three times, and the median of data was selected as the final result.
 
+If it is a a test with multiple devices, the log of device 0 is recorded.
+
 All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/oneflow_wdl_1025_logs.tgz).
 
 ### batch size X 2 tests

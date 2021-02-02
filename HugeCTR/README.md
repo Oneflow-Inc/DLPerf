@@ -98,6 +98,8 @@ Latency and GPU device memory usage should be recorded in this test.
 
 ## Test Results
 
+If it is a a test with multiple devices, the log of device 0 is recorded.
+
 ### batch size X 2 tests
 All batch size double tests were performed with 2 x 1024 Hidden Fully-connected Units.
 

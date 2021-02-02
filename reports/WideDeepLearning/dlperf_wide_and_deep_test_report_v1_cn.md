@@ -1,7 +1,7 @@
 # Wide & Deep 在深度学习框架上的性能测试报告V1.0
 
 ## 简介
-Wide & Deep 是点击率预估领域非常重要的模型，被广泛应用于推荐系统。Wide & Deep 的模型非常大，并且伴随巨大的数据吞吐量，因此对深度学习框架要求很高。在很长一段时间内，在 [HugeCTR](https://github.com/NVIDIA/HugeCTR) 框架下实现的 Wide & Deep 模型性能最优。
+Wide & Deep 是点击率预估领域非常重要的模型，被广泛应用于推荐系统。Wide & Deep 的模型非常大，并且伴随巨大的数据吞吐量，因此对深度学习框架要求很高。在很长一段时间内，一直是 [HugeCTR](https://github.com/NVIDIA/HugeCTR) 框架下所实现的 Wide & Deep 性能最优。
 
 本报告中设计了一系列对比测试，旨在相同硬件条件下通过多个维度对比框架的表现和性能边界。其中，测试的维度包含词表数(`vocab_size`)、批量大小(`batch_size`)、GPU 数量等；框架表现的评测指标为每个迭代(iter)的耗时(latency)、GPU 显存占用大小。
 

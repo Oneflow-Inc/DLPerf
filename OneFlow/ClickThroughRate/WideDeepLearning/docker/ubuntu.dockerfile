@@ -32,4 +32,4 @@ RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/s
 
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install $pip_args scikit-learn pynvml
-RUN python3 -m pip install --find-links https://oneflow-public.oss-cn-beijing.aliyuncs.com/nightly.pip.index.html oneflow_cu102
+RUN python3 -m pip install --find-links https://release.oneflow.info oneflow_cu102==0.2.0 --user
