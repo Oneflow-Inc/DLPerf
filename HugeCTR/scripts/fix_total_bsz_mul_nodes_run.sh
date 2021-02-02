@@ -7,8 +7,6 @@ plan_generator=/hugectr/tools/plan_generation_no_mpi/plan_generator_no_mpi.py
 
 declare -a num_nodes_list=(4 2 1 1 1 1)
 declare -a num_gpus_list=(8 8 8 4 2 1)
-#declare -a num_nodes_list=(1 ) 
-#declare -a num_gpus_list=(1 )
 len=${#num_nodes_list[@]}
 
 for (( i=0; i<$len; i++ ))

@@ -5,7 +5,6 @@ LOCAL_RUN=train_all_in_docker.sh
 # ```
 
 
-#for repeat_id in 1 2 3 4 5
 for repeat_id in 1 2 3
 do
     # case 1: bsz x 2

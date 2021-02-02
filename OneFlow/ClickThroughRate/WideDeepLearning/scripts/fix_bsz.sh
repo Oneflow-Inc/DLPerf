@@ -5,8 +5,6 @@ LOCAL_RUN=train_all_in_docker.sh
 # ```
 declare -a num_nodes_list=(4 2 1 1 1 1)
 declare -a num_gpus_list=(8 8 8 4 2 1)
-#declare -a num_nodes_list=(1 1 1 1)
-#declare -a num_gpus_list=(8 4 2 1)
 len=${#num_nodes_list[@]}
 
 

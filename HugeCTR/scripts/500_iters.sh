@@ -24,5 +24,3 @@ python3 gpu_memory_usage.py 1>$mem_usage_file 2>&1 </dev/null &
 
 # start hugectr
 ./huge_ctr --train $output_json_file >$hugectr_log_file 
-#./huge_ctr_mn --train $output_json_file >$hugectr_log_file 
-
