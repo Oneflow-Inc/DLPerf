@@ -48,7 +48,8 @@
 ```shell
 git clone https://gitee.com/mindspore/mindspore.git
 cd mindspore/
-git checkout e13c045ced043de5998f5f77acc0ebe7da4eed5c
+git checkout r1.1
+git reset e13c045ced043de5998f5f77acc0ebe7da4eed5c --hard
 cd model_zoo/official/cv/resnet/
 ```
 
@@ -380,6 +381,8 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前100个it
 | 2        | 16      | 5483.22   | 14.83   |
 | 4        | 32      | 10731.78  | 29.02   |
 
+注：以32为最小单位，最大batch size为128，否则会OOM(out of memory)。
+
 ### ResNet50v1.5  FP16
 
 #### batch size=256
@@ -392,6 +395,8 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前100个it
 | 1        | 8       | 6867.34   | 6.15    |
 | 2        | 16      | 12057.38  | 10.80   |
 | 4        | 32      | 24183.95  | 21.67   |
+
+注：以32为最小单位，最大batch size为256，否则会OOM(out of memory)。
 
 ### 完整日志
 
