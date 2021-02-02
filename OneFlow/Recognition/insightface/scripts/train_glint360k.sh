@@ -14,6 +14,8 @@ model_parallel=${11:-1}
 partial_fc=${12:-1}
 test_times=${13:-1}
 sample_ratio=${14:-0.1}
+num_classes=${15:-1500000}
+use_synthetic_data=${16:-False}
 
 MODEL_SAVE_DIR=${network}_${precision}_b${batch_size_per_device}_oneflow_model_parallel_${model_parallel}_partial_fc_${partial_fc}_${sample_ratio}/$network/${num_nodes}n${gpu_num_per_node}g
 LOG_DIR=$MODEL_SAVE_DIR
@@ -54,6 +56,9 @@ CMD+=" --partial_fc=${partial_fc}"
 CMD+=" --sample_ratio=${sample_ratio}"
 CMD+=" --log_dir=${LOG_DIR}"
 CMD+=" $PREC"
+CMD+=" --sample_ratio=${sample_ratio}"
+CMD+=" --use_synthetic_data=${use_synthetic_data}"
+CMD+=" --num_classes=${num_classes}"
 
 CMD="python3 $CMD "
 set -x

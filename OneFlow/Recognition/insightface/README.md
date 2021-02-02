@@ -4,7 +4,7 @@
 ## 概述 Overview
 
 
-本测试基于 OneFlow [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/master) 提供与 [deepinsight](https://github.com/deepinsight)/**[insightface](https://github.com/deepinsight/InsightFace)** 仓库中 MXNet 等价实现的 InsightFace 网络，进行单机单卡、单机多卡的速度评测，评判框架在分布式训练情况下的横向拓展能力。
+本测试基于 OneFlow [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/master) 提供与 [deepinsight](https://github.com/deepinsight)/**[insightface](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487)** 仓库中 MXNet 等价实现的 InsightFace 网络，进行单机单卡、单机多卡的速度评测，评判框架在分布式训练情况下的横向拓展能力。
 
 
 目前，该测试覆盖 FP32 精度，后续将持续维护，增加使用其他优化方式的测评。
@@ -29,12 +29,10 @@
       - [Data Parallelism](#data-parallelism)
       - [Model Parallelism](#model-parallelism)
       - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01)
-    - [](#)
     - [Glint360k & R100 & FP32](#glint360k--r100--fp32)
       - [Data Parallelism](#data-parallelism-1)
       - [Model Parallelism](#model-parallelism-1)
       - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01-1)
-    - [](#-1)
     - [Face Emore & Y1 & FP32](#face-emore--y1--fp32)
       - [Data Parallelism](#data-parallelism-2)
       - [Model Parallelism](#model-parallelism-2)
@@ -147,7 +145,7 @@ OneFlow 采用此约定，与 Spark 的默认存储的文件名一致，方便�
 
 OneFlow 提供了加载 OFRecord 数据集的接口，使得我们只要指定数据集目录的路径，就可以享受 OneFlow 框架所带来的多线程、数据流水线等优势。
 
-准备 Face Emore 和 Glint360k 的 OFReocord 数据集，可以选择根据 [加载与准备 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_make_ofdataset.html) 文档中 Python 脚本生成所有数据的完整 OFRecord + Spark Shuffle + Spark Partition 的方式，也可以选择只使用 Python脚本生成多块 OFRecord 的方式，用以进行 InsightFace 的测试。
+准备 Face Emore 和 Glint360k 的 OFReocord 数据集，可以选择根据 [加载与准备 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_make_ofdataset.html)文档中 Python 脚本生成所有数据的完整 OFRecord + Spark Shuffle + Spark Partition 的方式，也可以选择只使用 Python 脚本生成多块 OFRecord 的方式，用以进行 InsightFace 的测试。
 
 1. Python 脚本直接生成
 
@@ -196,7 +194,7 @@ ofrecord/test/
 
 2. Python 脚本 + Spark Shuffle + Spark Partition
 
-运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/blob/master/tools/dataset_convert/mx_recordio_2_ofrecord.py) 生成所有数据的完整 OFRecord（`part-0`）
+运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/tree/b7207f29f4e9254b1d9ea748a628d223b9aafd1a) 生成所有数据的完整 OFRecord（`part-0`）
 
 ```
 python tools/dataset_convert/mx_recordio_2_ofrecord.py --data_dir /data/face_test/dataset/faces_emore  --output_filepath ofrecord/train 
@@ -253,10 +251,11 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 - #### 单机测试
 
 
-在节点 1 的容器内下载本仓库源码：
+在节点 1 的容器内下载 oneflow_face 源码和本仓库源码：
 
 
 ````
+git clone https://github.com/Oneflow-Inc/oneflow_face.git
 git clone https://github.com/Oneflow-Inc/DLPerf.git
 ````
 
@@ -390,11 +389,11 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 128                   | 257.62             | 1.00    |
-| 1        | 4                | 128                   | 983.23             | 3.82    |
-| 1        | 8                | 128                   | 1953.46            | 7.58    |
+| 1        | 1                | 120                   | 256.61             | 1.00    |
+| 1        | 4                | 120                   | 990.82             | 3.86    |
+| 1        | 8                | 120                   | 1962.76            | 7.65    |
 
-### 
+
 
 ### Glint360k & R100 & FP32 
 
@@ -449,11 +448,11 @@ Saving result to ./result/_result.json
 
 | node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
-| 1        | 1                | 115                   | 250.89             | 1.00    |
-| 1        | 4                | 115                   | 969.75             | 3.87    |
-| 1        | 8                | 115                   | 1927.74            | 7.68    |
+| 1        | 1                | 115                   | 248.01             | 1.00    |
+| 1        | 4                | 115                   | 973.63             | 3.93    |
+| 1        | 8                | 115                   | 1933.88            | 7.8     |
 
-### 
+
 
 ### Face Emore & Y1 & FP32
 
@@ -496,15 +495,13 @@ Saving result to ./result/_result.json
 
 ### Max num_classses
 
-| node_num | gpu_num_per_node | batch_size_per_device | FP16 | Model Parallel | Partial FC | num_classes |
+| node_num | gpu_num_per_node | batch_size_per_device | fp16 | Model Parallel | Partial FC | num_classes |
 | -------- | ---------------- | --------------------- | ---- | -------------- | ---------- | ----------- |
 | 1        | 1                | 64                    | True | True           | True       | 2000000     |
 | 1        | 8                | 64                    | True | True           | True       | 13500000    |
- 
 
-目前 InsightFace 的相关代码及结果已经 PR 至 [insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/[**oneflow_face**]([insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/**oneflow_face**/)
+目前 InsightFace 的相关代码及结果已经 PR 至 [insightface][(https://github.com/deepinsight/insightface](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487))/[recognition](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487/recognition)/[**oneflow_face**]([insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/**oneflow_face**/)
 
-[deepinsight](https://github.com/deepinsight)/**[insightface](https://github.com/deepinsight/InsightFace)** 官方测评结果详见 [Benchmark](https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc#benchmark)。
-
-详细 Log 信息可下载：[-]()。
+[deepinsight](https://github.com/deepinsight)/**[insightface](https://github.com/deepinsight/insightface](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487)** 官方测评结果详见 [Benchmark](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487/recognition/partial_fc#benchmark)。
+详细 Log 信息可下载：[insightface_fp32_logs.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/InsightFace/insightface_fp32_logs.tar)。
 

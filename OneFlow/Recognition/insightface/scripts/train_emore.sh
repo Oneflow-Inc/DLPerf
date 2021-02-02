@@ -7,14 +7,17 @@ loss=${4:-"arcface"}
 num_nodes=${5:-1}
 batch_size_per_device=${6:-64}
 train_unit=${7:-"batch"}
-train_iter=${8:-15} 
+train_iter=${8:-150} 
 gpu_num_per_node=${9:-8}
-precision=${10:-fp32}
+precision=${10:-fp16}
 model_parallel=${11:-0}
-partial_fc=${12:-1}
+partial_fc=${12:-0}
 test_times=${13:-1}
+sample_ratio=${14:-0.1}
+num_classes=${15:-1500000}
+use_synthetic_data=${16:-False}
 
-MODEL_SAVE_DIR=${precision}_b${batch_size_per_device}_oneflow_model_parallel_${model_parallel}_partial_fc_${partial_fc}/$network/${num_nodes}n${gpu_num_per_node}g
+MODEL_SAVE_DIR=${num_classes}_${precision}_b${batch_size_per_device}_oneflow_model_parallel_${model_parallel}_partial_fc_${partial_fc}/$network/${num_nodes}n${gpu_num_per_node}g
 LOG_DIR=$MODEL_SAVE_DIR
 
 if [ $gpu_num_per_node -gt 1 ]; then
@@ -38,8 +41,8 @@ LOG_FILE=${LOG_DIR}/${network}_b${batch_size_per_device}_${precision}_$test_time
 rm -r $MODEL_SAVE_DIR
 mkdir -p $MODEL_SAVE_DIR
 
-#time=$(date "+%Y-%m-%d %H:%M:%S")
-#echo $time
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo $time
 
 CMD="$workspace/insightface_train.py"
 CMD+=" --network=${network}"
@@ -53,6 +56,9 @@ CMD+=" --model_parallel=${model_parallel}"
 CMD+=" --partial_fc=${partial_fc}"
 CMD+=" --log_dir=${LOG_DIR}"
 CMD+=" $PREC"
+CMD+=" --sample_ratio=${sample_ratio}"
+CMD+=" --use_synthetic_data=${use_synthetic_data}"
+CMD+=" --num_classes=${num_classes}"
 
 CMD="python3 $CMD "
 set -x
