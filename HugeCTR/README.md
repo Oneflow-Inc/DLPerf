@@ -73,7 +73,7 @@ Legend:
 ### 500 Iterations Test
 This test aims to show the training loss convergency profile and validation area under the ROC Curve(AUC) during 500 steps testing. 
 
-To show the tendency of the loss and AUC curves clearly, the total training batch size is set to 512, 512 is a small value compared to the WDL industry production scenario. Validation should be performed every training step.
+To show the tendency of the loss and AUC curves clearly, the total training batch size is set to 512 which is a small value compared to the WDL industry production scenario. Validation should be performed every training step.
 
 ### 300,000 Iterations Test
 This test aims to show the training loss profile and validation area under the ROC Curve(AUC) during 300,000 steps testing. Compare to 500 iters test, we print loss and AUC every 1000 steps, it will bring us a long period view of loss and AUC curves.
@@ -84,29 +84,29 @@ This test will keep the total batch size as a constant value(default is 16384), 
 Latency and GPU device memory usage should be recorded in this test.
 
 ### Fixed Batch Size per Device Test
-This test will keep batch size per device as a constant value(default is 16384), each test case adopts a different number of GPU devices, such as 1, 2, 4, 8, 16, 32, the total batch size is scaled up with the total number of devices of the test case.
+This test will keep batch size per device as a constant value(default is 16384), each test case adopts a different number of GPU devices, such as 1, 2, 4, 8, 16, 32, the total batch size is scaled up with the total number of devices.
 
 Latency and GPU device memory usage should be recorded in this test.
 
 ### Batch Size Double Test
-This test uses one GPU device, the first case's batch size is 512, the batch size of the subsequent case is doubled, and so on. This test can be performed on single device, single node and multi-nodes.
+This test uses one GPU device, batch size of the first case is 512 while the subsequent cases are doubled, and so on. This test can be performed on single device, single node and multi-nodes.
 
 Latency and GPU device memory usage should be recorded in this test.
 
 ### Vocabulary Size Double Test
-This test uses devices as much as possible, the first case's vocabulary size is 3,200,000, the vocab size of the subsequent case is doubled, and so on. This test can be performed on single device, single node and multi-nodes.
+This test will use devices as much as possible, vocabulary size of the first case is 3,200,000 while the subsequent cases are doubled, and so on. This test can be performed on single device, single node and multi-nodes.
 
 Latency and GPU device memory usage should be recorded in this test.
 
 ## Test Results
 
-If it is a a test with multiple devices, the log of device 0 is recorded.
+If test with multiple devices, only the log of device 0 is recorded.
 
 ### batch size X 2 tests
 All batch size double tests were performed with 2 x 1024 Hidden Fully-connected Units.
 
 #### 1 node 1 device
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n1g1 | 512 | 16 | 2,322,444 | 2.74 | 1,879 |
 | n1g1 | 1,024 | 16 | 2,322,444 | 3.318 | 1,883 |
@@ -121,7 +121,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 ![latency](./imgs/hugectr_1node_1device_batchsize_double.png)
 
 #### 1 node 8 devices
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n1g8 | 512 | 16 | 2,322,444 | 3.335 | 2,229 |
 | n1g8 | 1,024 | 16 | 2,322,444 | 4.828 | 2,237 |
@@ -138,7 +138,7 @@ All batch size double tests were performed with 2 x 1024 Hidden Fully-connected 
 ![latency](./imgs/hugectr_1node_8device_batchsize_double.png)
 
 #### 4 nodes 32 devices
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n4g8 | 16,384 | 32 | 2,322,444 | 14.536 | 2,633 |
 | n4g8 | 32,768 | 32 | 2,322,444 | 21.28 | 2,901 |
@@ -154,7 +154,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 
 #### 1 node 1 device
 
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n1g1 | 16,384 | 16 | 3,200,000 | 65.664 | 4,427 |
 | n1g1 | 16,384 | 16 | 6,400,000 | 67.913 | 5,177 |
@@ -166,7 +166,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 
 #### 1 node 8 devices
 
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n1g8 | 16,384 | 16 | 3,200,000 | 16.671 | 3,021 |
 | n1g8 | 16,384 | 16 | 6,400,000 | 19.036 | 3,797 |
@@ -177,7 +177,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 ![latency](./imgs/hugectr_1node_8device_vocabsize_double.png)
 
 #### 4 node 32 devices
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n4g8 | 16,384 | 32 | 3,200,000 | 21.843 | 3,217 |
 | n4g8 | 16,384 | 32 | 6,400,000 | 26.375 | 4,579 |
@@ -189,7 +189,7 @@ All vocat size double tests were performed with 7 x 1024 Hidden Fully-connected 
 ### fixed batch size per device tests
 All fix batch size per device tests were performed with 7 x 1024 Hidden Fully-connected Units.
 
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n1g1 | 16,384 | 32 | 2,322,444 | 70.181 | 4,845 |
 | n1g2 | 32,768 | 32 | 2,322,444 | 75.446 | 5,139 |
@@ -203,7 +203,7 @@ All fix batch size per device tests were performed with 7 x 1024 Hidden Fully-co
 ### fixed total batch size tests
 All fixed total batch size tests were performed with 7 x 1024 Hidden Fully-connected Units.
 
-| gpu | batchsize  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
+| gpu | batch_size  | deep_vec_size | vocab_size | latency(ms) | memory_usage(MB) |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | n1g1 | 16,384 | 32 | 2,322,444 | 70.216 | 4,845 |
 | n1g2 | 16,384 | 32 | 2,322,444 | 40.928 | 3,769 |
