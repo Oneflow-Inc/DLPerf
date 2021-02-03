@@ -2,7 +2,7 @@
 
 ## 概述 Overview
 
-本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出单机～多机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出多卡情况下的加速比，评判框架在多卡训练情况下的横向拓展能力。
 
 目前，该测试覆盖了FP32 精度下的单机1~8卡，后续将持续维护，增加更多方式的测评。
 
@@ -106,7 +106,7 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
 
-每个节点有8张显卡，这里设置batch size为64，分别在单机1卡～单机8卡的情况下进行了多组训练。
+每个节点有8张显卡，这里设分别在单机1卡～单机8卡的情况下进行了多组训练。
 
 #### 测试
 
@@ -124,9 +124,7 @@ bash run_test.sh
 
 针对1机1~8卡， 进行测试，并将 log 信息保存在logs目录下。
 
-
-
-**默认测试的网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
+**默认测试的backbone网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
 
 ```shell
 # 测试resnet100，batch size=96，sample_ratio=0.5
@@ -216,7 +214,7 @@ Saving result to ./result/bz64_result.json
 
 ## 性能结果 Performance
 
-- network:resnet100
+- backbone:resnet100
 
 - dataset:emore
 
