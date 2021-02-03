@@ -2,7 +2,7 @@
 
 # Overview
 
-本次复现采用了[MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/r1.1)中的[BERT](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/nlp/bert)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本次复现采用了[MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44)中的[BERT](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44/model_zoo/official/nlp/bert)，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试已覆盖 FP32、FP16混合精度以及图算融合（Graph Kernel Fusion，类似 XLA 的图优化/算子融合技术，在本文档后续简称 GKF），后续将持续维护，增加更多方式的测评。
 
@@ -24,6 +24,10 @@
 - CUDA 10.1.243
 - OpenMPI 4.0.3
 
+## 框架
+
+- **MindSpore 1.1.0**
+
 ## Feature support matrix
 
 | Feature            | BERT-Base MindSpore       |
@@ -36,8 +40,8 @@
 
 ## 项目代码
 
-- [MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/r1.1)
-  - [BERT项目主页](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/nlp/bert)
+- [MindSpore官方仓库](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44)
+  - [BERT项目主页](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44/model_zoo/official/nlp/bert)
 
 下载官方源码：
 
@@ -45,6 +49,7 @@
 git clone https://gitee.com/mindspore/mindspore.git
 cd mindspore/
 git checkout r1.1
+git reset d9db5bf730ee7aa252eb7df41ffad09501acbe44 --hard
 cd model_zoo/official/nlp/bert/
 ```
 
@@ -52,16 +57,19 @@ cd model_zoo/official/nlp/bert/
 
 2.将本页面scripts路径下的其余脚本：`run_standalone_pretrain_for_gpu.sh`、`run_distributed_pretrain_for_gpu.sh`放入model_zoo/official/nlp/bert/scripts/下；
 
-3.修改代码脚本
-将 model_zoo/official/nlp/bert/run_pretrain.py 173 行：
+3.修改代码脚本，将本页面`run_pretrain.py`放入model_zoo/official/nlp/bert/路径下；
+
+或者按如下说明手动修改官方原有`run_pretrain.py`：
+
+将 model_zoo/official/nlp/bert/run_pretrain.py 138 行：
 ```shell
-# line 133
+# line 138
     args_opt = parser.parse_args()
 ```
 替换为：
 
 ```shell
-    # line 133
+    # line 138
     parser.add_argument("--optimizer", type=str, default="AdamWeightDecay", choices=["AdamWeightDecay", "Lamb", "Momentum"],
                         help="Optimizer, default is AdamWeightDecay.")
     parser.add_argument("--enable_global_norm", type=str, default="true", choices=["true", "false"],
@@ -77,23 +85,29 @@ cd model_zoo/official/nlp/bert/
     bert_net_cfg.compute_type = mstype.float32 if args_opt.dtype== "fp32" else mstype.float16
     logger.warning("\nargs_opt: {}".format(args_opt))
     logger.warning("\ncfg: {}".format(cfg))
+
 ```
 增加输入参数。
 
-将 model_zoo/official/nlp/bert/run_pretrain.py 178 行至 181 行：
+将 model_zoo/official/nlp/bert/run_pretrain.py 179 行至 187 行：
 ```shell
-    # line 178
+    # line 179
     if args_opt.device_target == 'GPU' and bert_net_cfg.compute_type != mstype.float32 and \
     not is_auto_enable_graph_kernel:
-    logger.warning('Gpu only support fp32 temporarily, run with fp32.')
+    warning_message = 'Gpu only support fp32 temporarily, run with fp32.'
     bert_net_cfg.compute_type = mstype.float32
+    if args_opt.enable_lossscale == "true":
+        args_opt.enable_lossscale = "false"
+        warning_message = 'Gpu only support fp32 temporarily, run with fp32 and disable lossscale.'
+    logger.warning(warning_message)
+
 ```
-删除，避免 data type 被其他参数影响。
+删除，避免参数间互相影响。
 
 ## 容器
 
 本次测评采用的是MindSpore官方提供的Docker镜像，您可以
-参考[MindSpore官方文档](https://gitee.com/mindspore/mindspore/tree/r1.1/#docker%E9%95%9C%E5%83%8F)GPU部分
+参考[MindSpore官方文档](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44/#docker%E9%95%9C%E5%83%8F)GPU部分
 **获取项目镜像**
 
 对于`GPU`后端，请确保`nvidia-container-toolkit`已经提前安装，以下是`Ubuntu`用户安装指南：
@@ -152,7 +166,7 @@ docker run -it \
 
 ## 数据集
 
-数据集采用TFRecord格式的[Wikipedia](https://dumps.wikimedia.org/)，制作方式请参考：[MindSpore官方仓库说明](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo/official/nlp/bert#dataset) ；
+数据集采用TFRecord格式的[Wikipedia](https://dumps.wikimedia.org/)，制作方式请参考：[MindSpore官方仓库说明](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44/model_zoo/official/nlp/bert#dataset) ；
 
 数据集具体制作步骤及脚本见：[TensorFlow 2.x-BERT测评](https://github.com/Oneflow-Inc/DLPerf/tree/master/TensorFlow/bert#%E6%95%B0%E6%8D%AE%E9%9B%86)
 
@@ -236,60 +250,60 @@ python extract_mindspore_logs_time.py --log_dir=logs_fp32/mindspore/bert/bz32
 输出：
 
 ```shell
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_1.log {1: 2376.39}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_5.log {1: 2376.39, 5: 2382.1}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_4.log {1: 2376.39, 5: 2382.1, 4: 2379.52}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_3.log {1: 2376.39, 5: 2382.1, 4: 2379.52, 3: 2387.77}
-logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_2.log {1: 2376.39, 5: 2382.1, 4: 2379.52, 3: 2387.77, 2: 2382.25}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_1.log {1: 171.11}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_5.log {1: 171.11, 5: 171.33}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_4.log {1: 171.11, 5: 171.33, 4: 171.12}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_3.log {1: 171.11, 5: 171.33, 4: 171.12, 3: 171.29}
-logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_2.log {1: 171.11, 5: 171.33, 4: 171.12, 3: 171.29, 2: 171.08}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_1.log {1: 113.17}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_5.log {1: 113.17, 5: 113.16}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_4.log {1: 113.17, 5: 113.16, 4: 113.17}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_3.log {1: 113.17, 5: 113.16, 4: 113.17, 3: 113.17}
-logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_2.log {1: 113.17, 5: 113.16, 4: 113.17, 3: 113.17, 2: 113.13}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_1.log {1: 1221.36}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_5.log {1: 1221.36, 5: 1220.07}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_4.log {1: 1221.36, 5: 1220.07, 4: 1213.6}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_3.log {1: 1221.36, 5: 1220.07, 4: 1213.6, 3: 1221.21}
-logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_2.log {1: 1221.36, 5: 1220.07, 4: 1213.6, 3: 1221.21, 2: 1214.8}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_1.log {1: 349.18}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_5.log {1: 349.18, 5: 349.39}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_4.log {1: 349.18, 5: 349.39, 4: 348.76}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_3.log {1: 349.18, 5: 349.39, 4: 348.76, 3: 348.9}
-logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_2.log {1: 349.18, 5: 349.39, 4: 348.76, 3: 348.9, 2: 348.9}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_1.log {1: 703.44}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_5.log {1: 703.44, 5: 703.99}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_4.log {1: 703.44, 5: 703.99, 4: 702.4}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_3.log {1: 703.44, 5: 703.99, 4: 702.4, 3: 708.24}
-logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_2.log {1: 703.44, 5: 703.99, 4: 702.4, 3: 708.24, 2: 707.89}
-{'bert': {'1n1g': {'average_speed': 113.16,
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_5.log {5: 174.38}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_1.log {5: 174.38, 1: 174.45}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_2.log {5: 174.38, 1: 174.45, 2: 174.4}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_4.log {5: 174.38, 1: 174.45, 2: 174.4, 4: 174.56}
+logs_fp32/mindspore/bert/bz32/1n2g/bert_b32_fp32_3.log {5: 174.38, 1: 174.45, 2: 174.4, 4: 174.56, 3: 174.52}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_5.log {5: 1309.42}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_1.log {5: 1309.42, 1: 1309.64}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_2.log {5: 1309.42, 1: 1309.64, 2: 1309.94}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_4.log {5: 1309.42, 1: 1309.64, 2: 1309.94, 4: 1309.76}
+logs_fp32/mindspore/bert/bz32/2n8g/bert_b32_fp32_3.log {5: 1309.42, 1: 1309.64, 2: 1309.94, 4: 1309.76, 3: 1309.7}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_5.log {5: 112.22}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_1.log {5: 112.22, 1: 112.18}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_2.log {5: 112.22, 1: 112.18, 2: 112.12}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_4.log {5: 112.22, 1: 112.18, 2: 112.12, 4: 112.18}
+logs_fp32/mindspore/bert/bz32/1n1g/bert_b32_fp32_3.log {5: 112.22, 1: 112.18, 2: 112.12, 4: 112.18, 3: 112.21}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_5.log {5: 2451.44}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_1.log {5: 2451.44, 1: 2458.83}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_2.log {5: 2451.44, 1: 2458.83, 2: 2450.83}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_4.log {5: 2451.44, 1: 2458.83, 2: 2450.83, 4: 2458.03}
+logs_fp32/mindspore/bert/bz32/4n8g/bert_b32_fp32_3.log {5: 2451.44, 1: 2458.83, 2: 2450.83, 4: 2458.03, 3: 2457.8}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_5.log {5: 352.54}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_1.log {5: 352.54, 1: 352.38}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_2.log {5: 352.54, 1: 352.38, 2: 352.76}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_4.log {5: 352.54, 1: 352.38, 2: 352.76, 4: 352.69}
+logs_fp32/mindspore/bert/bz32/1n4g/bert_b32_fp32_3.log {5: 352.54, 1: 352.38, 2: 352.76, 4: 352.69, 3: 352.93}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_5.log {5: 704.3}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_1.log {5: 704.3, 1: 704.85}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_2.log {5: 704.3, 1: 704.85, 2: 704.81}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_4.log {5: 704.3, 1: 704.85, 2: 704.81, 4: 704.37}
+logs_fp32/mindspore/bert/bz32/1n8g/bert_b32_fp32_3.log {5: 704.3, 1: 704.85, 2: 704.81, 4: 704.37, 3: 705.25}
+{'bert': {'1n1g': {'average_speed': 112.18,
                    'batch_size_per_device': 32,
-                   'median_speed': 113.17,
+                   'median_speed': 112.18,
                    'speedup': 1.0},
-          '1n2g': {'average_speed': 171.19,
+          '1n2g': {'average_speed': 174.46,
                    'batch_size_per_device': 32,
-                   'median_speed': 171.12,
-                   'speedup': 1.51},
-          '1n4g': {'average_speed': 349.03,
+                   'median_speed': 174.45,
+                   'speedup': 1.56},
+          '1n4g': {'average_speed': 352.66,
                    'batch_size_per_device': 32,
-                   'median_speed': 348.9,
-                   'speedup': 3.08},
-          '1n8g': {'average_speed': 705.19,
+                   'median_speed': 352.69,
+                   'speedup': 3.14},
+          '1n8g': {'average_speed': 704.72,
                    'batch_size_per_device': 32,
-                   'median_speed': 703.99,
-                   'speedup': 6.22},
-          '2n8g': {'average_speed': 1218.21,
+                   'median_speed': 704.81,
+                   'speedup': 6.28},
+          '2n8g': {'average_speed': 1309.69,
                    'batch_size_per_device': 32,
-                   'median_speed': 1220.07,
-                   'speedup': 10.78},
-          '4n8g': {'average_speed': 2381.61,
+                   'median_speed': 1309.7,
+                   'speedup': 11.67},
+          '4n8g': {'average_speed': 2455.39,
                    'batch_size_per_device': 32,
-                   'median_speed': 2382.1,
-                   'speedup': 21.05}}}
+                   'median_speed': 2457.8,
+                   'speedup': 21.91}}}
 Saving result to ./result/_result.json
 ```
 
@@ -322,80 +336,60 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 113.17    | 1       |
-| 1        | 2       | 171.12    | 1.51    |
-| 1        | 4       | 348.9     | 3.08    |
-| 1        | 8       | 703.99    | 6.22    |
-| 2        | 16      | 1220.07   | 10.78   |
-| 4        | 32      | 2382.1    | 21.05   |
+| 1        | 1       | 112.18    | 1       |
+| 1        | 2       | 174.45    | 1.56    |
+| 1        | 4       | 352.69    | 3.14    |
+| 1        | 8       | 704.81    | 6.28    |
+| 2        | 16      | 1309.7    | 11.67   |
+| 4        | 32      | 2457.8    | 21.91   |
 
 #### batch size=32 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 149.98    | 1       |
-| 1        | 2       | 263.18    | 1.75    |
-| 1        | 4       | 553.06    | 3.69    |
-| 1        | 8       | 1124.46   | 7.5     |
-| 2        | 16      | 1785.3    | 11.9    |
-| 4        | 32      | 3445.38   | 22.97   |
-
-#### batch size=48 & without Graph Kernel Fusion
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 118.78    | 1       |
-| 1        | 2       | 194.08    | 1.63    |
-| 1        | 4       | 390.59    | 3.29    |
-| 1        | 8       | 791.14    | 6.66    |
-| 2        | 16      | 1415.69   | 11.92   |
-| 4        | 32      | 2786.19   | 23.46   |
-
-#### batch size=48 & with Graph Kernel Fusion
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 157.27    | 1       |
-| 1        | 2       | 285.88    | 1.82    |
-| 1        | 4       | 576.93    | 3.67    |
-| 1        | 8       | 1168.05   | 7.43    |
-| 2        | 16      | 1994.8    | 12.68   |
-| 4        | 32      | 3890.85   | 24.74   |
+| 1        | 1       | 148.74    | 1       |
+| 1        | 2       | 258.38    | 1.74    |
+| 1        | 4       | 548.7     | 3.69    |
+| 1        | 8       | 1106.81   | 7.44    |
+| 2        | 16      | 1707.44   | 11.48   |
+| 4        | 32      | 3423.44   | 23.02   |
 
 #### batch size=64 & without Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 119.36    | 1       |
-| 1        | 2       | 204.05    | 1.71    |
-| 1        | 4       | 410.41    | 3.44    |
-| 1        | 8       | 829.83    | 6.95    |
-| 2        | 16      | 1517.57   | 12.71   |
-| 4        | 32      | 2990.8    | 25.06   |
+| 1        | 1       | 117.99    | 1       |
+| 1        | 2       | 205.54    | 1.74    |
+| 1        | 4       | 413.71    | 3.51    |
+| 1        | 8       | 827.83    | 7.02    |
+| 2        | 16      | 1582.82   | 13.41   |
+| 4        | 32      | 3051.3    | 25.86   |
 
 #### batch size=64 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 157.13    | 1       |
-| 1        | 2       | 292.4     | 1.86    |
-| 1        | 4       | 587.36    | 3.74    |
-| 1        | 8       | 1183.68   | 7.53    |
-| 2        | 16      | 2092.23   | 13.32   |
-| 4        | 32      | 4102.04   | 26.11   |
+| 1        | 1       | 153.51    | 1       |
+| 1        | 2       | 284.69    | 1.85    |
+| 1        | 4       | 588.12    | 3.83    |
+| 1        | 8       | 1181.56   | 7.7     |
+| 2        | 16      | 2044.75   | 13.32   |
+| 4        | 32      | 4080.97   | 26.58   |
 
 #### batch size=96 & with Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 157.95    | 1       |
-| 1        | 2       | 300.73    | 1.90    |
-| 1        | 4       | 598.74    | 3.79    |
-| 1        | 8       | 1204.86   | 7.63    |
-| 2        | 16      | 2213.37   | 14.01   |
-| 4        | 32      | 4364.62   | 27.63   |
+| 1        | 1       | 154.68    | 1       |
+| 1        | 2       | 294.01    | 1.9     |
+| 1        | 4       | 601.62    | 3.89    |
+| 1        | 8       | 1207.47   | 7.81    |
+| 2        | 16      | 2185.27   | 14.13   |
+| 4        | 32      | 4350.6    | 28.13   |
 
-注：batch size=96 without Graph Kernel Fusion 情况下会OOM(out of memory)
+注：
+- 以32为最小单位，关闭Graph Kernel Fusion时，最大batch size为64，否则会OOM(out of memory)。
+- 以32为最小单位，打开Graph Kernel Fusion时，最大batch size为96，否则会OOM(out of memory)。
 
 ### BERT-Base  FP16
 
@@ -403,51 +397,30 @@ extract_mindspore_logs_time.py根据log中打印出的耗时，排除前20iter�
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 239.42    | 1       |
-| 1        | 2       | 361.5     | 1.51    |
-| 1        | 4       | 742.64    | 3.10    |
-| 1        | 8       | 1492.7    | 6.23    |
-| 2        | 16      | 2564.36   | 10.71   |
-| 4        | 32      | 5000.16   | 20.88   |
+| 1        | 1       | 185.78    | 1       |
+| 1        | 2       | 347.73    | 1.87    |
+| 1        | 4       | 698.06    | 3.76    |
+| 1        | 8       | 1376.28   | 7.41    |
+| 2        | 16      | 2525.83   | 13.6    |
+| 4        | 32      | 4659.76   | 25.08   |
 
-#### batch size=64 & with Graph Kernel Fusion
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 506.35    | 1       |
-| 1        | 2       | 841.09    | 1.66    |
-| 1        | 4       | 1826.17   | 3.61    |
-| 1        | 8       | 3743.59   | 7.39    |
-| 2        | 16      | 5248.66   | 10.37   |
-| 4        | 32      | 9985.87   | 19.72   |
-
-#### batch size=96 & with Graph Kernel Fusion
+#### batch size=128 & without Graph Kernel Fusion
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 508.39    | 1       |
-| 1        | 2       | 890.49    | 1.75    |
-| 1        | 4       | 1847.05   | 3.63    |
-| 1        | 8       | 3762.17   | 7.4     |
-| 2        | 16      | 5893.18   | 11.59   |
-| 4        | 32      | 11347.61  | 22.32   |
+| 1        | 1       | 216.49    | 1       |
+| 1        | 2       | 417.56    | 1.93    |
+| 1        | 4       | 838.24    | 3.87    |
+| 1        | 8       | 1652.89   | 7.63    |
+| 2        | 16      | 3171.2    | 14.65   |
+| 4        | 32      | 6068.55   | 28.03   |
 
-#### batch size=160 & with Graph Kernel Fusion
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 510.81    | 1       |
-| 1        | 2       | 939.66    | 1.84    |
-| 1        | 4       | 1905.81   | 3.73    |
-| 1        | 8       | 3854.43   | 7.55    |
-| 2        | 16      | 6582.89   | 12.89   |
-| 4        | 32      | 12855.72  | 25.17   |
-
-注：batch size>=96, without Graph Kernel Fusion 情况下会OOM(out of memory)。
+注：
+- 以32为最小单位，关闭Graph Kernel Fusion时，最大batch size为128，否则会OOM(out of memory)。
+- 本次测评使用的MindSpore官方代码在使用FP16混合精度训练Bert时，若同时打开dynamic loss scale和Graph Kernel Fusion，会返回“Build akg kernel op failed”错误，因此暂时没有该配置的结果。
 
 ### 完整日志
 
 - [bert_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp32.zip) 
 - [bert_fp16.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp16.zip) 
 - [bert_fp32_gkf.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp32_gkf.zip) 
-- [bert_fp16_gkf.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MindSpore/bert/bert_fp16_gkf.zip) 
