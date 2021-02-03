@@ -2,7 +2,7 @@
 
 ## 概述 Overview
 
-本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出多卡情况下的加速比，评判框架在多卡训练情况下的横向拓展能力。
+本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出多卡情况下的加速比，评判框架在单机情况下的横向拓展能力。
 
 目前，该测试覆盖了FP32 精度下的单机1~8卡，后续将持续维护，增加更多方式的测评。
 
