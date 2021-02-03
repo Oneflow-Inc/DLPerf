@@ -197,7 +197,7 @@ Saving result to ./result/bz64_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 MXNet 框架的BERT-base 模型单机测试的性能结果和完整 log 日志。
+该小节提供针对 MXNet 框架的ArcFace 模型单机测试的性能结果和完整 log 日志。
 
 ### ArcFace(resnet100) FP32
 
