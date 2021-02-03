@@ -259,10 +259,11 @@ git clone https://github.com/Oneflow-Inc/oneflow_face.git
 git clone https://github.com/Oneflow-Inc/DLPerf.git
 ````
 
-将本仓库 DLPerf/OneFlow/Recognition/InsightFace/scripts 路径源码放至 oneflow_face 路径下，执行脚本
+将本仓库 DLPerf/OneFlow/Recognition/InsightFace/scripts 路径源码放至 oneflow_face 路径下，使用 /scripts 路径下的 insightface_train.py 替换 oneflow_face 路径下的文件，执行脚本
 
 
 ```
+mv scripts/insightface_train.py oneflow_face/insightface_train.py
 bash scripts/run_single_node.sh
 ```
 
@@ -343,7 +344,7 @@ Saving result to ./result/_result.json
 **batch_size = 64**
 
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 245.0              | 1.00    |
 | 1        | 4                | 64                    | 923.23             | 3.77    |
@@ -351,7 +352,7 @@ Saving result to ./result/_result.json
 
 **batch_size = max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 96                    | 252.76             | 1.00    |
 | 1        | 4                | 96                    | 969.27             | 3.83    |
@@ -361,7 +362,7 @@ Saving result to ./result/_result.json
 
 **batch_size = 64**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 245.29             | 1.00    |
 | 1        | 4                | 64                    | 938.83             | 3.83    |
@@ -369,7 +370,7 @@ Saving result to ./result/_result.json
 
 **batch_size = max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 115                   | 245.92             | 1.00    |
 | 1        | 4                | 115                   | 968.72             | 3.94    |
@@ -379,7 +380,7 @@ Saving result to ./result/_result.json
 
 **batch_size=64**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 247.97             | 1.00    |
 | 1        | 4                | 64                    | 946.54             | 3.82    |
@@ -387,7 +388,7 @@ Saving result to ./result/_result.json
 
 **batch_size=max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 120                   | 256.61             | 1.00    |
 | 1        | 4                | 120                   | 990.82             | 3.86    |
@@ -402,7 +403,7 @@ Saving result to ./result/_result.json
 **batch_size = 64**
 
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s| speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 230.22             | 1.00    |
 | 1        | 4                | 64                    | 847.71             | 3.68    |
@@ -410,7 +411,7 @@ Saving result to ./result/_result.json
 
 **batch_size = max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s| speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 85                    | 229.94             | 1.00    |
 | 1        | 4                | 85                    | 856.61             | 3.73    |
@@ -420,7 +421,7 @@ Saving result to ./result/_result.json
 
 **batch_size = 64**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 230.33             | 1.00    |
 | 1        | 4                | 64                    | 912.24             | 3.96    |
@@ -428,7 +429,7 @@ Saving result to ./result/_result.json
 
 **batch_size = max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 100                   | 231.86             | 1.00    |
 | 1        | 4                | 100                   | 925.85             | 3.99    |
@@ -438,7 +439,7 @@ Saving result to ./result/_result.json
 
 **batch_size=64**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 64                    | 245.12             | 1.00    |
 | 1        | 4                | 64                    | 945.44             | 3.86    |
@@ -446,7 +447,7 @@ Saving result to ./result/_result.json
 
 **batch_size=max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 115                   | 248.01             | 1.00    |
 | 1        | 4                | 115                   | 973.63             | 3.93    |
@@ -461,7 +462,7 @@ Saving result to ./result/_result.json
 **batch_size = 256**
 
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 256                   | 1961.52            | 1.00    |
 | 1        | 4                | 256                   | 7354.49            | 3.75    |
@@ -469,7 +470,7 @@ Saving result to ./result/_result.json
 
 **batch_size = max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 350                   | 1969.66            | 1.00    |
 | 1        | 4                | 350                   | 7511.53            | 3.81    |
@@ -479,7 +480,7 @@ Saving result to ./result/_result.json
 
 **batch_size = 256**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 256                   | 1963.62            | 1.00    |
 | 1        | 4                | 256                   | 7264.54            | 3.7     |
@@ -487,7 +488,7 @@ Saving result to ./result/_result.json
 
 **batch_size = max**
 
-| node_num | gpu_num_per_node | batch_size_per_device | samples/s(PyTorch) | speedup |
+| node_num | gpu_num_per_node | batch_size_per_device | samples/s | speedup |
 | -------- | ---------------- | --------------------- | ------------------ | ------- |
 | 1        | 1                | 400                   | 1969.65            | 1.00    |
 | 1        | 4                | 400                   | 7363.77            | 3.74    |
@@ -500,8 +501,8 @@ Saving result to ./result/_result.json
 | 1        | 1                | 64                    | True | True           | True       | 2000000     |
 | 1        | 8                | 64                    | True | True           | True       | 13500000    |
 
-目前 InsightFace 的相关代码及结果已经 PR 至 [insightface][(https://github.com/deepinsight/insightface](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487))/[recognition](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487/recognition)/[**oneflow_face**]([insightface](https://github.com/deepinsight/insightface)/[recognition](https://github.com/deepinsight/insightface/tree/master/recognition)/**oneflow_face**/)
+目前 InsightFace 的相关代码及结果已经 PR 至 [insightface](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487)/[recognition](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487/recognition)/[**oneflow_face**](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487/recognition/oneflow_face)
 
-[deepinsight](https://github.com/deepinsight)/**[insightface](https://github.com/deepinsight/insightface](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487)** 官方测评结果详见 [Benchmark](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487/recognition/partial_fc#benchmark)。
+[deepinsight](https://github.com/deepinsight)/[insightface](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487) 官方测评结果详见 [Benchmark](https://github.com/deepinsight/insightface/tree/79aacd2bb3323fa50a125b828bb1656166604487/recognition/partial_fc#benchmark)。
+
 详细 Log 信息可下载：[insightface_fp32_logs.tar](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/InsightFace/insightface_fp32_logs.tar)。
-

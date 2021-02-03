@@ -59,6 +59,7 @@ CMD+=" $PREC"
 CMD+=" --sample_ratio=${sample_ratio}"
 CMD+=" --use_synthetic_data=${use_synthetic_data}"
 CMD+=" --num_classes=${num_classes}"
+CMD+=" --data_part_num=${data_part_num}"
 
 CMD="python3 $CMD "
 set -x
