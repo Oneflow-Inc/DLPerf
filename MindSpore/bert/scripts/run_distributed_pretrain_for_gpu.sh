@@ -27,6 +27,11 @@ else
     echo "Invalid node num."
 fi
 
+ENABLE_LOSSSCALE="false"
+if [ ${DTYPE} == "fp16" ] ; then
+  ENABLE_LOSSSCALE="true"
+fi
+
 export CUDA_VISIBLE_DEVICES=$DEVICE_ID
 export GLOG_logtostderr=1
 export GLOG_v=2
@@ -46,7 +51,7 @@ mpirun --allow-run-as-root \
     --distribute="true"        \
     --epoch_size=1    \
     --enable_save_ckpt="false"    \
-    --enable_lossscale="false"    \
+    --enable_lossscale=$ENABLE_LOSSSCALE \
     --enable_data_sink="true"    \
     --data_sink_steps=10        \
     --train_steps=$NUM_STEP \
