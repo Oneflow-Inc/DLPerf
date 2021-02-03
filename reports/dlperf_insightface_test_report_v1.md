@@ -107,6 +107,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 64                    | 938.83            | 651.44          |
 | 1        | 8                | 64                    | 1854.15           | 756.96          |
 
+
+![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_mp_en.png)
+
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bzs=115) | MXNet samples/s（max bzs=96） |
@@ -114,6 +117,8 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 1                | 245.92                         | 242.2                         |
 | 1        | 4                | 968.72                         | 724.26                        |
 | 1        | 8                | 1925.59                        | 821.06                        |
+
+![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_mp_en.png)
 
 #### Partial FC, sample_ratio=0.1
 
@@ -207,6 +212,8 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 256                   | 7354.49           |                 |
 | 1        | 8                | 256                   | 14298.02          |                 |
 
+![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_b256_mp_en.png)
+
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bzs=350) | MXNet samples/s(max bzs=352) |
@@ -214,6 +221,8 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 1                | 1969.66                        |                              |
 | 1        | 4                | 7511.53                        |                              |
 | 1        | 8                | 14756.03                       |                              |
+
+![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_bmax_mp_en.png)
 
 #### Model Parallelism
 
