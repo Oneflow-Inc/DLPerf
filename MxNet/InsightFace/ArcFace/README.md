@@ -195,7 +195,7 @@ Saving result to ./result/bz64_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 MXNet 框架的Insightface模型(Arcface配置)的单机测试性能结果和完整 log 日志。
+该小节提供针对 MXNet 框架的Insightface模型(Arcface配置)，以及基于train_parall.py(模型并行)进行的单机测试性能结果和完整 log 日志。
 
 ### Insightface(resnet100) FP32
 
@@ -250,7 +250,6 @@ Saving result to ./result/bz64_result.json
 
 - 当训练backbone网络使用mobilefacenet时，多gpu相比单gpu并没有明显加速，是因为巨大的全连接层带来的IO瓶颈。
 
-- 我们后续打算对[partial_fc](https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc)项目进行测试，其使用了openmpi和horovod，速度更快且支持分布式多机多卡下的训练。
 
 
 
