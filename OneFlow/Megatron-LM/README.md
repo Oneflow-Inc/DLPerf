@@ -164,7 +164,7 @@ node_ips="10.11.0.2,10.11.0.3,10.11.0.4,10.11.0.5"
 
 **单机8卡**
 
-| date     | test_desc | xn_xg_xdp_xmp_xbs | gpu_mem(mB)  | gpu_util(%)        | throuthput(sample/sec) |            |
+| date     | test_num | test_desc | xn_xg_xdp_xmp_xbs | gpu_mem(mB)  | gpu_util(%)        | throuthput(sample/sec) |
 | -------- | --------- | ----------------- | ------------ | ------------------ | ---------------------- | ---------- |
 | 20201208 | test-10-1 | off_optimization  | 1n_8g_dp_1bs | 5603               | 73                     | 104        |
 |          | test-10-2 | on_optimization   | 1n_8g_dp_1bs | 3849(-1754,↓31.3%) | 43                     | 89(↓14.4%) |
