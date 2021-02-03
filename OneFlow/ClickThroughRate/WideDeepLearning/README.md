@@ -8,7 +8,7 @@ This folder holds OneFlow WideDeepLearning Benchmark Test scripts, tools and rep
 │   ├── launch.sh
 │   └── ubuntu.dockerfile
 ├── imgs
-├── extract_info_from_log.py # extract information form log files
+├── extract_info_from_log.py # extract information from log files
 ├── extract_time.py 
 ├── gpu_memory_usage.py # log maximum GPU device memory usage during testing
 ├── README.md
@@ -23,21 +23,21 @@ This folder holds OneFlow WideDeepLearning Benchmark Test scripts, tools and rep
 ```
 
 ### Run Scripts
-We can run tests below as follows:
+We can run tests as follows:
 
-1. Build docker image: 
+1. Build the docker image: 
 
 ```shell
 cd docker && bash build.sh
 ```
 
-**Note**: The last line in `docker/ubuntu.dockerfile` is a command to install the 0.2.0 OneFlow in docker, however, you can install whatever version you want by changing it, for example, install the latest stable release version of OneFlow:
+**Note**: At the end of `docker/ubuntu.dockerfile` there is a command to install the 0.2.0 OneFlow in docker, however, you can install whatever version you want, for example, install the latest stable release version by changing it to:
 
 ```shell
 RUN python3 -m pip install --find-links https://release.oneflow.info oneflow_cu102 --user
 ```
 
-2. Config the `launch.sh` file in docker folder:
+2. Change the configs in `docker/launch.sh` file:
 
 ```text
 ONEFLOW_BENCHMARK_ROOT=/path/to/OneFlow-Benchmark:/OneFlow-Benchmark
@@ -52,7 +52,7 @@ cd scripts && bash train_all_in_docker.sh
 ```
 
 ## Benchmark Test Cases
-This report summarized OneFlow test on 4 nodes with 8 x Tesla V100 on Oct 2020.
+This report has summarized OneFlow test on 4 nodes with 8 x Tesla V100 on Oct 2020.
 
 ### Test Environment
 
@@ -93,7 +93,7 @@ Legend:
 ### 500 Iterations Test
 This test aims to show the training loss convergency profile and validation area under the ROC Curve(AUC) during 500 steps testing. 
 
-To show the tendency of the loss and AUC curves clearly, the total training batch size is set to 512, 512 is a small value compared to the WDL industry production scenario. Validation should be performed every training step.
+To show the tendency of the loss and AUC curves clearly, the total training batch size is set to 512 which is a small value compared to the WDL industry production scenario. Validation should be performed every training step.
 
 ### 300,000 Iterations Test
 This test aims to show the training loss profile and validation area under the ROC Curve(AUC) during 300,000 steps testing. Compare to 500 iters test, we print loss and AUC every 1000 steps, it will bring us a long period view of loss and AUC curves.
@@ -109,20 +109,20 @@ This test will keep batch size per device as a constant value(default is 16384),
 Latency and GPU device memory usage should be recorded in this test.
 
 ### Batch Size Double Test
-This test uses one GPU device, the first case's batch size is 512, the batch size of the subsequent case is doubled, and so on. This test can be performed on single device, single node and multi-nodes.
+This test uses one GPU device, batch size of the first case is 512 while the subsequent cases are doubled, and so on. This test can be performed on single device, single node and multi-nodes.
 
 Latency and GPU device memory usage should be recorded in this test.
 
 ### Vocabulary Size Double Test
-This test uses devices as much as possible, the first case's vocabulary size is 3,200,000, the vocab size of the subsequent case is doubled, and so on. This test can be performed on single device, single node and multi-nodes.
+This test uses devices as much as possible, the vocabulary size of first case is 3,200,000 while the subsequent cases are doubled, and so on. This test can be performed on single device, single node and multi-nodes.
 
 Latency and GPU device memory usage should be recorded in this test.
 
 
 ## Test Results
-Each group was tested three times, and the median of data was selected as the final result.
+We have tested each group for three times, and the median of data was selected as the final result.
 
-If it is a a test with multiple devices, the log of device 0 is recorded.
+If it is a test with multiple devices, the log of device 0 is recorded.
 
 All the logs can be obtained [here](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/oneflow_wdl_1025_logs.tgz).
 
