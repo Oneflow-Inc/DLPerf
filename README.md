@@ -32,7 +32,7 @@ The first type is classical deep neural network models that used to evaluate the
 1. **ResNet-50 v1.5**
 2. **BERT-Base**
 
-The secode type is that some models use special techniques or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed, [Wide and Deep Learning(W&D)](https://arxiv.org/abs/1606.07792)based on [HugeCTR](https://github.com/NVIDIA/HugeCTR)( Designed for CTR estimation training and implemented by NVIDIA).
+The secode type is that some models use special techniques or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed, [Wide and Deep Learning(W&D)](https://arxiv.org/abs/1606.07792) based on [HugeCTR](https://github.com/NVIDIA/HugeCTR)(Designed for CTR estimation training and implemented by NVIDIA).
 
 | Model                                                        | Framework                                                    | Source                                                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
