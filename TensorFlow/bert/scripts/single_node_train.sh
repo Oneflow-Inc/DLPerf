@@ -22,6 +22,7 @@ echo "Total batch size : $total_batch_size"
 
 if  [ "$USE_XLA" == "true" ] ; then
   enable_xla='true'
+  export TF_XLA_FLAGS=--tf_xla_cpu_global_jit
 else
   enable_xla='false'
 fi

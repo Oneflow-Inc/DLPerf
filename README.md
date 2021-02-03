@@ -8,24 +8,34 @@ DLPerf measures how fast deep learning frameworks can train DNN models, so both 
 
 ### Evaluated Deep Learning Frameworks
 
-5 deep learning frameworks are evaluated in this repository, they are:
+Multiple deep learning frameworks are evaluated in this repository, they are:
 
 1. OneFlow
 2. TensorFlow 1.x and 2.x
 3. PyTorch
 4. MXNet
 5. PaddlePaddle
+6. MindSpore
 
-More and more frameworks will be included in the future, such as MindSpore and MegEngine.
+More frameworks will be included in the future, such as MegEngine, etc.
 
 ### Evaluated Deep Neural Network models
 
-2 classical deep neural network models are tested in this repository, they are:
+There are two main types of model cases tested in this repository, generally including : 
 
-1. ResNet-50 v1.5
-2. BERT-Base
+- Common cases
 
-There are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
+- Special cases
+
+
+The first type is classical deep neural network models that used to evaluate the performance of each framework,such as:
+
+1. **ResNet-50 v1.5**
+2. **BERT-Base**
+
+The second type is that some models use special techniques or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed, [HugeCTR](https://github.com/NVIDIA/HugeCTR)(Designed for CTR estimation training and implemented by NVIDIA).
+
+In general, there are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
 
 More DNN models will be tested in the future.
 
@@ -83,11 +93,12 @@ To get a continuous and stable output, first several training steps are ignored.
 - `TensorFlow/`: holds the reproducible scripts and test reports for DNN models from [TensorFlow 2.x official benchmark](https://github.com/tensorflow/models/tree/r2.3.0);
 - `PyTorch/`: holds the reproducible scripts and test reports for DNN models from [PyTorch official benchmark](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1);
 - `MxNet/`: holds the reproducible scripts and test reports for DNN models from [gluon-nlp](https://github.com/dmlc/gluon-nlp)  and [gluon-cv](https://github.com/dmlc/gluon-cv);
+- `MindSpore/`: holds the reproducible scripts and test reports for DNN models from [MindSpore official benchmark](https://gitee.com/mindspore/mindspore/tree/r1.1/model_zoo);
 - `reports`: holds rounds of DNN's benchmark test reports.
 
-## Summary of Latest Test Results
+## Summary of Latest Test Results(common cases)
 
-This section maintains the summary of the latest results. For more and more details, please find in [reports](./reports) folder.
+This section maintains a summary of the results of the common models.For more details, please refer to [reports](./reports) folder.
 
 ### Latest Test Report
 
@@ -113,6 +124,7 @@ This difference makes ResNet50 v1.5 slightly more accurate (~0.5% top1) than v1,
 | [TensorFlow 2.x](https://github.com/tensorflow/tensorflow/tree/v2.3.0) | [TensorFlow-models](https://github.com/tensorflow/models/tree/r2.3.0/official/vision/image_classification) | [9418.44](./TensorFlow/resnet50v1.5)                         | 29.27                   | 19314.31                                            | 17.96                          |
 | [PyTorch](https://github.com/pytorch/pytorch/tree/v1.6.0)    | [PyTorch-examples](https://github.com/PyTorch/examples/tree/49ec0bd72b85be55579ae8ceb278c66145f593e1/imagenet) | [10021.29](./PyTorch/resnet50v1.5)                           | 28.75                   | <sup>[2]</sup> -                                    | -                              |
 | [PaddlePaddle](https://github.com/PaddlePaddle/Paddle/tree/v1.8.3) | [PaddleCV](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleCV/image_classification) | [9348.17](./PaddlePaddle/resnet50v1.5)                       | 26.50                   | <sup>[3]</sup>10633.22<br>11617.57<sup>w/DALI</sup> | 10.2<br>13.1<sup>w/DALI</sup>  |
+| [MindSpore](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c) | [MindSpore-model_zoo](https://gitee.com/mindspore/mindspore/tree/e13c045ced043de5998f5f77acc0ebe7da4eed5c/model_zoo/official/cv/resnet) | [10731.78](./MindSpore/resnet50v1.5)                       | 29.02                   | 24183.95              | 21.67              |
 
 [1]:  AMP throughput of TensorFlow 1.x is obtained **with** or **without** XLA and using **bsz = 224**, because when bsz = 256 OOM (out of memory) will be encountered.
 
@@ -132,10 +144,12 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 | [PaddlePaddle](https://github.com/PaddlePaddle/Paddle/tree/v1.8.3) | [PaddleNLP](https://github.com/PaddlePaddle/models/tree/release/1.8/PaddleNLP/pretrain_language_models/BERT) | [3167.68<br>bsz=96](./PaddlePaddle/bert)                     | 2073.60                   | 5452.35<br>bsz=160                | 3406.36                                                      |
 | [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0)<sup>W/O clip</sup> | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/LanguageModeling/BERT) | [4799.64<br/>bsz=96](./OneFlow)                              | 4019.45                   | 17210.63<br>bsz=160               | 11195.72                                                     |
 | <sup>[5]</sup>[MXNet](https://github.com/apache/incubator-mxnet/tree/1.6.0)<sup>W/O clip</sup> | [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) | [4340.89<br>bsz=64](./MxNet/BERT)                            | 3671.45                   | 14822.31<br>bsz=128               | 11269.14                                                     |
+| [MindSpore](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44) | [MindSpore-model_zoo](https://gitee.com/mindspore/mindspore/tree/d9db5bf730ee7aa252eb7df41ffad09501acbe44/model_zoo/official/nlp/bert) | [3051.3<br/>bsz=64](./MindSpore/bert)                     | 2457.8                   | 6068.55<br>bsz=128                | 4659.76                                                      |
 
 [4]: AMP throughput of TensorFlow 1.x is obtained **with** or **without** XLA.
 
 [5]: The MXNet BERT script of the [gluon-nlp](https://github.com/dmlc/gluon-nlp/tree/7b7bf60259e28b3bf1f4d70569a7e5c18e2f4b3e/scripts/bert) repository does **NOT** support clip_by_ global_norm operation in Adam optimizer. **W/O clip_by_global_norm** operation, the throughput will be larger and the the fine-tuning accuracy may be lower. So we also tested OneFlow data W/O clip operation for comparison.
 
+## Other Test Results(special cases)
 
-
+This section maintains the results of the special case models.
