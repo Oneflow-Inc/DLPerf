@@ -52,7 +52,7 @@ Legend:
 | Framework | Version | Docker From |Model Sources|
 | --------- | ------- | ----------- | ----------- |
 |[OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0)|0.2.0|             |[OneFolow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/ClickThroughRate/WideDeepLearning)|
-|[HugeCTR](https://github.com/NVIDIA/HugeCTR)| 2.2 ||[samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl)|
+|[HugeCTR](https://github.com/NVIDIA/HugeCTR)| 2.2 |nvidia/cuda:11.0-cudnn8-devel-ubuntu18.04|[samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl)|
 
 ## Test Options
 
