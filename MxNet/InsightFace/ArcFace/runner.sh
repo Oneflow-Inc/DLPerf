@@ -6,6 +6,8 @@ GPUS=${4:-7}
 NODE_NUM=${5:-1}
 DTYPE=${6:-"fp32"}
 TEST_NUM=${7:-1}
+DATASET=${8:-emore}
+MODEL_PARALLEL=${9:-"True"}
 
 a=`expr ${#GPUS} + 1`
 gpu_num_per_node=`expr ${a} / 2`
@@ -25,7 +27,7 @@ esac
 
 
 
-log_folder=${MODEL}-${LOSS}/insightface/arcface/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
+log_folder=20210204-logs-${MODEL}-${LOSS}/insightface/arcface/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
 log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 
@@ -40,10 +42,21 @@ sed -i "s/\(default.per_batch_size = \)\S*/\default.per_batch_size = ${BZ_PER_DE
 
 
 echo "Begin time: "; date;
-python train_parall.py \
+
+if [ "$MODEL_PARALLEL" = "True" ] ; then
+    echo "Use model patallel mode"
+    python train_parall.py \
     --network ${MODEL}  \
     --loss ${LOSS} \
-    --dataset emore 2>&1 | tee ${log_file}
+    --dataset ${DATASET} 2>&1 | tee ${log_file}
+else
+    echo "Use data patallel mode"
+    python train.py \
+    --network ${MODEL}  \
+    --loss ${LOSS} \
+    --dataset ${DATASET} 2>&1 | tee ${log_file}
+fi
+
 
 echo "Writting log to $log_file"
 echo "End time: "; date;
