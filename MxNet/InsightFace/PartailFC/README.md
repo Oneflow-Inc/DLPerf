@@ -6,6 +6,8 @@
 
 目前，该测试覆盖了FP32 精度下的单机1~8卡，后续将持续维护，增加更多方式的测评。
 
+此外，针对大规模人脸，我们增加了一组最大人脸类别数的测试，用于展示框架在单卡/单机下支持的最大人脸ID类别数。
+
 
 
 ## 环境 Environment
@@ -142,6 +144,29 @@ dataset=glint360k_8GPU
 loss=cosface
 ```
 
+##### 最大人脸ID类别数测试
+
+我们在单机单卡、单机８卡的情况下，分别进行了最大人脸ID类别数的测试，测试条件为：
+
+- backbone:resnet100
+
+- batch size:64
+- partial fc(sample ratial=0.1)
+
+- dtype:fp16混合精度
+
+测试最大人脸ID类别数主要是通过修改[default.py](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L84) 中的config.num_classes，其中默认设置了100万、1000万、2000万、3000万、1亿人脸类别的配置，为了更加准确的进行边界性测试，可以添加自定义配置如：
+
+```python
+elif dataset == '1200w':
+        # max face ids 1200w 
+        config.debug = 1
+        config.num_classes = 1200 * 10000
+        config.lr_steps = '20000,28000'
+        config.max_update = 120
+```
+
+测试时，同步修改runner.sh[第52行](https://github.com/Oneflow-Inc/DLPerf/blob/mxnet-insightface-further-test/MxNet/InsightFace/PartailFC/runner.sh#L52)：`dataset=1200w`，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`
 
 ### 4. 数据处理
 
@@ -297,6 +322,15 @@ Saving result to ./result/bz64_result.json
 | 1        | 4       | 811.34    | 4.22    |
 | 1        | 8       | 1493.51   | 7.77    |
 
+### Max num classes(resnet100) FP16
+
+#### batch size = 64 & sample ratio = 0.1
+
+| node_num | gpu_num | max num classes |
+| -------- | ------- | --------------- |
+| 1        | 1       | 180 0000        |
+| 1        | 8       | 1200 0000       |
+
 
 ### 日志下载
 
@@ -304,5 +338,6 @@ Saving result to ./result/bz64_result.json
 
 - [partial_fc_fp32.zip.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32.zip)
 - [partial_fc_fp32_glint360k.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32_glint360k.zip)
+- [max_face_ids.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/max_face_ids.zip)
 
 
