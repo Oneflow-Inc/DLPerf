@@ -36,7 +36,7 @@
     - [Face Emore & Y1 & FP32](#face-emore--y1--fp32)
       - [Data Parallelism](#data-parallelism-2)
       - [Model Parallelism](#model-parallelism-2)
-    - [Max num_classses](#max-num_classses)
+    - [Max num_classes](#max-num_classes)
 
 
 ## 环境 Environment
@@ -139,7 +139,7 @@ mnist_kaggle/train/
 ├── part-00015
 ```
 
-OneFlow 采用此约定，与 Spark 的默认存储的文件名一致，方便使用 Spark 制作与转化 OFRecord 数据。
+OneFlow 采用此约定，与 Spark 默认存储的文件名一致，方便使用 Spark 制作与转化 OFRecord 数据。
 
 实际上，文件名前缀（`part-`）、文件名编号是否补齐、按多少位补齐，均可以自行指定，只需要在加载数据集时，保持相关参数一致即可。
 
@@ -277,7 +277,7 @@ bash scripts/run_single_node.sh
 ```
 bash train_emore.sh ${workspace_path} r100 emore arcface 1 64 batch 150 8 fp16 1 1 1 150000 True
 ```
-可以正常运行打印 log，即说明可支持当前 `num_classes`，可尝试更大 `num_classes`。
+若可以正常运行打印 log，即说明可支持当前 `num_classes` 设置，可尝试更大的 `num_classes`。
 
 ### 3. 数据处理
 
@@ -494,7 +494,7 @@ Saving result to ./result/_result.json
 | 1        | 4                | 400                   | 7363.77            | 3.74    |
 | 1        | 8                | 400                   | 14436.38           | 7.33    |
 
-### Max num_classses
+### Max num_classes
 
 | node_num | gpu_num_per_node | batch_size_per_device | fp16 | Model Parallel | Partial FC | num_classes |
 | -------- | ---------------- | --------------------- | ---- | -------------- | ---------- | ----------- |
