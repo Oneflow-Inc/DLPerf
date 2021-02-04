@@ -31,9 +31,9 @@ else
 fi
 
 if [ "$DTYPE" = "fp16" ] ; then
-    sed -i "s/\(config.fp16  = \)\S*/config.fp16  = True/" default.py
+    sed -i "s/\(config.fp16 = \)\S*/config.fp16 = True/" default.py
 else
-    sed -i "s/\(config.fp16  = \)\S*/config.fp16  = False/" default.py
+    sed -i "s/\(config.fp16 = \)\S*/config.fp16 = False/" default.py
 fi
 sed -i "s/\(config.batch_size = \)\S*/config.batch_size = ${BZ_PER_DEVICE}/" default.py
 sed -i "s/\(config.max_update = \)\S*/config.max_update = ${ITER_NUM}/" default.py
