@@ -302,7 +302,7 @@ Saving result to ./result/bz64_result.json
 
 详细 Log 信息可点击下载：
 
-- [arcface_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32.zip)
+- [partial_fc_fp32.zip.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32.zip)
 - [partial_fc_fp32_glint360k.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32_glint360k.zip)
 
 
