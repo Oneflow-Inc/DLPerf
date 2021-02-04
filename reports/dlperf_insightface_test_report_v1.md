@@ -108,7 +108,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 8                | 64                    | 1854.15           | 756.96          |
 
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_mp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_mp_en.png)
 
 **batch_size = max**
 
@@ -118,7 +118,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 968.72                         | 724.26                        |
 | 1        | 8                | 1925.59                        | 821.06                        |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_mp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_mp_en.png)
 
 #### Partial FC, sample_ratio = 0.1
 
@@ -130,7 +130,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 64                    | 946.54            |  799.19               |
 | 1        | 8                | 64                    | 1864.31           |   1586.09              |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_pf_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_pf_en.png)
 
 **batch_size=max**
 
@@ -140,7 +140,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 990.82                         |       852.4                    |
 | 1        | 8                | 1962.76                        |     1644.42                       |
 
-
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_pf_en.png)
 
 ### Glint360k & R100 & FP32 Thoughputs
 
@@ -155,7 +155,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 64                    | 847.71            | OOM             |
 | 1        | 8                | 64                    | 1688.62           | OOM             |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_dp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_dp_en.png)
 
 **batch_size = max**
 
@@ -165,7 +165,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 856.61                        | OOM                         |
 | 1        | 8                | 1707.03                       | OOM                         |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_dp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_dp_en.png)
 
 #### Model Parallelism
 
@@ -177,7 +177,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 64                    | 912.24            | OOM             |
 | 1        | 8                | 64                    | 1808.27           | OOM             |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_mp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_mp_en.png)
 
 **batch_size = max**
 
@@ -187,7 +187,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 925.85                         | OOM                        |
 | 1        | 8                | 1844.66                        | OOM                        |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_mp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_mp_en.png)
 
 #### Partial FC, sample_ratio = 0.1
 
@@ -199,7 +199,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 64                    | 945.44            | 730.29          |
 | 1        | 8                | 64                    | 1858.57           | 1359.2          |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_pf_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_pf_en.png)
 
 **batch_size=max**
 
@@ -209,7 +209,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 973.63                         | 811.34                      |
 | 1        | 8                | 1933.88                        | 1493.51                     |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_pf_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_pf_en.png)
 
 ### Face Emore & Y1 & FP32 Thoughputs
 
@@ -224,7 +224,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 256                   | 7354.49           | 1055.88         |
 | 1        | 8                | 256                   | 14298.02          | 1031.1          |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_b256_dp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_b256_dp_en.png)
 
 **batch_size = max**
 
@@ -234,7 +234,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 7511.53                        | 1044.38                      |
 | 1        | 8                | 14756.03                       | 1026.68                      |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_bmax_dp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_bmax_dp_en.png)
 
 #### Model Parallelism
 
@@ -246,7 +246,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 256                   | 7264.54           | 984.88          |
 | 1        | 8                | 256                   | 14049.75          | 1030.58         |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_b256_mp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_b256_mp_en.png)
 
 **batch_size = max**
 
@@ -256,13 +256,13 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 7363.77                        | 1017.78                      |
 | 1        | 8                | 14436.38                       | 1038.6                       |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_bmax_mp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_bmax_mp_en.png)
 
 ### Max num_classses
 
 | node_num | gpu_num_per_node | batch_size_per_device | FP16 | Model Parallel | Partial FC | OneFlow num_classes | MXNet   num_classes |
 | -------- | ---------------- | --------------------- | ---- | -------------- | ---------- | ------------------- | ------------------- |
-| 1        | 1                | 64                    | True | True           | True       | 2000000             | 2100000             |
+| 1        | 1                | 64                    | True | True           | True       | 2000000             | 1800000             |
 | 1        | 8                | 64                    | True | True           | True       | 13500000            | 12000000             |
 
 
