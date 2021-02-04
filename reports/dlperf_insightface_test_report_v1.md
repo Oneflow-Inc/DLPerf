@@ -84,7 +84,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 64                    | 923.23            | 655.56          |
 | 1        | 8                | 64                    | 1836.8            | 650.8           |
 
-![-](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_dp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_dp_en.png)
 
 
 **batch_size = max**
@@ -95,7 +95,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 4                | 969.27                          | 733.1                       |
 | 1        | 8                | 1925.6                          | 749.42                      |
 
-![](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_dp_en.png)
+![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_dp_en.png)
 
 #### Model Parallelism
 
