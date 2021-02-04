@@ -72,11 +72,11 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
 
 - 设置数据集路径
 
-  修改`insightface/recognition/partial_fc/mxnet/default.py`下相应数据集路径，如修改第63行：
+  修改`insightface/recognition/partial_fc/mxnet/default.py`下相应数据集路径，如修改[第63行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L63)：
 
   `config.rec = '/datasets/insightface/glint360k/train.rec'`以为glint360k_8GPU数据集设置本地路径。
 
-- 注释模型报错相关代码
+- 注释模型保存相关代码
 
   由于是性能评测而非完整训练，我们不需要保存模型模型，可以注释掉`insightface/recognition/partial_fc/mxnet/callbacks.py`中第122行起保存模型相关的代码：
 
@@ -94,7 +94,9 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
               #                              aux_params=aux)
   ```
 
-  
+- 设置log打印间隔为1个iter
+
+  修改defult.py[第20行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L13) `config.frequent = 1`使得每个iter都会打印log
 
 
 ### 3. 运行测试
@@ -127,13 +129,18 @@ bash run_test.sh
 **默认测试的backbone网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
 
 ```shell
-# 测试resnet100，batch size=96，sample_ratio=0.5
-bash run_test.sh r100  96  0.5
+# 测试resnet100，batch size=96，sample_ratio=0.1
+bash run_test.sh r100  96  0.1
 # 测试resnet50，batch size=64，sample_ratio=1.0
 bash run_test.sh r50   64  1.0
 ```
 
+默认使用emore数据集和arcface的loss，可以修改runner.sh的[52行](https://github.com/Oneflow-Inc/DLPerf/blob/master/MxNet/InsightFace/PartailFC/runner.sh#L52)指定参数以使用glint360k数据集和cosface的loss：
 
+```shell
+dataset=glint360k_8GPU
+loss=cosface
+```
 
 
 ### 4. 数据处理
@@ -214,30 +221,25 @@ Saving result to ./result/bz64_result.json
 
 ## 性能结果 Performance
 
-- backbone:resnet100
+### Insightface(resnet100) FP32
 
-- dataset:emore
-
-- loss:arcface
-
-### resnet100  FP32
+- **dataset:face emore**
+- **loss:arcface**
 
 #### batch size = 64 & sample ratio = 1.0
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 223.25    | 1.0     |
-| 1        | 2       | 401.89    | 1.80    |
 | 1        | 4       | 789.86    | 3.54    |
 | 1        | 8       | 1577.91   | 7.07    |
 
 
-#### Batch size = 104 & sample ratio = 1.0
+#### Batch size = 104(max) & sample ratio = 1.0
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 211.76    | 1       |
-| 1        | 2       | 402.63    | 1.90    |
 | 1        | 4       | 707.64    | 3.34    |
 | 1        | 8       | 1075.47   | 5.08    |
 
@@ -246,21 +248,54 @@ Saving result to ./result/bz64_result.json
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 223.11    | 1       |
-| 1        | 2       | 410.03    | 1.84    |
 | 1        | 4       | 799.19    | 3.58    |
 | 1        | 8       | 1586.09   | 7.11    |
 
 
-#### Batch size = 104 &  sample ratio = 0.1
+#### Batch size = 104(max) &  sample ratio = 0.1
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 232.56    | 1       |
-| 1        | 2       | 436.06    | 1.88    |
 | 1        | 4       | 852.4     | 3.67    |
 | 1        | 8       | 1644.42   | 7.07    |
 
+### Insightface(resnet100) FP32
 
+- **dataset:glint360k**
+- **loss:cosface**
+
+#### batch size = 64 & sample ratio = 1.0
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 206.83    | 1       |
+| 1        | 4       | 727.82    | 3.52    |
+| 1        | 8       | 1339.71   | 6.48    |
+
+#### batch size = 80(max) & sample ratio = 1.0
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 186.27    | 1       |
+| 1        | 4       | 752.52    | 4.04    |
+| 1        | 8       | 1400.46   | 7.52    |
+
+#### batch size = 64 & sample ratio = 0.1
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 194.01    | 1       |
+| 1        | 4       | 730.29    | 3.76    |
+| 1        | 8       | 1359.2    | 7.01    |
+
+#### batch size = 96(max) & sample ratio = 0.1
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 192.18    | 1       |
+| 1        | 4       | 811.34    | 4.22    |
+| 1        | 8       | 1493.51   | 7.77    |
 
 
 ### 日志下载
