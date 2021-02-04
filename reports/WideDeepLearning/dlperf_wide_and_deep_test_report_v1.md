@@ -1,15 +1,15 @@
 # DLPerf Wide & Deep Test Report V1.0
 
 ## Introduction
-Wide & Deep is a very important model of the CTR(Click Through Rate) field, which is widely used in recommendation system. The model of Wide & Deep is very large, meanwhile, has to deal with huge data throughput. Therefore, Wide & Deep has high requirements for deep learning framework. For a long time, the Wide & Deep model implemented by [HugeCTR](https://github.com/NVIDIA/HugeCTR) has the best performace.
+Wide & Deep is a very important model of the CTR(Click Through Rate) field, which is widely used in recommendation system. The model of Wide & Deep is very large, meanwhile, has to deal with huge data throughput. Therefore, Wide & Deep has high requirements for deep learning framework. For a long time, the Wide & Deep model implemented by [HugeCTR](https://github.com/NVIDIA/HugeCTR) has the best performance.
 
-A series of tests are designed in this report aims to compare the performance and limit of the frameworks through multiple factors with the same hardware conditions. The factors include: vocabulary size, batch size, number of GPUS, etc. The test measurements are latency per iteration and memory usage. 
+In order to compare the performance and limits of the frameworks through multiple factors under the same hardware conditions, a series of tests are designed in this report. The factors include: vocabulary size, batch size, number of GPUS, etc. The test measurements are latency per iteration and memory usage. 
 
 In short, smaller latency means better performance and smaller memory usage means better memory management capability which means the model can support a larger `vocab_size` and `batch_size` under the same hardware conditions.
 
 ## Test Environment
 
-All tests were performed on 4 Nodes with 8x Tesla V100-SXM2-16GB GPUs, the following is the main hardware and software configuration for each:  
+All tests were performed on 4 Nodes with 8x Tesla V100-SXM2-16GB GPUs, the main hardware and software configurations for each node are listed below:
 
 - 4 nodes with Tesla V100-SXM2-16GB x 8 each
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
@@ -94,9 +94,9 @@ Test under the situation of different number of nodes and devices with fixed bat
 - hidden unit: 7
 
 ## Test Results
-The following is a summary of the **Vocab Size X2 Tests**. Other types testing results, including **Batch Size X2 Tests**, **Fixed Batch Size Tests**. Please refer to [OneFlow/ClickThroughRate/WideDeepLearning/](../../OneFlow/ClickThroughRate/WideDeepLearning) and [HugeCTR/](../../HugeCTR/) for more details.
+The following is a summary of the **Vocab Size X2 Tests**. Other types of testing results include the **Batch Size X2 Tests** and **Fixed Batch Size Tests**. Please refer to [OneFlow/ClickThroughRate/WideDeepLearning/](../../OneFlow/ClickThroughRate/WideDeepLearning) and [HugeCTR/](../../HugeCTR/) for more details.
 
-**Vocab Size X 2 Tests** are carried out in the conditions **1 node 1 GPU**, **1 node 8 GPU** and **4 node 32 GPUs** respectively. The **Latency per Iteration** and **Memory Usage** of OneFlow and HugeCTR have been recorded. 
+**Vocab Size X 2 Tests** are carried out under the conditions **1 node 1 GPU**, **1 node 8 GPU** and **4 node 32 GPUs** respectively. The **Latency per Iteration** and **Memory Usage** of OneFlow and HugeCTR have been recorded. 
 
 In short, smaller **Latency per Iteration** means better performance and smaller **Memory Usage** means better memory management capability.
 
@@ -153,10 +153,10 @@ We will also see that the **Memory Usage** of OneFlow is less than HugeCTR in al
 
 ## Test Conclusion
 
-The test cases above shows that:
+The test cases above show that:
 
-1. With the increasing of `vocab_size`, hugeCTR slows down with obvious higher latency, while the performace of OneFlow keeps stable;
+1. With the increase of `vocab_size`, hugeCTR slows down with obvious higher latency, while the performace of OneFlow keeps stable;
 
-2. Under the same conditions, OneFlow supports a larger `batch_size` and `vocab_size`. When 4 node with 32 GPUs is used and the batch size is fixed to 16384, OneFlow supports a vocabulary size 32 times larger than hugectr (25.6 million vs 819.2 million);
+2. Under the same conditions, OneFlow supports larger `batch_size` and `vocab_size`. When 4 nodes with 32 GPUs are used and the batch size is fixed to 16384, OneFlow supports 32 times larger vocabulary size than hugectr (25.6 million vs 819.2 million);
 
-3. Under the same conditions (with same `batch_size` and `vocab_size` etc.), when running on single node with 8 GPUs, OneFlow(when peforms best) uses 19% of memory of HugeCTR; when running on 4 nodes with 32 GPUs, OneFlow(when peforms best) uses only 11% of memory of HugeCTR, which means that OneFlow has a stronger ability to use and manage memory, and with a increasing of the number of nodes and GPUs, the trend becomes more obvious.
+3. Under the same conditions (with same `batch_size` and `vocab_size` etc.), when running on single node with 8 GPUs, OneFlow (when peforms best) uses 19% of memory of HugeCTR; when running on 4 nodes with 32 GPUs, OneFlow (when peforms best) uses only 11% of memory of HugeCTR, which means that OneFlow has a stronger ability to use and manage memory, and with the increase of the number of nodes and GPUs, the trend becomes more obvious.
