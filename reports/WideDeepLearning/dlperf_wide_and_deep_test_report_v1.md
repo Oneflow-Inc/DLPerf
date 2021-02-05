@@ -157,6 +157,6 @@ The test cases above show that:
 
 1. With the increase of `vocab_size`, hugeCTR slows down with obvious higher latency, while the performace of OneFlow keeps stable;
 
-2. Under the same conditions, OneFlow supports larger `batch_size` and `vocab_size`. When 4 nodes with 32 GPUs are used and the batch size is fixed to 16384, OneFlow supports 32 times larger vocabulary size than hugectr (25.6 million vs 819.2 million);
+2. Under the same conditions, OneFlow supports larger `batch_size` and `vocab_size`;
 
-3. Under the same conditions (with same `batch_size` and `vocab_size` etc.), when running on single node with 8 GPUs, OneFlow (when peforms best) uses 19% of memory of HugeCTR; when running on 4 nodes with 32 GPUs, OneFlow (when peforms best) uses only 11% of memory of HugeCTR, which means that OneFlow has a stronger ability to use and manage memory, and with the increase of the number of nodes and GPUs, the trend becomes more obvious.
+3. Under the same conditions (with same `batch_size` and `vocab_size` etc.), OneFlow has a stronger ability to use and manage memory, and with the increase of the number of nodes and GPUs, the trend becomes more obvious.

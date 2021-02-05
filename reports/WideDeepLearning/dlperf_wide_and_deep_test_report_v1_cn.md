@@ -158,6 +158,6 @@ Legend:
 
 1. 随着 `vocab_size` 的增大，HugeCTR 的速度逐步变慢 latency 呈超线性增高，而 OneFlow 则始终保持稳定；
 
-2. 相同条件下 OneFlow 支持更大规模的 `batch_size` 和 `vocab_size` ，在4机32GPU、batch size 固定为16384的情况下，OneFlow 所支持的词表大小规模为 HugeCTR的32倍(2560万 vs 81920万)；
+2. 相同条件下 OneFlow 支持更大规模的 `batch_size` 和 `vocab_size`；
 
-3. 在`vocab_size`、`batch_size`等参数相同的条件下，单机8 GPU 时 OneFlow 的 GPU 显存占用最低为 HugeCTR 的19%；4机32 GPU 时 GPU 显存占用最低仅为 HugeCTR 的11%，意味着 OneFlow 对显存的利用和管理能力更强，并且随着节点数和 GPU 数增加，OneFlow 的领先趋势更为明显。
+3. 在`vocab_size`、`batch_size`等参数相同的条件下，OneFlow 对显存的利用和管理能力更强，并且随着节点数和 GPU 数增加，OneFlow 的领先趋势更为明显。
