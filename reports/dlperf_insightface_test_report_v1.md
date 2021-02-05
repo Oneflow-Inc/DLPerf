@@ -103,7 +103,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 245.29            | 223.88          |
+| 1        | 1                | 64                    | 245.29            | 233.88          |
 | 1        | 4                | 64                    | 938.83            | 651.44          |
 | 1        | 8                | 64                    | 1854.15           | 756.96          |
 
@@ -126,19 +126,19 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 247.97            |    223.11             |
-| 1        | 4                | 64                    | 946.54            |  799.19               |
-| 1        | 8                | 64                    | 1864.31           |   1586.09              |
+| 1        | 1                | 64                    | 247.97            | 223.11          |
+| 1        | 4                | 64                    | 946.54            | 799.19          |
+| 1        | 8                | 64                    | 1864.31           | 1586.09         |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_pf_en.png)
 
 **batch_size=max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=120) | MXNet samples/s(max bsz=104) |
-| -------- | ---------------- | ------------------------------ | -------------------------- |
-| 1        | 1                | 256.61                         |    232.56                      |
-| 1        | 4                | 990.82                         |       852.4                    |
-| 1        | 8                | 1962.76                        |     1644.42                       |
+| -------- | ---------------- | ------------------------------ | ---------------------------- |
+| 1        | 1                | 256.61                         | 232.56                       |
+| 1        | 4                | 990.82                         | 852.4                        |
+| 1        | 8                | 1962.76                        | 1644.42                      |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_pf_en.png)
 
@@ -160,10 +160,10 @@ In this report, num classes mean the number of face categories. In the tests, it
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=85) | MXNet samples/s(max bsz=?) |
-| -------- | ---------------- | ----------------------------- | --------------------------- |
-| 1        | 1                | 229.94                        | OOM                         |
-| 1        | 4                | 856.61                        | OOM                         |
-| 1        | 8                | 1707.03                       | OOM                         |
+| -------- | ---------------- | ----------------------------- | -------------------------- |
+| 1        | 1                | 229.94                        | OOM                        |
+| 1        | 4                | 856.61                        | OOM                        |
+| 1        | 8                | 1707.03                       | OOM                        |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_dp_en.png)
 
@@ -263,7 +263,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | node_num | gpu_num_per_node | batch_size_per_device | FP16 | Model Parallel | Partial FC | OneFlow num_classes | MXNet   num_classes |
 | -------- | ---------------- | --------------------- | ---- | -------------- | ---------- | ------------------- | ------------------- |
 | 1        | 1                | 64                    | True | True           | True       | 2000000             | 1800000             |
-| 1        | 8                | 64                    | True | True           | True       | 13500000            | 12000000             |
+| 1        | 8                | 64                    | True | True           | True       | 13500000            | 12000000            |
 
 
 
