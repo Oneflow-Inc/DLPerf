@@ -13,10 +13,14 @@ task_index=${8:-0}
 
 NODE_NUM=$(echo $NODE_IPS | tr ',' '\n' | wc -l)
 a=`expr ${#gpus} + 1`
-NUM_GPU=`expr ${a} / 2`
+NUM_GPU_PER_NODE=`expr ${a} / 2`
+NUM_GPU=`expr $NODE_NUM \* $NUM_GPU_PER_NODE`
 total_batch_size=`expr ${BATCH_SIZE} \* $NUM_GPU`
-echo "Node ip : $NODE_IPS"
-echo "Use gpus: $gpus"
+
+if [ $NODE_NUM -gt 1 ] ; then
+    echo "Node ip : $NODE_IPS"
+fi
+echo "Gpu num: $NUM_GPU"
 echo "Total batch size : $total_batch_size"
 
 
@@ -28,7 +32,7 @@ else
 fi
 
 BERT_BASE_CONFIG_FILE='/datasets/bert/uncased_L-12_H-768_A-12/bert_config.json' 
-LOG_FOLDER=./logs/tensorflow/bert/bz${BATCH_SIZE}/${NODE_NUM}n${NUM_GPU}g
+LOG_FOLDER=./logs/tensorflow/bert/bz${BATCH_SIZE}/${NODE_NUM}n${NUM_GPU_PER_NODE}g
 mkdir -p $LOG_FOLDER
 LOGFILE=${LOG_FOLDER}/bert_b${BATCH_SIZE}_${DTYPE}_${TEST_NUM}.log
 
@@ -45,7 +49,7 @@ CMD+=" --warmup_steps=10000"
 CMD+=" --use_next_sentence_label=True"
 CMD+=" --train_summary_interval=0"
 CMD+=" --optimizer_type=adamw"
-CMD+=" --num_gpus=$NUM_GPU"
+CMD+=" --num_gpus=$NUM_GPU_PER_NODE"
 CMD+=" --datasets_num_private_threads=8"
 CMD+=" --dtype=$DTYPE"
 CMD+=" --enable_xla=$enable_xla"
