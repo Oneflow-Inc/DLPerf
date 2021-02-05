@@ -28,7 +28,7 @@ The report compares throughputs of InsightFace model between repository of  [one
     - [Face Emore & Y1 & FP32 Thoughputs](#face-emore--y1--fp32-thoughputs)
       - [Data Parallelism](#data-parallelism-2)
       - [Model Parallelism](#model-parallelism-2)
-    - [Max num_classses](#max-num_classses)
+    - [Max num_classes](#max-num_classes)
   - [Conclusion](#conclusion)
 ## Data
 
@@ -37,7 +37,7 @@ Reproduction procedures, introductions, logs, data, and English reports could be
 
 ## Frameworks & MOdels
 
-| 框架                                                          | 版本              | 模型来源                                                                                                            |
+| Framework                                                          | Version              | Source                                                                                                            |
 | ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
 | [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face]()                                                                                                    |
 | [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
@@ -258,7 +258,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_y1_fp32_bmax_mp_en.png)
 
-### Max num_classses
+### Max num_classes
 
 | node_num | gpu_num_per_node | batch_size_per_device | FP16 | Model Parallel | Partial FC | OneFlow num_classes | MXNet   num_classes |
 | -------- | ---------------- | --------------------- | ---- | -------------- | ---------- | ------------------- | ------------------- |
@@ -272,7 +272,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 The above series of tests show that:
 
 1. When dealing with the very large datasets, such as Glint360k, MXNet will meet OOM(out of memory), and fail to run with data parallelism or model parallelism, unless it uses Partial FC.
-2. With the increase of `batch_size_per_device`, the throughput of MXNet  hard to breakthrough even using Partial FC optimization while the throughput of OneFlow has always maintained a relatively stable linear growth
+2. With the increase of `batch_size_per_device`, the throughput of MXNet hard to breakthrough even using Partial FC optimization while the throughput of OneFlow has always maintained a relatively stable linear growth.
 
 3. Under the same situation, OneFlow supports a larger scale of `batch_size` and `num_classes`. When using a batch size of 64 in one machine with 8 GPUs, optimization of FP16, model_parallel, and partial_fc.
 The value of `num_classes` supported by OneFlow is 1.36 times of one supported by MXNet(13,500,000 vs 9,900,000).
