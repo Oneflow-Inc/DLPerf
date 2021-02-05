@@ -28,14 +28,19 @@ There are two main types of model cases tested in this repository, generally inc
 - Special cases
 
 
-The first type is classical deep neural network models that used to evaluate the performance of each framework,such as:
+The first type is classical deep neural network models that used to evaluate the performance of each framework, such as:
 
 1. **ResNet-50 v1.5**
 2. **BERT-Base**
 
-The second type is that some models use special techniques or frameworks with unique implementations,such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed, [HugeCTR](https://github.com/NVIDIA/HugeCTR)(Designed for CTR estimation training and implemented by NVIDIA).
+The second type is that some models use special techniques or frameworks with unique implementations, such as implementation of [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM) based on Microsoft's framwork deepspeed, [Wide and Deep Learning(W&D)](https://arxiv.org/abs/1606.07792) based on [HugeCTR](https://github.com/NVIDIA/HugeCTR)(Designed for CTR estimation training and implemented by NVIDIA).
 
-In general, there are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing any scripts and codes from origin. If we have to, changes were mentioned in the documents.
+| Model  | Framework  | Source       |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [Wide and Deep Learning (W&D)](https://arxiv.org/abs/1606.07792) | [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/ClickThroughRate/WideDeepLearning) |
+| [Wide and Deep Learning (W&D)](https://arxiv.org/abs/1606.07792) | [HugeCTR](https://github.com/NVIDIA/HugeCTR)                 | [samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl) |
+
+In general, there are a lot of different implementations of these DNN models, we choose official benchmark source as well as [NVIDIA-DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples). In most cases, we avoid changing the original scripts and codes. If we have to, changes are mentioned in the documents.
 
 More DNN models will be tested in the future.
 
@@ -152,4 +157,40 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 ## Other Test Results(special cases)
 
-This section maintains the results of the special case models.
+This section maintains the results of the special case models such as WideDeepLearning, GPT-2, etc.
+
+### Latest Test Report
+
+#### Wide and Deep Learning
+
+on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. 
+
+- [WideDeepLearning Benchmark Test Report V1.0](./reports/WideDeepLearning/dlperf_wide_and_deep_test_report_v1.md)
+- [WideDeepLearning 性能评测报告中文版 V1.0](./reports/WideDeepLearning/dlperf_wide_and_deep_test_report_v1_cn.md)
+
+| Framework                                                    | Version | Source                                                       |
+| ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.2.0) | 0.2.0   | [OneFlow-Benchmark](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/v0.2.0/ClickThroughRate/WideDeepLearning) |
+| [HugeCTR](https://github.com/NVIDIA/HugeCTR)                 | 2.2     | [samples/wdl](https://github.com/NVIDIA/HugeCTR/tree/v2.2/samples/wdl) |
+
+#### Training Performance
+
+We take GPU memory usage and latency(the time consumption of each iter) as the standard of performance evaluation.
+
+Our results were obtained by running the applicable training scripts on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. In addition, the main parameters are as follows:
+
+**batch_size = 16384, deep_embedding_vec_size = 32, hidden_units_num = 7**
+
+| deep_vocab_size | OneFlow Latency per Iteration / ms | HugeCTR Latency per Iteration / ms | OneFlow Mem Usage / MB | HugeCTR Mem Usage / MB | Mem Usage Ratio |
+| --------------- | ---------------------------------- | ---------------------------------- | ---------------------- | ---------------------- | --------------- |
+| 3200000         | 22.414                             | 21.843                             | 1,115                  | 3217                   | 35%             |
+| 6400000         | 22.314                             | 26.375                             | 1,153                  | 4579                   | 25%             |
+| 12800000        | 22.352                             | 36.214                             | 1,227                  | 7299                   | 17%             |
+| 25600000        | 22.399                             | 57.718                             | 1,379                  | 12745                  | 11%             |
+| 51200000        | 22.31                              | OOM                                | 1,685                  | OOM                    | -               |
+| 102400000       | 22.444                             | OOM                                | 2,293                  | OOM                    | -               |
+| 204800000       | 22.403                             | OOM                                | 3,499                  | OOM                    | -               |
+| 409600000       | 22.433                             | OOM                                | 5,915                  | OOM                    | -               |
+| 819200000       | 22.407                             | OOM                                | 10,745                 | OOM                    | -               |
+
+- notes:OOM is the abbreviation of out of memory, which means an error is reported due to insufficient GPU memory
