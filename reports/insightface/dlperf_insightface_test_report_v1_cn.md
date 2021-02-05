@@ -7,7 +7,6 @@
 本报告比较了 [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/master) 和 [deepinsight](https://github.com/deepinsight) 两个仓库在 InsightFace 深度学习模型训练任务上的吞吐率。测试均采用相同的数据集、相同的硬件环境和算法，仅比较框架之间的速度差异。结果表明：OneFlow 在 InsightFace 模型上的性能以及分布式环境下的横向扩展能力优于其他框架。
 
 ## 目录
-- [](#)
 - [基于 InsightFace 模型的深度学习框架性能评测报告](#基于-insightface-模型的深度学习框架性能评测报告)
   - [简介](#简介)
   - [目录](#目录)
@@ -18,15 +17,15 @@
     - [2. Batch Size](#2-batch-size)
     - [3. Num Classes](#3-num-classes)
   - [测试结果](#测试结果)
-    - [Face Emore & R100 & FP32 吞吐率比较](#face-emore--r100--fp32-吞吐率比较)
+    - [Face Emore & R100 & FP32 Thoughput](#face-emore--r100--fp32-thoughput)
       - [Data Parallelism](#data-parallelism)
       - [Model Parallelism](#model-parallelism)
-      - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01)
-    - [Glint360k & R100 & FP32](#glint360k--r100--fp32)
+      - [Partial FC, sample_ratio = 0.1](#partial-fc-sample_ratio--01)
+    - [Glint360k & R100 & FP32 Thoughputs](#glint360k--r100--fp32-thoughputs)
       - [Data Parallelism](#data-parallelism-1)
       - [Model Parallelism](#model-parallelism-1)
-      - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01-1)
-    - [Face Emore & Y1 & FP32](#face-emore--y1--fp32)
+      - [Partial FC, sample_ratio = 0.1](#partial-fc-sample_ratio--01-1)
+    - [Face Emore & Y1 & FP32 Thoughputs](#face-emore--y1--fp32-thoughputs)
       - [Data Parallelism](#data-parallelism-2)
       - [Model Parallelism](#model-parallelism-2)
     - [Max num_classses](#max-num_classses)
