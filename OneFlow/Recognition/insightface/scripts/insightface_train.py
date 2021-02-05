@@ -75,7 +75,9 @@ def get_train_args():
     )
 
     # train config
-    train_parser.add_argument("--num_classes", type=int, default=config.num_classes, help="test pattern")
+    train_parser.add_argument("--num_classes", type=int, default=config.num_classes, help="Number of classes")
+    train_parser.add_argument("--data_part_num", type=int, default=config.train_data_part_num, help="Train data part num")
+
     train_parser.add_argument(
         "--train_batch_size",
         type=int,
@@ -239,7 +241,8 @@ def get_train_config(args):
         flow.config.collective_boxing.nccl_fusion_max_ops(
             args.nccl_fusion_max_ops)
     size = args.device_num_per_node * args.num_nodes
-    #config.num_classes = args.num_classes
+    config.num_classes = args.num_classes
+    config.train_data_part_num = args.data_part_num
     num_local = (config.num_classes + size - 1) // size
     num_sample = int(num_local * args.sample_ratio)
     args.total_num_sample = num_sample * size

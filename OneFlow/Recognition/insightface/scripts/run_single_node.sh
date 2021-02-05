@@ -17,7 +17,7 @@ use_synthetic_data=${13:-False}
 i=1
 while [ $i -le 5 ]
 do
-  bash ${workspace}/scripts/train_emore.sh ${workspace} ${network} ${dataset} ${loss} 1 ${bz_per_device} ${train_unit} ${iter_num} 1 ${precision} ${model_parallel} ${partila_fc} $i  ${sample_ratio} ${num_classes} ${use_synthetic_data}
+  bash ${workspace}/scripts/train_insightface.sh ${workspace} ${network} ${dataset} ${loss} 1 ${bz_per_device} ${train_unit} ${iter_num} 1 ${precision} ${model_parallel} ${partila_fc} $i  ${sample_ratio} ${num_classes} ${use_synthetic_data}
   echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Finished Test Case ${i}! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   let i++
   sleep 20
@@ -27,7 +27,7 @@ done
 i=1
 while [ $i -le 5 ]
 do
-  bash ${workspace}/scripts/train_emore.sh ${workspace} ${network} ${dataset} ${loss} 1 ${bz_per_device} ${train_unit} ${iter_num} 1 ${precision} ${model_parallel} ${partila_fc} $i  ${sample_ratio} ${num_classes} ${use_synthetic_data} 
+  bash ${workspace}/scripts/train_insightface.sh ${workspace} ${network} ${dataset} ${loss} 1 ${bz_per_device} ${train_unit} ${iter_num} 1 ${precision} ${model_parallel} ${partila_fc} $i  ${sample_ratio} ${num_classes} ${use_synthetic_data} 
   echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Finished Test Case ${i}! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   let i++
   sleep 20
@@ -36,7 +36,7 @@ done
 i=1
 while [ $i -le 5 ]
 do
-  bash ${workspace}/scripts/train_emore.sh ${workspace} ${network} ${dataset} ${loss} 1 ${bz_per_device} ${train_unit} ${iter_num} 1 ${precision} ${model_parallel} ${partila_fc} $i  ${sample_ratio} ${num_classes} ${use_synthetic_data}
+  bash ${workspace}/scripts/train_insightface.sh ${workspace} ${network} ${dataset} ${loss} 1 ${bz_per_device} ${train_unit} ${iter_num} 1 ${precision} ${model_parallel} ${partila_fc} $i  ${sample_ratio} ${num_classes} ${use_synthetic_data}
   echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Finished Test Case ${i}! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   let i++
   sleep 20

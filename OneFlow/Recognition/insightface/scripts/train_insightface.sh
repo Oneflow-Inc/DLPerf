@@ -17,11 +17,16 @@ sample_ratio=${14:-0.1}
 num_classes=${15:-1500000}
 use_synthetic_data=${16:-False}
 
-MODEL_SAVE_DIR=${num_classes}_${precision}_b${batch_size_per_device}_oneflow_model_parallel_${model_parallel}_partial_fc_${partial_fc}/$network/${num_nodes}n${gpu_num_per_node}g
+MODEL_SAVE_DIR=${num_classes}_${precision}_b${batch_size_per_device}_oneflow_model_parallel_${model_parallel}_partial_fc_${partial_fc}/${num_nodes}n${gpu_num_per_node}g
 LOG_DIR=$MODEL_SAVE_DIR
 
 if [ $gpu_num_per_node -gt 1 ]; then
+  if [ $network = "r100"]
     data_part_num=16
+  elif [$network = "r100_glint360k"]
+    data_part_num=200
+  else
+    echo "Please modify exact data part num in sample_config.py!"
 else
     data_part_num=1
 fi
@@ -38,7 +43,6 @@ fi
 
 LOG_FILE=${LOG_DIR}/${network}_b${batch_size_per_device}_${precision}_$test_times.log
 
-rm -r $MODEL_SAVE_DIR
 mkdir -p $MODEL_SAVE_DIR
 
 time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -54,6 +58,7 @@ CMD+=" --train_iter=${train_iter}"
 CMD+=" --device_num_per_node=${gpu_num_per_node}"
 CMD+=" --model_parallel=${model_parallel}"
 CMD+=" --partial_fc=${partial_fc}"
+CMD+=" --sample_ratio=${sample_ratio}"
 CMD+=" --log_dir=${LOG_DIR}"
 CMD+=" $PREC"
 CMD+=" --sample_ratio=${sample_ratio}"
