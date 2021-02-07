@@ -2,9 +2,11 @@
 
 ## 概述 Overview
 
-本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出单机～多机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出多卡情况下的加速比，评判框架在单机情况下的横向拓展能力。
 
 目前，该测试覆盖了FP32 精度下的单机1~8卡，后续将持续维护，增加更多方式的测评。
+
+此外，针对大规模人脸，我们增加了一组最大人脸类别数的测试，用于展示框架在单卡/单机下支持的最大人脸ID类别数。
 
 
 
@@ -72,11 +74,11 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
 
 - 设置数据集路径
 
-  修改`insightface/recognition/partial_fc/mxnet/default.py`下相应数据集路径，如修改第63行：
+  修改`insightface/recognition/partial_fc/mxnet/default.py`下相应数据集路径，如修改[第63行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L63)：
 
   `config.rec = '/datasets/insightface/glint360k/train.rec'`以为glint360k_8GPU数据集设置本地路径。
 
-- 注释模型报错相关代码
+- 注释模型保存相关代码
 
   由于是性能评测而非完整训练，我们不需要保存模型模型，可以注释掉`insightface/recognition/partial_fc/mxnet/callbacks.py`中第122行起保存模型相关的代码：
 
@@ -94,7 +96,9 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
               #                              aux_params=aux)
   ```
 
-  
+- 设置log打印间隔为1个iter
+
+  修改defult.py[第20行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L13) `config.frequent = 1`使得每个iter都会打印log
 
 
 ### 3. 运行测试
@@ -106,7 +110,7 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
 
-每个节点有8张显卡，这里设置batch size为64，分别在单机1卡～单机8卡的情况下进行了多组训练。
+每个节点有8张显卡，这里设分别在单机1卡～单机8卡的情况下进行了多组训练。
 
 #### 测试
 
@@ -124,19 +128,45 @@ bash run_test.sh
 
 针对1机1~8卡， 进行测试，并将 log 信息保存在logs目录下。
 
-
-
-**默认测试的网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
+**默认测试的backbone网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
 
 ```shell
-# 测试resnet100，batch size=96，sample_ratio=0.5
-bash run_test.sh r100  96  0.5
+# 测试resnet100，batch size=96，sample_ratio=0.1
+bash run_test.sh r100  96  0.1
 # 测试resnet50，batch size=64，sample_ratio=1.0
 bash run_test.sh r50   64  1.0
 ```
 
+默认使用emore数据集和arcface的loss，可以修改runner.sh的[52行](https://github.com/Oneflow-Inc/DLPerf/blob/master/MxNet/InsightFace/PartailFC/runner.sh#L52)指定参数以使用glint360k数据集和cosface的loss：
 
+```shell
+dataset=glint360k_8GPU
+loss=cosface
+```
 
+##### 最大人脸ID类别数测试
+
+我们在单机单卡、单机８卡的情况下，分别进行了最大人脸ID类别数的测试，测试条件为：
+
+- backbone:resnet100
+
+- batch size:64
+- partial fc(sample ratial=0.1)
+
+- dtype:fp16混合精度
+
+测试最大人脸ID类别数主要是通过修改[default.py](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L84) 中的config.num_classes，其中默认设置了100万、1000万、2000万、3000万、1亿人脸类别的配置，为了更加准确的进行边界性测试，可以添加自定义配置如：
+
+```python
+elif dataset == '1200w':
+        # max face ids 1200w 
+        config.debug = 1
+        config.num_classes = 1200 * 10000
+        config.lr_steps = '20000,28000'
+        config.max_update = 120
+```
+
+测试时，同步修改runner.sh[第52行](https://github.com/Oneflow-Inc/DLPerf/blob/mxnet-insightface-further-test/MxNet/InsightFace/PartailFC/runner.sh#L52)：`dataset=1200w`，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`
 
 ### 4. 数据处理
 
@@ -216,30 +246,25 @@ Saving result to ./result/bz64_result.json
 
 ## 性能结果 Performance
 
-- network:resnet100
+### Insightface(resnet100) FP32
 
-- dataset:emore
-
-- loss:arcface
-
-### resnet100  FP32
+- **dataset:face emore**
+- **loss:arcface**
 
 #### batch size = 64 & sample ratio = 1.0
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 223.25    | 1.0     |
-| 1        | 2       | 401.89    | 1.80    |
 | 1        | 4       | 789.86    | 3.54    |
 | 1        | 8       | 1577.91   | 7.07    |
 
 
-#### Batch size = 104 & sample ratio = 1.0
+#### Batch size = 104(max) & sample ratio = 1.0
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 211.76    | 1       |
-| 1        | 2       | 402.63    | 1.90    |
 | 1        | 4       | 707.64    | 3.34    |
 | 1        | 8       | 1075.47   | 5.08    |
 
@@ -248,27 +273,71 @@ Saving result to ./result/bz64_result.json
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 223.11    | 1       |
-| 1        | 2       | 410.03    | 1.84    |
 | 1        | 4       | 799.19    | 3.58    |
 | 1        | 8       | 1586.09   | 7.11    |
 
 
-#### Batch size = 104 &  sample ratio = 0.1
+#### Batch size = 104(max) &  sample ratio = 0.1
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 232.56    | 1       |
-| 1        | 2       | 436.06    | 1.88    |
 | 1        | 4       | 852.4     | 3.67    |
 | 1        | 8       | 1644.42   | 7.07    |
 
+### Insightface(resnet100) FP32
 
+- **dataset:glint360k**
+- **loss:cosface**
+
+#### batch size = 64 & sample ratio = 1.0
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 206.83    | 1       |
+| 1        | 4       | 727.82    | 3.52    |
+| 1        | 8       | 1339.71   | 6.48    |
+
+#### batch size = 80(max) & sample ratio = 1.0
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 186.27    | 1       |
+| 1        | 4       | 752.52    | 4.04    |
+| 1        | 8       | 1400.46   | 7.52    |
+
+#### batch size = 64 & sample ratio = 0.1
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 194.01    | 1       |
+| 1        | 4       | 730.29    | 3.76    |
+| 1        | 8       | 1359.2    | 7.01    |
+
+#### batch size = 96(max) & sample ratio = 0.1
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 192.18    | 1       |
+| 1        | 4       | 811.34    | 4.22    |
+| 1        | 8       | 1493.51   | 7.77    |
+
+### Max num classes(resnet100) FP16
+
+#### batch size = 64 & sample ratio = 0.1
+
+| node_num | gpu_num | max num classes |
+| -------- | ------- | --------------- |
+| 1        | 1       | 180 0000        |
+| 1        | 8       | 1200 0000       |
 
 
 ### 日志下载
 
 详细 Log 信息可点击下载：
 
-- [arcface_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/logs.zip)
+- [partial_fc_fp32.zip.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32.zip)
+- [partial_fc_fp32_glint360k.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32_glint360k.zip)
+- [max_face_ids.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/max_face_ids.zip)
 
 

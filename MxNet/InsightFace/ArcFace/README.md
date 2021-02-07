@@ -46,7 +46,7 @@
 
 - #### 数据集
 
-  数据集准备及制作参考[deepinsight官方readme中Model Training部分的说明](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace#model-training)
+  数据集准备及制作参考[deepinsight官方readme中Model Training部分的说明](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace#model-training)。
 
   
 
@@ -77,7 +77,7 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
   vim config.py # edit dataset path etc..
   ```
 
-  修改config.py[第116行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/sample_config.py#L116)，设置为自己的数据集路径；修改config.py[第23行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/sample_config.py#L23)，设置config.max_steps = 120以使得程序训练120iter自动退出
+  修改config.py[第116行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/sample_config.py#L116)，设置为自己的数据集路径；修改config.py[第23行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/sample_config.py#L23)，设置config.max_steps = 120以使得程序训练120iter自动退出。
 
 
 ### 3. 运行测试
@@ -105,18 +105,18 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 bash run_test.sh
 ```
 
-针对1机1卡、1机1卡、1机4卡、1机8卡， batch_size_per_device = **64** 进行测试，并将 log 信息保存在当前目录下。
+针对1机1卡、1机4卡、1机8卡， batch_size_per_device = **64** 进行测试，并将 log 信息保存在当前目录下。
 
-**默认测试的网络为resnet100，batch size=64** ，您也可以修改模型和相应的batch size如：
+**默认测试的backbone网络为resnet100，batch size=64** ，您也可以修改backbone和相应的batch size如：
 
 ```shell
-# 测试resnet100，batch size=96
-bash   run_test.sh   r100   96
-# 测试mobilefacenet，batch size=128
-bash   run_test.sh y1   128
+# 测试backbone为resnet100，batch size=96
+bash   run_test.sh   r100  96
+# 测试backbone为mobilefacenet，batch size=128
+bash   run_test.sh   y1    128
 ```
 
-
+默认情况下测试模型并行，即runner.sh中MODEL_PARALLEL=True，实际训练会调用[train_parall.py](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/train_parall.py)，当MODEL_PARALLEL=False时，可关闭模型并行，测试数据并行的情况（实际会调用[train.py](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace/train.py)）。
 
 
 ### 4. 数据处理
@@ -171,8 +171,6 @@ python extract_mxnet_logs.py --log_dir=./logs/insightface/arcface/bz64 --batch_s
 Saving result to ./result/bz64_result.json
 ```
 
-
-
 ### 5. 计算规则
 
 #### 5.1 测速脚本
@@ -185,7 +183,7 @@ Saving result to ./result/bz64_result.json
 
 - median_speed中值速度
 
-  每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
+每个batch size进行5次训练测试，记为一组，每一组取average_speed为均值速度，median_speed为中值速度
 
 #### 5.3 加速比以中值速度计算
 
@@ -197,62 +195,92 @@ Saving result to ./result/bz64_result.json
 
 ## 性能结果 Performance
 
-该小节提供针对 MXNet 框架的BERT-base 模型单机测试的性能结果和完整 log 日志。
+该小节提供针对 MXNet 框架的Insightface模型(Arcface配置)，以及基于数据并行、模型并行进行的单机测试性能结果和完整 log 日志。
 
-### ArcFace(resnet100) FP32
+### Insightface(resnet100) FP32
 
-#### Batch size = 64 & Without xla
+#### Data Parallelism
+
+#### Batch size = 64
+
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 241.82    | 1       |
+| 1        | 4       | 655.56    | 2.71    |
+| 1        | 8       | 650.8     | 2.69    |
+
+
+#### Batch size = 96(max)
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 288.0     | 1       |
+| 1        | 4       | 733.1     | 2.55    |
+| 1        | 8       | 749.42    | 2.6     |
+
+#### Model Parallelism
+
+#### Batch size = 64
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 233.88    | 1       |
-| 1        | 2       | 450.4     | 1.93    |
 | 1        | 4       | 651.44    | 2.79    |
 | 1        | 8       | 756.96    | 3.24    |
 
-#### Batch size = 96 & Without xla
+#### Batch size = 96(max)
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 242.2     | 1       |
-| 1        | 2       | 466.02    | 1.92    |
 | 1        | 4       | 724.26    | 2.99    |
 | 1        | 8       | 821.06    | 3.39    |
 
-### ArcFace(mobilefacenet) FP32
+### Insightface(mobilefacenet) FP32
 
-#### Batch size = 128 & Without xla
+#### Data Parallelism
+
+#### Batch size = 256
+
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 974.32    | 1       |
-| 1        | 2       | 856.44    | 0.88    |
-| 1        | 4       | 934.88    | 0.96    |
-| 1        | 8       | 1000.76   | 1.03    |
+| 1        | 1       | 786.94    | 1       |
+| 1        | 4       | 1055.88   | 1.34    |
+| 1        | 8       | 1031.1    | 1.31    |
 
-#### Batch size = 256 & Without xla
+
+#### Batch size = 368(max)
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 931.88    | 1       |
+| 1        | 4       | 1044.38   | 1.12    |
+| 1        | 8       | 1026.68   | 1.1     |
+
+#### Model Parallelism
+
+#### Batch size = 256
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 984.2     | 1       |
-| 1        | 2       | 953.02    | 0.97    |
 | 1        | 4       | 984.88    | 1.0     |
 | 1        | 8       | 1030.58   | 1.05    |
 
-#### Batch size = 352 & Without xla
+#### Batch size = 352(max)
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
 | 1        | 1       | 974.26 | 1       |
-| 1        | 2       | 955.58 | 0.98 |
 | 1        | 4       | 1017.78 | 1.04 |
 | 1        | 8       | 1038.6 | 1.07  |
 
 注：
 
-- 当训练网络使用mobilefacenet时，多gpu相比单gpu并没有明显加速，是因为巨大的全连接层带来的IO瓶颈。
+- 当训练backbone网络使用mobilefacenet时，多gpu相比单gpu并没有明显加速，是因为巨大的全连接层带来的IO瓶颈。
 
-- 我们后续打算对[partial_fc](https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc)项目进行测试，其使用了openmpi和horovod，速度更快且支持分布式多机多卡下的训练。
 
 
 
@@ -260,8 +288,6 @@ Saving result to ./result/bz64_result.json
 
 详细 Log 信息可点击下载：
 
-- [arcface_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/arcface_fp32.zip)
-
-  
+- [arcface_fp32.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/arcface/arcface_fp32.zip)
 
 
