@@ -194,7 +194,7 @@ ofrecord/test/
 
 2. Python 脚本 + Spark Shuffle + Spark Partition
 
-运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/tree/b7207f29f4e9254b1d9ea748a628d223b9aafd1a) 生成所有数据的完整 OFRecord（`part-0`）
+运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/blob/b7207f29f4e9254b1d9ea748a628d223b9aafd1a/tools/dataset_convert/mx_recordio_2_ofrecord.py) 生成所有数据的完整 OFRecord（`part-0`）
 
 ```
 python tools/dataset_convert/mx_recordio_2_ofrecord.py --data_dir /data/face_test/dataset/faces_emore  --output_filepath ofrecord/train 
