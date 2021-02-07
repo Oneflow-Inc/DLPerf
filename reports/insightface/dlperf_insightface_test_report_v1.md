@@ -151,21 +151,21 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 230.22            | OOM             |
-| 1        | 4                | 64                    | 847.71            | OOM             |
-| 1        | 8                | 64                    | 1688.62           | OOM             |
+| 1        | 1                | 64                    | 230.22            | -             |
+| 1        | 4                | 64                    | 847.71            | -             |
+| 1        | 8                | 64                    | 1688.62           | -             |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_dp_en.png)
+
 
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=85) | MXNet samples/s(max bsz=?) |
 | -------- | ---------------- | ----------------------------- | -------------------------- |
-| 1        | 1                | 229.94                        | OOM                        |
-| 1        | 4                | 856.61                        | OOM                        |
-| 1        | 8                | 1707.03                       | OOM                        |
+| 1        | 1                | 229.94                        | -                        |
+| 1        | 4                | 856.61                        | -                       |
+| 1        | 8                | 1707.03                       | -                        |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_dp_en.png)
+
 
 #### Model Parallelism
 
@@ -173,21 +173,21 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 230.33            | OOM             |
-| 1        | 4                | 64                    | 912.24            | OOM             |
-| 1        | 8                | 64                    | 1808.27           | OOM             |
+| 1        | 1                | 64                    | 230.33            | -             |
+| 1        | 4                | 64                    | 912.24            | -             |
+| 1        | 8                | 64                    | 1808.27           | -             |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_mp_en.png)
+
 
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=100) | MXNet samples/s(max bsz=?) |
 | -------- | ---------------- | ------------------------------ | -------------------------- |
-| 1        | 1                | 231.86                         | OOM                        |
-| 1        | 4                | 925.85                         | OOM                        |
-| 1        | 8                | 1844.66                        | OOM                        |
+| 1        | 1                | 231.86                         | -                       |
+| 1        | 4                | 925.85                         | -                       |
+| 1        | 8                | 1844.66                        | -                        |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_mp_en.png)
+> Note: Miss of MXNet data parallelism data and model parallelism data is because scripts under [insightface/recognition/ArcFace/](https://github.com/deepinsight/insightface/tree/b774d6a1b7c66655f07cc59ce98007ff2c19a11d) could not support Glint360k dataset.
 
 #### Partial FC, sample_ratio = 0.1
 
@@ -271,10 +271,10 @@ In this report, num classes mean the number of face categories. In the tests, it
  
 The above series of tests show that:
 
-1. When dealing with the very large datasets, such as Glint360k, MXNet will meet OOM(out of memory), and fail to run with data parallelism or model parallelism, unless it uses Partial FC.
-2. With the increase of `batch_size_per_device`, the throughput of MXNet hard to breakthrough even using Partial FC optimization while the throughput of OneFlow has always maintained a relatively stable linear growth.
 
-3. Under the same situation, OneFlow supports a larger scale of `batch_size` and `num_classes`. When using a batch size of 64 in one machine with 8 GPUs, optimization of FP16, model_parallel, and partial_fc.
+1. With the increase of `batch_size_per_device`, the throughput of MXNet hard to breakthrough even using Partial FC optimization while the throughput of OneFlow has always maintained a relatively stable linear growth.
+
+2. Under the same situation, OneFlow supports a larger scale of `batch_size` and `num_classes`. When using a batch size of 64 in one machine with 8 GPUs, optimization of FP16, model_parallel, and partial_fc.
 The value of `num_classes` supported by OneFlow is 1.36 times of one supported by MXNet(13,500,000 vs 9,900,000).
 
 For more data details, please check OneFlow and MXNet in DLPerf.

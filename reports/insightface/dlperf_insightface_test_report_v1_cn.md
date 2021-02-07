@@ -151,21 +151,20 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 230.22            | OOM             |
-| 1        | 4                | 64                    | 847.71            | OOM             |
-| 1        | 8                | 64                    | 1688.62           | OOM             |
+| 1        | 1                | 64                    | 230.22            | -             |
+| 1        | 4                | 64                    | 847.71            |-             |
+| 1        | 8                | 64                    | 1688.62           | -            |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_dp_en.png)
+
 
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=85) | MXNet samples/s(max bsz=?) |
 | -------- | ---------------- | ----------------------------- | -------------------------- |
-| 1        | 1                | 229.94                        | OOM                        |
-| 1        | 4                | 856.61                        | OOM                        |
-| 1        | 8                | 1707.03                       | OOM                        |
+| 1        | 1                | 229.94                        |  -                       |
+| 1        | 4                | 856.61                        |  -                       |
+| 1        | 8                | 1707.03                       |  -                      |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_dp_en.png)
 
 #### Model Parallelism
 
@@ -173,21 +172,21 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 230.33            | OOM             |
-| 1        | 4                | 64                    | 912.24            | OOM             |
-| 1        | 8                | 64                    | 1808.27           | OOM             |
+| 1        | 1                | 64                    | 230.33            |  -            |
+| 1        | 4                | 64                    | 912.24            | -             |
+| 1        | 8                | 64                    | 1808.27           | -             |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_b64_mp_en.png)
+
 
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=100) | MXNet samples/s(max bsz=?) |
 | -------- | ---------------- | ------------------------------ | -------------------------- |
-| 1        | 1                | 231.86                         | OOM                        |
-| 1        | 4                | 925.85                         | OOM                        |
-| 1        | 8                | 1844.66                        | OOM                        |
+| 1        | 1                | 231.86                         | -                        |
+| 1        | 4                | 925.85                         | -                        |
+| 1        | 8                | 1844.66                        | -                        |
 
-![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_mp_en.png)
+> 注意： MXNet 数据并行和模型并行的数据缺失是因为 [insightface/recognition/ArcFace/](https://github.com/deepinsight/insightface/tree/b774d6a1b7c66655f07cc59ce98007ff2c19a11d) 路径下的脚本不支持 Glint360k 数据集。
 
 #### Partial FC, sample_ratio = 0.1
 
