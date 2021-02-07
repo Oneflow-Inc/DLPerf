@@ -37,9 +37,9 @@ Reproduction procedures, introductions, logs, data, and English reports could be
 
 ## Frameworks & MOdels
 
-| Framework                                                          | Version              | Source                                                                                                            |
+| Framework                                                     | Version           | Source                                                                                                              |
 | ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face)                                                                                                    |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face)                                                         |
 | [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
 
 ## Configration
@@ -93,7 +93,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | -------- | ---------------- | ------------------------------- | --------------------------- |
 | 1        | 1                | 250.71                          | 288.0                       |
 | 1        | 4                | 972.8                           | 733.1                       |
-| 1        | 8                | 1931.76                          | 749.42                      |
+| 1        | 8                | 1931.76                         | 749.42                      |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_dp_en.png)
 
@@ -114,9 +114,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=115) | MXNet samples/s（max bsz=96） |
 | -------- | ---------------- | ------------------------------ | ----------------------------- |
-| 1        | 1                | 246.55                        | 242.2                         |
-| 1        | 4                | 970.1                         | 724.26                        |
-| 1        | 8                |  1921.87                       | 821.06                        |
+| 1        | 1                | 246.55                         | 242.2                         |
+| 1        | 4                | 970.1                          | 724.26                        |
+| 1        | 8                | 1921.87                        | 821.06                        |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_mp_en.png)
 
@@ -126,9 +126,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 246.45             | 223.11          |
+| 1        | 1                | 64                    | 246.45            | 223.11          |
 | 1        | 4                | 64                    | 948.96            | 799.19          |
-| 1        | 8                | 64                    |  1872.81           | 1586.09         |
+| 1        | 8                | 64                    | 1872.81           | 1586.09         |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_pf_en.png)
 
@@ -151,9 +151,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 230.22            | -             |
-| 1        | 4                | 64                    | 847.71            | -             |
-| 1        | 8                | 64                    | 1688.62           | -             |
+| 1        | 1                | 64                    | 230.22            | -               |
+| 1        | 4                | 64                    | 847.71            | -               |
+| 1        | 8                | 64                    | 1688.62           | -               |
 
 
 
@@ -161,9 +161,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=85) | MXNet samples/s(max bsz=?) |
 | -------- | ---------------- | ----------------------------- | -------------------------- |
-| 1        | 1                | 229.94                        | -                        |
-| 1        | 4                | 856.61                        | -                       |
-| 1        | 8                | 1707.03                       | -                        |
+| 1        | 1                | 229.94                        | -                          |
+| 1        | 4                | 856.61                        | -                          |
+| 1        | 8                | 1707.03                       | -                          |
 
 
 
@@ -173,9 +173,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 230.33            | -             |
-| 1        | 4                | 64                    | 912.24            | -             |
-| 1        | 8                | 64                    | 1808.27           | -             |
+| 1        | 1                | 64                    | 230.33            | -               |
+| 1        | 4                | 64                    | 912.24            | -               |
+| 1        | 8                | 64                    | 1808.27           | -               |
 
 
 
@@ -183,9 +183,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=100) | MXNet samples/s(max bsz=?) |
 | -------- | ---------------- | ------------------------------ | -------------------------- |
-| 1        | 1                | 231.86                         | -                       |
-| 1        | 4                | 925.85                         | -                       |
-| 1        | 8                | 1844.66                        | -                        |
+| 1        | 1                | 231.86                         | -                          |
+| 1        | 4                | 925.85                         | -                          |
+| 1        | 8                | 1844.66                        | -                          |
 
 > Note: Miss of MXNet data parallelism data and model parallelism data is because scripts under [insightface/recognition/ArcFace/](https://github.com/deepinsight/insightface/tree/b774d6a1b7c66655f07cc59ce98007ff2c19a11d) could not support Glint360k dataset.
 
@@ -275,6 +275,6 @@ The above series of tests show that:
 1. With the increase of `batch_size_per_device`, the throughput of MXNet hard to breakthrough even using Partial FC optimization while the throughput of OneFlow has always maintained a relatively stable linear growth.
 
 2. Under the same situation, OneFlow supports a larger scale of `batch_size` and `num_classes`. When using a batch size of 64 in one machine with 8 GPUs, optimization of FP16, model_parallel, and partial_fc.
-The value of `num_classes` supported by OneFlow is 1.36 times of one supported by MXNet(13,500,000 vs 9,900,000).
+The value of `num_classes` supported by OneFlow is 1.125 times of one supported by MXNet(13,500,000 vs 12,000,000).
 
 For more data details, please check OneFlow and MXNet in DLPerf.
