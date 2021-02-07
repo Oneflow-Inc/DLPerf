@@ -91,9 +91,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | OneFlow samples/s（max bsz=96） | MXNet samples/s(max bsz=96) |
 | -------- | ---------------- | ------------------------------- | --------------------------- |
-| 1        | 1                | 252.76                          | 288.0                       |
-| 1        | 4                | 969.27                          | 733.1                       |
-| 1        | 8                | 1925.6                          | 749.42                      |
+| 1        | 1                | 250.71                          | 288.0                       |
+| 1        | 4                | 972.8                           | 733.1                       |
+| 1        | 8                | 1931.76                          | 749.42                      |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_dp_en.png)
 
@@ -114,9 +114,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=115) | MXNet samples/s（max bsz=96） |
 | -------- | ---------------- | ------------------------------ | ----------------------------- |
-| 1        | 1                | 245.92                         | 242.2                         |
-| 1        | 4                | 968.72                         | 724.26                        |
-| 1        | 8                | 1925.59                        | 821.06                        |
+| 1        | 1                | 246.55                        | 242.2                         |
+| 1        | 4                | 970.1                         | 724.26                        |
+| 1        | 8                |  1921.87                       | 821.06                        |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_mp_en.png)
 
@@ -126,9 +126,9 @@ In this report, num classes mean the number of face categories. In the tests, it
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 247.97            | 223.11          |
-| 1        | 4                | 64                    | 946.54            | 799.19          |
-| 1        | 8                | 64                    | 1864.31           | 1586.09         |
+| 1        | 1                | 64                    | 246.45             | 223.11          |
+| 1        | 4                | 64                    | 948.96            | 799.19          |
+| 1        | 8                | 64                    |  1872.81           | 1586.09         |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_pf_en.png)
 

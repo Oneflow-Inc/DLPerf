@@ -36,10 +36,10 @@
 
 ## 框架 & 模型
 
-| 框架                                                         | 版本              | 模型来源                                                     |
-| ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face]()                                             |
-| [deepinsight](https://github.com/deepinsight)                | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
+| 框架                                                          | 版本              | 模型来源                                                                                                            |
+| ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face]()                                                                                                    |
+| [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
 
 ## 评测配置
 
@@ -48,16 +48,16 @@
 OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 |                    | [R100](https://github.com/deepinsight/insightface/blob/master/recognition/partial_fc/mxnet/default.py#L86)（ResNet100）+ face_emore | [R100](https://github.com/deepinsight/insightface/blob/master/recognition/partial_fc/mxnet/default.py#L86)（ResNet100）+ glint360k | [Y1](https://github.com/nlqq/insightface/blob/master/recognition/ArcFace/sample_config.py)（MobileFaceNet）+ face_emore |
-| ------------------ | :----------------------------------------------------------: | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| fc type            |                              E                               | FC                                                           | GDC                                                          |
-| optimizer          |                             SGD                              | SGD                                                          | SGD                                                          |
-| kernel initializer |       random_normal_initializer(mean=0.0, stddev=0.01)       | random_normal_initializer(mean=0.0, stddev=0.01)             | random_normal_initializer(mean=0.0, stddev=0.01)             |
-| loss type          |                           arcface                            | cosface                                                      | arcface                                                      |
-| regularizer        |                      Step Weight Decay                       | Step Weight Decay                                            | Step Weight Decay                                            |
-| lr_step            |                       [100000,160000]                        | [200000, 400000, 500000, 550000]                             | [100000,160000,220000]                                       |
-| scales             |                         [0.1, 0.01]                          | [0.1, 0.01, 0.001, 0.0001]                                   | [0.1, 0.01, 0.001]                                           |
-| momentum           |                             0.9                              | 0.9                                                          | 0.9                                                          |
-| weight decay       |                            0.0005                            | 0.0005                                                       | 0.0005                                                       |
+| ------------------ | :---------------------------------------------------------------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| fc type            |                                                                  E                                                                  | FC                                                                                                                                 | GDC                                                                                                                     |
+| optimizer          |                                                                 SGD                                                                 | SGD                                                                                                                                | SGD                                                                                                                     |
+| kernel initializer |                                          random_normal_initializer(mean=0.0, stddev=0.01)                                           | random_normal_initializer(mean=0.0, stddev=0.01)                                                                                   | random_normal_initializer(mean=0.0, stddev=0.01)                                                                        |
+| loss type          |                                                               arcface                                                               | cosface                                                                                                                            | arcface                                                                                                                 |
+| regularizer        |                                                          Step Weight Decay                                                          | Step Weight Decay                                                                                                                  | Step Weight Decay                                                                                                       |
+| lr_step            |                                                           [100000,160000]                                                           | [200000, 400000, 500000, 550000]                                                                                                   | [100000,160000,220000]                                                                                                  |
+| scales             |                                                             [0.1, 0.01]                                                             | [0.1, 0.01, 0.001, 0.0001]                                                                                                         | [0.1, 0.01, 0.001]                                                                                                      |
+| momentum           |                                                                 0.9                                                                 | 0.9                                                                                                                                | 0.9                                                                                                                     |
+| weight decay       |                                                               0.0005                                                                | 0.0005                                                                                                                             | 0.0005                                                                                                                  |
 
 ### 2. Batch Size
 
@@ -90,9 +90,9 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | OneFlow samples/s（max bsz=96） | MXNet samples/s(max bsz=96) |
 | -------- | ---------------- | ------------------------------- | --------------------------- |
-| 1        | 1                | 252.76                          | 288.0                       |
-| 1        | 4                | 969.27                          | 733.1                       |
-| 1        | 8                | 1925.6                          | 749.42                      |
+| 1        | 1                | 250.71                          | 288.0                       |
+| 1        | 4                | 972.8                           | 733.1                       |
+| 1        | 8                | 1931.76                         | 749.42                      |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_dp_en.png)
 
@@ -113,9 +113,9 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=115) | MXNet samples/s（max bsz=96） |
 | -------- | ---------------- | ------------------------------ | ----------------------------- |
-| 1        | 1                | 245.92                         | 242.2                         |
-| 1        | 4                | 968.72                         | 724.26                        |
-| 1        | 8                | 1925.59                        | 821.06                        |
+| 1        | 1                | 246.55                         | 242.2                         |
+| 1        | 4                | 970.1                         | 724.26                        |
+| 1        | 8                | 1921.87                        | 821.06                        |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_mp_en.png)
 
@@ -125,19 +125,19 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 247.97            |    223.11             |
-| 1        | 4                | 64                    | 946.54            |  799.19               |
-| 1        | 8                | 64                    | 1864.31           |   1586.09              |
+| 1        | 1                | 64                    | 246.45            | 223.11          |
+| 1        | 4                | 64                    | 948.96            | 799.19          |
+| 1        | 8                | 64                    | 1872.81          | 1586.09         |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_b64_pf_en.png)
 
 **batch_size=max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=120) | MXNet samples/s(max bsz=104) |
-| -------- | ---------------- | ------------------------------ | -------------------------- |
-| 1        | 1                | 256.61                         |    232.56                      |
-| 1        | 4                | 990.82                         |       852.4                    |
-| 1        | 8                | 1962.76                        |     1644.42                       |
+| -------- | ---------------- | ------------------------------ | ---------------------------- |
+| 1        | 1                | 256.61                         | 232.56                       |
+| 1        | 4                | 990.82                         | 852.4                        |
+| 1        | 8                | 1962.76                        | 1644.42                      |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/emore_r100_fp32_bmax_pf_en.png)
 
@@ -160,10 +160,10 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 **batch_size = max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=85) | MXNet samples/s(max bsz=?) |
-| -------- | ---------------- | ----------------------------- | --------------------------- |
-| 1        | 1                | 229.94                        | OOM                         |
-| 1        | 4                | 856.61                        | OOM                         |
-| 1        | 8                | 1707.03                       | OOM                         |
+| -------- | ---------------- | ----------------------------- | -------------------------- |
+| 1        | 1                | 229.94                        | OOM                        |
+| 1        | 4                | 856.61                        | OOM                        |
+| 1        | 8                | 1707.03                       | OOM                        |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_dp_en.png)
 
@@ -207,7 +207,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | -------- | ---------------- | ------------------------------ | --------------------------- |
 | 1        | 1                | 248.01                         | 192.18                      |
 | 1        | 4                | 973.63                         | 811.34                      |
-| 1        | 8                | 1933.88                        | 1493.51                     |
+| 1        | 8                | 1933.88                       | 1493.51                     |
 
 ![ ](https://github.com/Oneflow-Inc/DLPerf/blob/dev_sx_insightface/reports/imgs/glint360k_r100_fp32_bmax_pf_en.png)
 
@@ -263,7 +263,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | node_num | gpu_num_per_node | batch_size_per_device | FP16 | Model Parallel | Partial FC | OneFlow num_classes | MXNet   num_classes |
 | -------- | ---------------- | --------------------- | ---- | -------------- | ---------- | ------------------- | ------------------- |
 | 1        | 1                | 64                    | True | True           | True       | 2000000             | 1800000             |
-| 1        | 8                | 64                    | True | True           | True       | 13500000            | 12000000             |
+| 1        | 8                | 64                    | True | True           | True       | 13500000            | 12000000            |
 
 
 
