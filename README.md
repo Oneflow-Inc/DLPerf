@@ -194,3 +194,18 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 | 819200000       | 22.407                             | OOM                                | 10,745                 | OOM                    | -               |
 
 - notes:OOM is the abbreviation of out of memory, which means an error is reported due to insufficient GPU memory
+
+#### InsightFace
+
+on 1 node with 8x Tesla V100-SXM2-16GB GPUs. 
+
+- [InsightFace Benchmark Test Report V1.0](./reports/insightface/dlperf_insightface_test_report_v1.md)
+
+- [InsightFace 性能评测报告中文版 V1.0](./reports/insightface/dlperf_benchmark_test_report_v1_cn.md)
+
+| Framework                                                          | Version              | Source                                                                                                            |
+| ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face)                                                         |
+| [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
+
+
