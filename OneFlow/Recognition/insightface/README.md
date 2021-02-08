@@ -15,28 +15,29 @@
 
 
 - [OneFlow InsightFace 测评](#oneflow-insightface-测评)
-  - [概述 Overview](#概述-overview)
-  - [内容目录 Table Of Content](#内容目录-table-of-content)
-  - [环境 Environment](#环境-environment)
-    - [系统](#系统)
-      - [Feature support matrix](#feature-support-matrix)
-  - [快速开始 Quick Start](#快速开始-quick-start)
-    - [1. 前期准备](#1-前期准备)
-    - [2. 运行测试](#2-运行测试)
-    - [3. 数据处理](#3-数据处理)
-  - [性能结果 Performance](#性能结果-performance)
-    - [Face Emore & R100 & FP32](#face-emore--r100--fp32)
-      - [Data Parallelism](#data-parallelism)
-      - [Model Parallelism](#model-parallelism)
-      - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01)
-    - [Glint360k & R100 & FP32](#glint360k--r100--fp32)
-      - [Data Parallelism](#data-parallelism-1)
-      - [Model Parallelism](#model-parallelism-1)
-      - [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01-1)
-    - [Face Emore & Y1 & FP32](#face-emore--y1--fp32)
-      - [Data Parallelism](#data-parallelism-2)
-      - [Model Parallelism](#model-parallelism-2)
-    - [Max num_classes](#max-num_classes)
+	- [概述 Overview](#概述-overview)
+	- [内容目录 Table Of Content](#内容目录-table-of-content)
+	- [环境 Environment](#环境-environment)
+		- [系统](#系统)
+			- [Feature support matrix](#feature-support-matrix)
+		- [模型配置](#模型配置)
+	- [快速开始 Quick Start](#快速开始-quick-start)
+		- [1. 前期准备](#1-前期准备)
+		- [2. 运行测试](#2-运行测试)
+		- [3. 数据处理](#3-数据处理)
+	- [性能结果 Performance](#性能结果-performance)
+		- [Face Emore & R100 & FP32](#face-emore--r100--fp32)
+			- [Data Parallelism](#data-parallelism)
+			- [Model Parallelism](#model-parallelism)
+			- [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01)
+		- [Glint360k & R100 & FP32](#glint360k--r100--fp32)
+			- [Data Parallelism](#data-parallelism-1)
+			- [Model Parallelism](#model-parallelism-1)
+			- [Partial FC, sample_ratio=0.1](#partial-fc-sample_ratio01-1)
+		- [Face Emore & Y1 & FP32](#face-emore--y1--fp32)
+			- [Data Parallelism](#data-parallelism-2)
+			- [Model Parallelism](#model-parallelism-2)
+		- [Max num_classes](#max-num_classes)
 
 
 ## 环境 Environment
@@ -80,6 +81,22 @@
 | Partial FC                      | Yes                   |
 
 
+### 模型配置
+
+OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
+
+|                    | [R100](https://github.com/deepinsight/insightface/blob/master/recognition/partial_fc/mxnet/default.py#L86)（ResNet100）+ face_emore | [R100](https://github.com/deepinsight/insightface/blob/master/recognition/partial_fc/mxnet/default.py#L86)（ResNet100）+ glint360k | [Y1](https://github.com/nlqq/insightface/blob/master/recognition/ArcFace/sample_config.py)（MobileFaceNet）+ face_emore |
+| ------------------ | :---------------------------------------------------------------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| fc type            |                                                                  E                                                                  | FC                                                                                                                                 | GDC                                                                                                                     |
+| optimizer          |                                                                 SGD                                                                 | SGD                                                                                                                                | SGD                                                                                                                     |
+| kernel initializer |                                          random_normal_initializer(mean=0.0, stddev=0.01)                                           | random_normal_initializer(mean=0.0, stddev=0.01)                                                                                   | random_normal_initializer(mean=0.0, stddev=0.01)                                                                        |
+| loss type          |                                                               arcface                                                               | cosface                                                                                                                            | arcface                                                                                                                 |
+| regularizer        |                                                          Step Weight Decay                                                          | Step Weight Decay                                                                                                                  | Step Weight Decay                                                                                                       |
+| lr_step            |                                                           [100000,160000]                                                           | [200000, 400000, 500000, 550000]                                                                                                   | [100000,160000,220000]                                                                                                  |
+| scales             |                                                             [0.1, 0.01]                                                             | [0.1, 0.01, 0.001, 0.0001]                                                                                                         | [0.1, 0.01, 0.001]                                                                                                      |
+| momentum           |                                                                 0.9                                                                 | 0.9                                                                                                                                | 0.9                                                                                                                     |
+| weight decay       |                                                               0.0005                                                                | 0.0005                                                                                                                             | 0.0005                                                                                                                  |
+
 
 ## 快速开始 Quick Start
 
@@ -89,63 +106,9 @@
 
 - #### 数据集
 
-OFRecord 数据集是 **OFRecord 文件的集合** 。将多个 OFRecord 文件，按照 OneFlow 约定的文件名格式，存放在同一个目录中，就得到了 OFRecord 数据集。
-
-默认情况下，OFRecord 数据集目录中的文件，统一以 `part-xxx` 的方式命名，其中的 "xxx" 是从 0 开始的文件编号，有补齐和不补齐两种选择。
-
-以下是没有采用补齐的命名风格示例：
-
-```
-mnist_kaggle/train/
-├── part-0
-├── part-1
-├── part-10
-├── part-11
-├── part-12
-├── part-13
-├── part-14
-├── part-15
-├── part-2
-├── part-3
-├── part-4
-├── part-5
-├── part-6
-├── part-7
-├── part-8
-└── part-9
-```
-
-
-
-以下是有补齐的命名风格：
-
-```
-mnist_kaggle/train/
-├── part-00000
-├── part-00001
-├── part-00002
-├── part-00003
-├── part-00004
-├── part-00005
-├── part-00006
-├── part-00007
-├── part-00008
-├── part-00009
-├── part-00010
-├── part-00011
-├── part-00012
-├── part-00013
-├── part-00014
-├── part-00015
-```
-
-OneFlow 采用此约定，与 Spark 默认存储的文件名一致，方便使用 Spark 制作与转化 OFRecord 数据。
-
-实际上，文件名前缀（`part-`）、文件名编号是否补齐、按多少位补齐，均可以自行指定，只需要在加载数据集时，保持相关参数一致即可。
-
-OneFlow 提供了加载 OFRecord 数据集的接口，使得我们只要指定数据集目录的路径，就可以享受 OneFlow 框架所带来的多线程、数据流水线等优势。
-
 准备 Face Emore 和 Glint360k 的 OFReocord 数据集，可以选择根据 [加载与准备 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_make_ofdataset.html)文档中 Python 脚本生成所有数据的完整 OFRecord + Spark Shuffle + Spark Partition 的方式，也可以选择只使用 Python 脚本生成多块 OFRecord 的方式，用以进行 InsightFace 的测试。
+
+可以参考 deepinsight [Training Data](https://github.com/deepinsight/insightface#training-data) 小节，下载 [DataZoo](https://github.com/deepinsight/insightface/wiki/Dataset-Zoo) 中的 [MS1M-ArcFace](https://pan.baidu.com/s/1S6LJZGdqcZRle1vlcMzHOQ) 数据集或者 [Glint360k](https://pan.baidu.com/share/init?surl=GsYqTTt7_Dn8BfxxsLFN0w) 数据集。
 
 1. Python 脚本直接生成
 
@@ -211,21 +174,9 @@ Spark.read.chunk("data_path").shuffle().repartition(96).write.chunk("new_data_pa
 sc.formatFilenameAsOneflowStyle("new_data_path")
 ```
 
-- #### 网络对齐
+更多关于 OneFlow OFRecord 数据集的信息，请参考 [加载与准备 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_make_ofdataset.html) 和 [将图片文件制作为 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_convert_image_to_ofrecord.html)。
 
-OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
-|                    | [R100](https://github.com/deepinsight/insightface/blob/master/recognition/partial_fc/mxnet/default.py#L86)（ResNet100）+ face_emore | [R100](https://github.com/deepinsight/insightface/blob/master/recognition/partial_fc/mxnet/default.py#L86)（ResNet100）+ glint360k | [Y1](https://github.com/nlqq/insightface/blob/master/recognition/ArcFace/sample_config.py)（MobileFaceNet）+ face_emore |
-| ------------------ | :---------------------------------------------------------------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| fc type            |                                                                  E                                                                  | FC                                                                                                                                 | GDC                                                                                                                     |
-| optimizer          |                                                                 SGD                                                                 | SGD                                                                                                                                | SGD                                                                                                                     |
-| kernel initializer |                                          random_normal_initializer(mean=0.0, stddev=0.01)                                           | random_normal_initializer(mean=0.0, stddev=0.01)                                                                                   | random_normal_initializer(mean=0.0, stddev=0.01)                                                                        |
-| loss type          |                                                               arcface                                                               | cosface                                                                                                                            | arcface                                                                                                                 |
-| regularizer        |                                                          Step Weight Decay                                                          | Step Weight Decay                                                                                                                  | Step Weight Decay                                                                                                       |
-| lr_step            |                                                           [100000,160000]                                                           | [200000, 400000, 500000, 550000]                                                                                                   | [100000,160000,220000]                                                                                                  |
-| scales             |                                                             [0.1, 0.01]                                                             | [0.1, 0.01, 0.001, 0.0001]                                                                                                         | [0.1, 0.01, 0.001]                                                                                                      |
-| momentum           |                                                                 0.9                                                                 | 0.9                                                                                                                                | 0.9                                                                                                                     |
-| weight decay       |                                                               0.0005                                                                | 0.0005                                                                                                                             | 0.0005                                                                                                                  |
 
 
 
@@ -245,7 +196,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 - NODE4=10.11.0.5
 
 
-每个节点有 8 张 V100 显卡， 每张显卡显存 16 G。
+每个节点有 8 张 V100 显卡， 每张显卡显存 16 G。目前的单机测试仅使用其中一个节点。
 
 
 - #### 单机测试
@@ -263,22 +214,23 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 ```
 mv scripts/insightface_train.py oneflow_face/insightface_train.py
 ```
-同时根据测试需求修改脚本参数，以测试 FP32 数据并行的 r100，Face emore 数据集搭配 arcface loss，batch_size_per_device=64, 单机 8 卡的真实数据 150 batch 为例，确认参数
+同时根据测试需求打开 `run_single_node.sh` 文件，修改脚本参数。以测试 FP32 数据并行的 r100，Face emore 数据集搭配 arcface loss，batch_size_per_device=64, 单机 8 卡的真实数据 150 batch 为例，确认参数
 
 ```
-workspace=${1:-"/home/leinao/sx/test_face"}
-network=${2:-"r100"}
-dataset=${3:-"emore"}
-loss=${4:-"arcface"}
-bz_per_device=${5:-64}
-train_unit=${6:-"batch"}
-iter_num=${7:-150}
-precision=${8:-fp32}
-model_parallel=${9:-False}
-partila_fc=${10:-False}
+# run_single_node.sh 
+workspace=${1:-"/path/to/workspace/"} 
+network=${2:-"r100"}	# optional: r100_glint360k, y1
+dataset=${3:-"emore"}	# optional: glint360k_8GPU
+loss=${4:-"arcface"}	# optional: softmax, cosface, combined
+bz_per_device=${5:-64}	
+train_unit=${6:-"batch"}	# optional: epoch
+iter_num=${7:-150}	
+precision=${8:-fp32}	# optional: fp16
+model_parallel=${9:-False}	# optional: True
+partila_fc=${10:-False}		# optional: True
 sample_ratio=${11:-0.1}
-num_classes=${12:-85744}
-use_synthetic_data=${13:-False}
+num_classes=${12:-85744}	# default num classes in the face emore dataset
+use_synthetic_data=${13:-False}		# optional: True
 ```
 
 保存配置，直接运行
