@@ -108,7 +108,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 准备 Face Emore 和 Glint360k 的 OFReocord 数据集，可以选择根据 [加载与准备 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_make_ofdataset.html)文档中 Python 脚本生成所有数据的完整 OFRecord + Spark Shuffle + Spark Partition 的方式，也可以选择只使用 Python 脚本生成多块 OFRecord 的方式，用以进行 InsightFace 的测试。
 
-可以参考 deepinsight [Training Data](https://github.com/deepinsight/insightface#training-data) 小节，下载 [DataZoo](https://github.com/deepinsight/insightface/wiki/Dataset-Zoo) 中的 [MS1M-ArcFace](https://pan.baidu.com/s/1S6LJZGdqcZRle1vlcMzHOQ) 数据集或者 [Glint360k](https://pan.baidu.com/share/init?surl=GsYqTTt7_Dn8BfxxsLFN0w) 数据集。
+可以参考 deepinsight [Training Data](https://github.com/deepinsight/insightface#training-data) 小节，下载 [Dataset-Zoo](https://github.com/deepinsight/insightface/wiki/Dataset-Zoo) 中的 [MS1M-ArcFace](https://pan.baidu.com/s/1S6LJZGdqcZRle1vlcMzHOQ) 数据集或者 [Glint360k](https://pan.baidu.com/share/init?surl=GsYqTTt7_Dn8BfxxsLFN0w) 数据集。
 
 1. Python 脚本直接生成
 
@@ -157,7 +157,7 @@ ofrecord/test/
 
 2. Python 脚本 + Spark Shuffle + Spark Partition
 
-运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/blob/b7207f29f4e9254b1d9ea748a628d223b9aafd1a/tools/dataset_convert/mx_recordio_2_ofrecord.py) 生成所有数据的完整 OFRecord（`part-0`）
+运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/blob/b7207f29f4e9254b1d9ea748a628d223b9aafd1a/tools/dataset_convert/mx_recordio_2_ofrecord.py) 生成所有数据的完整 OFRecord（`part-00000`）
 
 ```
 python tools/dataset_convert/mx_recordio_2_ofrecord.py --data_dir /data/face_test/dataset/faces_emore  --output_filepath ofrecord/train 
