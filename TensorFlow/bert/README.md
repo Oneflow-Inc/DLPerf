@@ -32,7 +32,6 @@
 ```shell
 git clone https://github.com/tensorflow/models.git
 cd models/ && git checkout r2.3.0
-git reset 400d68abbccda2f0f6609e3a924467718b144233 --hard
 cd official/nlp/bert
 ```
 
