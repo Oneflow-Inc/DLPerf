@@ -110,69 +110,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 可以参考 deepinsight [Training Data](https://github.com/deepinsight/insightface#training-data) 小节，下载 [Dataset-Zoo](https://github.com/deepinsight/insightface/wiki/Dataset-Zoo) 中的 [MS1M-ArcFace](https://pan.baidu.com/s/1S6LJZGdqcZRle1vlcMzHOQ) 数据集或者 [Glint360k](https://pan.baidu.com/share/init?surl=GsYqTTt7_Dn8BfxxsLFN0w) 数据集。
 
-1. Python 脚本直接生成
-
-运行 tools/dataset_convert/mx_recordio_2_ofrecord_shuffled_npart.py
-
-```
-python tools/dataset_convert/mx_recordio_2_ofrecord_shuffled_npart.py  --data_dir /data/face_test/dataset/faces_emore  --output_filepath ofrecord/train --num_part 16
-```
-
-屏幕打印
-
-```
-Converting images: 5790000 of 5822653
-Converting images: 5800000 of 5822653
-Converting images: 5810000 of 5822653
-Converting images: 5820000 of 5822653
-```
-
-完成后，即可直接生成对应 `num_part` 数量的 OFRecord。以生成 16 个 part 为例：
-
-```
-$ tree ofrecord/test/
-ofrecord/test/
-|-- _SUCCESS
-|-- part-00000
-|-- part-00001
-|-- part-00002
-|-- part-00003
-|-- part-00004
-|-- part-00005
-|-- part-00006
-|-- part-00007
-|-- part-00008
-|-- part-00009
-|-- part-00010
-|-- part-00011
-|-- part-00012
-|-- part-00013
-|-- part-00014
-`-- part-00015
-
-0 directories, 17 files
-```
-
-
-
-2. Python 脚本 + Spark Shuffle + Spark Partition
-
-运行 [tools/dataset_convert/mx_recordio_2_ofrecord.py](https://github.com/Oneflow-Inc/oneflow_face/blob/b7207f29f4e9254b1d9ea748a628d223b9aafd1a/tools/dataset_convert/mx_recordio_2_ofrecord.py) 生成所有数据的完整 OFRecord（`part-00000`）
-
-```
-python tools/dataset_convert/mx_recordio_2_ofrecord.py --data_dir /data/face_test/dataset/faces_emore  --output_filepath ofrecord/train 
-```
-
-安装部署 Spark 环境后，输入 Spark 命令
-
-```scala
-//Spark 启动命令：
-./Spark-2.4.3-bin-hadoop2.7/bin/Spark-shell --jars ~/Spark-oneflow-connector-assembly-0.1.0.jar --driver-memory=64G --conf Spark.local.dir=/tmp/
-// shuffle 并分成 96 个 part 的执行命令：
-import org.oneflow.Spark.functions._
-Spark.read.chunk("data_path").shuffle().repartition(96).write.chunk("new_data_path")
-sc.formatFilenameAsOneflowStyle("new_data_path")
-```
+具体制作方法请参考 [InsightFace 在 OneFlow 中的实现](https://github.com/Oneflow-Inc/oneflow_face/blob/master/README_CH.md#insightface-%E5%9C%A8-oneflow-%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0)中的[准备数据集](https://github.com/Oneflow-Inc/oneflow_face/blob/master/README_CH.md#%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE%E9%9B%86)部分。
 
 更多关于 OneFlow OFRecord 数据集的信息，请参考 [加载与准备 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_make_ofdataset.html) 和 [将图片文件制作为 OFRecord 数据集](https://docs.oneflow.org/extended_topics/how_to_convert_image_to_ofrecord.html)。
 
