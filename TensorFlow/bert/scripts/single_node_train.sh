@@ -18,7 +18,8 @@ NUM_GPU=`expr $NODE_NUM \* $NUM_GPU_PER_NODE`
 total_batch_size=`expr ${BATCH_SIZE} \* $NUM_GPU`
 
 if [ $NODE_NUM -gt 1 ] ; then
-    echo "Node ip : $NODE_IPS"
+  export NCCL_DEBUG=INFO
+  echo "Node ip : $NODE_IPS"
 fi
 echo "Gpu num: $NUM_GPU"
 echo "Total batch size : $total_batch_size"
