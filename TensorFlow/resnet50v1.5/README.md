@@ -154,7 +154,7 @@ fp16混合精度条件下，默认测试的batch_size=256，可以修改multi_no
 执行以下命令，即可计算各种测试配置下的吞吐率及加速比：
 
 ```shell
-python extract_tensorflow_logs.py --log_dir=logs/tensorflow/resnet50/bz128 --batch_size_per_device=128
+python extract_tensorflow_logs.py --log_dir=logs/tensorflow/resnet50/bz128
 ```
 
 输出：

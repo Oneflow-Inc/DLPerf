@@ -17,7 +17,6 @@ parser.add_argument("--log_dir", type=str, default="./logs/tensorflow/resnet50",
 parser.add_argument("--output_dir", type=str, default="./result", required=False)
 parser.add_argument('--warmup_batches', type=int, default=100)
 parser.add_argument('--train_batches', type=int, default=600)
-parser.add_argument('--batch_size_per_device', type=int, default=128)
 
 args = parser.parse_args()
 

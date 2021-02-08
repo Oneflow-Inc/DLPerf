@@ -3,7 +3,7 @@
 # Overview
 本次复现采用了[Tensorflow官方仓库](https://github.com/tensorflow/models/tree/r2.3.0)中的tf2.x版[BERT](https://github.com/tensorflow/models/tree/r2.3.0/official/nlp/bert)的实现，复现的目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
-目前，该测试仅覆盖单机情况下的FP32、FP16混合精度，后续将持续维护，增加更多方式的测评。
+目前，该测试已覆盖 FP32、FP16混合精度以及XLA，后续将持续维护，增加更多方式的测评。
 
 
 
@@ -37,14 +37,31 @@ cd official/nlp/bert
 
 将本页面scripts文件夹中的脚本放入models/official/nlp/bert目录下。
 
-修改[run_pretraining.py](https://github.com/tensorflow/models/blob/r2.3.0/official/nlp/bert/run_pretraining.py)以支持 xla，将以下部分：
+修改[run_pretraining.py](https://github.com/tensorflow/models/blob/r2.3.0/official/nlp/bert/run_pretraining.py)以支持xla和多机测试，将以下部分：
 
+```shell
+# LINE 186
+  strategy = distribution_utils.get_distribution_strategy(
+      distribution_strategy=FLAGS.distribution_strategy,
+      num_gpus=FLAGS.num_gpus,
+      tpu_address=FLAGS.tpu)
+```
+替换为：
 ```shell
 # LINE 186
   from official.utils.misc import keras_utils
   keras_utils.set_session_config(enable_xla=FLAGS.enable_xla)
+
+  distribution_utils.configure_cluster(
+      FLAGS.worker_hosts,
+      FLAGS.task_index)
+
+  strategy = distribution_utils.get_distribution_strategy(
+      distribution_strategy=FLAGS.distribution_strategy,
+      all_reduce_alg=FLAGS.all_reduce_alg,
+      num_gpus=FLAGS.num_gpus,
+      tpu_address=FLAGS.tpu)
 ```
-添加到186行。
 
 
 ## 框架安装
@@ -112,14 +129,12 @@ python3  ../data/create_pretraining_data.py
 
 集群中有4台节点：
 
-
 - NODE1=10.11.0.2
 - NODE2=10.11.0.3
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
 
 每个节点有8张显卡，这里设置batch size为32、48和64，在1机1卡～1机8卡的情况下进行了多组训练。
-
 
 
 ## 单机
@@ -133,23 +148,50 @@ bash run_single_node.sh
 ```
 对单机1卡、2卡、4卡、8卡分别做5组测试。单机脚本默认的batch size为32，可以通过参数指定，如指定batch size为48或64：`bash run_single_node.sh 48`，`bash run_single_node.sh 64`
 
-### 混合精度
 
-可以通过修改脚本`run_single_node.sh`中的变量，也可直接通过参数指定以开启混合精度，如：
+## 2机16卡
+
+2机、4机等多机情况下，需要在所有机器节点上相同路径准备同样的数据集和代码脚本，以完成分布式训练。
+
+如2机，NODE1='10.11.0.2'，NODE2='10.11.0.3'，指定batch size=32，每组测试5次，关闭混合精度和xla，则：
+
+在NODE1节点`models/official/nlp/bert/`目录下,执行脚本：
 
 ```shell
-bash run_single_node.sh 64   fp16
+bash run_two_node.sh 32 5 fp32 false 0
 ```
 
-表示开启fp16混合精度，batch size=64，每组默认测试5次。
+在NODE2节点相同目录下，执行同样的脚本：
+
+```shell
+bash run_two_node.sh 32 5 fp32 false 1
+```
+
+注意：最后一个参数表示task_index，需要与当前节点对应（NODE1为0，NODE2为1）。
 
 
+## 4机32卡
 
-## 多机
+流程同上，如指定batch size=32，每组测试5次，关闭混合精度和xla，则只需在4个机器节点上分别执行：
 
-测试过程中我们发现，官方提供的python脚本运行多机时会报错，即使在修改代码后也只能支持
+```shell
+bash run_multi_node.sh 32 5 fp32 false ${task_index}
+```
 
-`--all_reduce_alg='ring'`模式的多机训练(cpu多机)，而不能支持'nccl'模式的多gpu训练，故多机的测试暂不开展。
+同样，最后一个参数表示task_index，需要与当前节点对应（NODE1为0，NODE2为1，NODE3为2……）。
+
+
+## 混合精度
+
+可以修改脚本`run_single_node.sh`, `run_two_node.sh`, `run_multi_node.sh`中的变量，或直接通过参数指定DTYPE以开启混合精度，如：
+
+```shell
+bash run_single_node.sh 64 5 fp16
+```
+
+表示单机训练开启fp16混合精度，并batch size=64，每组测试5次。
+多机训练类似，在各节点运行脚本时分别指定对应参数即可。
+
 
 
 # Result
@@ -161,26 +203,36 @@ python extract_tensorflow_logs_time.py --log_dir=logs/tensorflow/bert/bz64 --bat
 ```
 输出：
 ```shell
-logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_4.log {4: 805.41}
-logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_1.log {4: 805.41, 1: 806.74}
-logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_2.log {4: 805.41, 1: 806.74, 2: 805.43}
-logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_3.log {4: 805.41, 1: 806.74, 2: 805.43, 3: 806.01}
-logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_5.log {4: 805.41, 1: 806.74, 2: 805.43, 3: 806.01, 5: 803.36}
-logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_4.log {4: 402.34}
-logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_1.log {4: 402.34, 1: 399.56}
-logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_2.log {4: 402.34, 1: 399.56, 2: 402.02}
-logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_3.log {4: 402.34, 1: 399.56, 2: 402.02, 3: 404.06}
-logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_5.log {4: 402.34, 1: 399.56, 2: 402.02, 3: 404.06, 5: 400.27}
-logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_4.log {4: 112.71}
-logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_1.log {4: 112.71, 1: 113.55}
-logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_2.log {4: 112.71, 1: 113.55, 2: 114.95}
-logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_3.log {4: 112.71, 1: 113.55, 2: 114.95, 3: 112.99}
-logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_5.log {4: 112.71, 1: 113.55, 2: 114.95, 3: 112.99, 5: 111.67}
-logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_4.log {4: 204.96}
-logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_1.log {4: 204.96, 1: 204.3}
-logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_2.log {4: 204.96, 1: 204.3, 2: 202.48}
-logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_3.log {4: 204.96, 1: 204.3, 2: 202.48, 3: 204.16}
-logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_5.log {4: 204.96, 1: 204.3, 2: 202.48, 3: 204.16, 5: 203.15}
+logs/tensorflow/bert/bz64/4n8g/bert_b64_fp32_2.log {2: 2237.6}
+logs/tensorflow/bert/bz64/4n8g/bert_b64_fp32_1.log {2: 2237.6, 1: 2238.39}
+logs/tensorflow/bert/bz64/4n8g/bert_b64_fp32_5.log {2: 2237.6, 1: 2238.39, 5: 2244.38}
+logs/tensorflow/bert/bz64/4n8g/bert_b64_fp32_3.log {2: 2237.6, 1: 2238.39, 5: 2244.38, 3: 2252.55}
+logs/tensorflow/bert/bz64/4n8g/bert_b64_fp32_4.log {2: 2237.6, 1: 2238.39, 5: 2244.38, 3: 2252.55, 4: 2249.41}
+logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_2.log {2: 202.48}
+logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_1.log {2: 202.48, 1: 204.3}
+logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_5.log {2: 202.48, 1: 204.3, 5: 203.15}
+logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_3.log {2: 202.48, 1: 204.3, 5: 203.15, 3: 204.16}
+logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_4.log {2: 202.48, 1: 204.3, 5: 203.15, 3: 204.16, 4: 204.96}
+logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_2.log {2: 114.95}
+logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_1.log {2: 114.95, 1: 113.55}
+logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_5.log {2: 114.95, 1: 113.55, 5: 111.67}
+logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_3.log {2: 114.95, 1: 113.55, 5: 111.67, 3: 112.99}
+logs/tensorflow/bert/bz64/1n1g/bert_b64_fp32_4.log {2: 114.95, 1: 113.55, 5: 111.67, 3: 112.99, 4: 112.71}
+logs/tensorflow/bert/bz64/2n8g/bert_b64_fp32_2.log {2: 1242.44}
+logs/tensorflow/bert/bz64/2n8g/bert_b64_fp32_1.log {2: 1242.44, 1: 1237.07}
+logs/tensorflow/bert/bz64/2n8g/bert_b64_fp32_5.log {2: 1242.44, 1: 1237.07, 5: 1249.61}
+logs/tensorflow/bert/bz64/2n8g/bert_b64_fp32_3.log {2: 1242.44, 1: 1237.07, 5: 1249.61, 3: 1237.47}
+logs/tensorflow/bert/bz64/2n8g/bert_b64_fp32_4.log {2: 1242.44, 1: 1237.07, 5: 1249.61, 3: 1237.47, 4: 1239.3}
+logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_2.log {2: 402.02}
+logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_1.log {2: 402.02, 1: 399.56}
+logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_5.log {2: 402.02, 1: 399.56, 5: 400.27}
+logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_3.log {2: 402.02, 1: 399.56, 5: 400.27, 3: 404.06}
+logs/tensorflow/bert/bz64/1n4g/bert_b64_fp32_4.log {2: 402.02, 1: 399.56, 5: 400.27, 3: 404.06, 4: 402.34}
+logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_2.log {2: 805.43}
+logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_1.log {2: 805.43, 1: 806.74}
+logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_5.log {2: 805.43, 1: 806.74, 5: 803.36}
+logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_3.log {2: 805.43, 1: 806.74, 5: 803.36, 3: 806.01}
+logs/tensorflow/bert/bz64/1n8g/bert_b64_fp32_4.log {2: 805.43, 1: 806.74, 5: 803.36, 3: 806.01, 4: 805.41}
 {'bert': {'1n1g': {'average_speed': 113.17,
                    'batch_size_per_device': 64,
                    'median_speed': 112.99,
@@ -196,8 +248,16 @@ logs/tensorflow/bert/bz64/1n2g/bert_b64_fp32_5.log {4: 204.96, 1: 204.3, 2: 202.
           '1n8g': {'average_speed': 805.39,
                    'batch_size_per_device': 64,
                    'median_speed': 805.43,
-                   'speedup': 7.13}}}
-Saving result to ./result/bz64_result.json
+                   'speedup': 7.13},
+          '2n8g': {'average_speed': 1241.18,
+                   'batch_size_per_device': 64,
+                   'median_speed': 1239.3,
+                   'speedup': 10.97},
+          '4n8g': {'average_speed': 2244.47,
+                   'batch_size_per_device': 64,
+                   'median_speed': 2244.38,
+                   'speedup': 19.86}}}
+Saving result to ./result/_result.json
 ```
 ## 计算规则
 
@@ -223,42 +283,6 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 
 ## BERT-Base FP32
 
-### batch size = 64 & without xla
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 112.99    | 1       |
-| 1        | 2       | 204.16    | 1.81    |
-| 1        | 4       | 402.02    | 3.56    |
-| 1        | 8       | 805.43    | 7.13    |
-
-### batch size = 64 & with xla
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 138.21    | 1       |
-| 1        | 2       | 254.91    | 1.84    |
-| 1        | 4       | 505.63    | 3.66    |
-| 1        | 8       | 959.02    | 6.94    |
-
-### batch size=48 & without xla
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 108.94    | 1       |
-| 1        | 2       | 194.29    | 1.78    |
-| 1        | 4       | 384.59    | 3.53    |
-| 1        | 8       | 752.21    | 6.9     |
-
-### batch size=48 & with xla
-
-| node_num | gpu_num | samples/s | speedup |
-| -------- | ------- | --------- | ------- |
-| 1        | 1       | 131.27    | 1       |
-| 1        | 2       | 236.58    | 1.8     |
-| 1        | 4       | 468.83    | 3.57    |
-| 1        | 8       | 877.55    | 6.69    |
-
 ### batch size=32 & without xla
 
 | node_num | gpu_num | samples/s | speedup |
@@ -267,6 +291,8 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 177.18    | 1.71    |
 | 1        | 4       | 347.83    | 3.36    |
 | 1        | 8       | 675.82    | 6.52    |
+| 2        | 16      | 909.0     | 8.78    |
+| 4        | 32      | 1551.52   | 14.98   |
 
 ### batch size=32 & with xla
 
@@ -276,7 +302,55 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 216.46    | 1.73    |
 | 1        | 4       | 421.79    | 3.36    |
 | 1        | 8       | 775.93    | 6.19    |
+| 2        | 16      | 1022.99   | 8.16    |
+| 4        | 32      | 1693.59   | 13.51   |
 
+### batch size=48 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 108.94    | 1       |
+| 1        | 2       | 194.29    | 1.78    |
+| 1        | 4       | 384.59    | 3.53    |
+| 1        | 8       | 752.21    | 6.9     |
+| 2        | 16      | 1106.71   | 10.16   |
+| 4        | 32      | 1956.1    | 17.96   |
+
+### batch size=48 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 131.27    | 1       |
+| 1        | 2       | 236.58    | 1.8     |
+| 1        | 4       | 468.83    | 3.57    |
+| 1        | 8       | 877.55    | 6.69    |
+| 2        | 16      | 1262.4    | 9.62    |
+| 4        | 32      | 2168.44   | 16.52   |
+
+### batch size = 64 & without xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 112.99    | 1       |
+| 1        | 2       | 204.16    | 1.81    |
+| 1        | 4       | 402.02    | 3.56    |
+| 1        | 8       | 805.43    | 7.13    |
+| 2        | 16      | 1239.3    | 10.97   |
+| 4        | 32      | 2244.38   | 19.86   |
+
+### batch size = 64 & with xla
+
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 138.21    | 1       |
+| 1        | 2       | 254.91    | 1.84    |
+| 1        | 4       | 505.63    | 3.66    |
+| 1        | 8       | 959.02    | 6.94    |
+| 2        | 16      | 1448.74   | 10.48   |
+| 4        | 32      | 2544.74   | 18.41   |
+
+注：
+- 以32为最小单位，最大batch size为64，否则会OOM(out of memory)。
 
 
 ## BERT-Base FP16
@@ -289,6 +363,8 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 385.19    | 1.68    |
 | 1        | 4       | 746.9     | 3.27    |
 | 1        | 8       | 1402.41   | 6.13    |
+| 2        | 16      | 1893.51   | 8.28    |
+| 4        | 32      | 3194.02   | 13.97   |
 
 ### batch size=64 & with xla
 
@@ -298,6 +374,8 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 748.66    | 1.8     |
 | 1        | 4       | 1311.35   | 3.16    |
 | 1        | 8       | 2241.6    | 5.4     |
+| 2        | 16      | 2565.99   | 6.19    |
+| 4        | 32      | 4113.68   | 9.92    |
 
 ### batch size=96 & without xla
 
@@ -307,6 +385,8 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 440.72    | 1.71    |
 | 1        | 4       | 868.12    | 3.36    |
 | 1        | 8       | 1669.07   | 6.46    |
+| 2        | 16      | 2421.33   | 9.38    |
+| 4        | 32      | 4168.79   | 16.15   |
 
 ### batch size=96 & with xla
 
@@ -316,8 +396,23 @@ extract_tensorflow_logs_time.py根据log中打印出的时间，排除前20iter�
 | 1        | 2       | 851.97    | 1.83    |
 | 1        | 4       | 1557.31   | 3.34    |
 | 1        | 8       | 2773.8    | 5.95    |
+| 2        | 16      | 3506.12   | 7.52    |
+| 4        | 32      | 5735.19   | 12.3    |
 
+### batch size=128 & with xla
 
+| node_num | gpu_num | samples/s | speedup |
+| -------- | ------- | --------- | ------- |
+| 1        | 1       | 503.47    | 1       |
+| 1        | 2       | 924.4     | 1.84    |
+| 1        | 4       | 1694.3    | 3.37    |
+| 1        | 8       | 3200.86   | 6.36    |
+| 2        | 16      | 4243.96   | 8.43    |
+| 4        | 32      | 7101.16   | 14.1    |
+
+注：
+- 以32为最小单位，关闭xla时，最大batch size为96，否则会OOM(out of memory)。
+- 以32为最小单位，打开xla时，最大batch size为128，否则会OOM(out of memory)。
 
 
 ## 完整日志
