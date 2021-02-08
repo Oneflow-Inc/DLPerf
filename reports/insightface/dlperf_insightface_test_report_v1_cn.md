@@ -38,7 +38,7 @@
 
 | 框架                                                          | 版本              | 模型来源                                                                                                            |
 | ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face)                                                         |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/1705ae5b4cee6466f7abf75ba891984ec02b8ea3)                                                         |
 | [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
 
 ## 评测配置

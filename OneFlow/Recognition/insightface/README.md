@@ -259,29 +259,36 @@ git clone https://github.com/Oneflow-Inc/oneflow_face.git
 git clone https://github.com/Oneflow-Inc/DLPerf.git
 ````
 
-将本仓库 DLPerf/OneFlow/Recognition/InsightFace/scripts 路径源码放至 oneflow_face 路径下，使用 /scripts 路径下的 insightface_train.py 替换 oneflow_face 路径下的文件
-
+将本仓库 DLPerf/OneFlow/Recognition/InsightFace/scripts 路径源码放至 oneflow_face 路径下，使用 scripts 路径下的 insightface_train.py 替换 oneflow_face 路径下的文件
 ```
 mv scripts/insightface_train.py oneflow_face/insightface_train.py
 ```
-以测试 FP32 数据并行 r100，Face emore 数据集搭配 arcface loss，batch_size_per_device=64, 单机 8 卡的真实数据 150 batch 为例，运行
+同时根据测试需求修改脚本参数，以测试 FP32 数据并行的 r100，Face emore 数据集搭配 arcface loss，batch_size_per_device=64, 单机 8 卡的真实数据 150 batch 为例，确认参数
+
 ```
-bash run_single_node.sh r100 emore arcface 64 batch 150 fp32 False False
-```
-换成相同配置模型并行， 输入
-```
-bash run_single_node.sh r100 emore arcface 64 batch 150 fp32 True False
-```
-换成 Partial FC 优化，输入
-```
-bash run_single_node.sh r100 emore arcface 64 batch 150 fp32 True True
-```
-如果希望测试 Partial FC 优化 r100 Glint360k 数据集搭配 cosface loss，其他配置不变，则输入
-```
-bash run_single_node.sh r100_glint360k glint360k cosface 64 batch 150 fp32 True True
+workspace=${1:-"/home/leinao/sx/test_face"}
+network=${2:-"r100"}
+dataset=${3:-"emore"}
+loss=${4:-"arcface"}
+bz_per_device=${5:-64}
+train_unit=${6:-"batch"}
+iter_num=${7:-150}
+precision=${8:-fp32}
+model_parallel=${9:-False}
+partila_fc=${10:-False}
+sample_ratio=${11:-0.1}
+num_classes=${12:-85744}
+use_synthetic_data=${13:-False}
 ```
 
-即可针对不同网络和配置，对单机单卡、2 卡、4 卡、8 卡等情况进行测试，并将 log 信息保存在当前目录的对应测评配置路径中。
+保存配置，直接运行
+```
+bash run_single_node.sh 
+```
+
+即可针对当前网络和配置进行测试。
+
+修改配置之后，即可对不同网络和配置，单机单卡、2 卡、4 卡、8 卡等情况进行测试，并将 log 信息保存在当前目录的对应测评配置路径中。
 
 - #### 寻找最大 `num_classes`
 
