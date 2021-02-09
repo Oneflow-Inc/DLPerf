@@ -2,11 +2,9 @@
 
 ## 概述 Overview
 
-本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出多卡情况下的加速比，评判框架在单机情况下的横向拓展能力。
+本测试基于 [deepinsight](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55) 仓库中提供的基于MXNet框架的 [Partial-FC](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc) 实现，目的在于速度测评，同时根据测速结果给出加速比，评判框架在单机、分布式多机情况下的横向拓展能力。
 
-目前，该测试覆盖了FP32 精度下的单机1~8卡，后续将持续维护，增加更多方式的测评。
-
-此外，针对大规模人脸，我们增加了一组最大人脸类别数的测试，用于展示框架在单卡/单机下支持的最大人脸ID类别数。
+目前，该测试覆盖了FP32 精度下的单机、多机测试，此外，针对大规模人脸，我们增加了一组最大人脸类别数的测试，用于展示框架在单卡/单机下支持的最大人脸ID类别数。后续将持续维护，增加更多方式的测评。
 
 
 
@@ -110,7 +108,7 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
 
-每个节点有8张显卡，这里设分别在单机1卡～单机8卡的情况下进行了多组训练。
+每个节点有 8 张 V100 显卡， 每张显卡显存 16 G。
 
 #### 测试
 
@@ -126,7 +124,7 @@ git clone https://github.com/Oneflow-Inc/DLPerf.git
 bash run_test.sh
 ```
 
-针对1机1~8卡， 进行测试，并将 log 信息保存在logs目录下。
+默认针对单机1~8卡， 进行测试，并将 log 信息保存在logs目录下。
 
 **默认测试的backbone网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
 
@@ -143,6 +141,19 @@ bash run_test.sh r50   64  1.0
 dataset=glint360k_8GPU
 loss=cosface
 ```
+
+**多机测试**
+
+只需在[run_test.sh](./run_test.sh)脚本中增加多机测试的启动代码即可，如：
+
+```shell
+# 2机
+bash $SHELL_FOLDER/runner.sh ${MODEL} ${BZ_PER_DEVICE} 120 0,1,2,3,4,5,6,7  2  $SAMPLE_RATIO  $DTYPE
+# 4机
+bash $SHELL_FOLDER/runner.sh ${MODEL} ${BZ_PER_DEVICE} 120 0,1,2,3,4,5,6,7  4  $SAMPLE_RATIO  $DTYPE
+```
+
+
 
 ##### 最大人脸ID类别数测试
 
@@ -166,7 +177,7 @@ elif dataset == '1200w':
         config.max_update = 120
 ```
 
-测试时，同步修改runner.sh[第52行](https://github.com/Oneflow-Inc/DLPerf/blob/mxnet-insightface-further-test/MxNet/InsightFace/PartailFC/runner.sh#L52)：`dataset=1200w`，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`
+测试时，同步修改runner.sh[第52行](./runner.sh)：`dataset=1200w`，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`
 
 ### 4. 数据处理
 
@@ -275,6 +286,8 @@ Saving result to ./result/bz64_result.json
 | 1        | 1       | 223.11    | 1       |
 | 1        | 4       | 799.19    | 3.58    |
 | 1        | 8       | 1586.09   | 7.11    |
+| 2        | 16      | 2677.79   | 12.0    |
+| 4        | 32      | 5211.93   | 23.36   |
 
 
 #### Batch size = 104(max) &  sample ratio = 0.1
@@ -337,7 +350,10 @@ Saving result to ./result/bz64_result.json
 详细 Log 信息可点击下载：
 
 - [partial_fc_fp32.zip.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32.zip)
+
 - [partial_fc_fp32_glint360k.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32_glint360k.zip)
+
 - [max_face_ids.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/max_face_ids.zip)
+
 
 
