@@ -3,6 +3,11 @@ This Folder contains top level reports of DLPerf test.
 ## Changelog
 Note: latest on the top
 
+### Feb 7th, 2021
+- [InsightFace Benchmark Test Report V1.0](insightface/dlperf_insightface_test_report_v1.md)
+
+- [InsightFace 性能评测报告中文版 V1.0](insightface/dlperf_insightface_test_report_v1_cn.md)
+
 ### Jan 29th, 2021
 
 - [WideDeepLearning Benchmark Test Report V1.0](WideDeepLearning/dlperf_wide_and_deep_test_report_v1.md)
