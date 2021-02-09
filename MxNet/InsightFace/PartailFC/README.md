@@ -144,16 +144,7 @@ loss=cosface
 
 **多机测试**
 
-只需在[run_test.sh](./run_test.sh)脚本中增加多机测试的启动代码即可，如：
-
-```shell
-# 2机
-bash $SHELL_FOLDER/runner.sh ${MODEL} ${BZ_PER_DEVICE} 120 0,1,2,3,4,5,6,7  2  $SAMPLE_RATIO  $DTYPE
-# 4机
-bash $SHELL_FOLDER/runner.sh ${MODEL} ${BZ_PER_DEVICE} 120 0,1,2,3,4,5,6,7  4  $SAMPLE_RATIO  $DTYPE
-```
-
-
+在4台机器上准备相同的环境、数据集后，在NODE1节点上运行bash run_multi_node_test.sh即可对2机、4机进行测试。测试默认的backbone网络为resnet100，batch size=64 ，sample_ratio=0.1。
 
 ##### 最大人脸ID类别数测试
 
