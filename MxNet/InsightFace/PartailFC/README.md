@@ -177,7 +177,7 @@ elif dataset == '1200w':
         config.max_update = 120
 ```
 
-测试时，同步修改runner.sh[第52行](./runner.sh)：`dataset=1200w`，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`
+测试时，同步修改runner.sh[第52行](./runner.sh#L52)：`dataset=1200w`，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`
 
 ### 4. 数据处理
 
