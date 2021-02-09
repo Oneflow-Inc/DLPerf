@@ -46,15 +46,14 @@ mkdir -p $log_folder
 log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 
 # use `which python` to get the absolute path of your python interpreter
-#
-
 # dataset: emore webface glint360k_8GPU ; loss : arcface; cosface
+
 dataset=emore
 loss=arcface
 
 PYTHON_EXEC=/home/leinao/anaconda3/envs/mxnet/bin/python
 FOLDER=$(dirname $(readlink -f "$0"))
-horovodrun -np ${gpu_num} -H ${node_ip}  ${PYTHON_EXEC} \
+horovodrun -p 22 -np ${gpu_num} -H ${node_ip}  ${PYTHON_EXEC} \
 ${FOLDER}/train_memory.py \
     --dataset ${dataset}  \
     --loss ${loss} \
