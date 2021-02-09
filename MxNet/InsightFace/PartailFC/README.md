@@ -72,13 +72,13 @@ HOROVOD_WITH_MXNET=1  HOROVOD_GPU_OPERATIONS=NCCL HOROVOD_GPU_ALLREDUCE=NCCL HOR
 
 - 设置数据集路径
 
-  修改`insightface/recognition/partial_fc/mxnet/default.py`下相应数据集路径，如修改[第63行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L63)：
+  修改 `insightface/recognition/partial_fc/mxnet/default.py` 下相应数据集路径，如修改[第63行](https://github.com/deepinsight/insightface/blob/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc/mxnet/default.py#L63)：
 
-  `config.rec = '/datasets/insightface/glint360k/train.rec'`以为glint360k_8GPU数据集设置本地路径。
+  `config.rec = '/datasets/insightface/glint360k/train.rec'` 以为glint360k_8GPU数据集设置本地路径。
 
 - 注释模型保存相关代码
 
-  由于是性能评测而非完整训练，我们不需要保存模型模型，可以注释掉`insightface/recognition/partial_fc/mxnet/callbacks.py`中第122行起保存模型相关的代码：
+  由于是性能评测而非完整训练，我们不需要保存模型模型，可以注释掉`insightface/recognition/partial_fc/mxnet/callbacks.py` 中第122行起保存模型相关的代码：
 
   ```shell
   # if self.rank == 0:
@@ -144,7 +144,7 @@ loss=cosface
 
 **多机测试**
 
-在4台机器上准备相同的环境、数据集后，在NODE1节点上运行bash run_multi_node_test.sh即可对2机、4机进行测试。测试默认的backbone网络为resnet100，batch size=64 ，sample_ratio=0.1。
+在4台机器上准备相同的环境、数据集后，在NODE1节点上直接运行 `bash run_multi_node_test.sh` 即可对2机、4机进行测试。测试默认的backbone网络为resnet100，batch size=64 ，sample_ratio=0.1。
 
 ##### 最大人脸ID类别数测试
 
@@ -168,7 +168,7 @@ elif dataset == '1200w':
         config.max_update = 120
 ```
 
-测试时，同步修改runner.sh[第52行](./runner.sh#L52)：`dataset=1200w`，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`
+测试时，同步修改runner.sh[第52行](./runner.sh#L52)：`dataset=1200w` ，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`。
 
 ### 4. 数据处理
 
