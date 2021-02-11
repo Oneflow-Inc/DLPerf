@@ -38,7 +38,7 @@
 
 | 框架                                                          | 版本              | 模型来源                                                                                                            |
 | ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/1705ae5b4cee6466f7abf75ba891984ec02b8ea3)                                                         |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/1705ae5b4cee6466f7abf75ba891984ec02b8ea3)           |
 | [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
 
 ## 评测配置
@@ -128,8 +128,9 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 1                | 64                    | 246.45            | 223.11          |
 | 1        | 4                | 64                    | 948.96            | 799.19          |
 | 1        | 8                | 64                    | 1872.81           | 1586.09         |
+| 2        | 8                | 64                    | 3540.09           | 2677.79         |
 
-![ ](../imgs/emore_r100_fp32_b64_pf_en.png)
+
 
 **batch_size=max**
 
@@ -138,8 +139,9 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 1                | 256.61                         | 232.56                       |
 | 1        | 4                | 990.82                         | 852.4                        |
 | 1        | 8                | 1962.76                        | 1644.42                      |
+| 2        | 8                | 3856.52                        |                              |
 
-![ ](../imgs/emore_r100_fp32_bmax_pf_en.png)
+
 
 
 ### Glint360k & R100 & FP32 Thoughputs
