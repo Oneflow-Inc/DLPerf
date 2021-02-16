@@ -274,20 +274,22 @@ Saving result to ./result/bz64_result.json
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 223.11    | 1       |
-| 1        | 4       | 799.19    | 3.58    |
-| 1        | 8       | 1586.09   | 7.11    |
-| 2        | 16      | 2677.79   | 12.0    |
-| 4        | 32      | 5211.93   | 23.36   |
+| 1        | 1       | 217.69    | 1       |
+| 1        | 4       | 749.57    | 3.44    |
+| 1        | 8       | 1395.2    | 6.41    |
+| 2        | 16      | 2575.7    | 11.83   |
+| 4        | 32      | 5013.47   | 23.03   |
 
 
 #### Batch size = 104(max) &  sample ratio = 0.1
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 232.56    | 1       |
-| 1        | 4       | 852.4     | 3.67    |
-| 1        | 8       | 1644.42   | 7.07    |
+| 1        | 1       | 229.36    | 1       |
+| 1        | 4       | 842.09    | 3.67    |
+| 1        | 8       | 1568.72   | 6.84    |
+| 2        | 16      | 2739.71   | 11.95   |
+| 4        | 32      | 5570.42   | 24.29   |
 
 ### Insightface(resnet100) FP32
 
@@ -341,9 +343,7 @@ Saving result to ./result/bz64_result.json
 详细 Log 信息可点击下载：
 
 - [partial_fc_fp32.zip.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32.zip)
-
 - [partial_fc_fp32_glint360k.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/partial_fc_fp32_glint360k.zip)
-
 - [max_face_ids.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/MxNet/insightface/partial_fc/max_face_ids.zip)
 
 

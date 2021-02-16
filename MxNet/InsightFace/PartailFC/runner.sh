@@ -17,7 +17,6 @@ export CUDA_VISIBLE_DEVICES=${GPUS}
 export HOROVOD_GPU_ALLREDUCE=NCCL
 export HOROVOD_GPU_ALLGATHER=NCCL
 export HOROVOD_GPU_BROADCAST=NCLL
-export HOROVOD_CACHE_CAPACITY=0
 export MXNET_CPU_WORKER_NTHREADS=3
 
 if [ ${NODE_NUM} -eq 1 ] ; then
@@ -53,8 +52,28 @@ loss=arcface
 
 PYTHON_EXEC=/home/leinao/anaconda3/envs/mxnet/bin/python
 FOLDER=$(dirname $(readlink -f "$0"))
-horovodrun -p 22 -np ${gpu_num} -H ${node_ip}  ${PYTHON_EXEC} \
-${FOLDER}/train_memory.py \
-    --dataset ${dataset}  \
-    --loss ${loss} \
-    --network ${MODEL}  2>&1 | tee ${log_file}
+
+# when training on multiple nodes, mpirun will be more stable than horovodrun 
+# horovodrun -p 22 -np ${gpu_num} -H ${node_ip}  ${PYTHON_EXEC} \
+# ${FOLDER}/train_memory.py \
+#     --dataset ${dataset}  \
+#     --loss ${loss} \
+#     --network ${MODEL}  2>&1 | tee ${log_file}
+
+
+# when training on multiple nodes, mpirun will be more stable than horovodrun 
+mpirun --allow-run-as-root -oversubscribe \
+    -np ${gpu_num} -H ${node_ip} \
+    -bind-to none -map-by slot \
+    -x LD_LIBRARY_PATH -x PATH \
+    -mca pml ob1 -mca btl ^openib \
+    -mca plm_rsh_args "-p 22  -q -o StrictHostKeyChecking=no" \
+    -mca btl_tcp_if_include ib0 \
+    -x OMP_NUM_THREADS=2 \
+    -x MXNET_USE_OPERATOR_TUNING=1 \
+    -x MXNET_USE_NUM_CORES_OPERATOR_TUNING=1 \
+    -x MXNET_CUDNN_AUTOTUNE_DEFAULT=1 \
+    ${PYTHON_EXEC} ${FOLDER}/train_memory.py \
+        --dataset ${dataset}  \
+        --loss ${loss} \
+        --network ${MODEL}  2>&1 | tee ${log_file}
