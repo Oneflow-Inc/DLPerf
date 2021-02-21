@@ -131,6 +131,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 8                | 64                    | 1872.81           | 1586.09         |
 | 2        | 8                | 64                    | 3540.09           | 2677.79         |
 | 4        | 8                | 64                    | 6931.6            | 5013.47         |
+
 ![ ](../imgs/emore_r100_fp32_b64_pf_en.png)
 
 **batch_size=max**
@@ -142,6 +143,7 @@ In this report, num classes mean the number of face categories. In the tests, it
 | 1        | 8                | 1962.76                        | 1644.42                      |
 | 2        | 8                | 3856.52                        | 2739.71                      |
 | 4        | 8                | 7564.74                        | 5570.42                      |
+
 ![ ](../imgs/emore_r100_fp32_bmax_pf_en.png)
 
 ### Glint360k & R100 & FP32 Thoughputs

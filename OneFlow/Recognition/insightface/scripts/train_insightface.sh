@@ -28,7 +28,6 @@ if [ $gpu_num_per_node -gt 1 ]; then
     data_part_num=200
   else
     echo "Please modify exact data part num in sample_config.py!"
-   fi
 else
     data_part_num=1
 fi
