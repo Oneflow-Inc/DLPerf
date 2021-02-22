@@ -40,7 +40,7 @@ sed -i "s/\(config.sample_ratio = \)\S*/config.sample_ratio = ${SAMPLE_RATIO}/" 
 
 
 rm -rf checkpoints
-log_folder=./log_sample-ratio-${SAMPLE_RATIO}/mxnet/partial_fc/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
+log_folder=./logs-20210222-sample-ratio-${SAMPLE_RATIO}/mxnet/partial_fc/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
 log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 
@@ -50,20 +50,22 @@ log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
 dataset=emore
 loss=arcface
 
+
 PYTHON_EXEC=/home/leinao/anaconda3/envs/mxnet/bin/python
 FOLDER=$(dirname $(readlink -f "$0"))
 
-# when training on multiple nodes, mpirun will be more stable than horovodrun 
-# horovodrun -p 22 -np ${gpu_num} -H ${node_ip}  ${PYTHON_EXEC} \
-# ${FOLDER}/train_memory.py \
-#     --dataset ${dataset}  \
-#     --loss ${loss} \
-#     --network ${MODEL}  2>&1 | tee ${log_file}
-
-
-# when training on multiple nodes, mpirun will be more stable than horovodrun 
-mpirun --allow-run-as-root -oversubscribe \
+if [ ${NODE_NUM} -eq 1 ] ; then
+    export HOROVOD_CACHE_CAPACITY=0
+    horovodrun -np ${gpu_num} -H ${node_ip} ${PYTHON_EXEC} \
+    ${FOLDER}/train_memory.py \
+        --dataset ${dataset}  \
+        --loss ${loss} \
+        --network ${MODEL}  2>&1 | tee ${log_file}
+else
+    export HOROVOD_CACHE_CAPACITY=1024
+    mpirun --allow-run-as-root -oversubscribe \
     -np ${gpu_num} -H ${node_ip} \
+    -x HOROVOD_CACHE_CAPACITY=1024  \
     -bind-to none -map-by slot \
     -x LD_LIBRARY_PATH -x PATH \
     -mca pml ob1 -mca btl ^openib \
@@ -77,3 +79,4 @@ mpirun --allow-run-as-root -oversubscribe \
         --dataset ${dataset}  \
         --loss ${loss} \
         --network ${MODEL}  2>&1 | tee ${log_file}
+fi

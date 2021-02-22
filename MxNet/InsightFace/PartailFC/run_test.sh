@@ -25,16 +25,6 @@ done
 i=1
 while [ $i -le ${TEST_NUM} ]
 do
-    bash $SHELL_FOLDER/runner.sh ${MODEL} ${BZ_PER_DEVICE} 120 0,1  1  $SAMPLE_RATIO  $DTYPE   ${i}
-    echo " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< "
-    let i++
-    sleep 20s
-done
-
-
-i=1
-while [ $i -le ${TEST_NUM} ]
-do
     bash $SHELL_FOLDER/runner.sh ${MODEL} ${BZ_PER_DEVICE} 120 0,1,2,3  1  $SAMPLE_RATIO  $DTYPE   ${i}
     echo " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< "
     let i++
@@ -50,3 +40,4 @@ do
     let i++
     sleep 20s
 done
+
