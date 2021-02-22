@@ -297,8 +297,6 @@ Saving result to ./result/bz64_result.json
 | 2        | 16      | 2845.97   | 12.42   |
 | 4        | 32      | 5476.51   | 23.9    |
 
-注：单机情况下可以测得的最大batch size为112，多机情况下可能由于额外的显存占用，跑112的batch size会引发out of memory
-
 ### Insightface(resnet100) FP32
 
 - **dataset:glint360k**
