@@ -150,6 +150,10 @@ loss=cosface
 
 在4台机器上准备相同的环境、数据集后，在NODE1节点上直接运行 `bash run_multi_node_test.sh` 即可对2机、4机进行测试。测试默认的backbone网络为resnet100，batch size=64 ，sample_ratio=0.1。
 
+注：[runner.sh](./runner.sh#L56)中做了判断，在单机情况下使用horovodrun运行程序，在多机情况下默认使用mpirun运行，且设置了和官方脚本一致的HOROVOD_CACHE_CAPACITY变量用于加速多机时的通信效率。
+
+
+
 ##### 最大人脸ID类别数测试
 
 我们在单机单卡、单机８卡的情况下，分别进行了最大人脸ID类别数的测试，测试条件为：
