@@ -39,7 +39,6 @@ sed -i "s/\(config.max_update = \)\S*/config.max_update = ${ITER_NUM}/" default.
 sed -i "s/\(config.sample_ratio = \)\S*/config.sample_ratio = ${SAMPLE_RATIO}/" default.py
 
 
-rm -rf checkpoints
 log_folder=./logs-20210222-sample-ratio-${SAMPLE_RATIO}/mxnet/partial_fc/bz${BZ_PER_DEVICE}/${NODE_NUM}n${gpu_num_per_node}g
 mkdir -p $log_folder
 log_file=$log_folder/${MODEL}_b${BZ_PER_DEVICE}_${DTYPE}_$TEST_NUM.log
