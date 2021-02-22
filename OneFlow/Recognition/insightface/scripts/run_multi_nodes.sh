@@ -2,12 +2,12 @@
 
 set -ex
 
-host_num=${1:-4}
 workdir=/home/leinao/sx
+host_num=${1:-4}
 network=${2:-"r100"}
 dataset=${3:-"emore"}
 loss=${4:-"arcface"}
-num_nodes=${5:-4}
+num_nodes=${5:-${host_num}}
 bz_per_device=${6:-64}
 train_unit=${7:-"batch"}
 train_iter=${8:-150} 
@@ -15,7 +15,7 @@ gpu_num_per_node=${9:-8}
 precision=${10:-fp32}
 model_parallel=${11:-1}
 partial_fc=${12:-1}
-test_times=${13:-1}
+test_times=${13:-5}
 sample_ratio=${14:-0.1}
 num_classes=${15:-85744}
 use_synthetic_data=${16:-False}
@@ -53,10 +53,8 @@ fi
 hosts=("${host_list[@]:0:${host_num}}")
 echo "Working on hosts:${hosts[@]}"
 
-test_case=${host_num}n_${gpu_num_per_node}g_b${bz_per_device}_${network}_${dataset}_${loss}
+test_case=${host_num}n${gpu_num_per_node}g_b${bz_per_device}_${network}_${dataset}_${loss}
 log_file=${test_case}.log
-mem_file=${test_case}.mem
-INFO_file=${test_case}.INFO
 
 logs_folder=logs
 mkdir -p $logs_folder
@@ -76,7 +74,7 @@ do
   echo "start training on ${host}"
   ssh -p ${port} $host "rm -rf ~/oneflow_temp/*"
   scp -P ${port} -r $scripts_path $LOCAL_RUN $host:~/oneflow_temp
-  ssh -p ${port} $host "cd ~/oneflow_temp; nohup bash train_insightface.sh ~/oneflow_temp/oneflow_face ${network} ${dataset} ${loss} ${num_nodes} $bz_per_device $train_unit $train_iter ${gpu_num_per_node} $precision $model_parallel $partial_fc 1 $sample_ratio $num_classes 1>${log_file} 2>&1 </dev/null &"
+  ssh -p ${port} $host "cd ~/oneflow_temp; nohup bash train_insightface.sh ~/oneflow_temp/oneflow_face ${network} ${dataset} ${loss} ${num_nodes} $bz_per_device $train_unit $train_iter ${gpu_num_per_node} $precision $model_parallel $partial_fc $test_times $sample_ratio $num_classes 1>${log_file} 2>&1 </dev/null &"
 done
 
 #3 copy files to master host and start work
@@ -84,13 +82,10 @@ host=${hosts[0]}
 echo "start training on ${host}"
 ssh -p ${port} $host "rm -rf ~/oneflow_temp/*"
 scp -P ${port} -r $scripts_path $LOCAL_RUN $host:~/oneflow_temp
-ssh -p ${port} $host "cd ~/oneflow_temp; bash train_insightface.sh ~/oneflow_temp/oneflow_face ${network} ${dataset} ${loss} ${num_nodes} $bz_per_device $train_unit $train_iter ${gpu_num_per_node} $precision $model_parallel $partial_fc 1 $sample_ratio $num_classes 1>${log_file}"
+ssh -p ${port} $host "cd ~/oneflow_temp; bash train_insightface.sh ~/oneflow_temp/oneflow_face ${network} ${dataset} ${loss} ${num_nodes} $bz_per_device $train_unit $train_iter ${gpu_num_per_node} $precision $model_parallel $partial_fc $test_times $sample_ratio $num_classes 1>${log_file}"
 
 echo "done"
 
 cp ~/oneflow_temp/${log_file} $logs_folder/${log_file}
-cp ~/oneflow_temp/log/VS00${host: -1}/oneflow.INFO $logs_folder/${INFO_file}
-#python3 extract_time.py --log_file=logs/${log_file}
 sleep 3
 
-# pkill python3
