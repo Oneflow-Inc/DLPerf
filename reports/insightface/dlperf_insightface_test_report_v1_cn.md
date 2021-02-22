@@ -38,7 +38,7 @@
 
 | 框架                                                          | 版本              | 模型来源                                                                                                            |
 | ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/1705ae5b4cee6466f7abf75ba891984ec02b8ea3)                                                         |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/1705ae5b4cee6466f7abf75ba891984ec02b8ea3)           |
 | [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
 
 ## 评测配置
@@ -125,11 +125,11 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 246.45            | 223.11          |
-| 1        | 4                | 64                    | 948.96            | 799.19          |
-| 1        | 8                | 64                    | 1872.81           | 1586.09         |
-| 2        | 8                | 64                    | 3540.09           | 2575.7          |
-| 4        | 8                | 64                    | 6931.6            | 5013.47         |
+| 1        | 1                | 64                    | 246.45            | 218.84          |
+| 1        | 4                | 64                    | 948.96            | 787.07          |
+| 1        | 8                | 64                    | 1872.81           | 1423.12         |
+| 2        | 8                | 64                    | 3540.09           | 2612.65         |
+| 4        | 8                | 64                    | 6931.6            | 5008.72         |
 
 ![ ](../imgs/emore_r100_fp32_b64_pf_en.png)
 
@@ -137,11 +137,11 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=120) | MXNet samples/s(max bsz=104) |
 | -------- | ---------------- | ------------------------------ | ---------------------------- |
-| 1        | 1                | 256.61                         | 232.56                       |
-| 1        | 4                | 990.82                         | 852.4                        |
-| 1        | 8                | 1962.76                        | 1644.42                      |
-| 2        | 8                | 3856.52                        | 2739.71                      |
-| 4        | 8                | 7564.74                        | 5570.42                      |
+| 1        | 1                | 256.61                         | 229.11                       |
+| 1        | 4                | 990.82                         | 844.37                       |
+| 1        | 8                | 1962.76                        | 1584.89                      |
+| 2        | 8                | 3856.52                        | 2845.97                      |
+| 4        | 8                | 7564.74                        | 5476.51                      |
 
 ![ ](../imgs/emore_r100_fp32_bmax_pf_en.png)
 
