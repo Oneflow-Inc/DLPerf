@@ -46,7 +46,11 @@
 
 - #### 数据集
 
-  数据集可以使用emore(MS1MV2-Arcface)、Glint360K等多种数据集。emore数据集准备及制作参考[ArcFace-readme](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace#model-training);Glint360K数据集的下载和准备过程参考[partial_fc-readme](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc#glint360k)，本次测试主要以emore数据集为主。
+  数据集可以使用emore(MS1MV2-Arcface)、Glint360K等数据集，其中：
+
+  - emore数据集准备及制作参考[ArcFace-readme](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/ArcFace#model-training);
+
+  - Glint360K数据集的下载和准备过程参考[partial_fc-readme](https://github.com/deepinsight/insightface/tree/863a7ea9ea0c0355d63c17e3c24e1373ed6bec55/recognition/partial_fc#glint360k)，本次测试主要以emore数据集为主。
 
   
 
@@ -129,13 +133,13 @@ bash run_test.sh
 **默认测试的backbone网络为resnet100，batch size=64 ，sample_ratio=1.0**，您也可以修改模型和相应的batch size如：
 
 ```shell
-# 测试resnet100，batch size=96，sample_ratio=0.1
-bash run_test.sh r100  96  0.1
+# 测试resnet100，batch size=112，sample_ratio=0.1
+bash run_test.sh r100  112  0.1
 # 测试resnet50，batch size=64，sample_ratio=1.0
 bash run_test.sh r50   64  1.0
 ```
 
-默认使用emore数据集和arcface的loss，可以修改runner.sh的[52行](https://github.com/Oneflow-Inc/DLPerf/blob/master/MxNet/InsightFace/PartailFC/runner.sh#L52)指定参数以使用glint360k数据集和cosface的loss：
+默认使用emore数据集和arcface的loss，可以修改runner.sh的[49行](./runner.sh#L49)指定参数以使用glint360k数据集和cosface的loss：
 
 ```shell
 dataset=glint360k_8GPU
@@ -153,7 +157,7 @@ loss=cosface
 - backbone:resnet100
 
 - batch size:64
-- partial fc(sample ratial=0.1)
+- partial fc sample ratial=0.1
 
 - dtype:fp16混合精度
 
@@ -168,7 +172,7 @@ elif dataset == '1200w':
         config.max_update = 120
 ```
 
-测试时，同步修改runner.sh[第52行](./runner.sh#L52)：`dataset=1200w` ，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`。
+测试时，同步修改runner.sh[第49行](./runner.sh#L49)：`dataset=1200w` ，然后运行：`bash run_test.sh r100 64 0.1 fp16 1`。
 
 ### 4. 数据处理
 
@@ -177,7 +181,7 @@ elif dataset == '1200w':
 运行，即可得到针对不同配置测试结果 log 数据处理的结果： 
 
 ```shell
-python extract_mxnet_logs.py --log_dir=./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64 --batch_size_per_device=64
+python extract_mxnet_logs.py --log_dir=./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64 --batch_size_per_device=64
 ```
 
 结果打印如下
@@ -190,35 +194,33 @@ python extract_mxnet_logs.py --log_dir=./logs-20201216-sample-ratio-1.0/mxnet/pa
 ./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_4.log {1: 1588.16, 5: 1577.91, 3: 1569.79, 2: 1575.83, 4: 1582.3}
 ./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_1.log {1: 812.26}
 ./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_5.log {1: 812.26, 5: 795.89}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_3.log {1: 812.26, 5: 795.89, 3: 789.8}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_2.log {1: 812.26, 5: 795.89, 3: 789.8, 2: 789.86}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_4.log {1: 812.26, 5: 795.89, 3: 789.8, 2: 789.86, 4: 778.28}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_1.log {1: 223.25}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_5.log {1: 223.25, 5: 223.13}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_3.log {1: 223.25, 5: 223.13, 3: 224.73}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_2.log {1: 223.25, 5: 223.13, 3: 224.73, 2: 223.19}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_4.log {1: 223.25, 5: 223.13, 3: 224.73, 2: 223.19, 4: 224.08}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_1.log {1: 405.87}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_5.log {1: 405.87, 5: 400.29}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_3.log {1: 405.87, 5: 400.29, 3: 423.79}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_2.log {1: 405.87, 5: 400.29, 3: 423.79, 2: 401.89}
-./logs-20201216-sample-ratio-1.0/mxnet/partial_fc/bz64/1n2g/r100_b64_fp32_4.log {1: 405.87, 5: 400.29, 3: 423.79, 2: 401.89, 4: 397.0}
-{'r100': {'1n1g': {'average_speed': 223.68,
+../logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_1.log {1: 1427.27}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_5.log {1: 1427.27, 5: 1435.1}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_3.log {1: 1427.27, 5: 1435.1, 3: 1434.44}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_2.log {1: 1427.27, 5: 1435.1, 3: 1434.44, 2: 1416.14}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n8g/r100_b64_fp32_4.log {1: 1427.27, 5: 1435.1, 3: 1434.44, 2: 1416.14, 4: 1439.3}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_1.log {1: 811.52}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_5.log {1: 811.52, 5: 778.33}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_3.log {1: 811.52, 5: 778.33, 3: 786.71}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_2.log {1: 811.52, 5: 778.33, 3: 786.71, 2: 777.88}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n4g/r100_b64_fp32_4.log {1: 811.52, 5: 778.33, 3: 786.71, 2: 777.88, 4: 786.41}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_1.log {1: 218.92}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_5.log {1: 218.92, 5: 218.95}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_3.log {1: 218.92, 5: 218.95, 3: 220.59}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_2.log {1: 218.92, 5: 218.95, 3: 220.59, 2: 218.72}
+./logs-20210222-sample-ratio-1.0/mxnet/partial_fc/bz64/1n1g/r100_b64_fp32_4.log {1: 218.92, 5: 218.95, 3: 220.59, 2: 218.72, 4: 219.73}
+{'r100': {'1n1g': {'average_speed': 219.38,
                    'batch_size_per_device': 64,
-                   'median_speed': 223.25,
+                   'median_speed': 218.95,
                    'speedup': 1.0},
-          '1n2g': {'average_speed': 405.77,
+          '1n4g': {'average_speed': 788.17,
                    'batch_size_per_device': 64,
-                   'median_speed': 401.89,
-                   'speedup': 1.8},
-          '1n4g': {'average_speed': 793.22,
+                   'median_speed': 786.41,
+                   'speedup': 3.59},
+          '1n8g': {'average_speed': 1430.45,
                    'batch_size_per_device': 64,
-                   'median_speed': 789.86,
-                   'speedup': 3.54},
-          '1n8g': {'average_speed': 1578.8,
-                   'batch_size_per_device': 64,
-                   'median_speed': 1577.91,
-                   'speedup': 7.07}}}
+                   'median_speed': 1434.44,
+                   'speedup': 6.55}}}
 Saving result to ./result/bz64_result.json
 ```
 
@@ -257,39 +259,41 @@ Saving result to ./result/bz64_result.json
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 223.25    | 1.0     |
-| 1        | 4       | 789.86    | 3.54    |
-| 1        | 8       | 1577.91   | 7.07    |
+| 1        | 1       | 218.95    | 1.0     |
+| 1        | 4       | 786.41    | 3.59    |
+| 1        | 8       | 1434.44   | 6.55    |
 
 
 #### Batch size = 104(max) & sample ratio = 1.0
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 211.76    | 1       |
-| 1        | 4       | 707.64    | 3.34    |
-| 1        | 8       | 1075.47   | 5.08    |
+| 1        | 1       | 208.09    | 1       |
+| 1        | 4       | 685.58    | 3.29    |
+| 1        | 8       | 983.88    | 4.73    |
 
 #### batch size = 64 & sample ratio = 0.1
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 217.69    | 1       |
-| 1        | 4       | 749.57    | 3.44    |
-| 1        | 8       | 1395.2    | 6.41    |
-| 2        | 16      | 2575.7    | 11.83   |
-| 4        | 32      | 5013.47   | 23.03   |
+| 1        | 1       | 218.84    | 1       |
+| 1        | 4       | 787.07    | 3.6     |
+| 1        | 8       | 1423.12   | 6.5     |
+| 2        | 16      | 2612.65   | 11.94   |
+| 4        | 32      | 5008.72   | 22.89   |
 
 
 #### Batch size = 104(max) &  sample ratio = 0.1
 
 | node_num | gpu_num | samples/s | speedup |
 | -------- | ------- | --------- | ------- |
-| 1        | 1       | 229.36    | 1       |
-| 1        | 4       | 842.09    | 3.67    |
-| 1        | 8       | 1568.72   | 6.84    |
-| 2        | 16      | 2739.71   | 11.95   |
-| 4        | 32      | 5570.42   | 24.29   |
+| 1        | 1       | 229.11    | 1       |
+| 1        | 4       | 844.37    | 3.69    |
+| 1        | 8       | 1584.89   | 6.92    |
+| 2        | 16      | 2845.97   | 12.42   |
+| 4        | 32      | 5476.51   | 23.9    |
+
+注：单机情况下可以测得的最大batch size为112，多机情况下可能由于额外的显存占用，跑112的batch size会引发out of memory
 
 ### Insightface(resnet100) FP32
 
