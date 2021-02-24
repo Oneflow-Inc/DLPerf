@@ -38,7 +38,7 @@
 
 | 框架                                                          | 版本              | 模型来源                                                                                                            |
 | ------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/1705ae5b4cee6466f7abf75ba891984ec02b8ea3)                                                         |
+| [OneFlow](https://github.com/Oneflow-Inc/oneflow/tree/v0.3.4) | 0.3.4             | [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/1705ae5b4cee6466f7abf75ba891984ec02b8ea3)           |
 | [deepinsight](https://github.com/deepinsight)                 | 2021-01-20 update | [deepinsight/insightface](https://github.com/deepinsight/insightface/tree/a9beb60971fb8115698859c35fdca721d6f75f5d) |
 
 ## 评测配置
@@ -83,7 +83,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 64                    | 923.23            | 655.56          |
 | 1        | 8                | 64                    | 1836.8            | 650.8           |
 
-![ ](../imgs/emore_r100_fp32_b64_dp_en.png)
+![ ](../imgs/data_parallel_face_emore_r100_bz64.png)
 
 
 **batch_size = max**
@@ -94,7 +94,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 972.8                           | 733.1                       |
 | 1        | 8                | 1931.76                         | 749.42                      |
 
-![ ](../imgs/emore_r100_fp32_bmax_dp_en.png)
+![ ](../imgs/data_parallel_face_emore_r100_bz_max.png)
 
 #### Model Parallelism
 
@@ -107,7 +107,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 8                | 64                    | 1854.15           | 756.96          |
 
 
-![ ](../imgs/emore_r100_fp32_b64_mp_en.png)
+![ ](../imgs/model_parallel_face_emore_r100_bz64.png)
 
 **batch_size = max**
 
@@ -117,7 +117,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 970.1                          | 724.26                        |
 | 1        | 8                | 1921.87                        | 821.06                        |
 
-![ ](../imgs/emore_r100_fp32_bmax_mp_en.png)
+![ ](../imgs/model_parallel_face_emore_r100_bz_max.png)
 
 #### Partial FC, sample_ratio = 0.1
 
@@ -125,21 +125,25 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 
 | node_num | gpu_num_per_node | batch_size_per_device | OneFlow samples/s | MXNet samples/s |
 | -------- | ---------------- | --------------------- | ----------------- | --------------- |
-| 1        | 1                | 64                    | 246.45            | 223.11          |
-| 1        | 4                | 64                    | 948.96            | 799.19          |
-| 1        | 8                | 64                    | 1872.81           | 1586.09         |
+| 1        | 1                | 64                    | 246.45            | 218.84          |
+| 1        | 4                | 64                    | 948.96            | 787.07          |
+| 1        | 8                | 64                    | 1872.81           | 1423.12         |
+| 2        | 8                | 64                    | 3540.09           | 2612.65         |
+| 4        | 8                | 64                    | 6931.6            | 5008.72         |
 
-![ ](../imgs/emore_r100_fp32_b64_pf_en.png)
+![ ](../imgs/partial_fc_sample_ratio_0_1_face_emore_r100_bz64.png)
 
 **batch_size=max**
 
 | node_num | gpu_num_per_node | OneFlow samples/s(max bsz=120) | MXNet samples/s(max bsz=104) |
 | -------- | ---------------- | ------------------------------ | ---------------------------- |
-| 1        | 1                | 256.61                         | 232.56                       |
-| 1        | 4                | 990.82                         | 852.4                        |
-| 1        | 8                | 1962.76                        | 1644.42                      |
+| 1        | 1                | 256.61                         | 229.11                       |
+| 1        | 4                | 990.82                         | 844.37                       |
+| 1        | 8                | 1962.76                        | 1584.89                      |
+| 2        | 8                | 3856.52                        | 2845.97                      |
+| 4        | 8                | 7564.74                        | 5476.51                      |
 
-![ ](../imgs/emore_r100_fp32_bmax_pf_en.png)
+![ ](../imgs/partial_fc_sample_ratio_0_1_face_emore_r100_bz_max.png)
 
 
 ### Glint360k & R100 & FP32 Thoughputs
@@ -198,7 +202,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 64                    | 945.44            | 730.29          |
 | 1        | 8                | 64                    | 1858.57           | 1359.2          |
 
-![ ](../imgs/glint360k_r100_fp32_b64_pf_en.png)
+![ ](../imgs/partial_fc_sample_ratio_0_1_glint_r100_bz64.png)
 
 **batch_size=max**
 
@@ -208,7 +212,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 973.63                         | 811.34                      |
 | 1        | 8                | 1933.88                        | 1493.51                     |
 
-![ ](../imgs/glint360k_r100_fp32_bmax_pf_en.png)
+![ ](../imgs/partial_fc_sample_ratio_0_1_glint_r100_bz_max.png)
 
 ### Face Emore & Y1 & FP32 Thoughputs
 
@@ -223,7 +227,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 256                   | 7354.49           | 1055.88         |
 | 1        | 8                | 256                   | 14298.02          | 1031.1          |
 
-![ ](../imgs/emore_y1_fp32_b256_dp_en.png)
+![ ](../imgs/data_parallel_face_emore_y1_bz256.png)
 
 **batch_size = max**
 
@@ -233,7 +237,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 7511.53                        | 1044.38                      |
 | 1        | 8                | 14756.03                       | 1026.68                      |
 
-![ ](../imgs/emore_y1_fp32_bmax_dp_en.png)
+![ ](../imgs/data_parallel_face_emore_y1_bz_max.png)
 
 #### Model Parallelism
 
@@ -245,7 +249,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 256                   | 7264.54           | 984.88          |
 | 1        | 8                | 256                   | 14049.75          | 1030.58         |
 
-![ ](../imgs/emore_y1_fp32_b256_mp_en.png)
+![ ](../imgs/model_parallel_face_emore_y1_bz256.png)
 
 **batch_size = max**
 
@@ -255,7 +259,7 @@ OneFlow 的实现与 MXNet 进行了严格对齐，主要包括：
 | 1        | 4                | 7363.77                        | 1017.78                      |
 | 1        | 8                | 14436.38                       | 1038.6                       |
 
-![ ](../imgs/emore_y1_fp32_bmax_mp_en.png)
+![ ](../imgs/model_parallel_face_emore_y1_bz_max.png)
 
 ### Max num_classses
 
