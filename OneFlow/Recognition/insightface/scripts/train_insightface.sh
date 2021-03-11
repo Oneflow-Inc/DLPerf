@@ -1,4 +1,4 @@
-#export ONEFLOW_DEBUG_MODE=True
+export ONEFLOW_DEBUG_MODE=True
 export PYTHONUNBUFFERED=1
 
 workspace=${1:-"/data/oneflow_temp/oneflow_face"}
@@ -8,7 +8,7 @@ loss=${4:-"arcface"}
 num_nodes=${5:-4}
 batch_size_per_device=${6:-64}
 train_unit=${7:-"batch"}
-train_iter=${8:-150} 
+train_iter=${8:-150}
 gpu_num_per_node=${9:-8}
 precision=${10:-fp32}
 model_parallel=${11:-1}
@@ -22,24 +22,23 @@ MODEL_SAVE_DIR=${num_classes}_${precision}_b${batch_size_per_device}_oneflow_mod
 LOG_DIR=$MODEL_SAVE_DIR
 
 if [ $gpu_num_per_node -gt 1 ]; then
-  if [ $network = "r100" ]; then
-    data_part_num=32
-  elif [ $network = "r100_glint360k" ]; then
-    data_part_num=200
-  else
-    echo "Please modify exact data part num in sample_config.py!"
+   if [ $network = "r100" ]; then
+      data_part_num=32
+   elif [ $network = "r100_glint360k" ]; then
+      data_part_num=200
+   else
+      echo "Please modify exact data part num in sample_config.py!"
    fi
 else
-    data_part_num=1
+   data_part_num=1
 fi
-sed -i "s/emore.train_data_part_num = 32/emore.train_data_part_num = $data_part_num/g" $workspace/sample_config.py
-sed -i "s/emore.num_classes = 85744/emore.num_classes = $num_classes/g" $workspace/sample_config.py
-
-
+sed -i "s/${dataset}.train_data_part_num = [[:digit:]]*/${dataset}.train_data_part_num = $data_part_num/g" $workspace/sample_config.py
+sed -i "s/${dataset}.num_classes = [[:digit:]]*/${dataset}.num_classes = $num_classes/g" $workspace/sample_config.py
+sed -i "s/num_nodes = [[:digit:]]*/num_nodes = $num_nodes/g" $workspace/sample_config.py
 PREC=""
-if [ "$precision" = "fp16" ] ; then
+if [ "$precision" = "fp16" ]; then
    PREC=" --use_fp16=True"
-elif [ "$precision" = "fp32" ] ; then
+elif [ "$precision" = "fp32" ]; then
    PREC=" --use_fp16=False"
 else
    echo "Unknown <precision> argument"
@@ -68,16 +67,16 @@ CMD+=" --log_dir=${LOG_DIR}"
 CMD+=" $PREC"
 CMD+=" --sample_ratio=${sample_ratio}"
 CMD+=" --use_synthetic_data=${use_synthetic_data}"
-CMD+=" --num_classes=${num_classes}"
-CMD+=" --data_part_num=${data_part_num}"
+CMD+=" --iter_num_in_snapshot=5000"
+CMD+=" --validation_interval=5000"
 
 CMD="/home/leinao/anaconda3/envs/insightface/bin/python3 $CMD "
 set -x
-if [ -z "$LOG_FILE" ] ; then
+if [ -z "$LOG_FILE" ]; then
    $CMD
 else
    (
-     $CMD
+      $CMD
    ) |& tee $LOG_FILE
 
 fi
