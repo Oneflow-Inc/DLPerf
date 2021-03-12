@@ -61,7 +61,7 @@ local_train_info = [[], [], [], []]
 
 ### 环境
 
-1.本测试使用 conda 环境， 可以在使用如下命令创建plsc环境
+1.本测试使用 conda 环境， 可以使用如下命令创建 plsc 环境：
 
 
 ```
@@ -93,7 +93,7 @@ sudo apt install libnccl2=2.7.3-1+cuda10.2 libnccl-dev=2.7.3-1+cuda10.2
 - NODE3=10.11.0.4
 - NODE4=10.11.0.5
 
-每个节点有8张显卡，这里默认使用resnet50的backbone，batch size设为128，分别在1机1卡～4机32卡的情况下进行了多组训练。
+每个节点有8张显卡，这里默认使用resnet50作为backbone，batch size设为128，分别在1机1卡～4机32卡的情况下进行了多组训练。
 
 ## 单机
 
@@ -195,15 +195,8 @@ Saving result to ./result/bz128_result.json
 ### 1.测速脚本
 
 - extract_paddle_logs.py
-- extract_paddle_logs_time.py
-
-两个脚本略有不同，得到的结果稍有误差：
 
 extract_paddle_logs.py根据官方在log中打印的速度，在150个iter中，排除前50iter，取后100个iter的速度做平均；
-
-extract_paddle_logs_time.py则根据log中打印出的时间，排除前50iter取后100个iter的实际运行时间计算速度。
-
-README展示的是extract_paddle_logs.py的计算结果。
 
 ### 2.均值速度和中值速度
 
