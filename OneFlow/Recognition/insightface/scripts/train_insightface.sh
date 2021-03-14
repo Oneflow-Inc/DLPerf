@@ -1,7 +1,7 @@
 export ONEFLOW_DEBUG_MODE=True
 export PYTHONUNBUFFERED=1
 
-workspace=${1:-"/data/oneflow_temp/oneflow_face"}
+workspace=${1:-"/oneflow_face"}
 network=${2:-"r100"}
 dataset=${3:-"emore"}
 loss=${4:-"arcface"}
@@ -34,7 +34,6 @@ else
 fi
 sed -i "s/${dataset}.train_data_part_num = [[:digit:]]*/${dataset}.train_data_part_num = $data_part_num/g" $workspace/sample_config.py
 sed -i "s/${dataset}.num_classes = [[:digit:]]*/${dataset}.num_classes = $num_classes/g" $workspace/sample_config.py
-sed -i "s/num_nodes = [[:digit:]]*/num_nodes = $num_nodes/g" $workspace/sample_config.py
 PREC=""
 if [ "$precision" = "fp16" ]; then
    PREC=" --use_fp16=True"
@@ -56,6 +55,7 @@ CMD="$workspace/insightface_train.py"
 CMD+=" --network=${network}"
 CMD+=" --dataset=${dataset}"
 CMD+=" --loss=${loss}"
+CMD+=" --num_nodes=${num_nodes}"
 CMD+=" --train_batch_size=$(expr $num_nodes '*' $gpu_num_per_node '*' $batch_size_per_device)"
 CMD+=" --train_unit=${train_unit}"
 CMD+=" --train_iter=${train_iter}"

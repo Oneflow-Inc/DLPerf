@@ -1,6 +1,7 @@
 # !/bin/bash
+export PYTHONUNBUFFERED=1
 
-workspace=${1:-"/home/leinao/sx/oneflow_face"}
+workspace=${1:-"/oneflow_face"}
 network=${2:-"r100"}
 dataset=${3:-"emore"}
 loss=${4:-"arcface"}
