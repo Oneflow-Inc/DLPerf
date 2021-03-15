@@ -1,4 +1,5 @@
-export ONEFLOW_DEBUG_MODE=True
+#！/bin/bash
+#export ONEFLOW_DEBUG_MODE=True
 export PYTHONUNBUFFERED=1
 
 workspace=${1:-"/oneflow_face"}
@@ -32,8 +33,10 @@ if [ $gpu_num_per_node -gt 1 ]; then
 else
    data_part_num=1
 fi
+
 sed -i "s/${dataset}.train_data_part_num = [[:digit:]]*/${dataset}.train_data_part_num = $data_part_num/g" $workspace/sample_config.py
 sed -i "s/${dataset}.num_classes = [[:digit:]]*/${dataset}.num_classes = $num_classes/g" $workspace/sample_config.py
+
 PREC=""
 if [ "$precision" = "fp16" ]; then
    PREC=" --use_fp16=True"
