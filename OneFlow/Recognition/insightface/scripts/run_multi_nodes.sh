@@ -2,7 +2,9 @@
 
 set -ex
 
-workdir=/home/leinao/sx
+
+workdir=/workdir
+
 host_num=${1:-4}
 network=${2:-"r100"}
 dataset=${3:-"emore"}
@@ -22,9 +24,11 @@ use_synthetic_data=${16:-False}
 
 
 port=22
-scripts_path=${workdir}/oneflow_face
-test_scripts=${scripts_path}/scripts
-LOCAL_RUN=${scripts_path}/scripts/train_insightface.sh
+
+SCRIPTS_PATH=${workdir}/oneflow_face
+TEST_SCRIPTS=${SCRIPTS_PATH}/scripts
+LOCAL_RUN=${SCRIPTS_PATH}/scripts/train_insightface.sh
+
 
 ##############################################
 #0 prepare the host list for training
@@ -53,6 +57,16 @@ fi
 hosts=("${host_list[@]:0:${host_num}}")
 echo "Working on hosts:${hosts[@]}"
 
+
+if [ ${host_num} == 2 ]; then
+  sed -i "s/node_ips = \[.*\]/node_ips = \[\"10.11.0.2\", \"10.11.0.3\"\]/g" $SCRIPTS_PATH/sample_config.py
+elif [ ${host_num} == 4 ]; then
+  sed -i "s/node_ips = \[.*\]/node_ips = \[\"10.11.0.2\", \"10.11.0.3\", \"10.11.0.4\", \"10.11.0.5\"\]/g" $SCRIPTS_PATH/sample_config.py
+else
+  echo "Please modify parameters in oneflow_face/sample_config.py, run_multi_nodes.sh manually! "
+fi
+
+
 test_case=${host_num}n${gpu_num_per_node}g_b${bz_per_device}_${network}_${dataset}_${loss}
 log_file=${test_case}.log
 
@@ -73,7 +87,8 @@ for host in "${hosts[@]:1}"
 do
   echo "start training on ${host}"
   ssh -p ${port} $host "rm -rf ~/oneflow_temp/*"
-  scp -P ${port} -r $scripts_path $LOCAL_RUN $host:~/oneflow_temp
+  scp -P ${port} -r $SCRIPTS_PATH $LOCAL_RUN $host:~/oneflow_temp
+
   ssh -p ${port} $host "cd ~/oneflow_temp; nohup bash train_insightface.sh ~/oneflow_temp/oneflow_face ${network} ${dataset} ${loss} ${num_nodes} $bz_per_device $train_unit $train_iter ${gpu_num_per_node} $precision $model_parallel $partial_fc $test_times $sample_ratio $num_classes 1>${log_file} 2>&1 </dev/null &"
 done
 
@@ -81,7 +96,7 @@ done
 host=${hosts[0]}
 echo "start training on ${host}"
 ssh -p ${port} $host "rm -rf ~/oneflow_temp/*"
-scp -P ${port} -r $scripts_path $LOCAL_RUN $host:~/oneflow_temp
+scp -P ${port} -r $SCRIPTS_PATH $LOCAL_RUN $host:~/oneflow_temp
 ssh -p ${port} $host "cd ~/oneflow_temp; bash train_insightface.sh ~/oneflow_temp/oneflow_face ${network} ${dataset} ${loss} ${num_nodes} $bz_per_device $train_unit $train_iter ${gpu_num_per_node} $precision $model_parallel $partial_fc $test_times $sample_ratio $num_classes 1>${log_file}"
 
 echo "done"
