@@ -3,7 +3,7 @@
 
 ## 概述 Overview
 
-本测试基于 OneFlow框架，对 [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/dev_test_dlperf_rn50)  仓库中的 InsightFace 网络进行了从单机单卡到多机多卡的评测，评判框架的训练速度以及在分布式训练情况下的横向拓展能力。
+本测试基于 OneFlow框架，对 [oneflow_face](https://github.com/Oneflow-Inc/oneflow_face/tree/dev_rn_50_test)  仓库中的 InsightFace 网络进行了从单机单卡到多机多卡的评测，评判框架的训练速度以及在分布式训练情况下的横向拓展能力。
 
 本次测评使用的backbone为r50网络，在数据并行、模型并行的情况下分别进行了测试。
 
