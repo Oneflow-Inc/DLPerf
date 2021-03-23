@@ -7,7 +7,7 @@
 3. `cp_logs.sh`，拷贝日志到指定目录；
 4. `schedule_launch.sh`，批量顺序执行多组`launch_all.sh`；
 5. `extract_cnn_result.py`，从cnn训练日志中提取结果，并打印成markdown表格。
-6. `reports`，[测试报告](OneFlow/Classification/ConvNets/resnet50v1.5/reports)目录
+6. `reports`，[测试报告](reports)目录
 
 通常这几个文件只需要修改很少的配置就能正常运行，下面对各个脚本进行详细介绍。
 
