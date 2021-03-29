@@ -1,6 +1,6 @@
 # Overview
 
-本次复现采用了[PaddlePaddle-PLSC官方仓库](https://github.com/PaddlePaddle/PLSC/tree/9bba9c90f542a5e1d8e6d461fcd1f6af40da0918)中的paddle版的arcface人脸分类模型，目的在于速度测评，同时根据测速结果给出1机、2机器、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
+本次复现采用了[PaddlePaddle-PLSC官方仓库](https://github.com/PaddlePaddle/PLSC/tree/9bba9c90f542a5e1d8e6d461fcd1f6af40da0918)中的paddle版的arcface人脸分类模型，目的在于速度测评，同时根据测速结果给出1机、2机、4机情况下的加速比，评判框架在分布式多机训练情况下的横向拓展能力。
 
 目前，该测试覆盖了FP32精度，后续将持续维护，增加更多方式的测评。
 
