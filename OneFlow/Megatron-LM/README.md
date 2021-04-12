@@ -1,8 +1,8 @@
-# 【OSDI】OneFlow-Megatron-LM测评
+# OneFlow-Megatron-LM测评
 
 ## 概述 Overview
 
-本测试为OSDI论文提供了多组真实测试数据，我们用 OneFlow 实现了微软 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 相似的工作，即 [DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77) 仓库中的 [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM)实现。本次评测是基于OneFlow-Benchmark仓库中的[Megatron-LM](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/gpt2_big_fc_osdi_test_1207)实现，框架依赖此分支的[oneflow](https://github.com/Oneflow-Inc/oneflow/tree/dev_optimizer_placement_optimization_nc_th)，您也可以直接pip安装我们编译好的[whl包](https://staging.oneflow.info/branch/dev_optimizer_placement_optimization_nc_th)。
+本测试提供了多组真实测试数据，我们用 OneFlow 实现了微软 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 相似的工作，即 [DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77) 仓库中的 [Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM)实现。本次评测是基于OneFlow-Benchmark仓库中的[Megatron-LM](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/gpt2_big_fc_osdi_test_1207)实现，框架依赖此分支的[oneflow](https://github.com/Oneflow-Inc/oneflow/tree/dev_optimizer_placement_optimization_nc_th)，您也可以直接pip安装我们编译好的[whl包](https://staging.oneflow.info/branch/dev_optimizer_placement_optimization_nc_th)。
 
 基于以上版本，我们对gpt-2网络在单机单卡～4机32卡情况下进行了多组测试。
 
@@ -191,6 +191,6 @@ node_ips="10.11.0.2,10.11.0.3,10.11.0.4,10.11.0.5"
 
 ### 日志下载
 
-详细 Log 信息可点击下载：[osdi-oneflow-gpt2-logs-vs-zero.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/Megatron-LM/osdi-oneflow-gpt2-logs-vs-zero.zip)
+详细 Log 信息可点击下载：[oneflow-gpt2-logs-vs-zero.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/OneFlow/Megatron-LM/osdi-oneflow-gpt2-logs-vs-zero.zip)
 
 
