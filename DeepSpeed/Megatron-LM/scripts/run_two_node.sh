@@ -5,7 +5,7 @@ BATCH_SIZE_PER_DEVICE=${2:-16}
 ZERO_STAGE=${3:-2}
 CHECKPOINT_ACTIVATIONS=${4:-"on"}
 DTYPE=${5:-'fp16'}
-TEST_NUM=${6:-4}
+TEST_NUM=${6:-5}
 
 export NODE1=10.11.0.2
 export NODE2=10.11.0.3
@@ -20,3 +20,5 @@ do
     pkill python3
     sleep 30s
 done
+
+

@@ -14,8 +14,8 @@ export NODE3=10.11.0.4
 export NODE4=10.11.0.5
 
 
-i=4
-while [ $i -le 4 ]
+i=1
+while [ $i -le ${TEST_NUM} ]
 do
     bash $SHELL_FOLDER/runner.sh $MODEL $BATCH_SIZE_PER_DEVICE 1 1 $ZERO_STAGE $CHECKPOINT_ACTIVATIONS $DTYPE ${i}
     echo " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< "
@@ -24,22 +24,24 @@ do
     sleep 30s
 done
 
-# i=1
-# while [ $i -le ${TEST_NUM} ]
-# do
-#     bash $SHELL_FOLDER/runner.sh $MODEL $BATCH_SIZE_PER_DEVICE 1 4 $ZERO_STAGE $CHECKPOINT_ACTIVATIONS $DTYPE ${i}
-#     echo " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< "
-#     let i++
-#     pkill python3
-#     sleep 30s
-# done
+i=1
+while [ $i -le ${TEST_NUM} ]
+do
+    bash $SHELL_FOLDER/runner.sh $MODEL $BATCH_SIZE_PER_DEVICE 1 4 $ZERO_STAGE $CHECKPOINT_ACTIVATIONS $DTYPE ${i}
+    echo " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< "
+    let i++
+    pkill python3
+    sleep 30s
+done
 
-# i=1
-# while [ $i -le ${TEST_NUM} ]
-# do
-#     bash $SHELL_FOLDER/runner.sh $MODEL $BATCH_SIZE_PER_DEVICE 1 8 $ZERO_STAGE $CHECKPOINT_ACTIVATIONS $DTYPE ${i}
-#     echo " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< "
-#     let i++
-#     pkill python3
-#     sleep 30s
-# done
+i=1
+while [ $i -le ${TEST_NUM} ]
+do
+    bash $SHELL_FOLDER/runner.sh $MODEL $BATCH_SIZE_PER_DEVICE 1 8 $ZERO_STAGE $CHECKPOINT_ACTIVATIONS $DTYPE ${i}
+    echo " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Finished Test Case ${i}!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< "
+    let i++
+    pkill python3
+    sleep 30s
+done
+
+
