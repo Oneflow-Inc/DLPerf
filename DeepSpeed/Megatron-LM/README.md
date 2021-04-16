@@ -2,25 +2,26 @@
 
 ## 概述 Overview
 
-本次测评提供了多组真实测试数据。测评基于微软[DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77) 仓库中的[Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM)实现，框架依赖[DeepSpeed](https://github.com/microsoft/DeepSpeed/tree/7d4d742bf03f8e1707130391e0b39bd6d93a702a) 以及pytorch，基于以上环境，对gpt-2 small、gpt-2 medium在单机单卡～4机32卡情况下进行了多组测试。
+本测评基于微软[DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77) 仓库中的[Megatron-LM](https://github.com/microsoft/DeepSpeedExamples/tree/a79272cc8b8f0c5b66c803e581a1355341eacb77/Megatron-LM)实现，框架依赖[DeepSpeed](https://github.com/microsoft/DeepSpeed/tree/7d4d742bf03f8e1707130391e0b39bd6d93a702a) 以及pytorch，基于以上环境，对gpt-2 small在单机单卡～4机32卡情况下进行了多组测试。测评主要目标在于评价ZeRO不同优化阶段时的训练速度、加速比情况。
 
-测评背景：DeepSpeed是一个深度学习优化库，使分布式训练简单、高效和有效，DeepSpeed实现了[论文](https://arxiv.org/abs/1910.02054)中提出的ZeRo内存优化技术，减少了显存占用以支持更大模型，这里主要关注的是Optimizer state的拆分。
-
-测评目标：主要验证的是stage 1的显存缩减。
+测评背景：DeepSpeed是一个深度学习优化库，使分布式训练简单、高效和有效，DeepSpeed实现了[论文](https://arxiv.org/abs/1910.02054)中提出的ZeRo内存优化技术，减少了显存占用以支持更大模型。
 
 ## 环境 Environment
 
-### 系统
+所有的测试都是在4台配置了8张 V100-SXM2-16GB GPU的服务器中，主要硬软件配置信息如下：
 
 - #### 硬件
 
   - GPU：8x Tesla V100-SXM2-16GB
+  - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
+  - Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+  - Memory 384G
 
 - #### 软件
 
-  - 驱动：NVIDIA 440.33.01
+  - 驱动：Driver Version: 460.67
   
-  - 系统：[ Ubuntu 16.04](http://releases.ubuntu.com/16.04/)
+  - 系统：[ Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)](http://releases.ubuntu.com/16.04/)
   
   - CUDA：10.2
   
@@ -31,9 +32,35 @@
   - Python：3.7.9
   
 - #### 框架
-  
+
   - **pytorch 1.6.0** 
   - **deepspeed 0.3.0+7d4d742**  
+
+- #### GPU拓扑
+
+```python
+
+		GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    mlx5_0  CPU Affinity
+GPU0     X      NV1     NV1     NV2     NV2     SYS     SYS     SYS     NODE    0-11,24-35
+GPU1    NV1      X      NV2     NV1     SYS     NV2     SYS     SYS     NODE    0-11,24-35
+GPU2    NV1     NV2      X      NV2     SYS     SYS     NV1     SYS     PIX     0-11,24-35
+GPU3    NV2     NV1     NV2      X      SYS     SYS     SYS     NV1     PIX     0-11,24-35
+GPU4    NV2     SYS     SYS     SYS      X      NV1     NV1     NV2     SYS     12-23,36-47
+GPU5    SYS     NV2     SYS     SYS     NV1      X      NV2     NV1     SYS     12-23,36-47
+GPU6    SYS     SYS     NV1     SYS     NV1     NV2      X      NV2     SYS     12-23,36-47
+GPU7    SYS     SYS     SYS     NV1     NV2     NV1     NV2      X      SYS     12-23,36-47
+mlx5_0  NODE    NODE    PIX     PIX     SYS     SYS     SYS     SYS      X 
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+```
 
 
 
@@ -190,19 +217,18 @@ class wikipedia(json_dataset):
 
 将本仓库scripts目录下的文件放入`DeepSpeed/DeepSpeedExamples/Megatron-LM/scripts`
 
-- ds_zero2_pretrain_gpt2_model_parallel.sh为测试使用的主要脚本
+- run_xxx_node.sh为单机～多机测试的启动脚本
+- runner.sh为训练主脚本（会在启动脚本中被调用）
 - ds_zero2_config.json为测试脚本相关的配置文件
 
-如果需要进行多机测试，需要在`DeepSpeed/DeepSpeedExamples/Megatron-LM`下新建集群的hosts文件，可参考本仓库中的deepspeed_hosts：
+如需要进行多机测试，需要在`DeepSpeed/DeepSpeedExamples/Megatron-LM`下新建集群的hosts文件，可参考本仓库中的deepspeed_hosts：
 
 ```shell
 vs002 slots=8
 vs003 slots=8
-vs004 slots=8
-vs005 slots=8
 ```
 
-表示集群使用4台机器，每个机器使用8张GPU设备
+表示集群使用2台机器，每个机器使用8张GPU设备；4机及以上，相应地在deepspeed_hosts中增加集群配置即可。
 
 ### 4.测试
 
@@ -217,95 +243,123 @@ vs005 slots=8
 
 #### 参数及配置
 
-测试使用`ds_zero2_pretrain_gpt2_model_parallel.sh`脚本，其中，默认使用gpt-2 small的网络配置，主要参数如下：
+测试主脚本为 `runner.sh` ，其中，默认使用gpt-2 small的网络配置，主要参数说明如下：
 
-- BATCH_SIZE为单卡batch_size，默认为4
-- NUM_GPUS_PER_WORKER 每台机器使用的gpu数，默认为8
-- ZERO_STAGE zero优化阶段，默认为0，可选0,1,2（3目前DeepSpeed框架暂不支持）
-- CHECKPOINT_ACTIVATIONS  是否开启亚线性activation优化，默认为off关闭
-- NUM_WORKERS 分布式训练集群中，机器节点数（单机情况下设为1；4机情况下设为4，根据情况设置）
-- MP_SIZE 模型并行度，可以在1～NUM_GPUS_PER_WORKER数字中设置（默认1为不开启模型并行）
-- ITER_NUM 测试迭代的iter数，默认迭代1000 iter
-
-**默认测试的网络为gpt2-small** ，也可以修改脚本中的参数设置不同型号的gpt2网络，如：
-
-```shell
-# gpt2-small
-num_layers=12
-num_attention_heads=12
-hidden_size=768
-# # gpt2-medium
-# num_layers=24
-# num_attention_heads=16
-# hidden_size=1024
-```
+- `BATCH_SIZE_PER_DEVICE` 为单卡batch_size，默认为8
+- `NUM_WORKERS` 分布式训练集群中，机器节点数（单机情况下设为1；4机情况下设为4，根据情况设置）
+- `NUM_GPUS_PER_WORKER`  每台机器使用的gpu数，默认为8
+- `ZERO_STAGE` zero优化阶段，默认为0，可选0,1,2（3目前DeepSpeed框架暂不支持）
+- `CHECKPOINT_ACTIVATIONS`  是否开启activation/gradient checkpointing优化，默认为off关闭
+- `MP_SIZE` 模型并行度，可以在1～NUM_GPUS_PER_WORKER数字中设置（默认1为不开启模型并行）
+- `ITER_NUM` 测试迭代的iter数，默认迭代200 iter
 
 配置相关的参数如下：
 
 ```shell
-BATCH_SIZE=${1:-4}
-NUM_GPUS_PER_WORKER=${2:-8}
-ZERO_STAGE=${3:-0}
-CHECKPOINT_ACTIVATIONS=${4:-"off"}
-NUM_WORKERS=${5:-1}
-MP_SIZE=${6:-1}
-ITER_NUM=${7:-1000}
+MODEL=${1:-gpt2-small}
+BATCH_SIZE_PER_DEVICE=${2:-8}
+NUM_WORKERS=${3:-1}
+NUM_GPUS_PER_WORKER=${4:-8}
+ZERO_STAGE=${5:-2}
+CHECKPOINT_ACTIVATIONS=${6:-"on"}
+DTYPE=${7:-'fp16'}
+TEST_NUM=${8:-1}
+ITER_NUM=${9:-200
 ```
 
-#### 运行脚本
+#### 单机测试
 
-运行以下脚本将对单机单卡～4机32卡进行测试
+运行 `bach scripts/run_single_node.sh`  即可，默认测试条件为：gpt-2-small网络、batch size为8、fp16混合精度、zero-stage-2优化阶段，也可自定义参数，如不同的batch size和不同zero优化阶段： `bach scripts/run_single_node.sh gpt2-small 16 1`  。
+
+#### 多机测试
+
+多机测试时需要保证多机上的数据集及路径、ds_zero2_config.json配置完全一样，然后运行相应脚本即可，如2机，可运行： `bach scripts/run_two_node.sh`  ，4机可运行： `bach scripts/run_multi_node.sh`  。
+
+#### 其他测试
+
+除了以上测试外，还可以通过设置不同参数进行多种类型测试。如，可以将CHECKPOINT_ACTIVATIONS设置为off来测试关闭checkpointing的情况，由于checkpointing关闭后，内存占用较大，故可以相应地降低batch size（如设置为4）。
+
+off-checkpointing 的测试脚本示例如下：
 
 ```shell
 # 单机1卡
-bash scripts/ds_zero2_pretrain_gpt2_model_parallel.sh 4 1 0 off  1
+bash scripts/runner.sh  gpt2-small  4  1  1  0  off 
 # 单机4卡
-bash scripts/ds_zero2_pretrain_gpt2_model_parallel.sh 4 4 0 off  1
+bash scripts/runner.sh  gpt2-small  4  1  4  0  off 
 # 单机8卡
-bash scripts/ds_zero2_pretrain_gpt2_model_parallel.sh 4 8 0 off  1
+bash scripts/runner.sh  gpt2-small  4  1  8  0  off 
 # 2机16卡
-bash scripts/ds_zero2_pretrain_gpt2_model_parallel.sh 4 8 0 off  2
+bash scripts/runner.sh  gpt2-small  4  2  8  0  off
 # 4机32卡
-bash scripts/ds_zero2_pretrain_gpt2_model_parallel.sh 4 8 0 off  4
+bash scripts/runner.sh  gpt2-small  4  4  8  0  off
 ```
 
-## 测试结果 Performance
+### 4. 吞吐率及加速比
 
-#### 测试环境
+执行以下命令，即可根据logs文件计算出训练吞吐率及加速比：
 
-所有的测试都是在4台配置了8张 V100-SXM2-16GB GPU的服务器中，主要硬软件配置信息：
+`python3 extract_deepspeed_logs.py --log_dir=./logs/deepspeed/gpt2-small/bz8`
 
-```shell
-Tesla V100-SXM2-16GB x 8
-InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
-Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
-Memory 384G
-Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
-CUDA Version: 10.2, Driver Version: 440.33.01
+输出：
 
-		GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    mlx5_0  CPU Affinity
-GPU0     X      NV1     NV1     NV2     NV2     SYS     SYS     SYS     NODE    0-11,24-35
-GPU1    NV1      X      NV2     NV1     SYS     NV2     SYS     SYS     NODE    0-11,24-35
-GPU2    NV1     NV2      X      NV2     SYS     SYS     NV1     SYS     PIX     0-11,24-35
-GPU3    NV2     NV1     NV2      X      SYS     SYS     SYS     NV1     PIX     0-11,24-35
-GPU4    NV2     SYS     SYS     SYS      X      NV1     NV1     NV2     SYS     12-23,36-47
-GPU5    SYS     NV2     SYS     SYS     NV1      X      NV2     NV1     SYS     12-23,36-47
-GPU6    SYS     SYS     NV1     SYS     NV1     NV2      X      NV2     SYS     12-23,36-47
-GPU7    SYS     SYS     SYS     NV1     NV2     NV1     NV2      X      SYS     12-23,36-47
-mlx5_0  NODE    NODE    PIX     PIX     SYS     SYS     SYS     SYS      X 
+```python3
 
-Legend:
-
-  X    = Self
-  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
-  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
-  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
-  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
-  PIX  = Connection traversing at most a single PCIe bridge
-  NV#  = Connection traversing a bonded set of # NVLinks
 ```
 
-#### 测试结果
+
+
+## 测试结果 Result
+
+### Gpt2-small & AMP
+
+#### zero-stage-0
+
+| node_num | batch_size_per_device | gpu_num_per_node | samples/s | speedup |
+| -------- | --------------------- | ---------------- | --------- | ------- |
+| 1        | 8                     | 1                |           | 1.00    |
+| 1        | 8                     | 4                |           |         |
+| 1        | 8                     | 8                |           |         |
+| 2        | 8                     | 8                |           |         |
+| 4        | 8                     | 8                |           |         |
+| 1        | 16(max)               | 1                |           | 1.00    |
+| 1        | 16                    | 4                |           |         |
+| 1        | 16                    | 8                |           |         |
+| 2        | 16                    | 8                |           |         |
+| 4        | 16                    | 8                |           |         |
+
+#### zero-stage-1
+
+| node_num | batch_size_per_device | gpu_num_per_node | samples/s | speedup |
+| -------- | --------------------- | ---------------- | --------- | ------- |
+| 1        | 8                     | 1                |           | 1.00    |
+| 1        | 8                     | 4                |           |         |
+| 1        | 8                     | 8                |           |         |
+| 2        | 8                     | 8                |           |         |
+| 4        | 8                     | 8                |           |         |
+| 1        | 16(max)               | 1                |           | 1.00    |
+| 1        | 16                    | 4                |           |         |
+| 1        | 16                    | 8                |           |         |
+| 2        | 16                    | 8                |           |         |
+| 4        | 16                    | 8                |           |         |
+
+#### zero-stage-2
+
+| node_num | batch_size_per_device | gpu_num_per_node | samples/s | speedup |
+| -------- | --------------------- | ---------------- | --------- | ------- |
+| 1        | 8                     | 1                |           | 1.00    |
+| 1        | 8                     | 4                |           |         |
+| 1        | 8                     | 8                |           |         |
+| 2        | 8                     | 8                |           |         |
+| 4        | 8                     | 8                |           |         |
+| 1        | 16(max)               | 1                |           | 1.00    |
+| 1        | 16                    | 4                |           |         |
+| 1        | 16                    | 8                |           |         |
+| 2        | 16                    | 8                |           |         |
+| 4        | 16                    | 8                |           |         |
+
+
+
+#### off-checkpointing测试结果
 
 | date     | test_num | test_desc    | xn_xg_xdp_xmp_xbs | gpu_mem(mB)   | gpu_util(%) | throuthput(sample/sec) |
 | -------- | -------- | ------------ | ----------------- | ------------- | ----------- | ---------------------- |
@@ -328,7 +382,9 @@ Legend:
 
 ### 日志下载
 
-详细 Log 信息可点击下载：[deepspeed-logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/DeepSpeed/gpt2/osdi-deepspeed-logs.zip)
+详细 Log 信息可点击下载：
+
+- [deepspeed-off-checkpointing-logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/DeepSpeed/gpt2/deepspeed-off-checkpointing-logs.zip)
 
 
 
