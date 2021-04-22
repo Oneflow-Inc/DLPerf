@@ -298,12 +298,56 @@ bash scripts/runner.sh  gpt2-small  4  4  8  0  off
 
 执行以下命令，即可根据logs文件计算出训练吞吐率及加速比：
 
-`python3 extract_deepspeed_logs.py --log_dir=./logs/deepspeed/gpt2-small/bz8`
+`python3 extract_deepspeed_logs.py --log_dir=./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16`
 
 输出：
 
 ```python3
-
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n1g/gpt2-small_b16_fp16_4.log {4: 23.7}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n1g/gpt2-small_b16_fp16_5.log {4: 23.7, 5: 23.6}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n1g/gpt2-small_b16_fp16_2.log {4: 23.7, 5: 23.6, 2: 23.7}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n1g/gpt2-small_b16_fp16_1.log {4: 23.7, 5: 23.6, 2: 23.7, 1: 23.58}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n8g/gpt2-small_b16_fp16_4.log {4: 193.13}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n8g/gpt2-small_b16_fp16_5.log {4: 193.13, 5: 193.01}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n8g/gpt2-small_b16_fp16_2.log {4: 193.13, 5: 193.01, 2: 192.99}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n8g/gpt2-small_b16_fp16_3.log {4: 193.13, 5: 193.01, 2: 192.99, 3: 193.01}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n8g/gpt2-small_b16_fp16_1.log {4: 193.13, 5: 193.01, 2: 192.99, 3: 193.01, 1: 193.44}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/4n8g/gpt2-small_b16_fp16_4.log {4: 630.52}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/4n8g/gpt2-small_b16_fp16_5.log {4: 630.52, 5: 629.65}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/4n8g/gpt2-small_b16_fp16_2.log {4: 630.52, 5: 629.65, 2: 631.74}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/4n8g/gpt2-small_b16_fp16_3.log {4: 630.52, 5: 629.65, 2: 631.74, 3: 630.87}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/4n8g/gpt2-small_b16_fp16_1.log {4: 630.52, 5: 629.65, 2: 631.74, 3: 630.87, 1: 637.21}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/2n8g/gpt2-small_b16_fp16_4.log {4: 330.14}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/2n8g/gpt2-small_b16_fp16_5.log {4: 330.14, 5: 330.08}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/2n8g/gpt2-small_b16_fp16_2.log {4: 330.14, 5: 330.08, 2: 325.84}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/2n8g/gpt2-small_b16_fp16_3.log {4: 330.14, 5: 330.08, 2: 325.84, 3: 324.32}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/2n8g/gpt2-small_b16_fp16_1.log {4: 330.14, 5: 330.08, 2: 325.84, 3: 324.32, 1: 330.73}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n4g/gpt2-small_b16_fp16_4.log {4: 95.99}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n4g/gpt2-small_b16_fp16_5.log {4: 95.99, 5: 96.1}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n4g/gpt2-small_b16_fp16_2.log {4: 95.99, 5: 96.1, 2: 96.18}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n4g/gpt2-small_b16_fp16_3.log {4: 95.99, 5: 96.1, 2: 96.18, 3: 96.07}
+./logs/logs-20210414-stage2-on-activation/deepspeed/gpt2-small/bz16/1n4g/gpt2-small_b16_fp16_1.log {4: 95.99, 5: 96.1, 2: 96.18, 3: 96.07, 1: 95.99}
+{'gpt2-small': {'1n1g': {'average_speed': 23.64,
+                         'batch_size_per_device': 16,
+                         'median_speed': 23.65,
+                         'speedup': 1.0},
+                '1n4g': {'average_speed': 96.07,
+                         'batch_size_per_device': 16,
+                         'median_speed': 96.07,
+                         'speedup': 4.06},
+                '1n8g': {'average_speed': 193.12,
+                         'batch_size_per_device': 16,
+                         'median_speed': 193.01,
+                         'speedup': 8.16},
+                '2n8g': {'average_speed': 328.22,
+                         'batch_size_per_device': 16,
+                         'median_speed': 330.08,
+                         'speedup': 13.96},
+                '4n8g': {'average_speed': 632.0,
+                         'batch_size_per_device': 16,
+                         'median_speed': 630.87,
+                         'speedup': 26.68}}}
+Saving result to ./result/bz16_result.json
 ```
 
 
@@ -320,12 +364,12 @@ bash scripts/runner.sh  gpt2-small  4  4  8  0  off
 | 1        | 8                     | 4                | 89.1      | 3.93    |
 | 1        | 8                     | 8                | 178.09    | 7.86    |
 | 2        | 8                     | 8                | 292.63    | 12.92   |
-| 4        | 8                     | 8                |           |         |
+| 4        | 8                     | 8                | 581.0     | 25.65   |
 | 1        | 16(max)               | 1                | 23.96     | 1       |
 | 1        | 16                    | 4                | 95.16     | 3.97    |
 | 1        | 16                    | 8                | 190.36    | 7.94    |
 | 2        | 16                    | 8                | 332.98    | 13.9    |
-| 4        | 16                    | 8                |           |         |
+| 4        | 16                    | 8                | 660.7     | 27.58   |
 
 #### zero-stage-1
 
@@ -335,12 +379,12 @@ bash scripts/runner.sh  gpt2-small  4  4  8  0  off
 | 1        | 8                     | 4                | 88.29     | 4.03    |
 | 1        | 8                     | 8                | 176.66    | 8.06    |
 | 2        | 8                     | 8                | 290.72    | 13.26   |
-| 4        | 8                     | 8                |           |         |
+| 4        | 8                     | 8                | 572.33    | 26.1    |
 | 1        | 16(max)               | 1                | 23.5      | 1       |
 | 1        | 16                    | 4                | 94.96     | 4.04    |
 | 1        | 16                    | 8                | 189.44    | 8.06    |
 | 2        | 16                    | 8                | 334.97    | 14.25   |
-| 4        | 16                    | 8                |           |         |
+| 4        | 16                    | 8                | 648.69    | 27.6    |
 
 #### zero-stage-2
 
@@ -350,12 +394,18 @@ bash scripts/runner.sh  gpt2-small  4  4  8  0  off
 | 1        | 8                     | 4                | 90.92     | 4.12    |
 | 1        | 8                     | 8                | 183.7     | 8.32    |
 | 2        | 8                     | 8                | 278.19    | 12.6    |
-| 4        | 8                     | 8                |           |         |
+| 4        | 8                     | 8                | 548.5     | 24.84   |
 | 1        | 16(max)               | 1                | 23.65     | 1       |
 | 1        | 16                    | 4                | 96.07     | 4.06    |
 | 1        | 16                    | 8                | 193.01    | 8.16    |
 | 2        | 16                    | 8                | 330.08    | 13.96   |
-| 4        | 16                    | 8                |           |         |
+| 4        | 16                    | 8                | 630.87    | 26.68   |
+
+注：
+
+1.zero-stage-0表示未开启zero优化，zero-stage-1、zero-stage-2则分别表示开始1阶段、2阶段优化。
+
+2.通过对比各优化阶段的速度和加速比可以看出，开启stage-1、stage-2优化后，速度和加速比并没有提升（甚至有一定程度的下降），因为zero 1、2阶段优化的主要目标是缩减GPU显存占用，而不是优化速度。
 
 
 
@@ -376,13 +426,17 @@ bash scripts/runner.sh  gpt2-small  4  4  8  0  off
 | 20201209 | test-18-1 | zero-stage-0     | 4n_8g_dp_4bs      | 15336              | 95          | 533                    |
 |          | test-18-2 | zero-stage-1     | 4n_8g_dp_4bs      | 13975(-1361,↓8.9%) | 92          | 506(↓5.3%)             |
 
-注：xn_xg_xdp_xmp_xbs表示x node, x gpu, x data parallel, x model parallel, x batch size per gpu
+注：
+
+1.xn_xg_xdp_xmp_xbs表示x node, x gpu, x data parallel, x model parallel, x batch size per gpu
 
 
 
 ### 日志下载
 
 详细 Log 信息可点击下载：
+
+- [logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/DeepSpeed/gpt2/logs.zip)
 
 - [deepspeed-off-checkpointing-logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/DLPerf/logs/DeepSpeed/gpt2/deepspeed-off-checkpointing-logs.zip)
 
