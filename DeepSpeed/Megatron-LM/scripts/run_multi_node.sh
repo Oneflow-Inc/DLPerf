@@ -7,11 +7,6 @@ CHECKPOINT_ACTIVATIONS=${4:-"on"}
 DTYPE=${5:-'fp16'}
 TEST_NUM=${6:-5}
 
-# export NODE1=10.11.0.2
-# export NODE2=10.11.0.3
-# export NODE3=10.11.0.4
-# export NODE4=10.11.0.5
-
 
 i=1
 while [ $i -le ${TEST_NUM} ]

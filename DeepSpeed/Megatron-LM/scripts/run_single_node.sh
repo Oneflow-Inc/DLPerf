@@ -8,8 +8,6 @@ DTYPE=${5:-'fp16'}
 TEST_NUM=${6:-5}
 
 
-# export NODE1=10.11.0.2
-
 
 i=1
 while [ $i -le ${TEST_NUM} ]
