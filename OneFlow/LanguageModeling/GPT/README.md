@@ -7,7 +7,7 @@
 - ### 脚本参数
   测试使用的脚本在`scripts`目录下的`args_pretrain_gpt.sh`，可将其移动到[OneFlow-Benchmark]()/LanguageModeling/GPT/examples下。其中确定了`tensor-model-parallel-size`、`pipeline-model-parallel-size`、`NNODES`以及`GPUS_PER_NODE`等参数情况下，即可确定`data_parallel_size`，即`DP*MP*PP=NODES*GPUS_PER_NODE`
   
-  - M_P=${1:-1}，`tensor-model-parallel-size`，指定了模型张量呗切分到多少个GPU设备上，即`张量模型并行度`
+  - M_P=${1:-1}，`tensor-model-parallel-size`，指定了模型张量被切分到多少个GPU设备上，即`张量模型并行度`
   - P_P=${2:-1}，`pipeline-model-parallel-size`，即`流水模型并行度`，如一个24层的网络，如果`pipeline-model-parallel-size=4`，即表示将24层分为4个stage，每个stage都会由一组GPU设备处理
   - MICRO_BATCH_SIZE=${3:-8}，是每组模型并行的设备使用的`batch size`，如果是纯数据并行，就是每卡`batch size`
   - GLOABAL_BATCH_SIZE=${4:-16}，`micro_batch_size * data_parallel_size = micro_batch_times_data_parallel_size`
