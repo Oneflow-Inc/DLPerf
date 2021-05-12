@@ -79,27 +79,27 @@ PP |  |  |  |  |  |  |  |  |  |  |  |  |
 group  |  case  |  oneflow_logs
 --  |  --  |  --
 DP  |    |  
-  |  DP_1x1x1_2_1536x16  |  perf_test_logs/pretrain_gpt_1n1d_dp1_mp1_pp1_mbz2_gbz2_s2048_l16_h1536_nh16.log
-  |  DP_8x1x1_16_1536x16  |  perf_test_logs/pretrain_gpt_1n8d_dp8_mp1_pp1_mbz2_gbz16_s2048_l16_h1536_nh16.log
-  |  DP_16x1x1_32_1536x16  |  perf_test_logs/pretrain_gpt_2n8d_dp16_mp1_pp1_mbz2_gbz32_s2048_l16_h1536_nh16.log
-  |  DP_32x1x1_64_1536x16  |  perf_test_logs/pretrain_gpt_4n8d_dp32_mp1_pp1_mbz2_gbz64_s2048_l16_h1536_nh16.log
+  --  |  DP_1x1x1_2_1536x16  |  perf_test_logs/pretrain_gpt_1n1d_dp1_mp1_pp1_mbz2_gbz2_s2048_l16_h1536_nh16.log
+  --  |  DP_8x1x1_16_1536x16  |  perf_test_logs/pretrain_gpt_1n8d_dp8_mp1_pp1_mbz2_gbz16_s2048_l16_h1536_nh16.log
+  --  |  DP_16x1x1_32_1536x16  |  perf_test_logs/pretrain_gpt_2n8d_dp16_mp1_pp1_mbz2_gbz32_s2048_l16_h1536_nh16.log
+  --  |  DP_32x1x1_64_1536x16  |  perf_test_logs/pretrain_gpt_4n8d_dp32_mp1_pp1_mbz2_gbz64_s2048_l16_h1536_nh16.log
 MP  |    |  
-  |  MP_1x1x1_8_768x12  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n1d_dp1_mp1_pp1_mbz8_gbz8_s2048_l12_h768_nh12.log
-  |  MP_1x8x1_16_1536x16  |  perf_test_logs/pretrain_gpt_1n8d_dp1_mp8_pp1_mbz16_gbz16_s2048_l16_h1536_nh16.log
-  |  MP_1x16x1_16_3072x16  |  perf_test_logs/pretrain_gpt_2n8d_dp1_mp16_pp1_mbz16_gbz16_s2048_l16_h3072_nh32.log
-  |  MP_1x32x1_16_3072x32  |  perf_test_logs/pretrain_gpt_4n8d_dp1_mp32_pp1_mbz16_gbz16_s2048_l32_h3072_nh32.log
+ --   |  MP_1x1x1_8_768x12  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n1d_dp1_mp1_pp1_mbz8_gbz8_s2048_l12_h768_nh12.log
+ --   |  MP_1x8x1_16_1536x16  |  perf_test_logs/pretrain_gpt_1n8d_dp1_mp8_pp1_mbz16_gbz16_s2048_l16_h1536_nh16.log
+ --   |  MP_1x16x1_16_3072x16  |  perf_test_logs/pretrain_gpt_2n8d_dp1_mp16_pp1_mbz16_gbz16_s2048_l16_h3072_nh32.log
+ --   |  MP_1x32x1_16_3072x32  |  perf_test_logs/pretrain_gpt_4n8d_dp1_mp32_pp1_mbz16_gbz16_s2048_l32_h3072_nh32.log
 2D  |    |  
-  |  2D_8x1x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp8_mp1_pp1_mbz2_gbz16_s2048_l16_h1536_nh16.log
-  |  2D_1x8x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp1_mp8_pp1_mbz16_gbz16_s2048_l16_h1536_nh16.log
-  |  2D_2x4x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp2_mp4_pp1_mbz8_gbz16_s2048_l16_h1536_nh16.log
-  |  2D_4x2x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp4_mp2_pp1_mbz4_gbz16_s2048_l16_h1536_nh16.log
-  |  2D_2x8x1_16_2304x24  |  oneflow_perf_logs/c28baca/pretrain_gpt_2n8d_dp2_mp8_pp1_mbz8_gbz16_s2048_l24_h2304_nh24.log
-  |  2D_4x8x1_32_2304x24  |  oneflow_perf_logs/c28baca/pretrain_gpt_4n8d_dp4_mp8_pp1_mbz8_gbz32_s2048_l24_h2304_nh24.log
+ --   |  2D_8x1x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp8_mp1_pp1_mbz2_gbz16_s2048_l16_h1536_nh16.log
+ --   |  2D_1x8x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp1_mp8_pp1_mbz16_gbz16_s2048_l16_h1536_nh16.log
+ --   |  2D_2x4x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp2_mp4_pp1_mbz8_gbz16_s2048_l16_h1536_nh16.log
+ --   |  2D_4x2x1_16_1536x16  |  oneflow_perf_logs/c28baca/pretrain_gpt_1n8d_dp4_mp2_pp1_mbz4_gbz16_s2048_l16_h1536_nh16.log
+ --   |  2D_2x8x1_16_2304x24  |  oneflow_perf_logs/c28baca/pretrain_gpt_2n8d_dp2_mp8_pp1_mbz8_gbz16_s2048_l24_h2304_nh24.log
+ --   |  2D_4x8x1_32_2304x24  |  oneflow_perf_logs/c28baca/pretrain_gpt_4n8d_dp4_mp8_pp1_mbz8_gbz32_s2048_l24_h2304_nh24.log
 PP  |    |  
-  |  DP_PP_8x1x4_512_1536x16  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp8_mp1_pp4_mbz2_gbz512_s2048_l16_h1536_nh16.log
-  |  MP_PP_1x8x4_512_2304x24  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp1_mp8_pp4_mbz16_gbz512_s2048_l24_h2304_nh24.log
-  |  2D_PP_2x4x4_512_2304x24  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp2_mp4_pp4_mbz8_gbz512_s2048_l24_h2304_nh24.log
-  |  2D_PP_2x8x2_512_2304x24  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp2_mp8_pp2_mbz8_gbz512_s2048_l24_h2304_nh24.log
+ --   |  DP_PP_8x1x4_512_1536x16  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp8_mp1_pp4_mbz2_gbz512_s2048_l16_h1536_nh16.log
+ --   |  MP_PP_1x8x4_512_2304x24  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp1_mp8_pp4_mbz16_gbz512_s2048_l24_h2304_nh24.log
+ --   |  2D_PP_2x4x4_512_2304x24  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp2_mp4_pp4_mbz8_gbz512_s2048_l24_h2304_nh24.log
+ --   |  2D_PP_2x8x2_512_2304x24  |  oneflow_perf_logs/a7fda55/pretrain_gpt_4n8d_dp2_mp8_pp2_mbz8_gbz512_s2048_l24_h2304_nh24.log
 
 
 ## Test Result
@@ -107,26 +107,24 @@ PP  |    |
 group  |  case  |  lantency  |  memory  |  throuthput(sample/sec)
 --  |  --  |  --  | --  |  -- 
 DP  |    |    |    |  
-  |  DP_1x1x1_2_1536x16  |  406.16 (ms)  |  11066 (MiB)  |  4.92
-  |  DP_8x1x1_16_1536x16  |  417.952 (ms)  |  12404 (MiB)  |  38.28
-  |  DP_16x1x1_32_1536x16  |  489.674 (ms)  |  12200 (MiB)  |  65.35
-  |  DP_32x1x1_64_1536x16  |  518.642 (ms)  |  12208 (MiB)  |  123.4
+ --   |  DP_1x1x1_2_1536x16  |  406.16 (ms)  |  11066 (MiB)  |  4.92
+ --   |  DP_8x1x1_16_1536x16  |  417.952 (ms)  |  12404 (MiB)  |  38.28
+ --   |  DP_16x1x1_32_1536x16  |  489.674 (ms)  |  12200 (MiB)  |  65.35
+ --   |  DP_32x1x1_64_1536x16  |  518.642 (ms)  |  12208 (MiB)  |  123.4
 MP  |    |    |    |  
-  |  MP_1x1x1_8_768x12  |  525.214 (ms)  |  7416 (MiB)  |  15.23
-  |  MP_1x8x1_16_1536x16  |  642.134 (ms)  |  6264 (MiB)  |  24.92
-  |  MP_1x16x1_16_3072x16  |  4819.296 (ms)  |  8678 (MiB)  |  3.32
-  |  MP_1x32x1_16_3072x32  |  9505.832 (ms)  |  11256 (MiB)  |  1.68
+ --   |  MP_1x1x1_8_768x12  |  525.214 (ms)  |  7416 (MiB)  |  15.23
+ --   |  MP_1x8x1_16_1536x16  |  642.134 (ms)  |  6264 (MiB)  |  24.92
+ --   |  MP_1x16x1_16_3072x16  |  4819.296 (ms)  |  8678 (MiB)  |  3.32
+ --   |  MP_1x32x1_16_3072x32  |  9505.832 (ms)  |  11256 (MiB)  |  1.68
 2D  |    |    |    |  
-  |  2D_8x1x1_16_1536x16  |  417.902 (ms)  |  12396 (MiB)  |  38.29
-  |  2D_1x8x1_16_1536x16  |  644.4 (ms)  |  6264 (MiB)  |  24.83
-  |  2D_2x4x1_16_1536x16  |  539.696 (ms)  |  6366 (MiB)  |  29.65
-  |  2D_4x2x1_16_1536x16  |  543.888 (ms)  |  7368 (MiB)  |  29.42
-  |  2D_2x8x1_16_2304x24  |  1268.532 (ms)  |  6998 (MiB)  |  12.61
-  |  2D_4x8x1_32_2304x24  |  1480.34 (ms)  |  6996 (MiB)  |  21.62
+ --   |  2D_8x1x1_16_1536x16  |  417.902 (ms)  |  12396 (MiB)  |  38.29
+ --   |  2D_1x8x1_16_1536x16  |  644.4 (ms)  |  6264 (MiB)  |  24.83
+ --   |  2D_2x4x1_16_1536x16  |  539.696 (ms)  |  6366 (MiB)  |  29.65
+ --   |  2D_4x2x1_16_1536x16  |  543.888 (ms)  |  7368 (MiB)  |  29.42
+ --   |  2D_2x8x1_16_2304x24  |  1268.532 (ms)  |  6998 (MiB)  |  12.61
+ --   |  2D_4x8x1_32_2304x24  |  1480.34 (ms)  |  6996 (MiB)  |  21.62
 PP  |    |    |    |  
-  |  DP_PP_8x1x4_512_1536x16  |  4006.318 (ms)  |  8712 (MiB)  |  127.8
-  |  MP_PP_1x8x4_512_2304x24  |  19196.65 (ms)  |  15670 (MiB)  |  26.67
-  |  2D_PP_2x4x4_512_2304x24  |  13117.188 (ms)  |  11958 (MiB)  |  39.03
-  |  2D_PP_2x8x2_512_2304x24  |  14375.352 (ms)  |  10708 (MiB)  |  35.62
-  
-
+ -- |  DP_PP_8x1x4_512_1536x16  |  4006.318 (ms)  |  8712 (MiB)  |  127.8
+ -- |  MP_PP_1x8x4_512_2304x24  |  19196.65 (ms)  |  15670 (MiB)  |  26.67
+ -- |  2D_PP_2x4x4_512_2304x24  |  13117.188 (ms)  |  11958 (MiB)  |  39.03
+ -- |  2D_PP_2x8x2_512_2304x24  |  14375.352 (ms)  |  10708 (MiB)  |  35.62
