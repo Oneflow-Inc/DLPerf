@@ -168,28 +168,28 @@
 group | case | num-nodes | num-gpus-per-node | data-parallel-size | tensor-model-parallel-size | pipeline-model-parallel-size | micro-batch-size | micro-batch-size-times-data-parallel-size | num-accumulation-steps | global-batch-size | hidden-size | num-attention-heads | num-layers
 -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
 DP |  |  |  |  |  |  |  |  |  |  |  |  | 
- | DP_1x1x1_2_1536x16 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 1 | 2 | 1536 | 16 | 16
- | DP_8x1x1_16_1536x16 | 1 | 8 | 8 | 1 | 1 | 2 | 16 | 1 | 16 | 1536 | 16 | 16
- | DP_16x1x1_32_1536x16 | 2 | 8 | 16 | 1 | 1 | 2 | 32 | 1 | 32 | 1536 | 16 | 16
- | DP_32x1x1_64_1536x16 | 4 | 8 | 32 | 1 | 1 | 2 | 64 | 1 | 64 | 1536 | 16 | 16
+ -- | DP_1x1x1_2_1536x16 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 1 | 2 | 1536 | 16 | 16
+ -- | DP_8x1x1_16_1536x16 | 1 | 8 | 8 | 1 | 1 | 2 | 16 | 1 | 16 | 1536 | 16 | 16
+ -- | DP_16x1x1_32_1536x16 | 2 | 8 | 16 | 1 | 1 | 2 | 32 | 1 | 32 | 1536 | 16 | 16
+ -- | DP_32x1x1_64_1536x16 | 4 | 8 | 32 | 1 | 1 | 2 | 64 | 1 | 64 | 1536 | 16 | 16
 MP |  |  |  |  |  |  |  |  |  |  |  |  | 
- | MP_1x1x1_8_768x12 | 1 | 1 | 1 | 1 | 1 | 8 | 8 | 1 | 8 | 768 | 12 | 12
- | MP_1x8x1_16_1536x16 | 1 | 8 | 1 | 8 | 1 | 16 | 16 | 1 | 16 | 1536 | 16 | 16
- | MP_1x16x1_16_3072x16 | 2 | 8 | 1 | 16 | 1 | 16 | 16 | 1 | 16 | 3072 | 32 | 16
- | MP_1x32x1_16_3072x32 | 4 | 8 | 1 | 32 | 1 | 16 | 16 | 1 | 16 | 3072 | 32 | 32
+ -- | MP_1x1x1_8_768x12 | 1 | 1 | 1 | 1 | 1 | 8 | 8 | 1 | 8 | 768 | 12 | 12
+ -- | MP_1x8x1_16_1536x16 | 1 | 8 | 1 | 8 | 1 | 16 | 16 | 1 | 16 | 1536 | 16 | 16
+ -- | MP_1x16x1_16_3072x16 | 2 | 8 | 1 | 16 | 1 | 16 | 16 | 1 | 16 | 3072 | 32 | 16
+ -- | MP_1x32x1_16_3072x32 | 4 | 8 | 1 | 32 | 1 | 16 | 16 | 1 | 16 | 3072 | 32 | 32
 2D |  |  |  |  |  |  |  |  |  |  |  |  | 
- | 2D_8x1x1_16_1536x16 | 1 | 8 | 8 | 1 | 1 | 2 | 16 | 1 | 16 | 1536 | 16 | 16
- | 2D_1x8x1_16_1536x16 | 1 | 8 | 1 | 8 | 1 | 16 | 16 | 1 | 16 | 1536 | 16 | 16
- | 2D_2x4x1_16_1536x16 | 1 | 8 | 2 | 4 | 1 | 8 | 16 | 1 | 16 | 1536 | 16 | 16
- | 2D_4x2x1_16_1536x16 | 1 | 8 | 4 | 2 | 1 | 4 | 16 | 1 | 16 | 1536 | 16 | 16
- | 2D_2x8x1_16_2304x24 | 2 | 8 | 2 | 8 | 1 | 8 | 16 | 1 | 16 | 2304 | 24 | 24
- | 2D_4x8x1_32_2304x24 | 4 | 8 | 4 | 8 | 1 | 8 | 32 | 1 | 32 | 2304 | 24 | 24
+ -- | 2D_8x1x1_16_1536x16 | 1 | 8 | 8 | 1 | 1 | 2 | 16 | 1 | 16 | 1536 | 16 | 16
+ -- | 2D_1x8x1_16_1536x16 | 1 | 8 | 1 | 8 | 1 | 16 | 16 | 1 | 16 | 1536 | 16 | 16
+ -- | 2D_2x4x1_16_1536x16 | 1 | 8 | 2 | 4 | 1 | 8 | 16 | 1 | 16 | 1536 | 16 | 16
+ -- | 2D_4x2x1_16_1536x16 | 1 | 8 | 4 | 2 | 1 | 4 | 16 | 1 | 16 | 1536 | 16 | 16
+ -- | 2D_2x8x1_16_2304x24 | 2 | 8 | 2 | 8 | 1 | 8 | 16 | 1 | 16 | 2304 | 24 | 24
+ -- | 2D_4x8x1_32_2304x24 | 4 | 8 | 4 | 8 | 1 | 8 | 32 | 1 | 32 | 2304 | 24 | 24
 PP |  |  |  |  |  |  |  |  |  |  |  |  | 
- | DP_PP_8x1x4_512_1536x16 | 4 | 8 | 8 | 1 | 4 | 2 | 16 | 32 | 512 | 1536 | 16 | 16
- | MP_PP_1x8x4_512_2304x24 | 4 | 8 | 1 | 8 | 4 | 16 | 16 | 32 | 512 | 2304 | 24 | 24
- | 2D_PP_2x4x4_512_2304x24 | 4 | 8 | 2 | 4 | 4 | 8 | 16 | 32 | 512 | 2304 | 24 | 24
- | 2D_PP_2x8x2_512_2304x24 | 4 | 8 | 2 | 8 | 2 | 8 | 16 | 32 | 512 | 2304 | 24 | 24
- |  |  |  |  |  |  |  |  |  |  |  |  | 
+ -- | DP_PP_8x1x4_512_1536x16 | 4 | 8 | 8 | 1 | 4 | 2 | 16 | 32 | 512 | 1536 | 16 | 16
+ -- | MP_PP_1x8x4_512_2304x24 | 4 | 8 | 1 | 8 | 4 | 16 | 16 | 32 | 512 | 2304 | 24 | 24
+ -- | 2D_PP_2x4x4_512_2304x24 | 4 | 8 | 2 | 4 | 4 | 8 | 16 | 32 | 512 | 2304 | 24 | 24
+ -- | 2D_PP_2x8x2_512_2304x24 | 4 | 8 | 2 | 8 | 2 | 8 | 16 | 32 | 512 | 2304 | 24 | 24
+ -- |  |  |  |  |  |  |  |  |  |  |  |  | 
 
 - ### 测试日志
   所有日志都在`https://oneflow-public.oss-cn-beijing.aliyuncs.com/GPT/`下。  
@@ -197,53 +197,53 @@ PP |  |  |  |  |  |  |  |  |  |  |  |  |
 group | case | megatron_logs
  -- | -- | --
 DP |  | 
- | DP_1x1x1_2_1536x16 | perf_test_logs/megatron_lm_perf_1n1g_dp1_mp1_pp1_mbs2_gbs2_pretrain_0.log
- | DP_8x1x1_16_1536x16 | perf_test_logs/megatron_lm_perf_1n8g_dp8_mp1_pp1_mbs2_gbs16_pretrain_0.log
- | DP_16x1x1_32_1536x16 | perf_test_logs/megatron_lm_perf_2n8g_dp16_mp1_pp1_mbs2_gbs32_pretrain_[0-1].log
- | DP_32x1x1_64_1536x16 | perf_test_logs/megatron_lm_perf_4n8g_dp32_mp1_pp1_mbs2_gbs64_pretrain_[0-3].log
+--  | DP_1x1x1_2_1536x16 | perf_test_logs/megatron_lm_perf_1n1g_dp1_mp1_pp1_mbs2_gbs2_pretrain_0.log
+--  | DP_8x1x1_16_1536x16 | perf_test_logs/megatron_lm_perf_1n8g_dp8_mp1_pp1_mbs2_gbs16_pretrain_0.log
+--  | DP_16x1x1_32_1536x16 | perf_test_logs/megatron_lm_perf_2n8g_dp16_mp1_pp1_mbs2_gbs32_pretrain_[0-1].log
+--  | DP_32x1x1_64_1536x16 | perf_test_logs/megatron_lm_perf_4n8g_dp32_mp1_pp1_mbs2_gbs64_pretrain_[0-3].log
 MP |  | 
- | MP_1x1x1_8_768x12 | megatron_perf_logs/megatron_pretrain_gpt_1n1d_dp1_mp1_pp1_mbz8_gbz8_s2048_l12_h768_nh12_rank0.log
- | MP_1x8x1_16_1536x16 | perf_test_logs/megatron_lm_perf_1n8g_dp1_mp8_pp1_mbs16_gbs16_pretrain_0.log
- | MP_1x16x1_16_3072x16 | perf_test_logs/megatron_lm_perf_2n8g_dp1_mp16_pp1_mbs16_gbs16_MP_1x16x1_16_3072x16_[0-1].log
- | MP_1x32x1_16_3072x32 | perf_test_logs/megatron_lm_perf_4n8g_dp1_mp32_pp1_mbs16_gbs16_pretrain_[0-3].log
+--  | MP_1x1x1_8_768x12 | megatron_perf_logs/megatron_pretrain_gpt_1n1d_dp1_mp1_pp1_mbz8_gbz8_s2048_l12_h768_nh12_rank0.log
+--  | MP_1x8x1_16_1536x16 | perf_test_logs/megatron_lm_perf_1n8g_dp1_mp8_pp1_mbs16_gbs16_pretrain_0.log
+--  | MP_1x16x1_16_3072x16 | perf_test_logs/megatron_lm_perf_2n8g_dp1_mp16_pp1_mbs16_gbs16_MP_1x16x1_16_3072x16_[0-1].log
+--  | MP_1x32x1_16_3072x32 | perf_test_logs/megatron_lm_perf_4n8g_dp1_mp32_pp1_mbs16_gbs16_pretrain_[0-3].log
 2D |  | 
- | 2D_8x1x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp8_mp1_pp1_mbz2_gbz16_s2048_l16_h1536_nh16_rank0.log
- | 2D_1x8x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp1_mp8_pp1_mbz16_gbz16_s2048_l16_h1536_nh16_rank0.log
- | 2D_2x4x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp2_mp4_pp1_mbz8_gbz16_s2048_l16_h1536_nh16_rank0.log
- | 2D_4x2x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp4_mp2_pp1_mbz4_gbz16_s2048_l16_h1536_nh16_rank0.log
- | 2D_2x8x1_16_2304x24 | megatron_perf_logs/megatron_pretrain_gpt_2n8d_dp2_mp8_pp1_mbz8_gbz16_s2048_l24_h2304_nh24_rank[0-1].log
- | 2D_4x8x1_32_2304x24 | megatron_perf_logs/megatron_pretrain_gpt_4n8d_dp4_mp8_pp1_mbz8_gbz32_s2048_l24_h2304_nh24_rank[0-3].log
+ -- | 2D_8x1x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp8_mp1_pp1_mbz2_gbz16_s2048_l16_h1536_nh16_rank0.log
+ -- | 2D_1x8x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp1_mp8_pp1_mbz16_gbz16_s2048_l16_h1536_nh16_rank0.log
+ -- | 2D_2x4x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp2_mp4_pp1_mbz8_gbz16_s2048_l16_h1536_nh16_rank0.log
+ -- | 2D_4x2x1_16_1536x16 | megatron_perf_logs/megatron_pretrain_gpt_1n8d_dp4_mp2_pp1_mbz4_gbz16_s2048_l16_h1536_nh16_rank0.log
+ -- | 2D_2x8x1_16_2304x24 | megatron_perf_logs/megatron_pretrain_gpt_2n8d_dp2_mp8_pp1_mbz8_gbz16_s2048_l24_h2304_nh24_rank[0-1].log
+ -- | 2D_4x8x1_32_2304x24 | megatron_perf_logs/megatron_pretrain_gpt_4n8d_dp4_mp8_pp1_mbz8_gbz32_s2048_l24_h2304_nh24_rank[0-3].log
 PP |  | 
- | DP_PP_8x1x4_512_1536x16 | oneflow_perf_logs/megatron_lm_perf_4n8g_dp8_mp1_pp4_mbs2_gbs512_pretrain_1536_16_16_[0-3].log
- | MP_PP_1x8x4_512_2304x24 | oneflow_perf_logs/megatron_lm_perf_4n8g_dp1_mp8_pp4_mbs16_gbs512_pretrain_[0-3].log
- | 2D_PP_2x4x4_512_2304x24 | oneflow_perf_logs/megatron_pretrain_gpt_4n8d_dp2_mp4_pp4_mbz8_gbz512_s2048_l24_h2304_nh24_rank[0-3].log; oneflow_perf_logs/megatron_lm_perf_4n8g_dp2_mp4_pp4_mbs8_gbs512_pretrain_[0-3].log
- | 2D_PP_2x8x2_512_2304x24 | oneflow_perf_logs/megatron_pretrain_gpt_4n8d_dp2_mp8_pp2_mbz8_gbz512_s2048_l24_h2304_nh24_rank[0-3].log; oneflow_perf_logs/megatron_lm_perf_4n8g_dp2_mp8_pp2_mbs8_gbs512_pretrain_[0-3].log
+ -- | DP_PP_8x1x4_512_1536x16 | oneflow_perf_logs/megatron_lm_perf_4n8g_dp8_mp1_pp4_mbs2_gbs512_pretrain_1536_16_16_[0-3].log
+ -- | MP_PP_1x8x4_512_2304x24 | oneflow_perf_logs/megatron_lm_perf_4n8g_dp1_mp8_pp4_mbs16_gbs512_pretrain_[0-3].log
+ -- | 2D_PP_2x4x4_512_2304x24 | oneflow_perf_logs/megatron_pretrain_gpt_4n8d_dp2_mp4_pp4_mbz8_gbz512_s2048_l24_h2304_nh24_rank[0-3].log; oneflow_perf_logs/megatron_lm_perf_4n8g_dp2_mp4_pp4_mbs8_gbs512_pretrain_[0-3].log
+ -- | 2D_PP_2x8x2_512_2304x24 | oneflow_perf_logs/megatron_pretrain_gpt_4n8d_dp2_mp8_pp2_mbz8_gbz512_s2048_l24_h2304_nh24_rank[0-3].log; oneflow_perf_logs/megatron_lm_perf_4n8g_dp2_mp8_pp2_mbs8_gbs512_pretrain_[0-3].log
 
 - ### 测试结果
 group  |  case  |  lantency-  |  memory-
 --  |  --  |  --  |  --
 DP  |    |    |  
-  |  DP_1x1x1_2_1536x16  |  464.12 (ms)  |  14362 (MiB)
-  |  DP_8x1x1_16_1536x16  |  480.96 (ms)  |  14938 (MiB)
-  |  DP_16x1x1_32_1536x16  |  664.46 (ms)  |  14508 (MiB)
-  |  DP_32x1x1_64_1536x16  |  683.51 (ms)  |  14508 (MiB)
+ --  |  DP_1x1x1_2_1536x16  |  464.12 (ms)  |  14362 (MiB)
+ --  |  DP_8x1x1_16_1536x16  |  480.96 (ms)  |  14938 (MiB)
+ --  |  DP_16x1x1_32_1536x16  |  664.46 (ms)  |  14508 (MiB)
+ --  |  DP_32x1x1_64_1536x16  |  683.51 (ms)  |  14508 (MiB)
 MP  |    |    |  
-  |  MP_1x1x1_8_768x12  |  611.2 (ms)  |  9810 (MiB)
-  |  MP_1x8x1_16_1536x16  |  692.44 (ms)  |  12684 (MiB)
-  |  MP_1x16x1_16_3072x16  |  5610.23(ms)  |  12150 (MiB)
-  |  MP_1x32x1_16_3072x32  |  13037.85 (ms)  |  8834 (MiB)
+ --  |  MP_1x1x1_8_768x12  |  611.2 (ms)  |  9810 (MiB)
+ --  |  MP_1x8x1_16_1536x16  |  692.44 (ms)  |  12684 (MiB)
+ --  |  MP_1x16x1_16_3072x16  |  5610.23(ms)  |  12150 (MiB)
+ --  |  MP_1x32x1_16_3072x32  |  13037.85 (ms)  |  8834 (MiB)
 2D  |    |    |  
-  |  2D_8x1x1_16_1536x16  |  480.22 (ms)  |  14938 (MiB)
-  |  2D_1x8x1_16_1536x16  |  664.64 (ms)  |  12684 (MiB)
-  |  2D_2x4x1_16_1536x16  |  576.48 (ms)  |  9104 (MiB)
-  |  2D_4x2x1_16_1536x16  |  593.68 (ms)  |  9642 (MiB)
-  |  2D_2x8x1_16_2304x24  |  1313.52 (ms)  |  14928 (MiB)
-  |  2D_4x8x1_32_2304x24  |  1508.48 (ms)  |  15004 (MiB)
+ --  |  2D_8x1x1_16_1536x16  |  480.22 (ms)  |  14938 (MiB)
+ --  |  2D_1x8x1_16_1536x16  |  664.64 (ms)  |  12684 (MiB)
+ --  |  2D_2x4x1_16_1536x16  |  576.48 (ms)  |  9104 (MiB)
+ --  |  2D_4x2x1_16_1536x16  |  593.68 (ms)  |  9642 (MiB)
+ --  |  2D_2x8x1_16_2304x24  |  1313.52 (ms)  |  14928 (MiB)
+ --  |  2D_4x8x1_32_2304x24  |  1508.48 (ms)  |  15004 (MiB)
 PP  |    |    |  
-  |  DP_PP_8x1x4_512_1536x16  |  4893.55 (ms)  |  7130 (MiB)
-  |  MP_PP_1x8x4_512_2304x24  |  22166.85 (ms)  |  14204 (MiB)
-  |  2D_PP_2x4x4_512_2304x24  |  15331.23 (ms)  |  10018 (MiB)
-  |  2D_PP_2x8x2_512_2304x24  |  16281.51 (ms)  |  10554 (MiB)
+ --  |  DP_PP_8x1x4_512_1536x16  |  4893.55 (ms)  |  7130 (MiB)
+ --  |  MP_PP_1x8x4_512_2304x24  |  22166.85 (ms)  |  14204 (MiB)
+ --  |  2D_PP_2x4x4_512_2304x24  |  15331.23 (ms)  |  10018 (MiB)
+ --  |  2D_PP_2x8x2_512_2304x24  |  16281.51 (ms)  |  10554 (MiB)
 
 
 
