@@ -1,4 +1,4 @@
-# [NVIDIA](https://github.com/NVIDIA)/[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)复现
+# [NVIDIA](https://github.com/NVIDIA)/[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)GPT测评
 
 ## 概述
   本次测评提供了多组基于真实数据集的测试结果。测评基于[NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM).commit为`8aa4619f2b2a57b5725026a50ebd2b15e8121482`.基于以上，对Megatron-LM进行了从单卡到多机、从DP、MP、2D到PP等等的测试。
