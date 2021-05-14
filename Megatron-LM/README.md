@@ -1,7 +1,7 @@
 # [NVIDIA](https://github.com/NVIDIA)/[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)GPT测评
 
 ## 概述
-  本次测评提供了多组基于真实数据集的测试结果。测评基于[NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM).commit为`8aa4619f2b2a57b5725026a50ebd2b15e8121482`.基于以上，对Megatron-LM进行了从单卡到多机、从DP、MP、2D到PP等等的测试。
+  本次测评提供了多组基于真实数据集的测试结果。测评基于[NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM).commit为`8aa4619f2b2a57b5725026a50ebd2b15e8121482`.基于以上，对Megatron-LM下的GPT进行了从单卡到多机、从DP、MP、2D到PP等等的测试。
 - ### 测评背景
   2020年OpenAI发布了GPT-3。于是在大规模模型的今天，训练超大规模模型所需的算力、存储已经不再是单机或几台机器能搞定的了，因此，对于如何解决分布式训练、如何能让大众也有能力搭建大规模模型都有着极高的挑战。基于此，NVIDIA提出了[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)，基于PyTorch进行分布式训练GPT。
 - ### 测评目的
