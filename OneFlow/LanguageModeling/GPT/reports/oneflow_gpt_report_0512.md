@@ -1,4 +1,4 @@
-# OneFlow ResNet50-V1.5 Benchmark Test Report
+# OneFlow GPT Benchmark Test Report
 
 本报告总结了OneFlow GPT 模型的评测结果。
 
