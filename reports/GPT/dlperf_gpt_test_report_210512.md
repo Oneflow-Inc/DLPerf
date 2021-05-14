@@ -47,7 +47,7 @@ DP_8x1x1_16_1536x16 | 38.28 | 33.27
 DP_16x1x1_32_1536x16 | 65.35 | 48.16
 DP_32x1x1_64_1536x16 | 123.40 | 93.63
 
-![DP](imgs/DP_throughput.png)
+![DP](http://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/GPT/DP_throughput.png)
 
 ### Tensor Model Parallelism Test
 Test Case | OneFlow <br> sequences/sec | Megatron-LM <br> sequences/sec
@@ -57,7 +57,7 @@ MP_1x8x1_16_1536x16 | 24.92 | 23.11
 MP_1x16x1_16_3072x16 | 3.32 | 2.85
 MP_1x32x1_16_3072x32 | 1.68 | 1.23
 
-![MP](imgs/MP_throughput.png)
+![MP](http://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/GPT/MP_throughput.png)
 
 ### Data Parallelism and Tensor Model Parallelism Test
 Test Case | OneFlow <br> sequences/sec | Megatron-LM <br> sequences/sec
@@ -69,7 +69,7 @@ Test Case | OneFlow <br> sequences/sec | Megatron-LM <br> sequences/sec
 2D_2x8x1_16_2304x24 | 12.61 | 12.18
 2D_4x8x1_32_2304x24 | 21.62 | 21.21
 
-![DP MP](imgs/DP_MP_throughput.png)
+![DP MP](http://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/GPT/DP_MP_throughput.png)
 
 ### Pipeline Model Parallelism Test
 Test Case | OneFlow <br> sequences/sec | Megatron-LM <br> sequences/sec
@@ -79,5 +79,5 @@ MP_PP_1x8x4_512_2304x24 | 26.67 | 23.10
 2D_PP_2x4x4_512_2304x24 | 39.03 | 33.40
 2D_PP_2x8x2_512_2304x24 | 35.62 | 31.45
 
-![PP](imgs/PP_throughput.png)
+![PP](http://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/GPT/PP_throughput.png)
 
