@@ -220,7 +220,7 @@ PP |  |
  -- | 2D_PP_2x8x2_512_2304x24 | oneflow_perf_logs/megatron_pretrain_gpt_4n8d_dp2_mp8_pp2_mbz8_gbz512_s2048_l24_h2304_nh24_rank[0-3].log; oneflow_perf_logs/megatron_lm_perf_4n8g_dp2_mp8_pp2_mbs8_gbs512_pretrain_[0-3].log
 
 - ### 测试结果
-group  |  case  |  lantency-  |  memory-
+group  |  case  |  lantency  |  memory
 --  |  --  |  --  |  --
 DP  |    |    |  
  --  |  DP_1x1x1_2_1536x16  |  464.12 (ms)  |  14362 (MiB)
