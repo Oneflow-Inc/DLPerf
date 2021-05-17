@@ -39,7 +39,7 @@ Global batch size is between parallel size and GPT model parameters.
 
 ## Test Results
 ### Achieved FLOP/s
-Following table shows the achieved floating-point operations per second for both OneFlow-GPT and Megatron-LM during the test. All results show that OneFlow-GPT has better performance than Megatron-LM under the same envirment. 
+Following table shows the achieved floating-point operations per second for both OneFlow-GPT and Megatron-LM during the test. All results show that OneFlow-GPT has better performance than Megatron-LM under the same environment. 
 
 case | Model size | Hidden size | Number of layers | Number of   parameters (billion) | Model-parallel size | Number of GPUs | Batch size | OneFlow Achieved teraFLOP/s per GPU | OneFlow Percentage of theoretical peak FLOP/s | OneFlow Achieved aggregate petaFLOP/s | Megatron-LM Achieved teraFLOP/s per GPU | Megatron-LM Percentage of theoretical peak FLOP/s | Megatron-LM Achieved aggregate petaFLOP/s
 -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
