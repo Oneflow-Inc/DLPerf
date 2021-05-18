@@ -234,7 +234,7 @@ utilization.gpu [%], memory.used [MiB]
 
 ### 在容器中启动
 
-在容器环境下运行测试可以帮助节省环境配置的时间。我们使用的容器镜像为 oneflow-manylinux2014-cuda11.2:0.1，可以根据 OneFlow 提供的 [dockerfile](https://github.com/Oneflow-Inc/oneflow/tree/master/docker/build) 来 build，或者直接[下载](https://oneflow-static.oss-cn-beijing.aliyuncs.com/docker_images/oneflow-manylinux2014-cuda11.2-0.1.tar.gz)。镜像 build 成功或者下载完成后，通过以下命令加载:
+在容器环境下运行测试可以帮助节省环境配置的时间。我们使用的容器镜像为 oneflow-manylinux2014-cuda11.2:0.1，可以根据 OneFlow 提供的 [dockerfile](https://github.com/Oneflow-Inc/oneflow/tree/master/docker/package/manylinux/Dockerfile) 来 build，或者直接[下载](https://oneflow-static.oss-cn-beijing.aliyuncs.com/docker_images/oneflow-manylinux2014-cuda11.2-0.1.tar.gz)。镜像 build 成功或者下载完成后，通过以下命令加载:
 
 ```
 docker load -i oneflow-manylinux2014-cuda11.2-0.1.tar.gz
