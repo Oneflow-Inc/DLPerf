@@ -217,9 +217,36 @@ utilization.gpu [%], memory.used [MiB]
 
 分别打印了该次 pretrain 运行的参数配置，内存使用情况和按轮次的统计数据。
 
+### 多机启动
+
+多机环境下需要在每台机器上配置相同环境，并且同时运行 `pretrain.sh` 即可。
+
 ### 在容器中启动
 
-[WIP]
+在容器环境下运行测试可以帮助节省环境配置的时间。我们使用的容器镜像为 oneflow-manylinux2014-cuda11.2:0.1，可以根据 OneFlow 提供的 [dockerfile](https://github.com/Oneflow-Inc/oneflow/tree/master/docker/build) 来 build，或者直接[下载](https://oneflow-static.oss-cn-beijing.aliyuncs.com/docker_images/oneflow-manylinux2014-cuda11.2-0.1.tar.gz)。镜像 build 成功或者下载完成后，通过以下命令加载:
+
+```
+docker load -i oneflow-manylinux2014-cuda11.2-0.1.tar.gz
+```
+
+容器启动方式不再需要手动安装 oneflow package 和 oneflow_gpt package，而是提供 OneFlow wheel 包 和 OneFlow GPT 源码路径，由脚本启动容器后自动安装。
+
+启动命令：
+
+```
+bash scripts/pretrain_with_container.sh
+```
+
+该命令参数在 `pretrain.sh` 已有的参数之外还额外提供容器相关参数配置。用户需要配置的参数变量如下：
+
+- `oneflow_gpt_src_dir`: OneFlow GPT 的源码路径，根据之前的 OneFlow-Benchmark repo clone 路径和 `OneFlow-Benchmark/LanguageModeling/GPT` 配置
+- `python_version`: 容器中使用的 python 版本
+- `image`: 镜像，上文有提，例 `oneflow-manylinux2014-cuda11.2:0.1`
+- `wheel`: OneFlow wheel 包地址，上文有列下载地址，或用户手动编译打包
+
+`pretrain_with_container.sh` 命令通过调用 oneflow_gpt tools 中的 `launch_container.py` 来完成容器启动并运行任务，这里有个额外的参数 `--extra-mount "/data"` 是为了映射数据目录，如果你的数据集路径与笔者位置相同（`/data/gpt/gpt_sample_dataset_text_document`），可以保持该配置不变，否则需要配置自己的数据集路径的映射目录。
+
+配置完成后，即可运行命令启动测试，输出结果与上文裸机运行测试相同。
 
 ## 测试结果
 
