@@ -7,7 +7,7 @@
 实现 OneFlow GPT 相关的源码仓库如下：
 
 - OneFlow repo and commit: [OneFlow#75f11b8](https://github.com/Oneflow-Inc/oneflow/commit/75f11b8257112c7afd0c777abf7cddc01b6b495c)
-- OneFlow-Benchmark repo and commit: [OneFlow-Benchmark#47adedc](https://github.com/Oneflow-Inc/OneFlow-Benchmark/pull/186/commits/47adedc7881392b52b7da15eb1e552d432002f98)
+- OneFlow-Benchmark repo and commit: [OneFlow-Benchmark#8da0250](https://github.com/Oneflow-Inc/OneFlow-Benchmark/commit/8da0250ad407da338825f1eb3f15ab8c7461427d)
 
 OneFlow GPT Pretrain 相关的模型脚本、启动脚本和工具全部在 OneFlow-Benchmark repo 的 `LanguageModeling/GPT/` 目录下。
 
@@ -98,12 +98,12 @@ oneflow package 由上文提到的 [OneFlow#75f11b8](https://github.com/Oneflow-
 python3 -m pip install oneflow-0.3.5+cu112.git.75f11b825-cp37-cp37m-manylinux2014_x86_64.whl
 ```
 
-oneflow_gpt package 由上文提到的 [OneFlow-Benchmark#47adedc](https://github.com/Oneflow-Inc/OneFlow-Benchmark/pull/186/commits/47adedc7881392b52b7da15eb1e552d432002f98) 中的 `LanguageModeling/GPT/` 目录 pip install 而来：
+oneflow_gpt package 由上文提到的 [OneFlow-Benchmark#8da0250](https://github.com/Oneflow-Inc/OneFlow-Benchmark/commit/8da0250ad407da338825f1eb3f15ab8c7461427d) 中的 `LanguageModeling/GPT/` 目录 pip install 而来：
 
 ```shell
 git clone https://github.com/Oneflow-Inc/OneFlow-Benchmark.git
 cd OneFlow-Benchmark/LanguageModeling/GPT
-git checkout 47adedc
+git checkout 8da0250
 python3 -m pip install -e .
 ```
 
