@@ -1,6 +1,6 @@
 # OneFlow GPT Pretrain Performance Benchmark
 
-本目录包含了 OneFlow GPT 预训练性能测试的方法、脚本以及结果报告。
+本目录包含了 OneFlow GPT 预训练性能测试的环境、脚本以及结果。
   
 ## 测试环境
 
