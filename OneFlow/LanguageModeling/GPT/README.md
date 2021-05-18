@@ -111,7 +111,7 @@ python3 -m pip install -e .
 
 测试脚本位置 `scripts/pretrain.sh`。
 
-需要根据上文测试用例中各 case 的参数配置来修改脚本中对应的变量的值。其中 `data_parallel_size` 和 `num_accumulation_steps` 不能直接配置，但它们可以根据上文提到的参数关系由其他配置推导而来。例如: 
+需要根据上文测试用例中各 case 的参数配置来修改脚本中对应的变量的值。其中 `data_parallel_size` 和 `num_accumulation_steps` 不能直接配置，但它们可以根据上文提到的参数关系由其他参数推导而来。例如: 
 
 ```shell
 num_node=1
