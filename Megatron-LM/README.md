@@ -1,11 +1,10 @@
 # [NVIDIA](https://github.com/NVIDIA)/[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)GPT测评
 
 ## 概述
-  本次测评提供了多组基于真实数据集的测试结果。测评基于[NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM).commit为`8aa4619f2b2a57b5725026a50ebd2b15e8121482`.基于以上，对Megatron-LM下的GPT进行了从单卡到多机、从DP、MP、2D到PP等等的测试。
-- ### 测评背景
-  2020年OpenAI发布了GPT-3。于是在大规模模型的今天，训练超大规模模型所需的算力、存储已经不再是单机或几台机器能搞定的了，因此，对于如何解决分布式训练、如何能让大众也有能力搭建大规模模型都有着极高的挑战。基于此，NVIDIA提出了[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)，基于PyTorch进行分布式训练GPT。
+  本次测评基于[NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM).commit为`8aa4619f2b2a57b5725026a50ebd2b15e8121482`.分别测试了数据并行(测试用例中简称`DP`)、模型并行(测试用例中简称`MP`)、数据并行+模型并行(测试用例中简称`2D`)以及数据并行+模型并行+流水并行(测试用例中简称`PP`)等从单机到多机的多组测试结果。
+
 - ### 测评目的
-  测试对比Megatron-LM在各种情况下的内存使用率、速度等
+  测试Megatron-LM GPT在多种并行组合情况下的内存使用率、速度等
 
 ## 环境
 ### 系统
@@ -75,29 +74,8 @@
       ```
     - 配置Docker间免密登录
 
-
-
 - ### 数据集
-
-- ####  OpenWebText
-  根据官方[说明](https://github.com/NVIDIA/Megatron-LM#datasets)，从[OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/)下载数据集.
-  - 其中，`openwebtext.tar.xz`为原始数据集、`openwebtext`为`json`文件。`gpt_sample_dataset_text_document.bin`和`gpt_sample_dataset_text_document.idx`为最终生成的数据集文件
-- 数据集制作过程
-  - `tar -xvJf openwebtext.tar.xz -C /datasets`，得到的是形如`urlsf_subset20-93_data.xz`的文件，再解压`xz -d ./*`，使用下面`openweb_to_json.py`转换为json格式的文件。
-
-    ```python
-    import sys
-    import tarfile
-    import json
-    with tarfile.open(sys.argv[1], 'r') as tar:
-      for member in tar.getmembers():
-        print(json.dumps({'url': member.name, 'text': str(tar.extractfile(member).read())}))
-        
-    ```
-
-  - `ls | xargs -n 1 -P 96 -I {} sh -c 'python openweb_to_json.py {} > ../openwebtext-json/{}.json'`即可得到数据集
-
-  - 根据官方[Data Preprocessing](https://github.com/NVIDIA/Megatron-LM#data-preprocessing)说明，制作数据集，运行下面shell脚本，`bash create_dataset.sh`得到数据集文件`gpt_sample_dataset_text_document.bin`和`gpt_sample_dataset_text_document.idx`
+  请参考Megatron-LM仓库[说明](https://github.com/NVIDIA/Megatron-LM#datasets)
 
 - ### 脚本与配置
   - `git clone https://github.com/NVIDIA/Megatron-LM.git`下载源码,`git checkout 8aa4619f2b2a57b5725026a50ebd2b15e8121482`
@@ -110,25 +88,38 @@
   - NODE2=10.11.0.3
   - NODE3=10.11.0.4
   - NODE4=10.11.0.5
+
   每个节点有 8 张 V100 显卡， 每张显卡显存 16 GB。
+
 - ### 参数及配置
   测试使用的脚本在`scripts`目录下，可将其移动到Megatron-LM/examples下。其中确定了`tensor-model-parallel-size`、`pipeline-model-parallel-size`、`NNODES`以及`GPUS_PER_NODE`等参数情况下，即可确定`data_parallel_size`，即`DP*MP*PP=NODES*GPUS_PER_NODE`
   - M_P=${1:-1}，`tensor-model-parallel-size`，指定了模型张量被切分到多少个GPU设备上，即`张量模型并行度`
   - P_P=${2:-1}，`pipeline-model-parallel-size`，即`流水模型并行度`，如一个24层的网络，如果`pipeline-model-parallel-size=4`，即表示将24层分为4个stage，每个stage都会由一组GPU设备处理
   - MICRO_BATCH_SIZE=${3:-8}，是每组模型并行的设备使用的`batch size`，如果是纯数据并行，就是每卡`batch size`
   - GLOABAL_BATCH_SIZE=${4:-16}，`micro_batch_size * data_parallel_size = micro_batch_times_data_parallel_size`
-  - GPUS_PER_NODE=${8:-8}，每个节点的GPU数量
   - NNODES=${5:-1}，节点数量
-  - MASTER_ADDR=${6:-10.11.0.2}，master节点ip地址
+  - GPUS_PER_NODE=${6:-8}，每个节点的GPU数量
+  - MASTER_ADDR=${7:-10.11.0.2}，master节点ip地址
   - MASTER_PORT=21327，通信端口
-  - NODE_RANK=${7:-0}，当前节点编号
+  - NODE_RANK=${8:-0}，当前节点编号，编号从0开始
   - TRAIN_ITERS=${9:-520}，训练的轮数
+  - NUM_LAYERS=${10:-16}，layer数量
+  - HIDDEN_SIZE=${11:-1536}，隐层大小
+  - NUM_ATTENTION_HEADS=${12:-16}
+
 - ### 运行脚本示例
+
   ```
-    #单机单卡
-    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp_1536_16_16.sh 1 1 2 2 1 10.11.0.2 0 1
-    #4机32卡情况下，分别执行
-    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp.sh 8 1 8 512 4 10.11.0.2 0
+    #示例
+    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp.sh M_P P_P MICRO_BATCH_SIZE GLOABAL_BATCH_SIZE NNODES GPUS_PER_NODE MASTER_ADDR NODE_RANK TRAIN_ITERS NUM_LAYERS HIDDEN_SIZE NUM_ATTENTION_HEADS
+
+    #单机单卡，如DP_1x1x1_2_1536x16
+    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp.sh 1 1 2 2 1 1 10.11.0.2 0 130 16 1536 16
+    #4机32卡，如2D_PP_2x8x2_512_2304x24，分别执行(每台机器NODE_RANK参数按顺序从0开始)
+    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp.sh 8 2 8 512 4 8 10.11.0.2 0 130 24 2304 24
+    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp.sh 8 2 8 512 4 8 10.11.0.2 1 130 24 2304 24
+    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp.sh 8 2 8 512 4 8 10.11.0.2 2 130 24 2304 24
+    bash examples/mutil_perf_pretrain_gpt_dp_mp_pp.sh 8 2 8 512 4 8 10.11.0.2 3 130 24 2304 24
   ```
 
 ## 测试结果
@@ -165,6 +156,7 @@
   ```
 
 - ### 测试用例
+
 group | case | num-nodes | num-gpus-per-node | data-parallel-size | tensor-model-parallel-size | pipeline-model-parallel-size | micro-batch-size | micro-batch-size-times-data-parallel-size | num-accumulation-steps | global-batch-size | hidden-size | num-attention-heads | num-layers
 -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
 DP |  |  |  |  |  |  |  |  |  |  |  |  | 
@@ -190,6 +182,7 @@ PP |  |  |  |  |  |  |  |  |  |  |  |  |
  -- | 2D_PP_2x4x4_512_2304x24 | 4 | 8 | 2 | 4 | 4 | 8 | 16 | 32 | 512 | 2304 | 24 | 24
  -- | 2D_PP_2x8x2_512_2304x24 | 4 | 8 | 2 | 8 | 2 | 8 | 16 | 32 | 512 | 2304 | 24 | 24
  -- |  |  |  |  |  |  |  |  |  |  |  |  | 
+
 
 - ### 测试日志
   所有日志都在`https://oneflow-public.oss-cn-beijing.aliyuncs.com/GPT/`下。  
@@ -220,30 +213,28 @@ PP |  |
  -- | 2D_PP_2x8x2_512_2304x24 | oneflow_perf_logs/megatron_pretrain_gpt_4n8d_dp2_mp8_pp2_mbz8_gbz512_s2048_l24_h2304_nh24_rank[0-3].log; oneflow_perf_logs/megatron_lm_perf_4n8g_dp2_mp8_pp2_mbs8_gbs512_pretrain_[0-3].log
 
 - ### 测试结果
-  > 在Megatron-LM测试中发现显存在一些case情况下会上下跳动，而且Megatron-LM的log里记录打印的显存和从nvidia-smi看到的显存不一致。故，以下显存取值为30iter后nvidia-smi观测到的值。
 
-group |  case |  lantency |  memory |  Achieved teraFLOP/s per GPU |  Percentage of theoretical peak FLOP/s |  Achieved aggregate petaFLOP/s
- -- |  --  |  --  |  --  |  --  |  --  |  -- 
-DP |   |   |   |   |   |  
--- |  DP_1x1x1_2_1536x16 |  464.12 (ms) |  14362 (MiB) |  43.25 |  35% |  0.04
--- |  DP_8x1x1_16_1536x16 |  480.96 (ms) |  14938 (MiB) |  41.74 |  33% |  0.33
--- |  DP_16x1x1_32_1536x16 |  664.46 (ms) |  14508 (MiB) |  30.21 |  24% |  0.48
--- |  DP_32x1x1_64_1536x16 |  683.51 (ms) |  14508 (MiB) |  29.37 |  23% |  0.94
-MP |   |   |   |   |   |  
--- |  MP_1x1x1_8_768x12 |  611.2 (ms) |  9810 (MiB) |  32.63 |  26% |  0.03
--- |  MP_1x8x1_16_1536x16 |  692.44 (ms) |  12684 (MiB) |  28.99 |  23% |  0.23
--- |  MP_1x16x1_16_3072x16 |  5610.23(ms) |  12150 (MiB) |  6.22 |  5% |  0.1
--- |  MP_1x32x1_16_3072x32 |  13037.85 (ms) |  8834 (MiB) |  2.6 |  2% |  0.08
-2D |   |   |   |   |   |  
--- |  2D_8x1x1_16_1536x16 |  480.22 (ms) |  14938 (MiB) |  41.8 |  33% |  0.33
--- |  2D_1x8x1_16_1536x16 |  664.64 (ms) |  12684 (MiB) |  30.2 |  24% |  0.24
--- |  2D_2x4x1_16_1536x16 |  576.48 (ms) |  9104 (MiB) |  34.82 |  28% |  0.28
--- |  2D_4x2x1_16_1536x16 |  593.68 (ms) |  9642 (MiB) |  33.81 |  27% |  0.27
--- |  2D_2x8x1_16_2304x24 |  1313.52 (ms) |  14928 (MiB) |  23 |  18% |  0.37
--- |  2D_4x8x1_32_2304x24 |  1508.48 (ms) |  15004 (MiB) |  20.03 |  16% |  0.64
-PP |   |   |   |   |   |  
--- |  DP_PP_8x1x4_512_1536x16 |  4893.55 (ms) |  7130 (MiB) |  32.82 |  26% |  1.05
--- |  MP_PP_1x8x4_512_2304x24 |  22166.85 (ms) |  14204 (MiB) |  21.8 |  17% |  0.7
--- |  2D_PP_2x4x4_512_2304x24 |  15331.23 (ms) |  10018 (MiB) |  31.53 |  25% |  1.01
--- |  2D_PP_2x8x2_512_2304x24 |  16281.51 (ms) |  10554 (MiB) |  29.69 |  24% |  0.95
-
+group  |  case  |  lantency  |  Achieved teraFLOP/s per GPU  |  Percentage of theoretical peak FLOP/s  |  Achieved aggregate petaFLOP/s
+--  |  --  |  --  |  --  |  --  |  --
+DP  |    |    |    |    |  
+--  |  DP_1x1x1_2_1536x16  |  464.12 (ms)  |  43.25  |  35%  |  0.04
+--  |  DP_8x1x1_16_1536x16  |  480.96 (ms)  |  41.74  |  33%  |  0.33
+--  |  DP_16x1x1_32_1536x16  |  664.46 (ms)  |  30.21  |  24%  |  0.48
+--  |  DP_32x1x1_64_1536x16  |  683.51 (ms)  |  29.37  |  23%  |  0.94
+MP  |    |    |    |    |  
+--  |  MP_1x1x1_8_768x12  |  611.2 (ms)  |  32.63  |  26%  |  0.03
+--  |  MP_1x8x1_16_1536x16  |  692.44 (ms)  |  28.99  |  23%  |  0.23
+--  |  MP_1x16x1_16_3072x16  |  5610.23(ms)  |  6.22  |  5%  |  0.1
+--  |  MP_1x32x1_16_3072x32  |  13037.85 (ms)  |  2.60  |  2%  |  0.08
+2D  |    |    |    |    |  
+--  |  2D_8x1x1_16_1536x16  |  480.22 (ms)  |  41.80  |  33%  |  0.33
+--  |  2D_1x8x1_16_1536x16  |  664.64 (ms)  |  30.20  |  24%  |  0.24
+--  |  2D_2x4x1_16_1536x16  |  576.48 (ms)  |  34.82  |  28%  |  0.28
+--  |  2D_4x2x1_16_1536x16  |  593.68 (ms)  |  33.81  |  27%  |  0.27
+--  |  2D_2x8x1_16_2304x24  |  1313.52 (ms)  |  23.00  |  18%  |  0.37
+--  |  2D_4x8x1_32_2304x24  |  1508.48 (ms)  |  20.03  |  16%  |  0.64
+PP  |    |    |    |    |  
+--  |  DP_PP_8x1x4_512_1536x16  |  4893.55 (ms)  |  32.82  |  26%  |  1.05
+--  |  MP_PP_1x8x4_512_2304x24  |  22166.85 (ms)  |  21.80  |  17%  |  0.7
+--  |  2D_PP_2x4x4_512_2304x24  |  15331.23 (ms)  |  31.53  |  25%  |  1.01
+--  |  2D_PP_2x8x2_512_2304x24  |  16281.51 (ms)  |  29.69  |  24%  |  0.95

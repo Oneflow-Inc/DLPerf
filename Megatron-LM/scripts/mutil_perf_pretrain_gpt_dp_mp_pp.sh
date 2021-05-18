@@ -1,8 +1,5 @@
 #! /bin/bash
 
-# Runs the "345M" parameter model
-
-
 export NCCL_SOCKET_IFNAME=ib0
 
 export NCCL_DEBUG=INFO
@@ -16,33 +13,38 @@ M_P=${1:-1}
 P_P=${2:-1}
 MICRO_BATCH_SIZE=${3:-8}
 GLOABAL_BATCH_SIZE=${4:-16}
-GPUS_PER_NODE=${8:-8}
 NNODES=${5:-1}
-MASTER_ADDR=${6:-127.0.0.1}
+GPUS_PER_NODE=${6:-8}
+MASTER_ADDR=${7:-127.0.0.1}
 MASTER_PORT=21327
-NODE_RANK=${7:-0}
+NODE_RANK=${8:-0}
 echo NODE_RANK=$NODE_RANK
 TRAIN_ITERS=${9:-520}
+
+NUM_LAYERS=${10:-16}
+HIDDEN_SIZE=${11:-1536}
+NUM_ATTENTION_HEADS=${12:-16}
+SEQ_LENGTH=2048
+DROPOUT_RATE=0.1
 
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
 
 D_P=$(($WORLD_SIZE/$M_P/$P_P))
 
-LOGFILE=./megatron_lm_perf_${NNODES}n${GPUS_PER_NODE}g_dp${D_P}_mp${M_P}_pp${P_P}_mbs${MICRO_BATCH_SIZE}_gbs${GLOABAL_BATCH_SIZE}_pretrain_${NODE_RANK}.log
-
+LOGFILE=./megatron_lm_perf_${NNODES}n${GPUS_PER_NODE}g_dp${D_P}_mp${M_P}_pp${P_P}_mbs${MICRO_BATCH_SIZE}_gbs${GLOABAL_BATCH_SIZE}_l${NUM_LAYERS}_hsz${HIDDEN_SIZE}_ahs${NUM_ATTENTION_HEADS}_pretrain_${NODE_RANK}.log
 
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE --nnodes $NNODES --node_rank ${NODE_RANK} --master_addr ${MASTER_ADDR} --master_port $MASTER_PORT"
 
 python -m torch.distributed.launch $DISTRIBUTED_ARGS pretrain_gpt.py \
        --tensor-model-parallel-size $M_P \
        --pipeline-model-parallel-size $P_P \
-       --num-layers 24 \
-       --hidden-size 2304 \
-       --num-attention-heads 24 \
+       --num-layers $NUM_LAYERS \
+       --hidden-size $HIDDEN_SIZE \
+       --num-attention-heads $NUM_ATTENTION_HEADS \
        --micro-batch-size $MICRO_BATCH_SIZE \
        --global-batch-size $GLOABAL_BATCH_SIZE \
-       --seq-length 2048 \
-       --max-position-embeddings 2048 \
+       --seq-length $SEQ_LENGTH \
+       --max-position-embeddings $SEQ_LENGTH \
        --train-iters $TRAIN_ITERS \
        --lr-decay-iters 320000 \
        --save $CHECKPOINT_PATH \
