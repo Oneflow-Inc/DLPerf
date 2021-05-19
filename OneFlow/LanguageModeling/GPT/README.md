@@ -160,7 +160,7 @@ global_batch_size=512
 
 其他可以配置的参数：
 
-- `dataset`: 需要根据你的 gpt_sample_dataset_text_document.bin 和 gpt_sample_dataset_text_document.idx 路径来配置，参考 OneFlow GPT [数据预处理](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/complete_gpt/LanguageModeling/GPT#gpt-%E9%A2%84%E8%AE%AD%E7%BB%83)一节。
+- `dataset`: 需要根据你的 gpt_sample_dataset_text_document.bin 和 gpt_sample_dataset_text_document.idx 路径来配置，参考上文。
 - `node_ips`: 需要根据你实际测试机器所能访问到的 ip 地址来配置。
 - `seq_length`: 测试用例中的所有 case 都被固定为 2048，也可根据需求自行调整（比如改为 1024）。
 - `train_iters` 和 `log_interval`: 测试所跑的总轮次和每多少轮打印一次统计。
