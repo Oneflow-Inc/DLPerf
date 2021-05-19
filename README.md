@@ -218,6 +218,6 @@ on 1 node with 8x Tesla V100-SXM2-16GB GPUs.
 | 1        | 8                | 64                    | True | True           | True       | 13500000            | 12000000            |
 
 ### GPT
-Following figure shows the achieved floating-point operations per second for both OneFlow-GPT and Megatron-LM on a claster with 4 Nodes  (each equiped with 8x Tesla V100-SXM2-16GB GPUs and InfiniBand 100 Gb/sec ethernet connection). All results show that OneFlow-GPT has better performance than Megatron-LM under the same environment. 
+Following figure shows the achieved floating-point operations per second for both OneFlow-GPT and Megatron-LM on a claster with 4 Nodes  (each equiped with 8x Tesla V100-SXM2-16GB GPUs and InfiniBand 100 Gb/sec ethernet connection). All results show that OneFlow-GPT has better performance than Megatron-LM under the same environment. Please find more detail in [DLPerf GPT Benchmark Test Report](reports/GPT/dlperf_gpt_test_report_210512.md).
 
 ![flops](http://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/GPT/of_mlm_flops.png)
