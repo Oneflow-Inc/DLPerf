@@ -109,20 +109,36 @@ python3 -m pip install -e .
 
 ### 数据集准备
 
-从 [OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/) 下载数据集。下载完成后得到一个压缩文件 `openwebtext.tar.xz`。使用脚本 `scripts/openweb_to_json.py` 转化得到 json 格式的语料文件，再借用 Megatron-LM 的 [preprocess_data.py](https://github.com/NVIDIA/Megatron-LM/blob/main/tools/preprocess_data.py) 脚本来产生最后的文档二进制文件（如 `gpt_sample_dataset_text_document.bin`）和索引文件（如 `gpt_sample_dataset_text_document.idx`），OneFlow GPT 可以直接读取这两个文件来进行训练。具体操作过程如下：
+从 [OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/) 下载数据集。下载完成后得到一个压缩文件 `openwebtext.tar.xz`。使用脚本 `scripts/openweb_to_json.py` 转化得到 json 格式的语料文件。下载[词表](https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-vocab.json)和[分词](https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-merges.txt)文件，再借用 Megatron-LM 的 [preprocess_data.py](https://github.com/NVIDIA/Megatron-LM/blob/main/tools/preprocess_data.py) 脚本来产生最后的文档二进制文件（如 `gpt_sample_dataset_text_document.bin`）和索引文件（如 `gpt_sample_dataset_text_document.idx`），OneFlow GPT 可以直接读取这两个文件来进行训练。具体操作过程如下：
 
+```
+tar -xvJf openwebtext.tar.xz
+ls openwebtext  
+# 可以看到 openwebtext 目录下都是形如 urlsf_subset20-93_data.xz 的压缩文件，需要进一步解压
+xz -d openwebtext/*
 
+# 使用 openweb_to_json.py 将原始文本文件转成 json 格式文件
+mkdir openwebtext-json
+ls openwebtext | xargs -n 1 -P 48 -I{} bash -c 'python3 openweb_to_json.py {} > openwebtext-json/{}.json'
+cat openwebtext-json/*.json > openwebtext.json
 
-- OpenWebText
-  根据官方[说明](https://github.com/NVIDIA/Megatron-LM#datasets)，从[OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/)下载数据集.
-  - 其中，`openwebtext.tar.xz`为原始数据集、`openwebtext`为`json`文件。`gpt_sample_dataset_text_document.bin`和`gpt_sample_dataset_text_document.idx`为最终生成的数据集文件
-- 数据集制作过程
-  - `tar -xvJf openwebtext.tar.xz -C /datasets`，得到的是形如`urlsf_subset20-93_data.xz`的文件，再解压`xz -d ./*`，使用下面`openweb_to_json.py`转换为json格式的文件。
+# 下载词表
+wget https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-vocab.json
 
+# 下载 BPE 分词所需的 merge 文件
+wget https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-merges.txt
 
-  - `ls | xargs -n 1 -P 96 -I {} sh -c 'python openweb_to_json.py {} > ../openwebtext-json/{}.json'`即可得到数据集
+# 使用 preprocess_data.py 根据 json 文件生成二进制文档和索引文件
+python /path/to/Megatron-LM/tools/preprocess_data.py \
+    --input openwebtext.json \
+    --output-prefix gpt_sample_dataset \
+    --vocab gpt2-vocab.json \
+    --dataset-impl mmap \
+    --tokenizer-type GPT2BPETokenizer \
+    --merge-file gpt2-merges.txt \
+    --append-eod
 
-  - 根据官方[Data Preprocessing](https://github.com/NVIDIA/Megatron-LM#data-preprocessing)说明，制作数据集，运行下面shell脚本，`bash create_dataset.sh`得到数据集文件`gpt_sample_dataset_text_document.bin`和`gpt_sample_dataset_text_document.idx`
+```
 
 ### 测试脚本参数配置
 
