@@ -6,8 +6,8 @@ Generative Pre-trained Transformer (GPT) is an autoregressive language model tha
 With SBP (Split, Broadcast, and Partial-value) abstraction, OneFlow supports hybrid of data parallelism and tensor model parallelism easily without extra customized plugins, and naturally supports pipeline parallelism based on the decentralized actor abstraction. [OneFlow-GPT](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/master/LanguageModeling/GPT) scripts in OneFlow-Benchmark repository is the implementation of GPT based on OneFlow.
 
 We compare the performance of both Megatron-LM GPT and OneFlow-GPT in representative configurations under the same hardware conditions. This report is the summary of the other two reports:
-- [OneFlow GPT Benchmark Test Report](https://github.com/Oneflow-Inc/DLPerf/OneFlow/LanguageModeling/GPT/reports/oneflow_gpt_report_0512.md)
-- [NVIDIA/Megatron-LM Benchmark](https://github.com/Oneflow-Inc/DLPerf/Megatron-LM)
+- [OneFlow GPT Benchmark Test Report](https://github.com/Oneflow-Inc/DLPerf/blob/master/OneFlow/LanguageModeling/GPT/README.md#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C)
+- [NVIDIA/Megatron-LM Benchmark](hhttps://github.com/Oneflow-Inc/DLPerf/tree/master/Megatron-LM#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C-1)
 
 ## Test Environment
 All tests were performed on 4 Nodes with 8x Tesla V100-SXM2-16GB GPUs(125 TFLOPS peak performance), and InfiniBand 100 Gb/sec ethernet connection.
