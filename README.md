@@ -158,10 +158,10 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 ## Other Test Results(special cases)
 
-This section maintains the results of the special case models such as:
+This section maintains the results of the special case models:
 - WideDeepLearning, 
 - InsightFace,
-- Generative Pre-trained Transformer (GPT), etc.
+- Generative Pre-trained Transformer (GPT).
 
 ### Latest Test Report
 
