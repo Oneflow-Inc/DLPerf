@@ -107,6 +107,23 @@ git checkout 8da0250
 python3 -m pip install -e .
 ```
 
+### 数据集准备
+
+从 [OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/) 下载数据集。下载完成后得到一个压缩文件 `openwebtext.tar.xz`。使用脚本 `scripts/openweb_to_json.py` 转化得到 json 格式的语料文件，再借用 Megatron-LM 的 [preprocess_data.py](https://github.com/NVIDIA/Megatron-LM/blob/main/tools/preprocess_data.py) 脚本来产生最后的文档二进制文件（如 `gpt_sample_dataset_text_document.bin`）和索引文件（如 `gpt_sample_dataset_text_document.idx`），OneFlow GPT 可以直接读取这两个文件来进行训练。具体操作过程如下：
+
+
+
+- OpenWebText
+  根据官方[说明](https://github.com/NVIDIA/Megatron-LM#datasets)，从[OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/)下载数据集.
+  - 其中，`openwebtext.tar.xz`为原始数据集、`openwebtext`为`json`文件。`gpt_sample_dataset_text_document.bin`和`gpt_sample_dataset_text_document.idx`为最终生成的数据集文件
+- 数据集制作过程
+  - `tar -xvJf openwebtext.tar.xz -C /datasets`，得到的是形如`urlsf_subset20-93_data.xz`的文件，再解压`xz -d ./*`，使用下面`openweb_to_json.py`转换为json格式的文件。
+
+
+  - `ls | xargs -n 1 -P 96 -I {} sh -c 'python openweb_to_json.py {} > ../openwebtext-json/{}.json'`即可得到数据集
+
+  - 根据官方[Data Preprocessing](https://github.com/NVIDIA/Megatron-LM#data-preprocessing)说明，制作数据集，运行下面shell脚本，`bash create_dataset.sh`得到数据集文件`gpt_sample_dataset_text_document.bin`和`gpt_sample_dataset_text_document.idx`
+
 ### 测试脚本参数配置
 
 测试脚本位置 `scripts/pretrain.sh`。
