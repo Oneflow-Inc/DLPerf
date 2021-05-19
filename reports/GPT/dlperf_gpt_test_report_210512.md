@@ -15,6 +15,8 @@ All tests were performed on 4 Nodes with 8x Tesla V100-SXM2-16GB GPUs(125 TFLOPS
 ## Test Options
 In order to compare the performance under the same hardware conditions, a series of tests are designed in this report. The test measurements is throughputs(sequences/sentenses per second), higer throughputs means better performance.
 
+We didn't report GPU Memory Usage in this report because PyTorch uses a caching memory allocator and the unused memory managed by the allocator will still show as if used in nvidia-smi. 
+
 4 Groups of test were performed, they are:
 - data parallelism test
 - tensor model parallelism test
