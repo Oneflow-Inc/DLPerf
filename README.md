@@ -158,11 +158,12 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 ## Other Test Results(special cases)
 
-This section maintains the results of the special case models such as WideDeepLearning, GPT-2, etc.
+This section maintains the results of the special case models:
+- WideDeepLearning, 
+- InsightFace,
+- Generative Pre-trained Transformer (GPT).
 
-### Latest Test Report
-
-#### Wide and Deep Learning
+### Wide and Deep Learning
 
 on 4 nodes with 8x Tesla V100-SXM2-16GB GPUs each. 
 
@@ -196,7 +197,7 @@ Our results were obtained by running the applicable training scripts on 4 nodes 
 
 - notes:OOM is the abbreviation of out of memory, which means an error is reported due to insufficient GPU memory
 
-#### InsightFace
+### InsightFace
 
 on 1 node with 8x Tesla V100-SXM2-16GB GPUs. 
 
@@ -217,3 +218,7 @@ on 1 node with 8x Tesla V100-SXM2-16GB GPUs.
 | 1        | 1                | 64                    | True | True           | True       | 2000000             | 1800000             |
 | 1        | 8                | 64                    | True | True           | True       | 13500000            | 12000000            |
 
+### Generative Pre-trained Transformer (GPT)
+Following figure shows the achieved floating-point operations per second for both OneFlow-GPT and Megatron-LM on a claster with 4 Nodes (each equiped with 8x Tesla V100-SXM2-16GB GPUs and InfiniBand 100 Gb/sec ethernet connection). All results show that OneFlow-GPT has better performance than Megatron-LM under the same environment. Please find more detail in [DLPerf GPT Benchmark Test Report](reports/GPT/dlperf_gpt_test_report_210512.md).
+
+![flops](http://oneflow-public.oss-cn-beijing.aliyuncs.com/images/DLPerf/GPT/of_mlm_flops.png)
