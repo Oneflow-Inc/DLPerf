@@ -109,7 +109,7 @@ python3 -m pip install -e .
 
 ### 数据集准备
 
-从 [OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/) 下载数据集。下载完成后得到一个压缩文件 `openwebtext.tar.xz`。使用脚本 `scripts/openweb_to_json.py` 转化得到 json 格式的语料文件。下载[词表](https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-vocab.json)和[分词](https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-merges.txt)文件，再借用 Megatron-LM 的 [preprocess_data.py](https://github.com/NVIDIA/Megatron-LM/blob/main/tools/preprocess_data.py) 脚本来产生最后的文档二进制文件（如 `gpt_sample_dataset_text_document.bin`）和索引文件（如 `gpt_sample_dataset_text_document.idx`），OneFlow GPT 可以直接读取这两个文件来进行训练。具体操作过程如下：
+从 [OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/) 下载数据集。下载完成后得到一个压缩文件 `openwebtext.tar.xz`。使用脚本 `scripts/openweb_to_json.py` 转化得到 json 格式的语料文件。下载[词表](https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-vocab.json)和[分词](https://s3.amazonaws.com/models.huggingface.co/bert/gpt2-merges.txt)文件，再借用 Megatron-LM 的 [preprocess_data.py](https://github.com/NVIDIA/Megatron-LM/blob/main/tools/preprocess_data.py) 脚本来产生最后的文档二进制文件（如 `gpt_sample_dataset_text_document.bin`）和索引文件（如 `gpt_sample_dataset_text_document.idx`）。OneFlow GPT 可以直接读取这两个文件来进行训练。具体操作过程如下：
 
 ```
 tar -xvJf openwebtext.tar.xz
