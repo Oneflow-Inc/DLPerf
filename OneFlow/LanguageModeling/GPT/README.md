@@ -138,7 +138,7 @@ python /path/to/Megatron-LM/tools/preprocess_data.py \
     --merge-file gpt2-merges.txt \
     --append-eod
 
-# 输出文件为 gpt_sample_dataset_text_document.bin 和 `gpt_sample_dataset_text_document.dix，然后可以将 /path/to/gpt_sample_dataset_text_document 直接作为 --dataset 参数传入到 oneflow_gpt.tranining 中去
+# 输出文件为 gpt_sample_dataset_text_document.bin 和 gpt_sample_dataset_text_document.dix，然后可以将 /path/to/gpt_sample_dataset_text_document 直接作为 --dataset 参数传入到 oneflow_gpt.tranining 中去
 ```
 
 ### 测试脚本参数配置
