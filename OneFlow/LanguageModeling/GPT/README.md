@@ -131,7 +131,7 @@ global_batch_size=512
 - `seq_length`: 测试用例中的所有 case 都被固定为 2048，也可根据需求自行调整（比如改为 1024）。
 - `train_iters` 和 `log_interval`: 测试所跑的总轮次和每多少轮打印一次统计。
 
-脚本中关于学习率、优化器参数、词表大小、数据集分块、模型保存和加载等等其他参数用户也可直接修改。oneflow_gpt.training 支持的完整参数列表见 [config.py](https://github.com/Oneflow-Inc/OneFlow-Benchmark/blob/master/LanguageModeling/GPT/oneflow_gpt/config.py)
+脚本中关于学习率、优化器参数、词表大小、数据集分块、模型保存和加载等等其他参数用户也可直接修改。oneflow_gpt.training 支持的完整参数列表见 [config.py](https://github.com/Oneflow-Inc/OneFlow-Benchmark/blob/master/LanguageModeling/GPT/oneflow_gpt/config.py)。
 
 脚本配置完毕后即可直接执行脚本来完成测试：
 
