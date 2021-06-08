@@ -10,7 +10,7 @@
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
 - Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
 - Memory 384G
-- Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
+- Ubuntu 16.04.4 LTS (GNU/Linux  4.4.0-206-generic x86_64)
 - CUDA Version: 10.2, Driver Version: 460.67
 - OneFlow: [v0.4.0@325160b](https://github.com/Oneflow-Inc/oneflow/tree/325160bcfb786b166b063e669aea345fadee2da7)
 - OneFlow-Benchmark: [c9a9342](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/c9a9342a40ff42c55da928a081b6d9c84a489594)
