@@ -10,10 +10,10 @@
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
 - Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
 - Memory 384G
-- Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
-- CUDA Version: 10.2, Driver Version: 440.33.01
-- OneFlow: v0.3.1@f4bf35f7a
-- OneFlow-Benchmark: v0.3.0@854ddd06b
+- Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-206-generic x86_64)
+- CUDA Version: 10.2, Driver Version: 460.67
+- OneFlow: [v0.4.0@325160b](https://github.com/Oneflow-Inc/oneflow/tree/325160bcfb786b166b063e669aea345fadee2da7)
+- OneFlow-Benchmark: [c9a9342](https://github.com/Oneflow-Inc/OneFlow-Benchmark/tree/c9a9342a40ff42c55da928a081b6d9c84a489594)
 - `nvidia-smi topo -m`
 
 ```
@@ -54,9 +54,11 @@ Legend:
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 |-----------|------------------|-----------------------|------------|---------|
-| 1         | 1                | 256                   | 1290.78    | 1.00    |
-| 1         | 8                | 256                   | 8992.31    | 6.97    |
-| 2         | 8                | 256                   | 15754.52   | 12.21   |
-| 4         | 8                | 256                   | 28421.45   | 22.02   |
+| 1 | 1 | 256 | 1450.16 | 1.00 |
+| 1 | 8 | 256 | 10391.91 | 7.17 |
+| 2 | 8 | 256 | 15552.55 | 10.72 |
+| 4 | 8 | 256 | 26374.82 | 18.19 |
 
-全部日志可以点击[rn50_dls_fp16_256_logs.zip]()获取。
+
+
+全部日志可以点击[rn50_dls_fp16_256_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.4.0/rn50_dls_fp16_256_logs.zip)获取。
