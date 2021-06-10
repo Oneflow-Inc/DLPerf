@@ -47,6 +47,7 @@ Legend:
 - Dynamic Loss Scale: 开启
 - XLA: 未采用
 - 测试共有四组，分别使用单机单卡、单机8卡、2机16卡、4机32卡进行测试，每组测试7次，选取这7次数据中的中位数作为最后结果。
+- 设置cnns/ofrecord_util.py [num_workers=3](https://github.com/Oneflow-Inc/OneFlow-Benchmark/blob/master/Classification/cnns/ofrecord_util.py#L88)
 
 ## Finial Results
 
@@ -54,11 +55,12 @@ Legend:
 
 | num_nodes | gpu_num_per_node | batch_size_per_device | throughput | speedup |
 |-----------|------------------|-----------------------|------------|---------|
-| 1 | 1 | 256 | 1450.16 | 1.00 |
-| 1 | 8 | 256 | 10391.91 | 7.17 |
-| 2 | 8 | 256 | 15552.55 | 10.72 |
-| 4 | 8 | 256 | 26374.82 | 18.19 |
+| 1 | 1 | 256 | 1452.84 | 1.00 |
+| 1 | 8 | 256 | 9876.88 | 6.80 |
+| 2 | 8 | 256 | 17256.82 | 11.88 |
+| 4 | 8 | 256 | 28406.60  | 19.55 |
 
+- 单机八卡情况下(1n8g)，设置设置cnns/ofrecord_util.py [num_workers=5](https://github.com/Oneflow-Inc/OneFlow-Benchmark/blob/master/Classification/cnns/ofrecord_util.py#L88)，可以得10859的吞吐率。
 
 
 全部日志可以点击[rn50_dls_fp16_256_logs.zip](https://oneflow-public.oss-cn-beijing.aliyuncs.com/oneflow_test_log/oneflow_0.4.0/rn50_dls_fp16_256_logs.zip)获取。
