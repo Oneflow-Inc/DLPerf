@@ -6,8 +6,8 @@ REPEAT_ID=$4
 log_root=logs/oneflow
 log_dir=$log_root/${NUM_NODES}n${GPU_NUM_PER_NODE}g
 
-log_file=bert_base_b${BSZ}_fp32_${REPEAT_ID}.log
-summary_file=bert_base_b${BSZ}_fp32_${REPEAT_ID}.csv
+log_file=rn50_b${BSZ}_fp16_${REPEAT_ID}.log
+summary_file=rn50_b${BSZ}_fp16_${REPEAT_ID}.csv
 
 [ ! -d "${log_dir}" ] && mkdir -p ${log_dir}
 
