@@ -1,20 +1,20 @@
 import os
 import argparse
-from extract_util import extract_result 
+from extract_util import extract_result
 
 
 parser = argparse.ArgumentParser(description="flags for BERT benchmark")
 parser.add_argument(
-    "--benchmark_log_dir", type=str, default="./logs/oneflow",
-    required=False)
+    "--benchmark_log_dir", type=str, default="./logs/oneflow", required=False
+)
 parser.add_argument("--start_iter", type=int, default=300)
 parser.add_argument("--end_iter", type=int, default=400)
-parser.add_argument("--print_mode", type=str, default='markdown')
+parser.add_argument("--print_mode", type=str, default="markdown")
 args = parser.parse_args()
 
 
 def extract_info_from_file(log_file):
-    '''
+    """
     num_nodes ....................................... 1
     num_gpus_per_node ............................... 8
     data_parallel_size .............................. 1
@@ -27,6 +27,7 @@ def extract_info_from_file(log_file):
     hidden_size ..................................... 2304
     num_attention_heads ............................. 16
     seq_length ...................................... 2048
+    log_interval .................................... 1
     Training...
     | step     | micro_batches   | samples         | throughput | latency    | loss       |
     | -------- | --------------- | --------------- | ---------- | ---------- | ---------- |
@@ -48,25 +49,44 @@ def extract_info_from_file(log_file):
     93 %, 13994 MiB
     100 %, 14102 MiB
     100 %, 13850 MiB
-    '''
+    """
     # extract info from file name
     # print('extract file:',log_file)
     result_dict = {}
-    with open(log_file, 'r') as f:
+    with open(log_file, "r") as f:
         for line in f.readlines():
-            ss = line.split(' ')
-            if len(ss) == 5 and ss[2] in ['num_nodes', 'num_gpus_per_node', 'data_parallel_size','tensor_model_parallel_size','pipeline_model_parallel_size','micro_batch_size','global_batch_size','num_accumulation_steps','num_layers','hidden_size','num_attention_heads','seq_length']:
+            ss = line.split(" ")
+            if len(ss) == 5 and ss[2] in [
+                "num_nodes",
+                "num_gpus_per_node",
+                "data_parallel_size",
+                "tensor_model_parallel_size",
+                "pipeline_model_parallel_size",
+                "micro_batch_size",
+                "global_batch_size",
+                "num_accumulation_steps",
+                "num_layers",
+                "hidden_size",
+                "num_attention_heads",
+                "seq_length",
+                "log_interval",
+            ]:
                 result_dict[ss[2]] = ss[-1].strip()
-            elif len(ss) == 4 and 'MiB' in line and 'utilization' not in line:
+            elif len(ss) == 4 and "MiB" in line and "utilization" not in line:
                 memory_userd = int(ss[-2])
-                if 'memory' not in result_dict.keys() or result_dict['memory'] < memory_userd:
-                    result_dict['memory'] = memory_userd
+                if (
+                    "memory" not in result_dict.keys()
+                    or result_dict["memory"] < memory_userd
+                ):
+                    result_dict["memory"] = memory_userd
 
-            ss = line.split('|')
+            ss = line.split("|")
             if len(ss) == 8 and "loss" not in line and "-" not in line:
-                tmp_line = ''.join(line.split(' ')).split('|')
-                result_dict['throughput_{}'.format(tmp_line[1])] = float(tmp_line[4])
-                result_dict['latency_{}'.format(tmp_line[1])] = float(tmp_line[5])*1000
+                tmp_line = "".join(line.split(" ")).split("|")
+                result_dict["throughput_{}".format(tmp_line[1])] = float(tmp_line[4])
+                result_dict["latency_{}".format(tmp_line[1])] = (
+                    float(tmp_line[5]) * 1000
+                )
 
     return result_dict
 
