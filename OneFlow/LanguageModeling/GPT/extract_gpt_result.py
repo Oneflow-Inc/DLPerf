@@ -3,7 +3,7 @@ import argparse
 from extract_util import extract_result
 
 
-parser = argparse.ArgumentParser(description="flags for BERT benchmark")
+parser = argparse.ArgumentParser(description="flags for GPT benchmark")
 parser.add_argument(
     "--benchmark_log_dir", type=str, default="./logs/oneflow", required=False
 )
