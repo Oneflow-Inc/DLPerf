@@ -3,9 +3,9 @@
 set +x
 REPEAT_TIMES=1
 NUM_ITERS=120
-LOG_FOLDER=./log
+LOG_FOLDER=/workspace/log
 mkdir -p $LOG_FOLDER
-SRC_ROOT=/workspace/OneFlow-Benchmark/Classification/cnns
+SRC_ROOT=/workspace/git-repos/OneFlow-Benchmark/Classification/cnns
 DATA_ROOT=/dataset/ImageNet/ofrecord
 
 
