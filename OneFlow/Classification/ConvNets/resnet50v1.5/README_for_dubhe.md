@@ -1,3 +1,4 @@
+## 脚本说明
 ### gen_hosts.sh
 该脚本运行在非容器环境，比如用户自己的机器上，需要安装ansible和sshpass。
 通常天枢专业版提供了ssh命令帮助用户远程连接到已经申请的一组节点，本脚本帮助获取这组节点的内网IP。
@@ -53,4 +54,20 @@ bash dubhe_hosts_auto_config.sh 10.244.1.* 10.244.237.*
 ```
 cmd="ansible \"dubhe[0:${num_nodes}]\" -i inventory "
 ```
+## 运行方式
+有两种运行方式:
+- 一种是本地运行，用户使用自己的机器，假设云端容器节点内已经安装了oneflow，并且已经下载了OneFlow-Benchmark的代码；
+- 一种是远端运行方式，用户通过ssh接入容器，在容器内进行测试。
 
+下面是两种运行方式的命令执行顺序。
+- 本地运行
+```
+sh gen_hosts.sh password 32511 32473
+sh ansible_launch.sh
+```
+- 远端运行
+```
+sh dubhe_hosts_auto_config.sh
+sh gen_hosts_on_host.sh 10.244.1.* 10.244.237.*
+sh ansible_launch_on_host.sh
+```
