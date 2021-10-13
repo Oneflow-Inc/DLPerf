@@ -16,7 +16,8 @@ declare -a num_nodes_list=(2 )
 declare -a num_gpus_list=(8 )
 len=${#num_nodes_list[@]}
 
-readarray host_arr <hosts
+#readarray host_arr <hosts
+host_arr=($(awk -F= '{print $1}' hosts))
 function join { local IFS="$1"; shift; echo "$*"; }
 
 for amp in 0 1
