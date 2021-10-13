@@ -16,9 +16,11 @@ declare -a num_nodes_list=(2 )
 declare -a num_gpus_list=(8 )
 len=${#num_nodes_list[@]}
 
-readarray host_arr <hosts
+#readarray host_arr <hosts
+host_arr=($(awk -F= '{print $1}' hosts))
 function join { local IFS="$1"; shift; echo "$*"; }
 
+python_bin=/root/miniconda3/bin/python3
 for amp in 0 1
 do
     if [[ $amp -eq 1 ]]; then
@@ -41,10 +43,10 @@ do
                 cmd+="-m shell "
                 cmd+="-a \""
                 cmd+="chdir=${SHELL_DIR} "
-                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts} python3"
+                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts} $python_bin"
                 cmd+=\"
                 echo $cmd
-                #eval $cmd
+                eval $cmd
                 #sleep 130s
             done
         done
