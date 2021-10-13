@@ -47,3 +47,10 @@ bash dubhe_hosts_auto_config.sh 10.244.1.* 10.244.237.*
 - `chdir=${SHELL_DIR}`指定了shell命令运行的初始位置
 - `"bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts}"`我们单独定义了一个`local_train.sh`脚本，该脚本的运行需要传入节点数、gpu数、批次大小等参数，而这些参数就是前面的各重循环确定的。
 
+### ansible_launch.sh
+该脚本适合运行在非容器环境，比如用户自己的机器上，需要安装ansible和sshpass。本脚本依赖`gen_hosts.sh`生成的`hosts`文件和`inventory`文件。
+脚本的主体与`ansible_launch_on_host.sh`一样，不同之处在于ansible的命令不同，选取了inventory文件，并且host的数量受到了num_nodes的约束，参考下面代码：
+```
+cmd="ansible \"dubhe[0:${num_nodes}]\" -i inventory "
+```
+
