@@ -7,7 +7,7 @@ sh gen_bash.sh 32511 32473
 ```
 脚本将根据这些端口号自动生成一个`inventory`文件，并且生成一个`ansible.cfg`文件供后面的ansible命令使用。ansible命令会在每个节点上运行"hostname -I"命令得到节点内网的ip地址，返回本地后重新处理一下保存到`hosts`文件中。
 
-### gen_hosts_inside_container.sh
+### gen_hosts_on_host.sh
 该脚本应该运行在容器内部。
 脚本使用`nmap`自动检测同组的机器，并保存至名为`hosts`的文件。
 脚本的运行依赖输入，例如：
@@ -31,8 +31,8 @@ bash dubhe_hosts_auto_config.sh 10.244.1.* 10.244.237.*
 - 生成一组 ssh key，并写入authorized_keys
 - 然后把生成的`ssh`目录通过ansible拷贝到`hosts`文件里有的主机的`.ssh`目录，从而实现各个机器之间免密。
 
-### ansible_launch.sh
-该脚本用于自动化测试。本脚本依赖`gen_hosts.sh`或`gen_hosts_inside_container.sh`生成的`hosts`文件
+### ansible_launch_on_host.sh
+该脚本用于自动化测试。本脚本依赖`gen_hosts.sh`或`gen_hosts_on_host.sh`生成的`hosts`文件
 结合测试的需求，脚本的主体是4重循环，每一重循环都代表了测试的一周需求，从外到内分别是：
 
 1. `for amp in 0 1`代表了是否打开混合精度进行测试
