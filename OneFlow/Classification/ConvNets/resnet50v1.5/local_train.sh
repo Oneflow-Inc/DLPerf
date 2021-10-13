@@ -7,6 +7,7 @@ bsz=${3:-32}
 use_fp16=${4:-0}
 suffix=${5:-0}
 hosts=${6:-localhost}
+python_bin=${7:-python3}
 
 NUM_ITERS=120
 LOG_FOLDER=/workspace/log
@@ -22,7 +23,7 @@ test_case=n${num_nodes}_g${num_gpus}_b${bsz}
 if [[ $use_fp16 -eq 1 ]]; then
     test_case+="_amp"
 fi
-cmd="/opt/conda/bin/python3 ${SRC_ROOT}/of_cnn_train_val.py "
+cmd+="${python_bin} ${SRC_ROOT}/of_cnn_train_val.py "
 
 if [[ $use_fp16 -eq 1 ]]; then
     cmd+="--use_fp16 "

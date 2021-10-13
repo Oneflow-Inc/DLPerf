@@ -41,7 +41,7 @@ do
                 cmd+="-m shell "
                 cmd+="-a \""
                 cmd+="chdir=${SHELL_DIR} "
-                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts}"
+                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts} `which python3`"
                 cmd+=\"
                 echo $cmd
                 eval $cmd
