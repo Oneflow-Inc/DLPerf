@@ -6,6 +6,7 @@ num_gpus=${2:-1}
 bsz=${3:-32}
 use_fp16=${4:-0}
 suffix=${5:-0}
+hosts=${6:-localhost}
 
 NUM_ITERS=120
 LOG_FOLDER=/workspace/log
@@ -35,7 +36,7 @@ fi
 cmd+="--num_nodes=${num_nodes} "
 cmd+="--gpu_num_per_node=${num_gpus} "
 cmd+="--batch_size_per_device=${bsz} "
-cmd+="--node_ips=10.244.111.4,10.244.1.14 "
+cmd+="--node_ips=${hosts} "
 cmd+="--optimizer=sgd "
 cmd+="--momentum=0.875 "
 cmd+="--label_smoothing=0.1 "

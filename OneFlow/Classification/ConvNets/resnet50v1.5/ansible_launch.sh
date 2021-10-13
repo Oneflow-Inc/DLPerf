@@ -16,6 +16,9 @@ declare -a num_nodes_list=(2 )
 declare -a num_gpus_list=(8 )
 len=${#num_nodes_list[@]}
 
+readarray host_arr <hosts
+function join { local IFS="$1"; shift; echo "$*"; }
+
 for amp in 0 1
 do
     if [[ $amp -eq 1 ]]; then
@@ -31,12 +34,14 @@ do
             num_nodes=${num_nodes_list[$i]}
             num_gpus=${num_gpus_list[$i]}
 
+            hosts=$(join , ${host_arr[@]::${num_nodes}})
             for (( j=0; j<$REPEAT_TIMES; j++ ))
             do
-                cmd="ansible hosts_$num_nodes -m shell "
-	              cmd+="-a \""
+                cmd="ansible all -i ${hosts}, "
+                cmd+="-m shell "
+                cmd+="-a \""
                 cmd+="chdir=${SHELL_DIR} "
-                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j}"
+                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts}"
                 cmd+=\"
                 echo $cmd
                 eval $cmd
