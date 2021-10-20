@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# override previous test or not
+override=1
+
 set +x
 REPEAT_TIMES=1
 SHELL_DIR=/workspace/git-repos/DLPerf/OneFlow/Classification/ConvNets/resnet50v1.5
@@ -43,7 +46,7 @@ do
                 cmd+="-m shell "
                 cmd+="-a \""
                 cmd+="chdir=${SHELL_DIR} "
-                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts} $python_bin"
+                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts} $python_bin ${override}"
                 cmd+=\"
                 echo $cmd
                 eval $cmd

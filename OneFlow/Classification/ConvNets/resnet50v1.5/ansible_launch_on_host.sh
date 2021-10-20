@@ -1,4 +1,6 @@
 #!/bin/bash
+# override previous test or not
+override=1
 
 set +x
 REPEAT_TIMES=1
@@ -42,7 +44,7 @@ do
                 cmd+="-m shell "
                 cmd+="-a \""
                 cmd+="chdir=${SHELL_DIR} "
-                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts} `which python3`"
+                cmd+="bash local_train.sh ${num_nodes} ${num_gpus} ${bsz} ${amp} ${j} ${hosts} `which python3` ${override}"
                 cmd+=\"
                 echo $cmd
                 eval $cmd

@@ -8,21 +8,51 @@ use_fp16=${4:-0}
 suffix=${5:-0}
 hosts=${6:-localhost}
 python_bin=${7:-python3}
+override=${8:-1}
 
 NUM_ITERS=120
 LOG_FOLDER=/workspace/log
+LOG_FOLDER=/Users/xiexuan/git-repos/DLPerf/OneFlow/Classification/ConvNets/resnet50v1.5/log
 mkdir -p $LOG_FOLDER
 SRC_ROOT=/workspace/git-repos/OneFlow-Benchmark/Classification/cnns
 DATA_ROOT=/workspace/dataset/ImageNet/ofrecord
 
 export PYTHONUNBUFFERED=1
 
-
+# test_case=resnet50_
 NUM_EXAMPLES=$(($num_nodes * $num_gpus * $bsz * $NUM_ITERS))
 test_case=n${num_nodes}_g${num_gpus}_b${bsz}
 if [[ $use_fp16 -eq 1 ]]; then
     test_case+="_amp"
 fi
+
+run_cmd=1
+if [[ $override -eq 1 ]]; then
+    declare -a normal_last_lines=("$NUM_ITERS iter per epoch..." "train: epoch 1, iter $NUM_ITERS")
+    for file in `ls $LOG_FOLDER/${test_case}*.log`; do
+        # if all previous tests are success
+        run_cmd=0
+        last_line=`awk '/./{line=$0} END{print line}' $file`
+        # echo $file
+        success=0
+        for s in "${normal_last_lines[@]}"; do
+            if [[ ${last_line[@]} == ${s[@]}* ]]; then
+                success=1
+                break
+            fi
+        done
+        if [[ $success -eq 0 ]]; then
+            run_cmd=1
+            break
+        fi
+    done
+fi
+
+if [[ $run_cmd -eq 0 ]]; then
+    set -x
+    exit 0
+fi
+
 cmd+="${python_bin} ${SRC_ROOT}/of_cnn_train_val.py "
 
 if [[ $use_fp16 -eq 1 ]]; then
@@ -60,3 +90,4 @@ $cmd 2>&1 | tee $LOG_FOLDER/${logfile}
 
 set -x
 
+exit 0
