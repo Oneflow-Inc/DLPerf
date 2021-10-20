@@ -12,7 +12,7 @@ override=${8:-1}
 
 NUM_ITERS=120
 LOG_FOLDER=/workspace/log
-LOG_FOLDER=/Users/xiexuan/git-repos/DLPerf/OneFlow/Classification/ConvNets/resnet50v1.5/log
+# LOG_FOLDER=/Users/xiexuan/git-repos/DLPerf/OneFlow/Classification/ConvNets/resnet50v1.5/log
 mkdir -p $LOG_FOLDER
 SRC_ROOT=/workspace/git-repos/OneFlow-Benchmark/Classification/cnns
 DATA_ROOT=/workspace/dataset/ImageNet/ofrecord
