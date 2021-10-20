@@ -49,6 +49,7 @@ if [[ $override -eq 1 ]]; then
 fi
 
 if [[ $run_cmd -eq 0 ]]; then
+    echo $test_case is ignored.
     set -x
     exit 0
 fi
