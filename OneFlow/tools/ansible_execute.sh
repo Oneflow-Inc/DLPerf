@@ -1,6 +1,24 @@
-cmd=${1:-ls}
+password=$1
+cmd=${2:-ls}
 
-ansible all --inventory=inventory -m shell \
+inventory_file=inventory
+
+> $inventory_file
+for ip in $(cat hosts); do
+    if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo "$ip" ansible_ssh_pass=$password >> $inventory_file
+    fi
+done
+
+# generate ansible.cfg
+echo '[defaults]' > ansible.cfg
+echo 'host_key_checking = False' >> ansible.cfg
+echo 'inventory = '$inventory_file >> ansible.cfg
+
+# ansible all --inventory=inventory -m shell \
+ansible all -m shell \
     --ask-pass \
     --ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
     -a "$cmd"
+
+# rm -f $inventory_file
