@@ -10,12 +10,6 @@ for ip in $(cat hosts); do
     fi
 done
 
-# generate ansible.cfg
-# echo '[defaults]' > ansible.cfg
-# echo 'host_key_checking = False' >> ansible.cfg
-# echo 'inventory = '$inventory_file >> ansible.cfg
-
-# ansible all -m shell \
 ansible all --inventory=$inventory_file -m shell \
     --ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
     -a "$cmd"
