@@ -70,6 +70,7 @@ class GroupTest(object):
             else:
                 parts.append(v)
 
-        parts.append(os.uname()[1])
+        # parts.append(os.uname()[1])
+        parts.append('`hostname`')
         parts.append(str(ext))
         return '_'.join(parts) + '.log'
