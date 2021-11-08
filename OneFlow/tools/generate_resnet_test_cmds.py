@@ -39,7 +39,7 @@ def init_rn50_tests(FLAGS):
     ]
 
     default_args = {
-        'data_dir': '/dataset/ImageNet/ofrecord',
+        'data_dir': FLAGS.data_dir,
         'optimizer': "sgd",
         'momentum': 0.875,
         'label_smoothing': 0.1,
@@ -100,6 +100,7 @@ def get_parser():
     parser.add_argument("--script", type=str, default="Classification/cnns/of_cnn_train_val.py", 
                         help="of_cnn_train_val.py path")
     parser.add_argument("--log_dir", type=str, default="log", help="log directory")
+    parser.add_argument("--data_dir", type=str, default="./imagenet/ofrecord", help="data directory")
     parser.add_argument("--repeat", type=int, default=1, help="repeat times")
     
     return parser
