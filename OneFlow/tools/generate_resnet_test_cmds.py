@@ -100,13 +100,13 @@ def get_parser():
     parser.add_argument("--script", type=str, default="Classification/cnns/of_cnn_train_val.py", 
                         help="of_cnn_train_val.py path")
     parser.add_argument("--log_dir", type=str, default="log", help="log directory")
-    parser.add_argument("--repeat", type=int, default=1, help="repeat times")  
-
-    return parser.parse_args()
+    parser.add_argument("--repeat", type=int, default=1, help="repeat times")
+    
+    return parser
 
 
 if __name__ == '__main__':
-    FLAGS = get_parser()
+    FLAGS = get_parser().parse_args()
     rn50 = init_rn50_tests(FLAGS)
     cmds = rn50(FLAGS.repeat)
     for num_nodes, cmd in cmds:
