@@ -10,7 +10,7 @@ if __name__ == '__main__':
     rn50 = init_rn50_tests(FLAGS)
     cmds = rn50(FLAGS.repeat)
     for num_nodes, cmd in cmds:
-        ansible_cmd = ['./ansible_execute.sh']
+        ansible_cmd = ['bash ./ansible_execute.sh']
         ansible_cmd.append(f'--cmd="{cmd}"')
         ansible_cmd.append(f'--num-nodes={num_nodes}')
         ansible_cmd.append(f'--password={FLAGS.password}')
