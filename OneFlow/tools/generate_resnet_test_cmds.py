@@ -73,7 +73,7 @@ def init_rn50_tests(FLAGS):
         for bsz in [192, 256]:
             run_on_args['batch_size_per_device'] = bsz
             run_on_args['num_examples'] = bsz * num_devices * num_steps
-            rn50.append_matrix(run_on_args)
+            rn50.append_matrix(run_on[0], run_on_args)
 
         run_on_args['use_fp16'] = None
         run_on_args['pad_output'] = None
@@ -81,7 +81,7 @@ def init_rn50_tests(FLAGS):
         for bsz in [256, 512]:
             run_on_args['batch_size_per_device'] = bsz
             run_on_args['num_examples'] = bsz * num_devices * num_steps
-            rn50.append_matrix(run_on_args)
+            rn50.append_matrix(run_on[0], run_on_args)
 
     naming_rule = {
         'num_nodes': 'n',
@@ -108,5 +108,7 @@ def get_parser():
 if __name__ == '__main__':
     FLAGS = get_parser()
     rn50 = init_rn50_tests(FLAGS)
-    rn50(FLAGS.repeat)
+    cmds = rn50(FLAGS.repeat)
+    for num_nodes, cmd in cmds:
+        print(num_nodes, cmd)
 

@@ -17,8 +17,10 @@ class GroupTest(object):
 
     def __call__(self, repeat=1):
         assert repeat > 0
+        cmds = []
         for i in range(repeat):
-            self.run_once()
+            cmds += self.run_once()
+        return cmds
 
     def run_once(self):
         self.num_of_runs += 1
@@ -28,7 +30,9 @@ class GroupTest(object):
 
         if len(self.matrix) == 0:
             self.matrix = [{}]
-        for args in self.matrix:
+
+        cmds = []
+        for num_nodes, args in self.matrix:
             assert isinstance(args, dict)
             running_args = copy.deepcopy(self.args)
             running_args.update(args)
@@ -43,11 +47,12 @@ class GroupTest(object):
             cmd = prefix + ' ' + string_args
             log_file = os.path.join(self.log_dir, self.get_log_name(running_args, self.num_of_runs))
             cmd = cmd + ' 2>&1 | tee ' + log_file
-            print(cmd)
+            cmds.append((num_nodes, cmd))
+        return cmds
 
-    def append_matrix(self, args):
+    def append_matrix(self, num_nodes, args):
         if isinstance(args, dict):
-            self.matrix.append(copy.deepcopy(args))
+            self.matrix.append((num_nodes, copy.deepcopy(args)))
         else:
             assert False
 
