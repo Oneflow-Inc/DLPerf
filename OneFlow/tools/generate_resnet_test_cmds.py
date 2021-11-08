@@ -3,7 +3,6 @@ import re
 import argparse
 from group_test import GroupTest
 
-
 class OfResnetTest(GroupTest):
     def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log',
                  hosts_file='hosts'):
@@ -96,7 +95,7 @@ def init_rn50_tests(FLAGS):
 
 def get_parser():
     parser = argparse.ArgumentParser("flags for cnn benchmark")
-    
+
     parser.add_argument("--python_bin", type=str, default="python3", help="python bin path")
     parser.add_argument("--script", type=str, default="Classification/cnns/of_cnn_train_val.py", 
                         help="of_cnn_train_val.py path")

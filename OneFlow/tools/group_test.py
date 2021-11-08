@@ -3,7 +3,6 @@ import re
 import copy
 import hashlib
 
-
 class GroupTest(object):
     def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log'):
         self.name = name
