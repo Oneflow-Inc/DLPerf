@@ -1,8 +1,11 @@
 import os
+import re
 import copy
+import time
 
 class GroupTest(object):
-    def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log'):
+    def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log',
+                 hosts_file='hosts'):
         self.name = name
         self.python_bin = python_bin
         self.script = script
@@ -14,6 +17,7 @@ class GroupTest(object):
 
         self.matrix = []
         self.num_of_runs = 0
+        self.init_hosts(hosts_file)
 
     def __call__(self, repeat=1):
         assert repeat > 0
@@ -77,3 +81,49 @@ class GroupTest(object):
         parts.append('`hostname`')
         parts.append(str(ext))
         return '_'.join(parts) + '.log'
+
+    def init_hosts(self, host_file):
+        pat = re.compile("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
+        with open(host_file, 'r') as f:
+            lines = f.readlines()
+            hosts = []
+            for line in lines:
+                test_ip = line.strip()
+                test = pat.match(test_ip)
+                if test:
+                    hosts.append(test_ip)
+            self.hosts = hosts
+            self.args['node_ips'] = ','.join(hosts)
+
+
+def exec_tmp_run_sh(num_nodes, cmd):
+    ansible_cmd = ['bash ./ansible_execute.sh']
+    with open('tmp_run.sh', 'w') as f:
+        f.write(cmd)
+    ansible_cmd.append(f'--cmd="bash tmp_run.sh"')
+    ansible_cmd.append(f'--num-nodes={num_nodes}')
+    ansible_cmd.append(f'--password={FLAGS.password}')
+    running_cmd = ' '.join(ansible_cmd)
+    print(running_cmd)
+    os.system(running_cmd)
+    time.sleep(3)
+
+
+def exec_cmd(num_nodes, cmd, host_ips, password):
+    # Create inventory file
+    with open('inventory', 'w') as f:
+        for host_ip in host_ips[:num_nodes]:
+            f.write(f'{host_ip} ansible_ssh_pass={password}\n')
+
+    with open('tmp_run.sh', 'w') as f:
+        f.write(cmd)
+
+    # generate ansible command
+    ansible_cmd = ['ansible all --inventory=inventory -m shell',
+        '--ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',
+        f'-a "chdir={os.getcwd()} bash tmp_run.sh"',
+    ]
+    running_cmd = ' '.join(ansible_cmd)
+    print(running_cmd)
+    os.system(running_cmd)
+    time.sleep(3)
