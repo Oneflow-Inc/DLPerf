@@ -14,8 +14,8 @@ class OfResnetTest(GroupTest):
         if 'data_dir' in self.args:
             self.args['train_data_dir'] = self.args['data_dir'] + '/train'
             self.args['train_data_part_num'] = 256
-            self.args['val_data_dir'] = self.args['data_dir'] + '/validation'
-            self.args['val_data_part_num'] = 256
+            # self.args['val_data_dir'] = self.args['data_dir'] + '/validation'
+            # self.args['val_data_part_num'] = 256
         self.args.pop('data_dir', None)
 
     def init_hosts(self, host_file):
