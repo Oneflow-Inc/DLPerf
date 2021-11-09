@@ -50,12 +50,12 @@ def meters(result_dict, args):
 def export_csv(all_results, filename):
     assert len(all_results)
     with open(filename, 'w') as f:
-        keys = list(all_results[0].keys())
+        keys = [key for key in list(all_results[0].keys()) if isinstance(key, str)]
         f.write(';'.join(keys) + '\n')
         for res in all_results:
             values = []
             for key in keys:
-                values.append(res[key])
+                values.append(str(res[key]))
             f.write(';'.join(values) + '\n')
     print('save results to', filename)
 
