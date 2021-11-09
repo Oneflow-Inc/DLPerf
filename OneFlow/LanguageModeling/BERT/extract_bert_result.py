@@ -1,16 +1,5 @@
 import os
 import argparse
-from extract_util import extract_result 
-
-
-parser = argparse.ArgumentParser(description="flags for BERT benchmark")
-parser.add_argument(
-    "--benchmark_log_dir", type=str, default="./logs/oneflow",
-    required=False)
-parser.add_argument("--start_iter", type=int, default=19)
-parser.add_argument("--end_iter", type=int, default=119)
-parser.add_argument("--print_mode", type=str, default='markdown')
-args = parser.parse_args()
 
 
 def extract_info_from_file(log_file):
@@ -36,4 +25,14 @@ def extract_info_from_file(log_file):
 
 
 if __name__ == "__main__":
+    from extract_util import extract_result 
+    
+    parser = argparse.ArgumentParser(description="flags for BERT benchmark")
+    parser.add_argument(
+        "--benchmark_log_dir", type=str, default="./logs/oneflow",
+        required=False)
+    parser.add_argument("--start_iter", type=int, default=19)
+    parser.add_argument("--end_iter", type=int, default=119)
+    parser.add_argument("--print_mode", type=str, default='markdown')
+    args = parser.parse_args()
     extract_result(args, extract_info_from_file)
