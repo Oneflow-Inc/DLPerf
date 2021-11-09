@@ -43,6 +43,14 @@ def get_node_metric(metric, node_ip, start, end, step=15, url='http://10.105.1.1
 
     metrics = metric_dict['data']['result']
     formated_metrics = [metric_format(metric) for metric in metrics]
+    if not formated_metrics:
+        formated_metrics.append({
+            '__name__': metric,
+            'instance': f'{node_ip}',
+            'start': start,
+            'end': end,
+            'values': 'NA',
+        })
     return formated_metrics
 
 
