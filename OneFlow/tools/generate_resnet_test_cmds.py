@@ -28,6 +28,7 @@ class OfResnetTest(GroupTest):
                 test = pat.match(test_ip)
                 if test:
                     hosts.append(test_ip)
+            self.hosts = hosts
             self.args['node_ips'] = ','.join(hosts)
 
 
