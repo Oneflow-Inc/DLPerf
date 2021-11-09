@@ -22,10 +22,14 @@ def exec_cmd(num_nodes, cmd, host_ips, password):
     with open('inventory', 'w') as f:
         for host_ip in host_ips[:num_nodes]:
             f.write(f'{host_ip} ansible_ssh_pass={password}\n')
+
+    with open('tmp_run.sh', 'w') as f:
+        f.write(cmd)
+
     # generate ansible command
     ansible_cmd = ['ansible all --inventory=inventory -m shell',
         '--ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',
-        f'-a "chdir={os.getcwd()} {cmd}"',
+        f'-a "chdir={os.getcwd()} bash tmp_run.sh"',
     ]
     running_cmd = ' '.join(ansible_cmd)
     print(running_cmd)
