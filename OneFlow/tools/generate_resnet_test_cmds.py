@@ -1,14 +1,11 @@
-import os
-import re
 import argparse
 from group_test import GroupTest
 
 class OfResnetTest(GroupTest):
     def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log',
                  hosts_file='hosts'):
-        super(OfResnetTest, self).__init__(name, script, args, envs, python_bin)
+        super(OfResnetTest, self).__init__(name, script, args, envs, python_bin, hosts_file)
         self.update_data_dir()
-        self.init_hosts(hosts_file)
 
     def update_data_dir(self):
         if 'data_dir' in self.args:
@@ -17,19 +14,6 @@ class OfResnetTest(GroupTest):
             # self.args['val_data_dir'] = self.args['data_dir'] + '/validation'
             # self.args['val_data_part_num'] = 256
         self.args.pop('data_dir', None)
-
-    def init_hosts(self, host_file):
-        pat = re.compile("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
-        with open(host_file, 'r') as f:
-            lines = f.readlines()
-            hosts = []
-            for line in lines:
-                test_ip = line.strip()
-                test = pat.match(test_ip)
-                if test:
-                    hosts.append(test_ip)
-            self.hosts = hosts
-            self.args['node_ips'] = ','.join(hosts)
 
 
 def init_rn50_tests(FLAGS):
