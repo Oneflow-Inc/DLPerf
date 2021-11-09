@@ -1,6 +1,8 @@
 import os
 import imp
+import json
 import argparse
+from exporter_util import get_metrics_of_node
 
 
 def get_parser():
@@ -10,6 +12,10 @@ def get_parser():
     parser.add_argument("--endswith", type=str, default=".log", help="specify log file extention")
     parser.add_argument("--contains", type=str, default='', help="log filename contains")
     parser.add_argument("--type", type=str, default="cnn", help="cnn, bert")
+    parser.add_argument("--start_iter", type=int, default=20)
+    parser.add_argument("--end_iter", type=int, default=120)
+    parser.add_argument("--master_ip", type=str, default="10.105.0.32",
+                        help="master ip address for metric")
 
     return parser
 
@@ -37,4 +43,22 @@ if __name__ == '__main__':
             continue
 
         res = extract_fn(os.path.join(FLAGS.log_dir, log_file))
+        #print(res)
+        start = float(res[FLAGS.start_iter]) - 10
+        end = float(res[FLAGS.end_iter]) + 5
+
+        # take master node's metric
+        node_metrics = get_metrics_of_node(FLAGS.master_ip, start, end)
+        for k, v in node_metrics.items():
+            if len(v) > 1:
+                # take gpu0's metric
+                for gpu_metric in v:
+                    if gpu_metric['gpu'] == '0':
+                        res[k] = gpu_metric['values']
+                        break
+            elif len(v) == 1:
+                res[k] = v[0]['values']
+        #print(json.dumps(node_metrics, indent=4, sort_keys=True))
+        #print(json.dumps(res, indent=4, sort_keys=True))
         print(res)
+        

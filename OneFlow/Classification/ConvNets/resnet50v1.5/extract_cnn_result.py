@@ -15,7 +15,7 @@ def extract_info_from_file(log_file):
     with open(log_file, 'r') as f:
         for line in f.readlines():
             ss = line.split(' ')
-            if ss[0] in ['model', 'batch_size_per_device', 'gpu_num_per_node', 'num_nodes']:
+            if ss[0] in ['model', 'batch_size_per_device', 'gpu_num_per_node', 'num_nodes', 'use_fp16']:
                 result_dict[ss[0]] = ss[2].strip() 
             elif ss[0] == 'train:': 
                 it = int(ss[4][:-1]) 
