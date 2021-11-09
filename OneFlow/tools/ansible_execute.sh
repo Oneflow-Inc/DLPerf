@@ -45,5 +45,5 @@ done
 
 ansible all --inventory=$inventory_file -m shell \
     --ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
-    -a "$cmd"
+    -a "chdir=$PWD $cmd"
     

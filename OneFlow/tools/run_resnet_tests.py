@@ -14,7 +14,7 @@ if __name__ == '__main__':
         ansible_cmd = ['bash ./ansible_execute.sh']
         with open('tmp_run.sh', 'w') as f:
             f.write(cmd)
-        ansible_cmd.append(f'--cmd=bash tmp_run.sh')
+        ansible_cmd.append(f'--cmd="bash tmp_run.sh"')
         ansible_cmd.append(f'--num-nodes={num_nodes}')
         ansible_cmd.append(f'--password={FLAGS.password}')
         running_cmd = ' '.join(ansible_cmd)
