@@ -36,6 +36,7 @@ def init_rn50_tests(FLAGS):
         'PYTHONUNBUFFERED=1',
         'NCCL_LAUNCH_MODE=PARALLEL',
         'ONEFLOW_COMM_NET_IB_ENABLE=1',
+        'ONEFLOW_DECODER_ENABLE_NVJPEG_HARDWARE_ACCELERATION=0'
     ]
 
     default_args = {
