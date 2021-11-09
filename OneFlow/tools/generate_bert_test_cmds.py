@@ -33,7 +33,7 @@ def init_tests(FLAGS):
         'attention_probs_dropout_prob': 0.1,
         'hidden_dropout_prob': 0.1,
         'model_save_every_n_iter': 10000,
-        'save_last_snapshot': False,
+        # 'save_last_snapshot': None,
         'model_save_dir': "output",
     }
 

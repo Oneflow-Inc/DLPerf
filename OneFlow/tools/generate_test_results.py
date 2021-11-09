@@ -84,6 +84,8 @@ if __name__ == '__main__':
             continue
 
         res = extract_fn(os.path.join(FLAGS.log_dir, log_file))
+        if FLAGS.start_iter not in res or FLAGS.end_iter not in res:
+            continue
         res['log_file'] = log_file
         res['throughput'], res['latency'] = meters(res, FLAGS)
         #print(res)
