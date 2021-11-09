@@ -45,7 +45,7 @@ def init_rn50_tests(FLAGS):
         'momentum': 0.875,
         'label_smoothing': 0.1,
         'learning_rate': 1.536,
-        'loss_print_every_n_iter': 100,
+        'loss_print_every_n_iter': 10,
         'val_batch_size_per_device': 50,
         'fuse_bn_relu': True,
         'fuse_bn_add_relu': True,
@@ -62,7 +62,7 @@ def init_rn50_tests(FLAGS):
     rn50 = OfResnetTest('resnet50', FLAGS.script, python_bin=FLAGS.python_bin, args=default_args, 
                         envs=envs, log_dir=FLAGS.log_dir)
 
-    num_steps = 1100
+    num_steps = 110
     for run_on in runs_on:
         run_on_args = {
             'num_nodes': run_on[0],

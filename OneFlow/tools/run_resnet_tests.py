@@ -1,4 +1,5 @@
 import os
+import time
 from generate_resnet_test_cmds import init_rn50_tests
 from generate_resnet_test_cmds import get_parser, init_rn50_tests
 
@@ -20,3 +21,5 @@ if __name__ == '__main__':
         running_cmd = ' '.join(ansible_cmd)
         print(running_cmd)
         os.system(running_cmd)
+        time.sleep(3)
+        
