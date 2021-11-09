@@ -1,5 +1,5 @@
 import os
-import importlib
+import imp
 import json
 import argparse
 from exporter_util import get_metrics_of_node
@@ -64,15 +64,15 @@ if __name__ == '__main__':
     FLAGS = get_parser().parse_args()
     if FLAGS.type == 'cnn':
         with open('../Classification/ConvNets/resnet50v1.5/extract_cnn_result.py', 'rb') as fp:
-            extract_fn = importlib.load_module(
+            extract_fn = imp.load_module(
                 'extract_info_from_file', fp, 'extract_cnn_result.py',
-                ('.py', 'rb', importlib.PY_SOURCE)
+                ('.py', 'rb', imp.PY_SOURCE)
             ).extract_info_from_file
     elif FLAGS.type == 'bert':
         with open('../LanguageModeling/BERT/extract_bert_result.py', 'rb') as fp:
-            extract_fn = importlib.load_module(
+            extract_fn = imp.load_module(
                 'extract_info_from_file', fp, 'extract_bert_result.py',
-                ('.py', 'rb', importlib.PY_SOURCE)
+                ('.py', 'rb', imp.PY_SOURCE)
             ).extract_info_from_file
 
     all_results = []
