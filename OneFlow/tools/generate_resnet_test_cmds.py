@@ -62,7 +62,7 @@ def init_rn50_tests(FLAGS):
     rn50 = OfResnetTest('resnet50', FLAGS.script, python_bin=FLAGS.python_bin, args=default_args, 
                         envs=envs, log_dir=FLAGS.log_dir)
 
-    num_steps = 110
+    num_steps = 120
     for run_on in runs_on:
         run_on_args = {
             'num_nodes': run_on[0],
