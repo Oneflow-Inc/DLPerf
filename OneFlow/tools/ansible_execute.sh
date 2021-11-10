@@ -1,5 +1,6 @@
 cmd=${cmd:-ls}
 num_nodes=${num_nodes:-0}
+changedir=${changedir:-$PWD}
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -11,6 +12,9 @@ while [ $# -gt 0 ]; do
       ;;
     --password=*)
       password="${1#*=}"
+      ;;
+    --chdir=*)
+      changedir="${1#*=}"
       ;;
     *)
       printf "***************************\n"
@@ -45,5 +49,5 @@ done
 
 ansible all --inventory=$inventory_file -m shell \
     --ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
-    -a "chdir=$PWD $cmd"
+    -a "chdir=$changedir $cmd"
     
