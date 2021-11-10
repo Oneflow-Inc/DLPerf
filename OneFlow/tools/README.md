@@ -20,7 +20,7 @@
 例子🌰：
 ```bash
 ./ansible_execute.sh \
-  --password=Zjlab@123 \
+  --password=******** \
   --cmd="python3 -m pip install -U /path/to/oneflow.whl"
 ```
 上面的例子中，需要注意的是`--cmd`的值被引号包裹，不然解析会出问题；另外`python3`通常会被绝对路径替换，比如`/home/tianshu/miniconda3/bin/python3`以避免各个机器的环境不一致。
