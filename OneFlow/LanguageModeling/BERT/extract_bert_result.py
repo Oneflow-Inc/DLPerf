@@ -15,7 +15,7 @@ def extract_info_from_file(log_file):
     with open(log_file, 'r') as f:
         for line in f.readlines():
             ss = line.split(' ')
-            if ss[0] in ['batch_size_per_device', 'gpu_num_per_node', 'num_nodes']:
+            if ss[0] in ['batch_size_per_device', 'gpu_num_per_node', 'num_nodes', 'use_fp16']:
                 result_dict[ss[0]] = ss[2].strip()
             elif ss[0] == 'step:':
                 it = int(ss[1][:-1])
@@ -26,7 +26,7 @@ def extract_info_from_file(log_file):
 
 if __name__ == "__main__":
     from extract_util import extract_result 
-    
+
     parser = argparse.ArgumentParser(description="flags for BERT benchmark")
     parser.add_argument(
         "--benchmark_log_dir", type=str, default="./logs/oneflow",
