@@ -41,7 +41,6 @@ def init_tests(FLAGS):
             'num_nodes': run_on[0],
             'gpu_num_per_node': run_on[1],
         }
-        num_devices = run_on[0] * run_on[1]
 
         for bsz in [128, 192]:
             run_on_args['batch_size_per_device'] = bsz
