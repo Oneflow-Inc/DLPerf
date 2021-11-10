@@ -78,7 +78,6 @@ def init_tests(FLAGS):
     return rn50
 
 
-
 if __name__ == '__main__':
     parser = get_parser()
     parser.add_argument("--password", type=str, default="password", help="password for ansible")
