@@ -3,7 +3,7 @@ from group_test import GroupTest, exec_cmd, get_parser
 class OfResnetTest(GroupTest):
     def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log',
                  hosts_file='hosts'):
-        super(OfResnetTest, self).__init__(name, script, args, envs, python_bin, hosts_file)
+        super(OfResnetTest, self).__init__(name, script, args, envs, python_bin, log_dir, hosts_file)
         self.update_data_dir()
 
     def update_data_dir(self):
