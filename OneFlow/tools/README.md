@@ -90,7 +90,7 @@ naming_rule = {
 
 #### 执行测试
 `exec_cmd`是真正的执行某一项测试。
-执行的时候，需要根据节点数先生成一个临时的`inventory`文件。然后把测试命令保存成一个临时的shell脚本文件`tmp_run.sh`，主要是因为不保存临时文件总数报错，没找到原因。然后ansible命令，通过`os.system`的方式执行。
+执行的时候，需要根据节点数先生成一个临时的`inventory`文件。然后把测试命令保存成一个临时的shell脚本文件`tmp_run.sh`，主要是因为不保存临时文件总数报错，没找到原因。然后生成ansible命令，通过`os.system`的方式执行。
 
 ## `run_bert_tests.py`
 与`run_resnet_tests.py`类似。
