@@ -1,5 +1,4 @@
-import argparse
-from group_test import GroupTest, exec_cmd
+from group_test import GroupTest, exec_cmd, get_parser
 
 
 def init_tests(FLAGS):
@@ -61,19 +60,6 @@ def init_tests(FLAGS):
     }
     bert.set_log_naming_rule(naming_rule)
     return bert
-
-
-def get_parser():
-    parser = argparse.ArgumentParser("flags for cnn benchmark")
-
-    parser.add_argument("--python_bin", type=str, default="python3", help="python bin path")
-    parser.add_argument("--script", type=str, default="LanguageModeling/BERT/run_pretraining.py", 
-                        help="run_pretraining.py path")
-    parser.add_argument("--log_dir", type=str, default="log", help="log directory")
-    parser.add_argument("--data_dir", type=str, default="./wiki_seq_len_128", help="data directory")
-    parser.add_argument("--repeat", type=int, default=1, help="repeat times")
-    
-    return parser
 
 
 if __name__ == '__main__':

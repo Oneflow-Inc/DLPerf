@@ -2,6 +2,7 @@ import os
 import re
 import copy
 import time
+import argparse
 
 class GroupTest(object):
     def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log',
@@ -127,3 +128,16 @@ def exec_cmd(num_nodes, cmd, host_ips, password):
     print(running_cmd)
     os.system(running_cmd)
     time.sleep(3)
+
+
+def get_parser():
+    parser = argparse.ArgumentParser("flags for oneflow benchmark tests")
+
+    parser.add_argument("--python_bin", type=str, default="python3", help="python bin path")
+    parser.add_argument("--script", type=str, default="Classification/cnns/of_cnn_train_val.py", 
+                        help="of_cnn_train_val.py path")
+    parser.add_argument("--log_dir", type=str, default="log", help="log directory")
+    parser.add_argument("--data_dir", type=str, default="./imagenet/ofrecord", help="data directory")
+    parser.add_argument("--repeat", type=int, default=1, help="repeat times")
+    
+    return parser
