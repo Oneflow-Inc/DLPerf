@@ -59,7 +59,21 @@ def get_metrics_of_node(node_ip, start, end, step=3, url='http://10.105.1.136:90
 
 
 if __name__ == "__main__":
-    start = 1636012608.456
-    end = 1636012863.456
+    start = 1636434583.4633102
+    end = 1636436677.8328712
     node_metrics = get_metrics_of_node('10.105.0.32', start, end)
-    print(json.dumps(node_metrics, indent=4, sort_keys=True))
+
+    #print(json.dumps(node_metrics, indent=4, sort_keys=True))
+    #print(json.dumps(node_metrics, indent=4, sort_keys=True))
+    #print(json.dumps(node_metrics['DCGM_FI_DEV_FB_USED'], indent=4, sort_keys=True))
+    for key in metric_info_dict.keys():
+        v = node_metrics[key]
+        if len(v) > 1:
+            # take gpu0's metric
+            for gpu_metric in v:
+                if gpu_metric['gpu'] == '0':
+                    values = gpu_metric['values']
+                    break
+        elif len(v) == 1:
+            values = v[0]['values']
+        print(key, values)
