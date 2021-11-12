@@ -3,14 +3,14 @@ import requests
 
 
 metric_info_dict = {
-  'DCGM_FI_DEV_FB_USED': (9440, "prod-gpu", 'GPU memory used (in MiB).'),
-  'DCGM_FI_DEV_POWER_USAGE': (9440, "prod-gpu", 'GPU power usage (in W).'),
-  'DCGM_FI_PROF_GR_ENGINE_ACTIVE': (9440, "prod-gpu", 'GPU utilization (in %).'),
-  'node_memory_Committed_AS_bytes': (9100, "prod-node", 'Node Memory information field Committed (in bytes)'),
+  'DCGM_FI_DEV_FB_USED': (9440, "kj", 'GPU memory used (in MiB).'),
+  'DCGM_FI_DEV_POWER_USAGE': (9440, "kj", 'GPU power usage (in W).'),
+  'DCGM_FI_PROF_GR_ENGINE_ACTIVE': (9440, "kj", 'GPU utilization (in %).'),
+  'node_memory_Committed_AS_bytes': (9100, "kj", 'Node Memory information field Committed (in bytes)'),
 }
 
 
-def get_node_metric(metric, node_ip, start, end, step=15, url='http://10.105.1.136:9090/api/v1/query_range'):
+def get_node_metric(metric, node_ip, start, end, step=3, url='http://10.105.1.136:9090/api/v1/query_range'):
     assert metric in metric_info_dict
 
     def build_params():
@@ -54,7 +54,7 @@ def get_node_metric(metric, node_ip, start, end, step=15, url='http://10.105.1.1
     return formated_metrics
 
 
-def get_metrics_of_node(node_ip, start, end, step=15, url='http://10.105.1.136:9090/api/v1/query_range'):
+def get_metrics_of_node(node_ip, start, end, step=3, url='http://10.105.1.136:9090/api/v1/query_range'):
     return {metric: get_node_metric(metric, node_ip, start, end, step, url) for metric in metric_info_dict}
 
 

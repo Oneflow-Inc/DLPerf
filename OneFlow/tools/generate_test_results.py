@@ -89,8 +89,8 @@ if __name__ == '__main__':
         res['log_file'] = log_file
         res['throughput'], res['latency'] = meters(res, FLAGS)
         #print(res)
-        start = float(res[FLAGS.start_iter]) - 10
-        end = float(res[FLAGS.end_iter]) + 5
+        start = float(res[FLAGS.start_iter]) - 5
+        end = float(res[FLAGS.end_iter]) + 10
 
         # take master node's metric
         node_metrics = get_metrics_of_node(FLAGS.master_ip, start, end)
