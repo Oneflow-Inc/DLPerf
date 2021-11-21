@@ -121,7 +121,7 @@ def exec_cmd(num_nodes, cmd, host_ips, password):
 
     # generate ansible command
     ansible_cmd = ['ansible all --inventory=inventory -m shell',
-        '--ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',
+        # '--ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',
         f'-a "chdir={os.getcwd()} bash tmp_run.sh"',
     ]
     running_cmd = ' '.join(ansible_cmd)
