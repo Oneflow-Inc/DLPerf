@@ -33,7 +33,11 @@ echo Create inventory file
 
 # append host to inventory file
 i=0
-for ip in $(cat hosts); do
+while IFS= read -r ip
+do
+    if [[ $ip =~ ^#.* ]]; then
+        continue
+    fi
     if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         if [ -z "$password" ]; then
             echo "$ip" >> $inventory_file
@@ -45,7 +49,7 @@ for ip in $(cat hosts); do
             break
         fi
     fi
-done
+done  < hosts
 
 ansible all --inventory=$inventory_file -m shell \
     --ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
