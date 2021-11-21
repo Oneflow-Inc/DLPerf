@@ -6,12 +6,14 @@ import argparse
 
 class GroupTest(object):
     def __init__(self, name, script, args={}, envs=[], python_bin='python3', log_dir='log',
-                 hosts_file='hosts'):
+                 hosts_file='hosts', distributed_launch=False):
         self.name = name
         self.python_bin = python_bin
         self.script = script
         self.envs = envs
         self.log_dir = log_dir
+
+        self.distributed_launch = distributed_launch
 
         assert isinstance(args, dict)
         self.args = args
@@ -31,18 +33,34 @@ class GroupTest(object):
         self.num_of_runs += 1
         prefix = ' '.join(self.envs)
         prefix = prefix + ' ' + self.python_bin
-        prefix = prefix + ' ' + self.script
+        if self.distributed_launch:
+            prefix = 'source set_rank_env.sh; ' + prefix
+            prefix = prefix + ' -m oneflow.distributed.launch'
 
         if len(self.matrix) == 0:
             self.matrix = [{}]
 
         cmds = []
         for num_nodes, args in self.matrix:
-            assert isinstance(args, dict)
+            assert isinstance(args, dict) 
             running_args = copy.deepcopy(self.args)
             running_args.update(args)
+            if self.distributed_launch:
+                assert 'nproc_per_node' in running_args
+                assert 'nnodes' in running_args
+                # assert 'node_rank' in dist_args
+                assert 'master_addr' in running_args
 
             string_args_list = []
+            if self.distributed_launch:
+                s = '--node_rank=$ONEFLOW_NODE_RANK'
+                for key in ['nproc_per_node', 'nnodes', 'master_addr']:
+                    s = f'--{key}={running_args[key]}'
+                    string_args_list.append(s)
+                    running_args.pop(key)
+
+            string_args_list.append(self.script)
+
             for key, value in running_args.items():
                 s = f'--{key}'
                 if value:
@@ -126,8 +144,8 @@ def exec_cmd(num_nodes, cmd, host_ips, password):
     ]
     running_cmd = ' '.join(ansible_cmd)
     print(running_cmd)
-    os.system(running_cmd)
-    time.sleep(15)
+    #os.system(running_cmd)
+    #time.sleep(15)
 
 
 def get_parser():
