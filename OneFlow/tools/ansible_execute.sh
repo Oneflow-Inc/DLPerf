@@ -52,6 +52,6 @@ do
 done  < hosts
 
 ansible all --inventory=$inventory_file -m shell \
-    --ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
     -a "chdir=$changedir $cmd"
+    # --ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
     
