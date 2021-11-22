@@ -34,8 +34,7 @@ class GroupTest(object):
         prefix = ' '.join(self.envs)
         prefix = prefix + ' ' + self.python_bin
         if self.distributed_launch:
-            prefix = 'source set_rank_env.sh; ' + prefix
-            prefix = prefix + 'echo $$ONEFLOW_NODE_RANK; '
+            prefix = 'source set_rank_env.sh; echo node_rank=$ONEFLOW_NODE_RANK;' + prefix
             prefix = prefix + ' -m oneflow.distributed.launch'
 
         if len(self.matrix) == 0:
