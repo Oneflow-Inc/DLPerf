@@ -20,7 +20,8 @@ class GroupTest(object):
 
         self.matrix = []
         self.num_of_runs = 0
-        self.init_hosts(hosts_file)
+        if not distributed_launch:
+            self.init_hosts(hosts_file)
 
     def __call__(self, repeat=1):
         assert repeat > 0

@@ -23,7 +23,7 @@ def init_tests(FLAGS):
         'metric-train-acc': True,
         'fuse-bn-relu': None,
         'fuse-bn-add-relu': None,
-        'gpu_image_decoder': True,
+        # 'gpu_image_decoder': True,
         #2>&1 | tee ${LOGFILE}
     }
 
