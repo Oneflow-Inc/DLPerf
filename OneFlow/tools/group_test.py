@@ -144,8 +144,8 @@ def exec_cmd(num_nodes, cmd, host_ips, password):
     ]
     running_cmd = ' '.join(ansible_cmd)
     print(running_cmd)
-    #os.system(running_cmd)
-    #time.sleep(15)
+    os.system(running_cmd)
+    time.sleep(15)
 
 
 def get_parser():
