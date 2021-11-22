@@ -20,8 +20,7 @@ class GroupTest(object):
 
         self.matrix = []
         self.num_of_runs = 0
-        if not distributed_launch:
-            self.init_hosts(hosts_file)
+        self.init_hosts(hosts_file)
 
     def __call__(self, repeat=1):
         assert repeat > 0
@@ -113,7 +112,8 @@ class GroupTest(object):
                 if test:
                     hosts.append(test_ip)
             self.hosts = hosts
-            self.args['node_ips'] = ','.join(hosts)
+            if not self.distributed_launch:
+                self.args['node_ips'] = ','.join(hosts)
 
 
 def exec_tmp_run_sh(num_nodes, cmd):
