@@ -55,6 +55,7 @@ class GroupTest(object):
             string_args_list = []
             if self.distributed_launch:
                 s = '--node_rank=$ONEFLOW_NODE_RANK'
+                string_args_list.append(s)
                 for key in ['nproc_per_node', 'nnodes', 'master_addr']:
                     s = f'--{key}={running_args[key]}'
                     string_args_list.append(s)
