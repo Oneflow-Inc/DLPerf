@@ -10,7 +10,7 @@ def init_tests(FLAGS):
     ]
 
     default_args = {
-        'master_addr': '10.105.0.54',
+        # 'master_addr': '10.105.0.54', #default is first ip in hosts file
         'ofrecord-path': FLAGS.data_dir,
         'ofrecord-part-num': 256,
         'lr': 1.536,

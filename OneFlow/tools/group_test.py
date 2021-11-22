@@ -35,6 +35,7 @@ class GroupTest(object):
         prefix = prefix + ' ' + self.python_bin
         if self.distributed_launch:
             prefix = 'source set_rank_env.sh; ' + prefix
+            prefix = prefix + 'echo $$ONEFLOW_NODE_RANK; '
             prefix = prefix + ' -m oneflow.distributed.launch'
 
         if len(self.matrix) == 0:
@@ -113,7 +114,10 @@ class GroupTest(object):
                 if test:
                     hosts.append(test_ip)
             self.hosts = hosts
-            if not self.distributed_launch:
+            if self.distributed_launch:
+                if 'master_addr' not in self.args:
+                    self.args['master_addr'] = hosts[0]
+            else:
                 self.args['node_ips'] = ','.join(hosts)
 
 
