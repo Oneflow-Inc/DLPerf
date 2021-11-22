@@ -37,7 +37,8 @@ def init_tests(FLAGS):
         'nccl_fusion_max_ops': 24,
         'gpu_image_decoder': True,
         'num_epoch': 1,
-        'model': "resnet50"
+        'model': "resnet50",
+        'log_dir': "./log"
         #2>&1 | tee ${LOGFILE}
     }
 
