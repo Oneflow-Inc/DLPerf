@@ -148,7 +148,7 @@ def exec_cmd(num_nodes, cmd, host_ips, password):
         f'-a "chdir={os.getcwd()} bash tmp_run.sh"',
     ]
     running_cmd = ' '.join(ansible_cmd)
-    print(running_cmd)
+    print(num_nodes, running_cmd)
     os.system(running_cmd)
     time.sleep(15)
 
