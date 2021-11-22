@@ -51,6 +51,7 @@ class GroupTest(object):
                 # assert 'node_rank' in dist_args
                 assert 'master_addr' in running_args
 
+            log_file = os.path.join(self.log_dir, self.get_log_name(running_args, self.num_of_runs))
             string_args_list = []
             if self.distributed_launch:
                 s = '--node_rank=$ONEFLOW_NODE_RANK'
@@ -68,7 +69,6 @@ class GroupTest(object):
                 string_args_list.append(s)
             string_args = ' '.join(string_args_list)
             cmd = prefix + ' ' + string_args
-            log_file = os.path.join(self.log_dir, self.get_log_name(running_args, self.num_of_runs))
             cmd = cmd + ' 2>&1 | tee ' + log_file
             cmds.append((num_nodes, cmd))
         return cmds

@@ -13,18 +13,17 @@ def init_tests(FLAGS):
         'master_addr': '10.105.0.54',
         'ofrecord-path': FLAGS.data_dir,
         'ofrecord-part-num': 256,
-        'optimizer': "sgd",
+        'lr': 1.536,
         'momentum': 0.875,
-        'label_smoothing': 0.1,
-        'learning_rate': 1.536,
-        'loss_print_every_n_iter': 10,
-        'val_batch_size_per_device': 50,
-        'fuse_bn_relu': True,
-        'fuse_bn_add_relu': True,
-        'nccl_fusion_threshold_mb': 16,
-        'nccl_fusion_max_ops': 24,
+        'num-epochs': 1,
+        'graph': None,
+        'skip-eval': None,
+        'print-interval': 10,
+        'metric-local': True,
+        'metric-train-acc': True,
+        'fuse-bn-relu': None,
+        'fuse-bn-add-relu': None,
         'gpu_image_decoder': True,
-        'num_epoch': 1,
         #2>&1 | tee ${LOGFILE}
     }
 
@@ -38,28 +37,29 @@ def init_tests(FLAGS):
         run_on_args = {
             'nnodes': run_on[0],
             'nproc_per_node': run_on[1],
-            'channel_last': False,
+            'num-devices-per-node': run_on[1],
+            # 'channel_last': False,
         }
         num_devices = run_on[0] * run_on[1]
 
         for bsz in [192, 256]:
-            run_on_args['batch_size_per_device'] = bsz
-            run_on_args['num_examples'] = bsz * num_devices * num_steps
+            run_on_args['train-batch-size'] = bsz
+            run_on_args['samples-per-epoch'] = bsz * num_devices * num_steps
             rn50.append_matrix(run_on[0], run_on_args)
 
-        run_on_args['use_fp16'] = None
-        run_on_args['pad_output'] = None
-        run_on_args['channel_last'] = True
+        run_on_args['use-fp16'] = None
+        # run_on_args['pad_output'] = None
+        # run_on_args['channel_last'] = True
         for bsz in [256, 512]:
-            run_on_args['batch_size_per_device'] = bsz
-            run_on_args['num_examples'] = bsz * num_devices * num_steps
+            run_on_args['train-batch-size'] = bsz
+            run_on_args['samples-per-epoch'] = bsz * num_devices * num_steps
             rn50.append_matrix(run_on[0], run_on_args)
 
     naming_rule = {
         'nnodes': 'n',
         'nproc_per_node': 'g',
-        'batch_size_per_device': 'b',
-        'use_fp16': 'amp',
+        'train-batch-size': 'b',
+        'use-fp16': 'amp',
     }
     rn50.set_log_naming_rule(naming_rule)
     return rn50
