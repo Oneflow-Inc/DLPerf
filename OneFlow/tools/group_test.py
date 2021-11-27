@@ -141,7 +141,14 @@ def exec_cmd(num_nodes, cmd, host_ips, password):
 
     with open('tmp_run.sh', 'w') as f:
         f.write(cmd)
-
+    
+    distribute_tmp_run_cmd = ['ansible all --inventory=inventory -m copy',
+        '--ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',
+        f'-a "src={os.getcwd()}/tmp_run.sh dest={os.getcwd()}"',]
+    distribute_cmd = ' '.join(distribute_tmp_run_cmd)
+    print(distribute_cmd)
+    os.system(distribute_cmd)
+    time.sleep(10)
     # generate ansible command
     ansible_cmd = ['ansible all --inventory=inventory -m shell',
         # '--ssh-extra-args "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',
