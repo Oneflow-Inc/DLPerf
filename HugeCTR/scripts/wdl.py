@@ -11,8 +11,8 @@ def WideAndDeep(args):
                                 repeat_dataset = True,
                                 i64_input_key = True)
     reader = hugectr.DataReaderParams(data_reader_type = hugectr.DataReaderType_t.Parquet,
-                                    source = ["/dataset/d4f7e679/criteo_day_0_parquet/train/_file_list.txt"],
-                                    eval_source = "/dataset/d4f7e679/criteo_day_0_parquet/val/_file_list.txt",
+                                    source = [f"{args.data_dir}/train/_file_list.txt"],
+                                    eval_source = f"{args.data_dir}/val/_file_list.txt",
                                     slot_size_array = [225945, 354813, 202260, 18767, 14108, 6886, 18578, 4, 6348, 1247, 51, 186454, 71251, 66813, 11, 2155, 7419, 60, 4, 922, 15, 202365, 143093, 198446, 61069, 9069, 74, 34],
                                     check_type = hugectr.Check_t.Non)
     optimizer = hugectr.CreateOptimizer(optimizer_type = hugectr.Optimizer_t.Adam,
@@ -94,13 +94,7 @@ def get_args():
         action="store_true",
         help="use single dataloader threads per node or not."
     )
-    parser.add_argument('--num_dataloader_thread_per_gpu', type=int, default=2)
-    parser.add_argument('--train_data_dir', type=str, default='')
-    parser.add_argument('--train_data_part_num', type=int, default=1)
-    parser.add_argument('--train_part_name_suffix_length', type=int, default=-1)
-    parser.add_argument('--eval_data_dir', type=str, default='')
-    parser.add_argument('--eval_data_part_num', type=int, default=1)
-    parser.add_argument('--eval_part_name_suffix_length', type=int, default=-1)
+    parser.add_argument('--data_dir', type=str, default='/dataset/d4f7e679/criteo_day_0_parquet')
     parser.add_argument('--eval_batchs', type=int, default=300)
     parser.add_argument('--eval_interval', type=int, default=1000)
     parser.add_argument('--batch_size', type=int, default=16384)
