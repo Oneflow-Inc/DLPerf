@@ -72,10 +72,10 @@ def WideAndDeep(args):
 
     model.add(hugectr.DenseLayer(layer_type = hugectr.Layer_t.InnerProduct,
                                 bottom_names = [bottom_name],
-                                top_names = [f"fc{h}"],
+                                top_names = [f"fc{args.hidden_units_num + 1}"],
                                 num_output=1))
     model.add(hugectr.DenseLayer(layer_type = hugectr.Layer_t.Add,
-                                bottom_names = [f"fc{h}", "wide_redn"],
+                                bottom_names = [f"fc{args.hidden_units_num + 1}", "wide_redn"],
                                 top_names = ["add1"]))
     model.add(hugectr.DenseLayer(layer_type = hugectr.Layer_t.BinaryCrossEntropyLoss,
                                 bottom_names = ["add1", "label"],
