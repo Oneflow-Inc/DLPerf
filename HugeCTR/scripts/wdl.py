@@ -3,10 +3,10 @@ from mpi4py import MPI
 
 def WideAndDeep(args):
     vvgpu = [[g for g in range(args.gpu_num_per_node)] for n in range(args.num_nodes)]
-    solver = hugectr.CreateSolver(max_eval_batches = 300,
+    solver = hugectr.CreateSolver(max_eval_batches = args.eval_batchs,
                                 batchsize_eval = args.batch_size,
                                 batchsize = args.batch_size,
-                                lr = 0.001,
+                                lr = args.learning_rate,
                                 vvgpu = vvgpu,
                                 repeat_dataset = True,
                                 i64_input_key = True)
@@ -22,10 +22,10 @@ def WideAndDeep(args):
                                         epsilon = 0.0000001)
     model = hugectr.Model(solver, reader, optimizer)
     model.add(hugectr.Input(label_dim = 1, label_name = "label",
-                            dense_dim = 13, dense_name = "dense",
+                            dense_dim = args.num_dense_fields, dense_name = "dense",
                             data_reader_sparse_param_array =
-                            [hugectr.DataReaderSparseParam("wide_data", 1, True, 2),
-                            hugectr.DataReaderSparseParam("deep_data", 2, False, 26)]))
+                            [hugectr.DataReaderSparseParam("wide_data", 1, True, args.num_wide_sparse_fields),
+                            hugectr.DataReaderSparseParam("deep_data", 2, False, args.num_deep_sparse_fields)]))
     model.add(hugectr.SparseEmbedding(embedding_type = hugectr.Embedding_t.DistributedSlotSparseEmbeddingHash,
                                 workspace_size_per_gpu_in_mb = 8,
                                 embedding_vec_size = 1,
@@ -35,7 +35,7 @@ def WideAndDeep(args):
                                 optimizer = optimizer))
     model.add(hugectr.SparseEmbedding(embedding_type = hugectr.Embedding_t.DistributedSlotSparseEmbeddingHash,
                                 workspace_size_per_gpu_in_mb = 114,
-                                embedding_vec_size = 16,
+                                embedding_vec_size = args.deep_embedding_vec_size,
                                 combiner = "sum",
                                 sparse_embedding_name = "sparse_embedding1",
                                 bottom_name = "deep_data",
@@ -101,7 +101,7 @@ def get_args():
     parser.add_argument('--eval_data_dir', type=str, default='')
     parser.add_argument('--eval_data_part_num', type=int, default=1)
     parser.add_argument('--eval_part_name_suffix_length', type=int, default=-1)
-    parser.add_argument('--eval_batchs', type=int, default=20)
+    parser.add_argument('--eval_batchs', type=int, default=300)
     parser.add_argument('--eval_interval', type=int, default=1000)
     parser.add_argument('--batch_size', type=int, default=16384)
     parser.add_argument('--learning_rate', type=float, default=1e-3)
