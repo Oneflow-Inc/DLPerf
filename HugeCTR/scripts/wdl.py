@@ -112,7 +112,7 @@ def get_args():
     parser.add_argument('--num_dense_fields', type=int, default=13)
     parser.add_argument('--num_wide_sparse_fields', type=int, default=2)
     parser.add_argument('--num_deep_sparse_fields', type=int, default=26)
-    parser.add_argument('--max_iter', type=int, default=30000)
+    parser.add_argument('--max_iter', type=int, default=2300)
     parser.add_argument('--loss_print_every_n_iter', type=int, default=100)
     parser.add_argument('--gpu_num_per_node', type=int, default=1)
     parser.add_argument('--num_nodes', type=int, default=1,
@@ -131,4 +131,8 @@ if __name__ == "__main__":
     model = WideAndDeep(args)
     model.compile()
     model.summary()
-    model.fit(max_iter = 2300, display = 200, eval_interval = 1000, snapshot = 1000000, snapshot_prefix = "wdl")
+    model.fit(max_iter = args.max_iter, 
+              display = args.loss_print_every_n_iter, 
+              eval_interval = args.eval_interval, 
+              snapshot = 1000000, 
+              snapshot_prefix = "wdl")
