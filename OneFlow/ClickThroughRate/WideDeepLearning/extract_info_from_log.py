@@ -79,22 +79,26 @@ if __name__ == "__main__":
     for log_file in logs_list:
         test_result = extract_info_from_file(log_file)
         print(test_result)
-        #json_file = os.path.basename(log_file)[:-4]
-        json_file = os.path.basename(log_file)[:-13]
+        json_file = os.path.basename(log_file)[:-4]
+        # json_file = os.path.basename(log_file)[:-13]
         print(json_file)
         test_result['log_file'] = json_file
         if json_file not in chunk_list.keys():
             chunk_list[json_file] = []
         chunk_list[json_file].append(test_result)
     result_list = []
-    for log_name,chunk in chunk_list.items():
+    for log_name, chunk in chunk_list.items():
         latency_list = []
         for single_result in chunk:
-            latency_list.append(single_result['latency(ms)'])
+            if 'latency(ms)' in single_result:
+                latency_list.append(single_result['latency(ms)'])
         tmp_chunk = chunk[0]
         tmp_chunk['gpu'] = 'n{}g{}'.format(tmp_chunk['num_nodes'], tmp_chunk['gpu_num_per_node'])
-        tmp_chunk['latency(ms)'] = median(latency_list)
-        result_list.append(tmp_chunk)
+        if len(latency_list):
+            tmp_chunk['latency(ms)'] = median(latency_list)
+            result_list.append(tmp_chunk)
+        else:
+            print('latency is not calculated in ', log_name)
     #with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
     report_file = args.benchmark_log_dir + '_latency_report.md'
     with open(report_file, 'w') as f:
