@@ -88,19 +88,14 @@ def get_args(print_args=True):
     def str_list(x):
         return x.split(',')
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset_format', type=str, default='ofrecord', help='ofrecord or onerec')
-    parser.add_argument(
-        "--use_single_dataloader_thread",
-        action="store_true",
-        help="use single dataloader threads per node or not."
-    )
+    parser.add_argument('--dataset_format', type=str, default='parquet', help='parquet')
     parser.add_argument('--data_dir', type=str, default='/dataset/d4f7e679/criteo_day_0_parquet')
     parser.add_argument('--eval_batchs', type=int, default=300)
     parser.add_argument('--eval_interval', type=int, default=1000)
     parser.add_argument('--batch_size', type=int, default=16384)
     parser.add_argument('--learning_rate', type=float, default=1e-3)
-    parser.add_argument('--wide_vocab_size', type=int, default=3200000)
-    parser.add_argument('--deep_vocab_size', type=int, default=3200000)
+    # parser.add_argument('--wide_vocab_size', type=int, default=3200000)
+    # parser.add_argument('--deep_vocab_size', type=int, default=3200000)
     parser.add_argument('--deep_embedding_vec_size', type=int, default=16)
     parser.add_argument('--deep_dropout_rate', type=float, default=0.5)
     parser.add_argument('--num_dense_fields', type=int, default=13)
@@ -111,9 +106,6 @@ def get_args(print_args=True):
     parser.add_argument('--gpu_num_per_node', type=int, default=1)
     parser.add_argument('--num_nodes', type=int, default=1,
                         help='node/machine number for training')
-    parser.add_argument('--node_ips', type=str_list, default=['192.168.1.13', '192.168.1.14'],
-                        help='nodes ip list for training, devided by ",", length >= num_nodes')
-    parser.add_argument("--ctrl_port", type=int, default=50051, help='ctrl_port for multinode job')
     parser.add_argument('--hidden_units_num', type=int, default=7)
     parser.add_argument('--hidden_size', type=int, default=1024)
 
