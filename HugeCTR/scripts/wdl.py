@@ -118,13 +118,13 @@ def get_args(print_args=True):
     parser.add_argument('--hidden_size', type=int, default=1024)
 
     FLAGS = parser.parse_args()
-    
+
     def _print_args(args):
-        import datetime
+        from datetime import datetime
         print("=".ljust(66, "="))
         print(
             "Running {}: gpu_num_per_node = {}, num_nodes = {}.".format(
-                args.model, args.gpu_num_per_node, args.num_nodes
+                "HugeCTR-WDL", args.gpu_num_per_node, args.num_nodes
             )
         )
         print("=".ljust(66, "="))
