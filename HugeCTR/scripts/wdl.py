@@ -83,7 +83,7 @@ def WideAndDeep(args):
     return model
 
 
-def get_args():
+def get_args(print_args=True):
     import argparse
     def str_list(x):
         return x.split(',')
@@ -118,6 +118,23 @@ def get_args():
     parser.add_argument('--hidden_size', type=int, default=1024)
 
     FLAGS = parser.parse_args()
+    
+    def _print_args(args):
+        import datetime
+        print("=".ljust(66, "="))
+        print(
+            "Running {}: gpu_num_per_node = {}, num_nodes = {}.".format(
+                args.model, args.gpu_num_per_node, args.num_nodes
+            )
+        )
+        print("=".ljust(66, "="))
+        for arg in vars(args):
+            print("{} = {}".format(arg, getattr(args, arg)))
+        print("-".ljust(66, "-"))
+        print("Time stamp: {}".format(str(datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))))
+    
+    if print_args:
+        _print_args(FLAGS)
     return FLAGS
 
 if __name__ == "__main__":
