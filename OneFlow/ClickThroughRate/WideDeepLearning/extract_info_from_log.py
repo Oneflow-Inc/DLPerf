@@ -81,7 +81,6 @@ def extract_info_from_file_for_models(log_file):
         latencies = []
         for line in f.readlines():
             ss = line.strip().split(' ')
-            print(ss)
             if ss[0] in ['num_nodes', 'gpu_num_per_node', 'batch_size', 'batch_size_per_proc', 'deep_vocab_size','hidden_units_num', 'deep_embedding_vec_size']:
                 result_dict[ss[0]] = ss[2].strip() 
             elif len(ss) > 6 and ss[1] == 'iter:' and ss[3] == 'loss:':
