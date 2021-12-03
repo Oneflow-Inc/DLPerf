@@ -77,7 +77,7 @@ if __name__ == "__main__":
     # parser.add_argument("--end_iter", type=int, default=1100)
     args = parser.parse_args()
 
-    logs_list = glob.glob(os.path.join(args.benchmark_log_dir, "*.log"))
+    logs_list = sorted(glob.glob(os.path.join(args.benchmark_log_dir, "*.log")), key=os.path.getmtime)
     #logs_list = sorted(logs_list)
     chunk_list = {}
     for log_file in logs_list:
