@@ -22,7 +22,7 @@ export PYTHONUNBUFFERED=1
 echo PYTHONUNBUFFERED=$PYTHONUNBUFFERED
 export NCCL_LAUNCH_MODE=PARALLEL
 echo NCCL_LAUNCH_MODE=$NCCL_LAUNCH_MODE
-#export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4
 #export NCCL_DEBUG=INFO
 #export LD_LIBRARY_PATH=/usr/local/cuda/lib64
 
