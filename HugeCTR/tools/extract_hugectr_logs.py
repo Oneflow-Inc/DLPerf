@@ -101,7 +101,7 @@ if __name__ == "__main__":
     #with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
     report_file = args.benchmark_log_dir + '_latency_report.md'
     with open(report_file, 'w') as f:
-        titles = ['log_file', 'gpu', 'batch_size', 'deep_vocab_size','deep_embedding_vec_size', 'hidden_units_num', 'latency(ms)', 'memory_usage(MB)']
+        titles = ['log_file', 'gpu', 'batch_size', 'deep_embedding_vec_size', 'hidden_units_num', 'latency(ms)', 'memory_usage(MB)']
         write_line(f, titles, '|', True)
         write_line(f, ['----' for _ in titles], '|', True)
         for result in result_list:
