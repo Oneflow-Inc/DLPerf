@@ -7,6 +7,7 @@ def WideAndDeep(args):
                                 batchsize_eval = args.batch_size,
                                 batchsize = args.batch_size,
                                 lr = args.learning_rate,
+                                seed = args.seed,
                                 vvgpu = vvgpu,
                                 repeat_dataset = True,
                                 i64_input_key = True)
@@ -90,6 +91,7 @@ def get_args(print_args=True):
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset_format', type=str, default='parquet', help='parquet')
     parser.add_argument('--data_dir', type=str, default='/dataset/d4f7e679/criteo_day_0_parquet')
+    parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--eval_batchs', type=int, default=300)
     parser.add_argument('--eval_interval', type=int, default=1000)
     parser.add_argument('--batch_size', type=int, default=16384)
