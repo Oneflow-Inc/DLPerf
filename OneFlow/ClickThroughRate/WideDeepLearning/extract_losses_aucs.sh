@@ -5,7 +5,7 @@
 
 logfile=${1}
 grep time ${logfile} | cut -d " " -f 5 > losses.tmp
-grep eval_auc: ${logfile} | cut -d " " -f 5 > aucs.tmp
+grep eval_auc ${logfile} | cut -d " " -f 5 > aucs.tmp
 paste losses.tmp aucs.tmp > ${logfile}.losses_aucs
 echo "extract loss and AUC to ${logfile}.losses_aucs"
 rm losses.tmp aucs.tmp
