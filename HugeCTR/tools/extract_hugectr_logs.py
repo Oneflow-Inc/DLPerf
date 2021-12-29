@@ -54,10 +54,13 @@ def extract_info_from_file(log_file, start_iter):
     loss_print_every_n_iter = 0
     with open(log_file, 'r') as f:
         latencies = []
+        vocab_size = []
         for line in f.readlines():
             ss = line.split(' ')
             if ss[0] in ['num_nodes', 'gpu_num_per_node', 'batch_size', 'deep_vocab_size','hidden_units_num', 'deep_embedding_vec_size']:
                 result_dict[ss[0]] = ss[2].strip() 
+            if ss[0] in ['wide_workspace_size_per_gpu_in_mb']:
+                result_dict['vocab_size'] = int((int(ss[2].strip()) * 1024 * 1024 / 4) // 1000000 * 1000000)
             if ss[0] == 'loss_print_every_n_iter':
                 loss_print_every_n_iter = float(ss[2].strip())
             elif len(ss) > 3 and ss[1] == 'Iter:' and '[INFO]' in ss[0]:
@@ -101,7 +104,7 @@ if __name__ == "__main__":
     #with open(os.path.join(args.benchmark_log_dir, 'latency_reprot.md'), 'w') as f:
     report_file = args.benchmark_log_dir + '_latency_report.md'
     with open(report_file, 'w') as f:
-        titles = ['log_file', 'gpu', 'batch_size', 'deep_embedding_vec_size', 'hidden_units_num', 'latency(ms)', 'memory_usage(MB)']
+        titles = ['log_file', 'gpu', 'batch_size', 'vocab_size', 'deep_embedding_vec_size', 'hidden_units_num', 'latency(ms)', 'memory_usage(MB)']
         write_line(f, titles, '|', True)
         write_line(f, ['----' for _ in titles], '|', True)
         for result in result_list:
