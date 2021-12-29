@@ -14,7 +14,7 @@ def WideAndDeep(args):
     reader = hugectr.DataReaderParams(data_reader_type = hugectr.DataReaderType_t.Parquet,
                                     source = [f"{args.data_dir}/train/_file_list.txt"],
                                     eval_source = f"{args.data_dir}/val/_file_list.txt",
-                                    slot_size_array = args.slot_size_array,
+                                    slot_size_array = [225945, 354813, 202260, 18767, 14108, 6886, 18578, 4, 6348, 1247, 51, 186454, 71251, 66813, 11, 2155, 7419, 60, 4, 922, 15, 202365, 143093, 198446, 61069, 9069, 74, 34],
                                     check_type = hugectr.Check_t.Non)
     optimizer = hugectr.CreateOptimizer(optimizer_type = hugectr.Optimizer_t.Adam,
                                         update_type = hugectr.Update_t.Global,
@@ -28,14 +28,14 @@ def WideAndDeep(args):
                             [hugectr.DataReaderSparseParam("wide_data", 1, True, args.num_wide_sparse_fields),
                             hugectr.DataReaderSparseParam("deep_data", 2, False, args.num_deep_sparse_fields)]))
     model.add(hugectr.SparseEmbedding(embedding_type = hugectr.Embedding_t.DistributedSlotSparseEmbeddingHash,
-                                workspace_size_per_gpu_in_mb = args.wide_workspace_size_per_gpu_in_mb,
+                                workspace_size_per_gpu_in_mb = 8,
                                 embedding_vec_size = 1,
                                 combiner = "sum",
                                 sparse_embedding_name = "sparse_embedding2",
                                 bottom_name = "wide_data",
                                 optimizer = optimizer))
     model.add(hugectr.SparseEmbedding(embedding_type = hugectr.Embedding_t.DistributedSlotSparseEmbeddingHash,
-                                workspace_size_per_gpu_in_mb = args.deep_workspace_size_per_gpu_in_mb,
+                                workspace_size_per_gpu_in_mb = 114,
                                 embedding_vec_size = args.deep_embedding_vec_size,
                                 combiner = "sum",
                                 sparse_embedding_name = "sparse_embedding1",
@@ -88,8 +88,6 @@ def get_args(print_args=True):
     import argparse
     def str_list(x):
         return x.split(',')
-    def int_list(x):
-        return list(map(int, x.split(",")))
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset_format', type=str, default='parquet', help='parquet')
     parser.add_argument('--data_dir', type=str, default='/dataset/d4f7e679/criteo_day_0_parquet')
@@ -98,8 +96,8 @@ def get_args(print_args=True):
     parser.add_argument('--eval_interval', type=int, default=1000)
     parser.add_argument('--batch_size', type=int, default=16384)
     parser.add_argument('--learning_rate', type=float, default=1e-3)
-    parser.add_argument('--wide_workspace_size_per_gpu_in_mb', type=int, default=8)
-    parser.add_argument('--deep_workspace_size_per_gpu_in_mb', type=int, default=114)
+    # parser.add_argument('--wide_vocab_size', type=int, default=3200000)
+    # parser.add_argument('--deep_vocab_size', type=int, default=3200000)
     parser.add_argument('--deep_embedding_vec_size', type=int, default=16)
     parser.add_argument('--deep_dropout_rate', type=float, default=0.5)
     parser.add_argument('--num_dense_fields', type=int, default=13)
@@ -112,11 +110,7 @@ def get_args(print_args=True):
                         help='node/machine number for training')
     parser.add_argument('--hidden_units_num', type=int, default=7)
     parser.add_argument('--hidden_size', type=int, default=1024)
-    parser.add_argument(
-        '--slot_size_array',
-        type=int_list,
-        default=[225945, 354813, 202260, 18767, 14108, 6886, 18578, 4, 6348, 1247, 51, 186454, 71251, 66813, 11, 2155, 7419, 60, 4, 922, 15, 202365, 143093, 198446, 61069, 9069, 74, 34]
-    )
+
     FLAGS = parser.parse_args()
 
     def _print_args(args):
