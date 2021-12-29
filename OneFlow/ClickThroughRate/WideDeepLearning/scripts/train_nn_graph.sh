@@ -30,7 +30,7 @@ python3  $WDL_MODEL_DIR \
     --loss_print_every_n_iter 1 \
     --eval_interval 0 \
     --deep_dropout_rate 0.5 \
-    --max_iter 500 \
+    --max_iter 50 \
     --hidden_size 1024 \
     --wide_vocab_size $EMBD_SIZE \
     --deep_vocab_size $EMBD_SIZE \
