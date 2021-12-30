@@ -9,6 +9,7 @@ This folder holds OneFlow WideDeepLearning Benchmark Test scripts, tools and rep
 │   └── ubuntu.dockerfile
 ├── imgs
 ├── extract_info_from_log.py # extract information from log files
+├── extract_info_from_log.sh # bash extract_info_from_log.py
 ├── extract_time.py 
 ├── gpu_memory_usage.py # log maximum GPU device memory usage during testing
 ├── README.md
@@ -17,66 +18,49 @@ This folder holds OneFlow WideDeepLearning Benchmark Test scripts, tools and rep
     ├── 500_iters.sh # 500 iterations test, display loss and auc every iteration.
     ├── bsz_x2.sh # Batch Size Double Test
     ├── fix_bsz.sh # test with different number of devices and fixing batch size per device
-    ├── local_launch_in_docker.sh # launch oneflow-wdl in docker with arguments
-    ├── train_all_in_docker.sh # multi-nodes training scripts
+    ├── train_nn_graph.sh #base script
     └── vocab_x2.sh # Vocabulary Size Double Test
 ```
 
 ### Run Scripts
+modify 500_iters.sh 300k_iters.sh train_nn_graph.sh 'WDL_MODEL_DIR'  as path to models/train.py
+
 We can run tests as follows:
 
-1. Build the docker image: 
-
-```shell
-cd docker && bash build.sh
-```
-
-**Note**: At the end of `docker/ubuntu.dockerfile` there is a command to install the 0.2.0 OneFlow in docker, however, you can install whatever version you want, for example, install the latest stable release version by changing it to:
-
-```shell
-RUN python3 -m pip install --find-links https://release.oneflow.info oneflow_cu102 --user
-```
-
-2. Change the configs in `docker/launch.sh` file:
-
-```text
-ONEFLOW_BENCHMARK_ROOT=/path/to/OneFlow-Benchmark:/OneFlow-Benchmark
-DLPERF_WDL_SCRIPTS_ROOT=/path/to/DLPerf/OneFlow/ClickThroughRate/WideDeepLearning/scripts
-DATASET_ROOT=/path/to/datasets:/data
-```
-
-3. Run the `train_all_in_docker.sh` script:
-
-```shell
-cd scripts && bash train_all_in_docker.sh
-```
+1. bash 500iter.sh 1 [1 512 2322444](tel:15122322444) 2 16 500iter 1
+   bash 300000iter.sh 1 [1 512 2322444](tel:15122322444) 2 16 300000iter 1
+   bash bsz_x2.sh
+   bash vocab_x2.sh
+   bash fix_bsz.sh
+2. modify extract_info_from_log.sh 'benchmark_log_dir' as path to log files
 
 ## Benchmark Test Cases
-This report has summarized OneFlow test on 4 nodes with 8 x Tesla V100 on Oct 2020.
+This report has summarized OneFlow test on 1 nodes with 8 x Tesla V100 in Dec 2021.
 
 ### Test Environment
 
-- Tesla V100-SXM2-16GB x 8
+- 1 nodes with Tesla V100-SXM2-16GB x 8
 - InfiniBand 100 Gb/sec (4X EDR)， Mellanox Technologies MT27700 Family
-- Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
-- Memory 384G
-- Ubuntu 16.04.4 LTS (GNU/Linux 4.4.0-116-generic x86_64)
-- CUDA Version: 10.2, Driver Version: 440.33.01
-- OneFlow: v0.2.0-83-gb16a8d42f 
-- OneFlow-Benchmark: update_wdl@42c5515
+- Intel(R) Xeon(R) Gold 6271C CPU @ 2.60GHz  ($ cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c*)
+- Memory 384G ($ cat /proc/meminfo)
+- Ubuntu 20.04.3 LTS  ($  cat /etc/issue/) (GNU/Linux 5.4.0-26-generic x86_64)   ($  uname -a)
+- CUDA Version: 11.4  ($  nvcc -V), Driver Version: 470.57.02  ($  cat /proc/driver/nvidia/version)
+- OneFlow: v0.6.0-3c2e05d49
+- models: main@
 - `nvidia-smi topo -m`
 
 ```
-        GPU0    GPU1    GPU2    GPU3    GPU4    GPU5    GPU6    GPU7    mlx5_0  CPU Affinity
-GPU0     X      NV1     NV1     NV2     NV2     SYS     SYS     SYS     NODE    0-11,24-35
-GPU1    NV1      X      NV2     NV1     SYS     NV2     SYS     SYS     NODE    0-11,24-35
-GPU2    NV1     NV2      X      NV2     SYS     SYS     NV1     SYS     PIX     0-11,24-35
-GPU3    NV2     NV1     NV2      X      SYS     SYS     SYS     NV1     PIX     0-11,24-35
-GPU4    NV2     SYS     SYS     SYS      X      NV1     NV1     NV2     SYS     12-23,36-47
-GPU5    SYS     NV2     SYS     SYS     NV1      X      NV2     NV1     SYS     12-23,36-47
-GPU6    SYS     SYS     NV1     SYS     NV1     NV2      X      NV2     SYS     12-23,36-47
-GPU7    SYS     SYS     SYS     NV1     NV2     NV1     NV2      X      SYS     12-23,36-47
-mlx5_0  NODE    NODE    PIX     PIX     SYS     SYS     SYS     SYS      X
+		GPU0	GPU1	GPU2	GPU3	GPU4	GPU5	GPU6	GPU7	mlx5_0	mlx5_1	CPU Affinity    NUMA Affinity
+GPU0	 X 		NV1	    NV2	    NV1	 	SYS		SYS		SYS		NV2		NODE	SYS		0-23,48-71		0
+GPU1	NV1	 	X 		NV1		NV2		SYS		SYS		NV2		SYS		NODE	SYS		0-23,48-71		0
+GPU2	NV2		NV1	 	X 		NV2		SYS		NV1		SYS		SYS		PIX		SYS		0-23,48-71		0
+GPU3	NV1		NV2		NV2		X 		NV1		SYS		SYS		SYS		PIX		SYS		0-23,48-71		0
+GPU4	SYS		SYS		SYS		NV1		X 		NV2		NV2		NV1		SYS		NODE	24-47,72-95		1
+GPU5	SYS		SYS		NV1		SYS		NV2	 	X 		NV1		NV2		SYS		NODE	24-47,72-95		1
+GPU6	SYS		NV2		SYS		SYS		NV2		NV1	 	X 		NV1		SYS		PIX		24-47,72-95		1
+GPU7	NV2		SYS		SYS		SYS		NV1		NV2		NV1	 	X 		SYS		PIX		24-47,72-95		1
+mlx5_0	NODE	NODE	PIX		PIX		SYS		SYS		SYS		SYS	 	X 		SYS		
+mlx5_1	SYS		SYS		SYS		SYS		NODE	NODE	PIX		PIX		SYS	 	X 		
 
 Legend:
 
@@ -87,7 +71,6 @@ Legend:
   PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
   PIX  = Connection traversing at most a single PCIe bridge
   NV#  = Connection traversing a bonded set of # NVLinks
-
 ```
 
 ### 500 Iterations Test
