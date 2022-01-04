@@ -1,18 +1,17 @@
-NUM_NODES=$1
-DEVICE_NUM_PER_NODE=$2
-BATHSIZE=$3
-EMBD_SIZE=$4
-HIDDEN_UNITS_NUM=$5
-DEEP_VEC_SIZE=$6
-PREFIX=$7
-SUFFIX=$8
+NUM_NODES=1
+DEVICE_NUM_PER_NODE=1
+BATHSIZE=512
+EMBD_SIZE=2000000
+HIDDEN_UNITS_NUM=2
+DEEP_VEC_SIZE=16
+PREFIX=500iters
 MASTER_ADDR=127.0.0.1
 NODE_RANK=0
 DATA_DIR=/dataset/f9f659c5/wdl_ofrecord
-WDL_MODEL_DIR=/dataset/.../train.py
+WDL_MODEL_DIR=/dataset/227246e8/wide_and_deep/train.py
 
 log_root=./log
-test_case=${log_root}/$PREFIX'_n'$NUM_NODES'_g'$DEVICE_NUM_PER_NODE'_b'$BATHSIZE'_h'$HIDDEN_UNITS_NUM'_log_'$SUFFIX
+test_case=${log_root}/300kiters-n1g1
 oneflow_log_file=${test_case}.log
 mem_file=${test_case}.mem
 

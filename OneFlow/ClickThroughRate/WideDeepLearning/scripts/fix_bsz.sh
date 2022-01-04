@@ -13,9 +13,9 @@ do
         bsz=$(( 16384 * ${gpu_num} ))
         echo $bsz $num_nodes $num_gpus_per_node $gpu_num
         # case 3: fix total bsz
-        bash train_nn_graph.sh $num_nodes $num_gpus_per_node 16384 2322444 7 32 fix_total_bsz $repeat_id
+        bash train_nn_graph.sh $num_nodes $num_gpus_per_node 16384 2322444 7 16 fix_total_bsz $repeat_id
         # case 4: fix bsz per device
-        bash train_nn_graph.sh $num_nodes $num_gpus_per_node $bsz 2322444 7 32 fix_bsz_per_device $repeat_id
+        bash train_nn_graph.sh $num_nodes $num_gpus_per_node $bsz 2322444 7 16 fix_bsz_per_device $repeat_id
         sleep 3
     done
 done
