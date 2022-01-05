@@ -1,11 +1,11 @@
 declare -a num_nodes_list=(1 1 1 1)
-declare -a num_gpus_list=(8 4 2 1)
+declare -a num_gpus_list=(1 2 4 8)
 len=${#num_nodes_list[@]}
 
 NUM_NODES=1
-EMBD_SIZE=2000000
+EMBD_SIZE=2322444
 HIDDEN_UNITS_NUM=7
-DEEP_VEC_SIZE=16
+DEEP_VEC_SIZE=32
 PREFIX=fix_total_bsz
 MASTER_ADDR=127.0.0.1
 NODE_RANK=0
@@ -16,6 +16,7 @@ export ONEFLOW_KERNEL_ENABLE_CUDA_GRAPH=1
 export ONEFLOW_THREAD_ENABLE_LOCAL_MESSAGE_QUEUE=1
 export ONEFLOW_KERNEL_DISABLE_BLOB_ACCESS_CHECKER=1
 export ONEFLOW_ACTOR_ENABLE_LIGHT_ACTOR=1
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4
 
 for (( i=0; i<$len; i++ ))
 do

@@ -8,12 +8,17 @@ NODE_RANK=0
 DATA_DIR=/dataset/f9f659c5/wdl_ofrecord
 WDL_MODEL_DIR=/dataset/227246e8/wide_and_deep/train.py
 
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4
+export ONEFLOW_KERNEL_ENABLE_CUDA_GRAPH=1
+export ONEFLOW_THREAD_ENABLE_LOCAL_MESSAGE_QUEUE=1
+export ONEFLOW_KERNEL_DISABLE_BLOB_ACCESS_CHECKER=1
+export ONEFLOW_ACTOR_ENABLE_LIGHT_ACTOR=1
 
 for DEVICE_NUM_PER_NODE in 1 8
 do
         for i in 1 2 4 8 16
         do
-                EMBD_SIZE=$(( 2000000*${i} ))
+                EMBD_SIZE=$(( 3200000*${i} ))
                 batch_size_per_proc=$(( ${BATHSIZE}/${DEVICE_NUM_PER_NODE} ))
                 log_root=./log
                 test_case=${log_root}/$PREFIX'_n'$NUM_NODES'g'$DEVICE_NUM_PER_NODE'_vsz'$EMBD_SIZE'_h'$HIDDEN_UNITS_NUM
