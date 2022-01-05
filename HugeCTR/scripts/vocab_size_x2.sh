@@ -1,16 +1,12 @@
 bsz=16384
-  
-
-for i in 1 2 4 8 16
+for ngpu in 1 8
 do
-    vocab_size=$(( 1798398*${i} ))
-
-    for ngpu in 1 8
+    for i in 1 2 4 8 16
     do
         test_case=vocab_x2_n1g${ngpu}_vsz${i}_h7
         mem_usage_file=${test_case}.mem
-        wide_workspace_size_per_gpu_in_mb=$(( 8*${i} ))
-        deep_workspace_size_per_gpu_in_mb=$(( 114*${i} ))
+        wide_workspace_size_per_gpu_in_mb=$(( 12*${i} ))
+        deep_workspace_size_per_gpu_in_mb=$(( 195*${i} ))
 
         python gpu_memory_usage.py 1> log/$mem_usage_file 2>&1 </dev/null &
 

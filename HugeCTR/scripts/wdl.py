@@ -41,10 +41,11 @@ def WideAndDeep(args):
                                 sparse_embedding_name = "sparse_embedding1",
                                 bottom_name = "deep_data",
                                 optimizer = optimizer))
+    sparse_embedding1_leading_dim=26*args.deep_embedding_vec_size
     model.add(hugectr.DenseLayer(layer_type = hugectr.Layer_t.Reshape,
                                 bottom_names = ["sparse_embedding1"],
                                 top_names = ["reshape1"],
-                                leading_dim=416))
+                                leading_dim=sparse_embedding1_leading_dim))
     model.add(hugectr.DenseLayer(layer_type = hugectr.Layer_t.Reshape,
                                 bottom_names = ["sparse_embedding2"],
                                 top_names = ["reshape2"],
