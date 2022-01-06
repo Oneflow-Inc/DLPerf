@@ -20,7 +20,6 @@ while running == True:
             running = False
         else:
             device0_max_used_mem = max(device0_max_used_mem, info.used)
-        
+
 nvmlShutdown()
 print('max device0 memory usage is:', device0_max_used_mem)
-

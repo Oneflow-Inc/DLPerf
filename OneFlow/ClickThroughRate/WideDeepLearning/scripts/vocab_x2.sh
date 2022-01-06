@@ -1,29 +1,54 @@
+NUM_NODES=1
+BATHSIZE=16384
+HIDDEN_UNITS_NUM=7
+DEEP_VEC_SIZE=16
+PREFIX=vsz_x2
+MASTER_ADDR=127.0.0.1
+NODE_RANK=0
+DATA_DIR=/dataset/f9f659c5/wdl_ofrecord
+WDL_MODEL_DIR=/dataset/227246e8/wide_and_deep/train.py
 
-LOCAL_RUN=train_all_in_docker.sh
-# ```
-# ./$LOCAL_RUN $num_nodes $gpu_num_per_device $bsz_per_device $vocab_size $hidden_units_num $deep_vec_size $prefix $suffix
-# ```
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4
+export ONEFLOW_KERNEL_ENABLE_CUDA_GRAPH=1
+export ONEFLOW_THREAD_ENABLE_LOCAL_MESSAGE_QUEUE=1
+export ONEFLOW_KERNEL_DISABLE_BLOB_ACCESS_CHECKER=1
+export ONEFLOW_ACTOR_ENABLE_LIGHT_ACTOR=1
 
-
-for repeat_id in 2 3
+for DEVICE_NUM_PER_NODE in 1 8
 do
-    # case 2: vocab x 2
-    # 1 node 1 device tests
-    for vocab in 3200000 6400000 12800000 25600000 51200000 
-    do
-        ./$LOCAL_RUN 1 1 16384 $vocab 7 16 vocabX2 $repeat_id
-    done
+        for i in 1 2 4 8 16
+        do
+                EMBD_SIZE=$(( 3200000*${i} ))
+                batch_size_per_proc=$(( ${BATHSIZE}/${DEVICE_NUM_PER_NODE} ))
+                log_root=./log
+                test_case=${log_root}/$PREFIX'_n'$NUM_NODES'g'$DEVICE_NUM_PER_NODE'_vsz'$EMBD_SIZE'_h'$HIDDEN_UNITS_NUM
+                oneflow_log_file=${test_case}.log
+                mem_file=${test_case}.mem
 
-    # 1 node 8 devices tests
-    for vocab in 3200000 6400000 12800000 25600000 51200000 102400000 204800000 409600000
-    do
-        ./$LOCAL_RUN 1 8 16384 $vocab 7 16 vocabX2 $repeat_id
-    done
+                python3 gpu_memory_usage.py 1>$mem_file 2>&1 </dev/null &
 
-    # 4 nodes tests
-    for vocab in 3200000 6400000 12800000 25600000 51200000 102400000 204800000 409600000 819200000 
-    do
-        ./$LOCAL_RUN 4 8 16384 $vocab 7 32 vocabX2 $repeat_id
-    done
+                python3 -m oneflow.distributed.launch \
+                        --nproc_per_node $DEVICE_NUM_PER_NODE \
+                        --nnodes $NUM_NODES \
+                        --node_rank $NODE_RANK \
+                        --master_addr $MASTER_ADDR \
+                        $WDL_MODEL_DIR \
+                        --learning_rate 0.001 \
+                        --batch_size $BATHSIZE \
+                        --batch_size_per_proc $batch_size_per_proc \
+                        --data_dir $DATA_DIR \
+                        --loss_print_every_n_iter 100 \
+                        --eval_interval 0 \
+                        --deep_dropout_rate 0.5 \
+                        --max_iter 1000 \
+                        --hidden_size 1024 \
+                        --wide_vocab_size $EMBD_SIZE \
+                        --deep_vocab_size $EMBD_SIZE \
+                        --hidden_units_num $HIDDEN_UNITS_NUM \
+                        --deep_embedding_vec_size $DEEP_VEC_SIZE \
+                        --data_part_num 256 \
+                        --data_part_name_suffix_length 5 \
+                        --execution_mode 'graph' \
+                        --test_name 'train_eager_graph_'$DEVICE_NUM_PER_NODE'gpu' > $oneflow_log_file
+        done
 done
-
