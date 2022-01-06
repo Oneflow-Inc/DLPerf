@@ -17,7 +17,6 @@ DLPerf/HugeCTR $ tree
 │   ├── 300k_iters.sh # 300k iterations test, display loss and auc every 1000 iterations.
 │   ├── 500_iters.sh # 500 iterations test, display loss and auc every iteration.
 │   ├── bsz_x2.sh # Batch Size Double Test
-│   ├── core
 │   ├── fix_bsz_per_device.sh # test with different number of devices and fixing batch size per device
 │   ├── fix_total_bsz.sh # test with different number of devices and fixing total batch size
 │   ├── gpu_memory_usage.py # log maximum GPU device memory usage during testing 
