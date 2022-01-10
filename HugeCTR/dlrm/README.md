@@ -46,14 +46,7 @@ Legend:
 
 ### baseline 
 
-command: python dlrm.py --gpu_num_pre_node 4
-
-gpu数量需大于等于2，目前单gpu运行报错：
-
-Traceback (most recent call last):
-  File "dlrm_kaggle_fp32.py", line 146, in <module>
-    model.compile()
-RuntimeError: Runtime error: out of memory /var/tmp/HugeCTR/HugeCTR/include/general_buffer2.hpp:57 
+command: python dlrm.py --gpu_num_per_node 4
 
 baseline运行默认参数：
 
