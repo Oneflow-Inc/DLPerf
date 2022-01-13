@@ -46,67 +46,23 @@ Legend:
 
 ### baseline 
 
-command: python dlrm.py --gpu_num_per_node 4
+command: bash dlrm.sh
 
-baseline运行默认参数：
-
-batch_size=65536
-
-learning_rate=0.5     (base learning rate)
-
-warmup_steps=300  (warmup期间 lr = step_ * base_lr_ / warmup_steps_)
-
-decay_start=0
-
-workspace_size_per_gpu_in_mb=11645 
-
-embedding_vec_size=128
-
-max_iter=600
-
-eval_interval=50
+| gpu_num_per_node             | 8                              |
+| ---------------------------- | ------------------------------ |
+| num_nodes                    | 1                              |
+| eval_batchs                  | 70                             |
+| batch_size                   | 65536                          |
+| learning_rate                | 0.5                            |
+| warmup_steps                 | 1000                           |
+| data_dir                     | /dataset/f9f659c5/hugectr_dlrm |
+| workspace_size_per_gpu_in_mb | 11645                          |
+| embedding_vec_size           | 128                            |
+| max_iter                     | 12000                          |
+| loss_print_every_n_iter      | 100                            |
+| eval_interval                | 100                            |
 
 ### baseline 运行log
 
-[HUGECTR][03:13:26][INFO][RANK0]: Iter: 50 Time(50 iters): 20.430227s Loss: 0.558395 lr:0.085000
-[HUGECTR][03:13:43][INFO][RANK0]: Evaluation, AUC: 0.675481
-[HUGECTR][03:13:43][INFO][RANK0]: Eval Time for 70 iters: 17.182972s
-[HUGECTR][03:14:03][INFO][RANK0]: Iter: 100 Time(50 iters): 37.239699s Loss: 0.536418 lr:0.168333
-[HUGECTR][03:14:21][INFO][RANK0]: Evaluation, AUC: 0.695105
-[HUGECTR][03:14:21][INFO][RANK0]: Eval Time for 70 iters: 17.082333s
-[HUGECTR][03:14:41][INFO][RANK0]: Iter: 150 Time(50 iters): 37.131152s Loss: 0.528158 lr:0.251667
-[HUGECTR][03:14:58][INFO][RANK0]: Evaluation, AUC: 0.708745
-[HUGECTR][03:14:58][INFO][RANK0]: Eval Time for 70 iters: 17.140160s
-[HUGECTR][03:15:18][INFO][RANK0]: Iter: 200 Time(50 iters): 37.168557s Loss: 0.546343 lr:0.335000
-[HUGECTR][03:15:35][INFO][RANK0]: Evaluation, AUC: 0.715132
-[HUGECTR][03:15:35][INFO][RANK0]: Eval Time for 70 iters: 17.145760s
-[HUGECTR][03:15:55][INFO][RANK0]: Iter: 250 Time(50 iters): 37.172421s Loss: 0.534963 lr:0.418333
-[HUGECTR][03:16:12][INFO][RANK0]: Evaluation, AUC: 0.720022
-[HUGECTR][03:16:12][INFO][RANK0]: Eval Time for 70 iters: 17.117377s
-[HUGECTR][03:16:33][INFO][RANK0]: Iter: 300 Time(50 iters): 37.171914s Loss: 0.495738 lr:0.500000
-[HUGECTR][03:16:50][INFO][RANK0]: Evaluation, AUC: 0.724995
-[HUGECTR][03:16:50][INFO][RANK0]: Eval Time for 70 iters: 17.130679s
-[HUGECTR][03:17:10][INFO][RANK0]: Iter: 350 Time(50 iters): 37.130778s Loss: 0.530376 lr:0.500000
-[HUGECTR][03:17:27][INFO][RANK0]: Evaluation, AUC: 0.727772
-[HUGECTR][03:17:27][INFO][RANK0]: Eval Time for 70 iters: 17.159518s
-[HUGECTR][03:17:47][INFO][RANK0]: Iter: 400 Time(50 iters): 37.222825s Loss: 0.526999 lr:0.500000
-[HUGECTR][03:18:04][INFO][RANK0]: Evaluation, AUC: 0.728558
-[HUGECTR][03:18:04][INFO][RANK0]: Eval Time for 70 iters: 17.187404s
-[HUGECTR][03:18:25][INFO][RANK0]: Iter: 450 Time(50 iters): 37.232422s Loss: 0.516090 lr:0.500000
-[HUGECTR][03:18:42][INFO][RANK0]: Evaluation, AUC: 0.732136
-[HUGECTR][03:18:42][INFO][RANK0]: Eval Time for 70 iters: 17.184398s
-[HUGECTR][03:19:02][INFO][RANK0]: Iter: 500 Time(50 iters): 37.203517s Loss: 0.503241 lr:0.500000
-[HUGECTR][03:19:19][INFO][RANK0]: Evaluation, AUC: 0.735191
-[HUGECTR][03:19:19][INFO][RANK0]: Eval Time for 70 iters: 17.160128s
-[HUGECTR][03:19:39][INFO][RANK0]: Iter: 550 Time(50 iters): 37.228689s Loss: 0.504160 lr:0.500000
-[HUGECTR][03:19:57][INFO][RANK0]: Evaluation, AUC: 0.737055
-[HUGECTR][03:19:57][INFO][RANK0]: Eval Time for 70 iters: 17.186027s
+见baseline_log_info.csv
 
-...
-[HUGECTR][04:17:04][INFO][RANK0]: Evaluation, AUC: 0.759263
-[HUGECTR][04:17:04][INFO][RANK0]: Eval Time for 70 iters: 17.218921s
-[HUGECTR][04:17:24][INFO][RANK0]: Finish 1200 iterations with batchsize: 65536 in 879.05s.
-
-
-
-### 
