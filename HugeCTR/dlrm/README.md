@@ -48,8 +48,9 @@ Legend:
 
 command: bash dlrm.sh
 
-| gpu_num_per_node             | 8                              |
+| parameter                    | value                          |
 | ---------------------------- | ------------------------------ |
+| gpu_num_per_node             | 8                              |
 | num_nodes                    | 1                              |
 | eval_batchs                  | 70                             |
 | batch_size                   | 65536                          |
@@ -61,6 +62,11 @@ command: bash dlrm.sh
 | max_iter                     | 12000                          |
 | loss_print_every_n_iter      | 100                            |
 | eval_interval                | 100                            |
+| eval_batch_size              | 65536                          |
+| decay_start                  | 0                              |
+| decay_steps                  | 1                              |
+| decay_power                  | 2                              |
+| end_lr',                     | 0                              |
 
 ### baseline 运行log
 
