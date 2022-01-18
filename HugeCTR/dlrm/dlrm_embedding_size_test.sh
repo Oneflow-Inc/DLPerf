@@ -4,6 +4,9 @@ lr=0.5
 for embedding_vec_size in 2 8 32 128 512
 do
     test_case=dlrm_test_embsz${embedding_vec_size}
+    mem_usage_file=${test_case}.mem
+
+    python gpu_memory_usage.py 1> log/$mem_usage_file 2>&1 </dev/null &
 
     python dlrm.py \
         --gpu_num_per_node 8 \
@@ -13,7 +16,7 @@ do
         --learning_rate ${lr} \
         --warmup_steps ${warmup_steps} \
         --max_iter ${max_iter} \
-        --loss_print_every_n_iter 100 \
+        --loss_print_every_n_iter 1000 \
         --embedding_vec_size ${embedding_vec_size} \
-        --eval_interval 100 | tee log/${test_case}.log
+        --eval_interval 1000 | tee log/${test_case}.log
 done
