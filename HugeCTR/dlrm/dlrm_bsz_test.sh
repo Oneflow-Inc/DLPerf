@@ -5,7 +5,7 @@ for bsz in 16 64 256 1024 4096 16384 32768
 do
     for ngpu in 1 8
     do 
-        test_case=dlrm_test_bsz${bsz}
+        test_case=dlrm_test_n1g$ngpu}_bsz${bsz}
         mem_usage_file=${test_case}.mem
 
         python gpu_memory_usage.py 1> log/$mem_usage_file 2>&1 </dev/null &
