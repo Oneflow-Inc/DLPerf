@@ -17,8 +17,8 @@ do
             --learning_rate ${lr} \
             --warmup_steps ${warmup_steps} \
             --max_iter ${max_iter} \
-            --loss_print_every_n_iter 1000 \
+            --loss_print_every_n_iter 100 \
             --embedding_vec_size 128 \
-            --eval_interval 1000 | tee log/${test_case}.log
+            --eval_interval 100 | tee log/${test_case}.log
     done
 done
