@@ -5,7 +5,7 @@ for embedding_vec_size in 2 8 32 128
 do
         for ngpu in 1 8
         do
-                test_case=dlrm_test_n1g$ngpu}_embsz${embedding_vec_size}
+                test_case=dlrm_test_n1g${ngpu}_embsz${embedding_vec_size}
                 mem_usage_file=${test_case}.mem
 
                 python gpu_memory_usage.py 1> log/$mem_usage_file 2>&1 </dev/null &
