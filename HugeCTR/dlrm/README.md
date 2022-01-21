@@ -1,7 +1,4 @@
-
-
 # NVIDIA HugeCTR DLRM Benchmark Test 
-
 This folder holds NVIDIA HugeCTR DLRM Benchmark Test scripts, tools and reports.
 
 You can refer to [HugeCTR User Guide](https://github.com/NVIDIA/HugeCTR/blob/master/docs/hugectr_user_guide.md) for additional information.
@@ -74,57 +71,4 @@ command: bash dlrm.sh
 ### baseline 运行log
 
 见baseline_log_info.csv
-
-### Test Case
-
-#### embedding size
-
-one GPU
-
-| gpu  | batch_size | embedding_vec_size | latency(ms) | memory_usage(MB) |
-| ---- | ---------- | ------------------ | ----------- | ---------------- |
-| n1g1 | 32768      | 2                  | 51.235      | 4,256            |
-| n1g1 | 32768      | 8                  | 51.501      | 5,288            |
-| n1g1 | 32768      | 32                 | 53.238      | 9,428            |
-| n1g1 | 32768      | 128                | 65.268      | 25,968           |
-
-eight GPUs
-
-| gpu  | batch_size | embedding_vec_size | latency(ms) | memory_usage(MB) |
-| ---- | ---------- | ------------------ | ----------- | ---------------- |
-| n1g8 | 32768      | 2                  | 106.352     | 2,112            |
-| n1g8 | 32768      | 8                  | 112.477     | 2,180            |
-| n1g8 | 32768      | 32                 | 102.875     | 2,452            |
-| n1g8 | 32768      | 128                | 295.483     | 3,540            |
-
-
-
-#### batch size
-
-one GPU
-
-| gpu  | batch_size | embedding_vec_size | latency(ms) | memory_usage(MB) |
-| ---- | ---------- | ------------------ | ----------- | ---------------- |
-| n1g1 | 16         | 128                | 0.535       | 17,890           |
-| n1g1 | 64         | 128                | 0.626       | 17,910           |
-| n1g1 | 256        | 128                | 0.980       | 17,942           |
-| n1g1 | 1024       | 128                | 2.219       | 18,138           |
-| n1g1 | 4096       | 128                | 7.236       | 18,900           |
-| n1g1 | 16384      | 128                | 27.148      | 21,930           |
-| n1g1 | 32768      | 128                | 53.337      | 25,966           |
-
-eight GPUs
-
-| gpu  | batch_size | embedding_vec_size | latency(ms) | memory_usage(MB) |
-| ---- | ---------- | ------------------ | ----------- | ---------------- |
-| n1g8 | 16         | 128                | 0.889       | 1,670            |
-| n1g8 | 64         | 128                | 1.161       | 1,682            |
-| n1g8 | 256        | 128                | 2.333       | 1,700            |
-| n1g8 | 1024       | 128                | 7.667       | 1,738            |
-| n1g8 | 4096       | 128                | 33.855      | 1,910            |
-| n1g8 | 16384      | 128                | 119.610     | 2,606            |
-| n1g8 | 32768      | 128                | 211.966     | 3,540            |
-| n1g8 | 65536      | 128                | 535.517     | 5,408            |
-
-
 
