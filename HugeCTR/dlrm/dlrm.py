@@ -53,7 +53,7 @@ def DLRM(args):
     model.add(hugectr.DenseLayer(layer_type = hugectr.Layer_t.InnerProduct,
                                 bottom_names = ["relu2"],
                                 top_names = ["fc3"],
-                                num_output=128))
+                                num_output=args.embedding_vec_size))
     model.add(hugectr.DenseLayer(layer_type = hugectr.Layer_t.ReLU,
                                 bottom_names = ["fc3"],
                                 top_names = ["relu3"]))                              
@@ -126,7 +126,7 @@ def get_args(print_args=True):
         print("=".ljust(66, "="))
         print(
             "Running {}: gpu_num_per_node = {}, num_nodes = {}.".format(
-                "HugeCTR-WDL", args.gpu_num_per_node, args.num_nodes
+                "HugeCTR-DLRM", args.gpu_num_per_node, args.num_nodes
             )
         )
         print("=".ljust(66, "="))
