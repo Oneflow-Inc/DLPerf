@@ -39,6 +39,7 @@ python3 ./$BENCH_ROOT/run_pretraining.py \
   --log_dir=./log \
   --model_save_every_n_iter=10000 \
   --save_last_snapshot=False \
+  --use_fp16 \
   --model_save_dir=./snapshots
   #--node_ips='10.11.0.2','10.11.0.3','10.11.0.4','10.11.0.5' \
   
