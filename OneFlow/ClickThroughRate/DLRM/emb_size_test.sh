@@ -50,8 +50,8 @@ do
             --data_part_num 256 \
             --data_part_name_suffix_length 5 \
             --execution_mode 'graph' \
-            # --model_load_dir /tank/model_zoo/dlrm_baseline_params_emb$emb_size \
             --test_name 'train_graph_conisitent_'$DEVICE_NUM_PER_NODE'gpu' | tee log/${test_case}.log
+            # --model_load_dir /tank/model_zoo/dlrm_baseline_params_emb$emb_size \
             # --dataset_format torch \
             # --model_load_dir /tank/xiexuan/dlrm/initial_parameters \
     done
