@@ -6,7 +6,7 @@ data_dir = "/path/to/dlrm_parquet"
 persistent_path = '/path/to/persistent'
 script_path = '/path/to/models/RecommenderSystems/dlrm/graph_train.py'
 
-# 
+# test cases
 cache_types = [
     ('device_ssd', '16384'),
     ('device_only', '24576'),
@@ -71,6 +71,5 @@ for cache_type, cache_memory_budget_mb in cache_types:
                 test_name += "_amp"
             var += f"--test_name {test_name}_{i} "
             cmd = env + dl + cfg + var
-            # os.system(cmd)
-            print(cmd)
+            os.system(cmd)
             i += 1
